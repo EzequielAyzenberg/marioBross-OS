@@ -1,28 +1,6 @@
-#include<arpa/inet.h>
-#include<errno.h>
-#include<netdb.h>
-#include<netinet/in.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<sys/types.h>
-#include<unistd.h>
+#include"sockets.h"
 
-typedef struct __attribute__((packed)){
-	char type;
-	char name[8];
-	char symbol;
-}handshake;
-
-typedef struct {
-	char msg;
-	short cont;
-	char data;
-	char symbol;
-}answer;
-
-void terminar(short estado, short sockfd){
+void terminar(int estado,int sockfd){
 	switch (estado){
 	case 0:
 		puts("Ha elegido terminar el programa, adios.");
@@ -47,61 +25,73 @@ void terminar(short estado, short sockfd){
 }
 
 void flush_in(void){
-short ch;
+int ch;
 while( (ch = fgetc(stdin)) != EOF && ch != '\n' ){}
 }
 
-short connectGRID(short port,char *ipdest){
-	short sockfd,estado;
+int connectGRID(int port,char *ipdest){
+	int estado;
+	int sockfd;
 	struct sockaddr_in socket_addr;
 	sockfd=socket(AF_INET,SOCK_STREAM,0);
-		if (sockfd==-1)	terminar(2,(short)sockfd);
+		if (sockfd==-1)	terminar(2,sockfd);
 	socket_addr.sin_family=AF_INET;
 	socket_addr.sin_port=htons(port);
 	socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	//Los mensajes probablemente se reemplacen con salidas al log.
-	puts("Estableciendo cenexion con el servidor..");
+	puts("\nEstableciendo cenexion con el servidor..");
 	estado=connect(sockfd,(struct sockaddr *)&socket_addr,sizeof(struct sockaddr));
-	if (estado==-1)terminar(3,(short)sockfd);
+	if (estado==-1)terminar(3,sockfd);
 	puts("Conexion realizada con exito!!");
 	return sockfd;
 }
 
-short listenGRID(short port,char *ipdest){
-	short sockfd,estado;
+int listenGRID(int port){
+	int sock,estado;
 	struct sockaddr_in socket_addr;
-	sockfd=socket(AF_INET,SOCK_STREAM,0);
-	if (sockfd==-1) terminar(2,(short)sockfd);
+	sock=socket(AF_INET,SOCK_STREAM,0);
+	if (sock==-1) terminar(2,sock);
 	socket_addr.sin_family =AF_INET;
 	socket_addr.sin_port=htons(port);
-	socket_addr.sin_addr.s_addr=inet_addr(ipdest);
+	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	//Los mensajes probablemente se reemplacen con salidas al log.
-	estado=bind(sockfd, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
-	if (estado==-1)terminar(4,(short)sockfd);
+	estado=bind(sock, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
+	if (estado==-1)terminar(4,sock);
 	puts("Puerto asiganado correctamente.");
-	estado=listen(sockfd,10);
-	if (estado==-1)terminar(5,(short)sockfd);
+	estado=listen(sock,10);
+	if (estado==-1)terminar(5,sock);
 	puts("Escuchando...");
-	return sockfd;
+	return sock;
 }
 
-short acceptGRID(short sockescucha){
+int selectGRID(int maxfd,fd_set *dirfdRead){
+	int estado=0;
+	struct timeval time;
+	time.tv_sec=10;
+	time.tv_usec=0;
+	while (estado<=0)	estado=select (maxfd,dirfdRead,NULL,NULL, &time);
+return estado;
+}
+
+int acceptGRID(int sockescucha){
 	struct sockaddr_in their_addr;
 	unsigned int size=sizeof(struct sockaddr_in);
 	//Los mensajes probablemente se reemplacen con salidas al log.
-	short socknuevo=(short) accept(sockescucha,(struct sockaddr *)&their_addr,&size);
-	if (socknuevo==-1)terminar(3,(short)socknuevo);
-	puts("Conexion establecida!!");
-	return socknuevo;
+	int nuevo=accept(sockescucha,(struct sockaddr *)&their_addr,&size);
+	if (nuevo==-1)terminar(3,nuevo);
+	char direccion[15];
+	strcpy(direccion,inet_ntoa(their_addr.sin_addr));
+	printf("Conexion establecida con IP Nº: %s\n",direccion);
+	return nuevo;
 }
 
 void sendHandshake(char tipo,char* nombre,char simbolo,short sockfd){
-	handshake *temp=(handshake*)malloc(sizeof(handshake));
-	temp->type=tipo;
-	temp->symbol=simbolo;
-	strcpy(temp->name,nombre);
+	handshake temp;
+	temp.type=tipo;
+	temp.symbol=simbolo;
+	strcpy(temp.name,nombre);
 	short estado=0;
 	while (estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
@@ -113,11 +103,11 @@ void sendHandshake(char tipo,char* nombre,char simbolo,short sockfd){
 }
 
 void sendAnswer(char mensaje,short contador, char datos, char simbolo, short sockfd){
-	answer *temp=(answer*)malloc(sizeof(answer));
-	temp->msg=mensaje;
-	temp->cont=contador;
-	temp->data=datos;
-	temp->symbol=simbolo;
+	answer temp;
+	temp.msg=mensaje;
+	temp.cont=contador;
+	temp.data=datos;
+	temp.symbol=simbolo;
 	short estado=0;
 	while (estado<sizeof(answer)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
