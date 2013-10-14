@@ -14,7 +14,7 @@
 #include "nivelconfig.h"
 
 //PROTOTIPO DE FUNCIONES
-puts("Hola Git");
+
 
 char * nombre ( t_config * cfg);
 
@@ -54,7 +54,7 @@ void reverse(char s[]);
 
 //FIN DE PROTOTIPO DE FUNCIONES
 
-int main(int argc, char *argv[]) {
+int main2(int argc, char *argv[]) {
 	int resultado;
 
 	nivelConfig cfgNivel;

@@ -3,6 +3,8 @@
 	<name>nivel</name>
 	<comment></comment>
 	<projects>
+		<project>Commons-Library</project>
+		<project>Nivel</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
