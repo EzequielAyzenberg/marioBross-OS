@@ -14,7 +14,6 @@
 #include "nivelconfig.h"
 
 //PROTOTIPO DE FUNCIONES
-puts("Hola Git");
 
 char * nombre ( t_config * cfg);
 
