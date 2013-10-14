@@ -4,23 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../theGRID/logger.c \
-../theGRID/sockets.c 
+../cargador.c \
+../nivel.c \
+../nivelconfig.c 
 
 OBJS += \
-./theGRID/logger.o \
-./theGRID/sockets.o 
+./cargador.o \
+./nivel.o \
+./nivelconfig.o 
 
 C_DEPS += \
-./theGRID/logger.d \
-./theGRID/sockets.d 
+./cargador.d \
+./nivel.d \
+./nivelconfig.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-theGRID/%.o: ../theGRID/%.c
+%.o: ../%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"/home/utnso/workspace/Commons-Library" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
