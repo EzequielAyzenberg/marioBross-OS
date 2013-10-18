@@ -5,6 +5,7 @@
 	<projects>
 		<project>Commons-Library</project>
 		<project>Nivel</project>
+		<project>commons</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

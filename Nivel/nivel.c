@@ -14,6 +14,7 @@
 
 main(){
 	nivelConfig config;
-	cargarconfig("/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg",config);
+	cargarconfig("/home/utnso/GitMario/tp-2013-2c-the-grid/Nivel/nivel1.cfg",config);
 	return 0;
 }
+

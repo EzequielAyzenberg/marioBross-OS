@@ -33,6 +33,6 @@ typedef struct ncfg {
 } nivelConfig;
 
 void cargarconfig(char *path,nivelConfig);
-void cargarNombre(t_config config,nivelConfig configNivel);
+void cargarNombre(t_config config,char** nombre);
 
 #endif /* CARGADOR_H_ */
