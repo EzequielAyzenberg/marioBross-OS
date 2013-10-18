@@ -26,7 +26,7 @@ void terminar(int estado,int sockfd){
 
 void flush_in(void){
 int ch;
-while( (ch = fgetc(stdin)) != EOF && ch != '\n' ){}
+while( (ch = fgetc(stdin)) != EOF && ch != '\n' && ch!='\0' ){}
 }
 
 int connectGRID(int port,char *ipdest){
@@ -96,7 +96,7 @@ void sendHandshake(char tipo,char* nombre,char simbolo,short sockfd){
 	while (estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Intentando enviar mensaje..");
-		estado=(short)send(sockfd,&temp,sizeof(handshake),0);
+		estado=(short)send(sockfd,(void*)&temp,sizeof(handshake),0);
 		sleep(0.1);
 	}
 	puts("Mensaje enviado con exito!!");
@@ -123,8 +123,9 @@ char recvHandshake(handshake *temp,short sockfd){
 	while(estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Recibiendo mensaje..");
-		estado=(short)recv(sockfd,temp,sizeof(handshake),0);
+		estado=(short)recv(sockfd,(void*)temp,sizeof(handshake),0);
 	}
+	(handshake*)temp;
 	puts("Mensaje recibido satisfactoriamente!!");
 	return temp->type;
 }

@@ -1,0 +1,8 @@
+Copien y peguen esto en sus terminales,, reeplazando 'yourusername' por su nombre de usuario
+
+git remote set-url origin https://yourusername@github.com/sisoputnfrba/tp-2013-2c-the-grid.git
+
+aparte les dejo las funciones de configuracion de usuario
+
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com

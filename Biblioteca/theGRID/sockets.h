@@ -22,7 +22,7 @@
 
 struct typeHand{
 	char type;
-	char name[8];
+	char name[9];
 	char symbol;
 }__attribute__((packed));
 

@@ -14,6 +14,10 @@
 #include "nivelconfig.h"
 
 //PROTOTIPO DE FUNCIONES
+<<<<<<< HEAD
+=======
+
+>>>>>>> b92ce3f6dcb4efdba4957dcc9c71f950ed49441e
 
 char * nombre ( t_config * cfg);
 
@@ -53,7 +57,7 @@ void reverse(char s[]);
 
 //FIN DE PROTOTIPO DE FUNCIONES
 
-int main(int argc, char *argv[]) {
+int main2(int argc, char *argv[]) {
 	int resultado;
 
 	nivelConfig cfgNivel;
