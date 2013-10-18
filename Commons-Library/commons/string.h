@@ -48,5 +48,8 @@
 
 	void 	string_iterate_lines(char ** strings, void (*closure)(char *));
 	char**  string_get_string_as_array(char* text);
+	void strreverse(char* begin, char* end);
+	void itoa(int value, char* str, int base) ;
+	int filterCharacters (char** filteredStr ,const char * strToFilter, char* filter);
 
 #endif /* STRING_UTILS_H_ */
