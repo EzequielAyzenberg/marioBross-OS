@@ -4,15 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../theGRID/logger.c \
+../theGRID/cadenas.c \
 ../theGRID/sockets.c 
 
 OBJS += \
-./theGRID/logger.o \
+./theGRID/cadenas.o \
 ./theGRID/sockets.o 
 
 C_DEPS += \
-./theGRID/logger.d \
+./theGRID/cadenas.d \
 ./theGRID/sockets.d 
 
 

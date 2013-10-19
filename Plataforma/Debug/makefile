@@ -24,11 +24,15 @@ endif
 # All Target
 all: Plataforma
 
+dependents:
+	-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug && $(MAKE) all
+	-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug && $(MAKE) all
+
 # Tool invocations
-Plataforma: $(OBJS) $(USER_OBJS)
+Plataforma: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc  -o "Plataforma" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -o "Plataforma" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -39,5 +43,7 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
+/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so:
+/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons.so:
 
 -include ../makefile.targets

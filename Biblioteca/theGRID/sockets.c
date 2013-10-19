@@ -57,6 +57,9 @@ int listenGRID(int port){
 	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	//Los mensajes probablemente se reemplacen con salidas al log.
+	int yes=1;
+	estado=setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yes,sizeof(int));
+	if (estado==-1)terminar(4,sock);
 	estado=bind(sock, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
 	if (estado==-1)terminar(4,sock);
 	puts("Puerto asiganado correctamente.");
@@ -68,10 +71,8 @@ int listenGRID(int port){
 
 int selectGRID(int maxfd,fd_set *dirfdRead){
 	int estado=0;
-	struct timeval time;
-	time.tv_sec=10;
-	time.tv_usec=0;
-	while (estado<=0)	estado=select (maxfd,dirfdRead,NULL,NULL, &time);
+	//struct timeval time;
+	while (estado<=0)	estado=select (maxfd+1,dirfdRead,NULL,NULL,NULL);
 return estado;
 }
 
@@ -82,12 +83,16 @@ int acceptGRID(int sockescucha){
 	int nuevo=accept(sockescucha,(struct sockaddr *)&their_addr,&size);
 	if (nuevo==-1)terminar(3,nuevo);
 	char direccion[15];
+	int dir,addrlen;
+	addrlen=sizeof(struct sockaddr);
+	dir=getpeername(nuevo,(struct sockaddr *)&their_addr,(unsigned int *)&addrlen);
+	if (dir==-1)terminar(3,nuevo);
 	strcpy(direccion,inet_ntoa(their_addr.sin_addr));
-	printf("Conexion establecida con IP Nº: %s\n",direccion);
+	printf("Conexion establecida con IP Nº: %s en el socket Nº: %d\n",direccion,nuevo);
 	return nuevo;
 }
 
-void sendHandshake(char tipo,char* nombre,char simbolo,short sockfd){
+void sendHandshake(short tipo,char* nombre,char simbolo,short sockfd){
 	handshake temp;
 	temp.type=tipo;
 	temp.symbol=simbolo;
@@ -96,47 +101,49 @@ void sendHandshake(char tipo,char* nombre,char simbolo,short sockfd){
 	while (estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Intentando enviar mensaje..");
-		estado=(short)send(sockfd,(void*)&temp,sizeof(handshake),0);
+		estado=send(sockfd,(void*)&temp,sizeof(handshake),0);
 		sleep(0.1);
 	}
 	puts("Mensaje enviado con exito!!");
 }
 
-void sendAnswer(char mensaje,short contador, char datos, char simbolo, short sockfd){
+void sendAnswer(short mensaje,short contador, char datos, char simbolo, short sockfd){
 	answer temp;
 	temp.msg=mensaje;
 	temp.cont=contador;
 	temp.data=datos;
 	temp.symbol=simbolo;
-	short estado=0;
+	int estado=0;
 	while (estado<sizeof(answer)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Intentando enviar mensaje..");
-		estado=(short)send(sockfd,&temp,sizeof(answer),0);
+		estado=send(sockfd,(void*)&temp,sizeof(answer),0);
 		sleep(0.1);
 	}
 	puts("Mensaje enviado con exito!!");
 }
 
-char recvHandshake(handshake *temp,short sockfd){
-	short estado=0;
-	while(estado<sizeof(handshake)){
+int recvHandshake(handshake *temp,int sockfd){
+	int estado=-1;
+	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Recibiendo mensaje..");
-		estado=(short)recv(sockfd,(void*)temp,sizeof(handshake),0);
+		estado=recv(sockfd,(handshake*)temp,sizeof(handshake),0);
 	}
-	(handshake*)temp;
+	printf("-------El estado es: %d-------\n",estado);
+	if(estado==0)return 0;
 	puts("Mensaje recibido satisfactoriamente!!");
-	return temp->type;
+	return (int)temp->type;
 }
 
-char recvAnswer(answer *temp,short sockfd){
-	short estado=0;
-	while(estado<sizeof(answer)){
+int recvAnswer(answer *temp,int sockfd){
+	int estado=-1;
+	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("Recibiendo mensaje..");
-		estado=(short)recv(sockfd,temp,sizeof(answer),0);
-	}
+		estado=recv(sockfd,(answer*)temp,sizeof(*temp),0);
+	}printf("-------El estado es: %d-------\n",estado);
+	if(estado==0)return 0;
 	puts("Mensaje recibido satisfactoriamente!!");
-	return temp->msg;
+	return (int)temp->msg;
 }

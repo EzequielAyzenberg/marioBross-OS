@@ -3,6 +3,8 @@
 	<name>Plataforma</name>
 	<comment></comment>
 	<projects>
+		<project>Biblioteca</project>
+		<project>Commons</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
