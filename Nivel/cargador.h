@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <commons/config.h>
+#include <commons/collections/list.h>
 
 typedef struct item {
 	char * itemName;
@@ -23,7 +24,8 @@ typedef struct ncfg {
 	char* orquestador;
 	int intervaloDeadLock;
 	int cantidadCajas;
-	Caja** cajasNivel;
+	t_list listaCajas;
+	Caja* cajasNivel;
 	int recovery;
 	int enemigos;
 	int sleepEnemigos;
@@ -32,7 +34,6 @@ typedef struct ncfg {
 	int retardo;
 } nivelConfig;
 
-void cargarconfig(char *path,nivelConfig);
-void cargarNombre(t_config config,char** nombre);
+void cargarconfig(nivelConfig*);
 
 #endif /* CARGADOR_H_ */

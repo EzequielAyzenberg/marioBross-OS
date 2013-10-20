@@ -10,27 +10,59 @@
 #include "cargador.h"
 #include <string.h>
 #include <malloc.h>
+#include <commons/collections/list.h>
 
 char *path;
 t_config config;
 char prueba[20];
 int sleep;
+t_list cajas;
 
 
-void cargarNombre(t_config config,char** nombre){
+//funcion que le paso un int y devuelve un string
+void itoa(int n, char s[])
+{
+     int i, sign;
+
+     if ((sign = n) < 0)
+         n = -n;
+     i = 0;
+     do {
+         s[i++] = n % 10 + '0';
+     } while ((n /= 10) > 0);
+     if (sign < 0)
+         s[i++] = '-';
+     s[i] = '\0';
+     reverse(s);
+}
+//me da vuelta el string
+void reverse(char s[])
+{
+     int i, j;
+     char c;
+
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+         c = s[i];
+         s[i] = s[j];
+         s[j] = c;
+     }
+}
+void cargarNombre(t_config config,char** nombre,int* valCar){
 	if (config_has_property(&config,"Nombre")){
 		*nombre=(char*)malloc(strlen(config_get_string_value(&config,"Nombre")));
 		strcpy(*nombre,config_get_string_value(&config,"Nombre"));
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el nombre del nivel");
 		exit(1);
 	};
 	}
-void cargarOrquestador(t_config config,char** orquestador){
+void cargarOrquestador(t_config config,char** orquestador,int* valCar){
 	if (config_has_property(&config,"orquestador")){
 		*orquestador=(char*)malloc(strlen(config_get_string_value(&config,"orquestador")));
 		strcpy(*orquestador,config_get_string_value(&config,"orquestador"));
+		(*valCar)++;
 	}
 	else {
 
@@ -38,98 +70,163 @@ void cargarOrquestador(t_config config,char** orquestador){
 		exit(1);
 	};
 	}
-void cargarDeadlock(t_config config,int* deadlock){
+void cargarDeadlock(t_config config,int* deadlock,int* valCar){
 	if (config_has_property(&config,"TiempoChequeoDeadlock")){
 		*deadlock=config_get_int_value(&config,"TiempoChequeoDeadlock");
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el intervalo de deadlock");
 		exit(1);
 	};
 	}
-void cargarRecovery(t_config config,int* recovery){
+void cargarRecovery(t_config config,int* recovery,int* valCar){
 	if (config_has_property(&config,"Recovery")){
 		*recovery=config_get_int_value(&config,"Recovery");
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el estado de recovery");
 		exit(1);
 	};
 	}
-void cargarEnemigos(t_config config,int* enemigos){
+void cargarEnemigos(t_config config,int* enemigos,int* valCar){
 	if (config_has_property(&config,"Enemigos")){
 		*enemigos=config_get_int_value(&config,"Enemigos");
+		(*valCar)++;
 	}
 	else {
 		puts("No hay datos sobre los enemigos");
 		exit(1);
 	};
 	}
-void cargarSleepEnemigos(t_config config,int* sleep){
+void cargarSleepEnemigos(t_config config,int* sleep,int* valCar){
 	if (config_has_property(&config,"Sleep_Enemigos")){
 		*sleep=config_get_int_value(&config,"Sleep_Enemigos");
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el tiempo de sleep de los enemigos");
 		exit(1);
 	};
 	}
-void cargarAlgoritmo(t_config config,char** algoritmo){
+void cargarAlgoritmo(t_config config,char** algoritmo,int* valCar){
 	if (config_has_property(&config,"algoritmo")){
 		*algoritmo=(char*)malloc(strlen(config_get_string_value(&config,"algoritmo")));
 		strcpy(*algoritmo,config_get_string_value(&config,"algoritmo"));
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el tipo de algoritmo a usar");
 		exit(1);
 	};
 	}
-void cargarQuantum(t_config config,int* quantum){
+void cargarQuantum(t_config config,int* quantum,int* valCar){
 	if (config_has_property(&config,"quantum")){
 		*quantum=config_get_int_value(&config,"quantum");
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el tiempo de quantum para el algoritmo de Round Robin");
 		exit(1);
 	};
 	}
-void cargarRetardo(t_config config,int* retardo){
+void cargarRetardo(t_config config,int* retardo,int* valCar){
 	if (config_has_property(&config,"retardo")){
 		*retardo=config_get_int_value(&config,"retardo");
+		(*valCar)++;
 	}
 	else {
 		puts("Falta el tiempo de retardo");
 		exit(1);
 	};
 	}
+void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
+	//Los numeros de las cajas debes ser consecutivos,sino el algoritmo no los cargara
+	int flag=1;
+	int cont=1;
+	char numCja[2];
+	char caja[8];
+	char** arrayCaja;
+	char* aux;
+	aux=(char*)malloc(25);
+	arrayCaja=(char**)malloc(25);
+	Caja cajaBuffer;              //En esta caja se van a volcar los valores de cada caja sacados directamente del archivo de config.
+	*listaCajas=*list_create();
+	while(flag){
 
-//Recibe la direccion del archivo de configuracion y la estructura donde va a guardar los datos
-void cargarconfig(char *path,nivelConfig configNivel){
+		strcpy(caja,"Caja");
+		itoa(cont,numCja);
+		strcat(caja,numCja);
+		if (config_has_property(&config,caja)){
+
+			strcpy(aux,"[");
+			strcat(aux,config_get_string_value(&config,caja));
+			strcat(aux,"]");
+			arrayCaja=string_get_string_as_array(aux);
+			cajaBuffer.itemName=(char*)malloc(strlen(arrayCaja[0]));
+			strcpy(cajaBuffer.itemName,arrayCaja[0]);
+			cajaBuffer.id=arrayCaja[1];
+			cajaBuffer.quantity=atoi(arrayCaja[2]);
+			cajaBuffer.posx=atoi(arrayCaja[3]);
+			cajaBuffer.posy=atoi(arrayCaja[4]);
+			Caja* cajaTemp;  //Esta caja es creada para asignarle memoria con malloc, y asi podes guardar esa direccion de memoria en la lista
+			cajaTemp=(Caja*)malloc(25);
+			*cajaTemp=cajaBuffer;
+			list_add(listaCajas,cajaTemp);//despues para obtener los datos, se deben guardar en un puntero ya que devuelve un void*
+			(*valCar)++;
+			cont++;
+		}
+		else flag=0;
+};
+
+if (cont==1){
+	puts("El nivel no tiene cajas"); //si el contador al terminar vale 1,significa que no se cargo ni una caja
+	exit(1);
+}
+
+
+}
+
+verificarCargados(t_config config,int valCar){
+	if(config_keys_amount(&config)==valCar){
+		printf("Se han cargado %d valores de %d\n",valCar,config_keys_amount(&config));
+		puts("Archivo de configuracion cargado exitosamente");
+	}
+	else{
+		printf("Se han cargado %d valores de %d\n",valCar,config_keys_amount(&config));
+		puts("Revise el archivo de configuracion, que no haya keys de mas y que las cajas esten bien numeradas en orden ascendente desde 1 sin saltear ningun numero, el programaa abortara");
+		exit(1);
+	}
+}
+
+//Recibe la estructura donde va a guardar los datos
+void cargarconfig(nivelConfig* configNivel){
+	puts("Por favor,ingrese la ruta del archivo de configuracion");
+	t_config config;
+	char* path;
+	path=malloc(250);
+	scanf("%s",path);
+	int result = strncmp(path, "0",100);
+	if(result==0){//
+		strcpy(path,"/home/utnso/GitMario/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
+	};
+	nivelConfig configTemp; //archivo de configuracion temporal donde se guardan los datos extraidos del archivo de configuracion, luego al final se vuela en configNivel que retornara al main program
 	config=*config_create(path);
-	cargarNombre(config,&configNivel.nombre);
-	cargarOrquestador(config,&configNivel.orquestador);
-	cargarDeadlock(config,&configNivel.intervaloDeadLock);//carga el intervalo de Deadlock
-	cargarRecovery(config,&configNivel.recovery);
-	cargarEnemigos(config,&configNivel.enemigos);
-	cargarSleepEnemigos(config,&configNivel.sleepEnemigos);
-	cargarAlgoritmo(config,&configNivel.algoritmo);
-	cargarQuantum(config,&configNivel.quantum);
-	cargarRetardo(config,&configNivel.retardo);
-
-
-	configNivel.algoritmo=(char*)malloc(strlen(config_get_string_value(&config,"algoritmo")));
-	strcpy(configNivel.algoritmo,config_get_string_value(&config,"algoritmo"));
-	sleep=config_get_int_value(&config,"Sleep_Enemigos");
-	configNivel.sleepEnemigos=sleep;
-	printf("%s\n",configNivel.nombre);
-	printf("%s\n",configNivel.orquestador);
-	printf("%d\n",configNivel.intervaloDeadLock);
-	printf("%d\n",configNivel.recovery);
-	printf("%d\n",configNivel.enemigos);
-	printf("%d\n",configNivel.sleepEnemigos);
-	printf("%s\n",configNivel.algoritmo);
-	printf("%d\n",configNivel.quantum);
-	printf("%d\n",configNivel.retardo);
+	free(path);
+	int valCar=0;// cantidad de valores que se cargaron exitosamente
+	cargarNombre(config,&configTemp.nombre,&valCar);
+	cargarCajas(config,&configTemp.listaCajas,&valCar);
+	cargarOrquestador(config,&configTemp.orquestador,&valCar);
+	cargarDeadlock(config,&configTemp.intervaloDeadLock,&valCar);//carga el intervalo de Deadlock
+	cargarRecovery(config,&configTemp.recovery,&valCar);
+	cargarEnemigos(config,&configTemp.enemigos,&valCar);
+	cargarSleepEnemigos(config,&configTemp.sleepEnemigos,&valCar);
+	cargarAlgoritmo(config,&configTemp.algoritmo,&valCar);
+	cargarQuantum(config,&configTemp.quantum,&valCar);
+	cargarRetardo(config,&configTemp.retardo,&valCar);
+	verificarCargados(config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
+	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
 }
 
 
