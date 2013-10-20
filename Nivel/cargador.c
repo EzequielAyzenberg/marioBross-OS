@@ -200,6 +200,34 @@ verificarCargados(t_config config,int valCar){
 	}
 }
 
+comprobarSuperposicion(t_list listaCajas){
+	int posiciones[list_size(&listaCajas)];
+	int i=0;
+	Caja* Buffer;
+	for(i=0;i<list_size(&listaCajas);i++){
+		Buffer=list_get(&listaCajas,i);
+		posiciones[i]=((*Buffer).posx)*100+(*Buffer).posy;
+
+		}
+	i=0;
+	int flag=0;
+	int j=0;
+	for(i=0;i<list_size(&listaCajas);i++){
+		for(j=i+1;j<list_size(&listaCajas);j++){
+			if(posiciones[i]==posiciones[j]){
+				printf("La Caja%d se superpone con la Caja%d\n",i+1,j+1);
+				flag=1;
+			}
+		}
+
+	}
+	if (flag==1){
+		puts("Corrija las superposiciones y cargue el archivo de nuevo");
+		exit(1);
+	}
+}
+
+
 //Recibe la estructura donde va a guardar los datos
 void cargarconfig(nivelConfig* configNivel){
 	puts("Por favor,ingrese la ruta del archivo de configuracion");
@@ -225,6 +253,7 @@ void cargarconfig(nivelConfig* configNivel){
 	cargarAlgoritmo(config,&configTemp.algoritmo,&valCar);
 	cargarQuantum(config,&configTemp.quantum,&valCar);
 	cargarRetardo(config,&configTemp.retardo,&valCar);
+	comprobarSuperposicion(configTemp.listaCajas);
 	verificarCargados(config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
 }
