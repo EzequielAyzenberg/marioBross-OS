@@ -6,6 +6,7 @@
 		<project>Commons-Library</project>
 		<project>Nivel</project>
 		<project>commons</project>
+		<project>nivel-gui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

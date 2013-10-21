@@ -10,13 +10,16 @@
 #include <sys/ioctl.h>
 #include <curses.h>
 #include "cargador.h"
+#include "gui.h"
 #include <commons/collections/list.h>
 
 
 main(){
 	nivelConfig config;
-	cargarconfig(&config);
+	cargarConfig(&config);
+	dibujarNivel();
 
+	/*
 	puts("Main program bitch");
 	printf("El nombre del Nivel es %s\n",config.nombre);
 	printf("Los datos de conexion son %s\n",config.orquestador);
@@ -32,7 +35,7 @@ main(){
 
 	buffer=list_get(&config.listaCajas,2);
 	printf("%s\n",(*buffer).itemName);
-
+*/
 	return 0;
 }
 

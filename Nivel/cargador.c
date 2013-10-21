@@ -229,7 +229,7 @@ comprobarSuperposicion(t_list listaCajas){
 
 
 //Recibe la estructura donde va a guardar los datos
-void cargarconfig(nivelConfig* configNivel){
+void cargarConfig(nivelConfig* configNivel){
 	puts("Por favor,ingrese la ruta del archivo de configuracion");
 	t_config config;
 	char* path;
