@@ -19,6 +19,9 @@ int sleep;
 t_list cajas;
 
 
+
+
+
 //funcion que le paso un int y devuelve un string
 void itoa(int n, char s[])
 {
@@ -166,7 +169,7 @@ void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 			arrayCaja=string_get_string_as_array(aux);
 			cajaBuffer.itemName=(char*)malloc(strlen(arrayCaja[0]));
 			strcpy(cajaBuffer.itemName,arrayCaja[0]);
-			cajaBuffer.id=arrayCaja[1];
+			cajaBuffer.id=*arrayCaja[1];
 			cajaBuffer.quantity=atoi(arrayCaja[2]);
 			cajaBuffer.posx=atoi(arrayCaja[3]);
 			cajaBuffer.posy=atoi(arrayCaja[4]);
@@ -256,6 +259,7 @@ void cargarConfig(nivelConfig* configNivel){
 	comprobarSuperposicion(configTemp.listaCajas);
 	verificarCargados(config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
+
 }
 
 

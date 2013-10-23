@@ -11,13 +11,33 @@
 #include <curses.h>
 #include "cargador.h"
 #include "gui.h"
+#include "enemigos.h"
 #include <commons/collections/list.h>
-
+#include <time.h>
 
 main(){
 	nivelConfig config;
+	t_list listaEnemigos;
+	t_list listaActivos;
+	//list_create(&listaJugadoresActivos);
+	int rows,cols;
 	cargarConfig(&config);
-	dibujarNivel();
+	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
+	crearEnemigos(config,&listaEnemigos,rows,cols);
+	actualizarNivel(config.listaCajas,listaEnemigos,config.nombre);
+/*
+	coordenadas* buffer;
+	buffer=list_get(&listaEnemigos,0);
+	printf("pos X :%d\n",(*buffer).posx);
+	printf("pos Y :%d\n",(*buffer).posy);
+	buffer=list_get(&listaEnemigos,1);
+	printf("pos X :%d\n",(*buffer).posx);
+	printf("pos Y :%d\n",(*buffer).posy);
+	buffer=list_get(&listaEnemigos,2);
+	printf("pos X :%d\n",(*buffer).posx);
+	printf("pos Y :%d\n",(*buffer).posy);
+
+*/
 
 	/*
 	puts("Main program bitch");
@@ -31,10 +51,11 @@ main(){
 	printf("El tiempo de quantum es %d\n",config.quantum);
 	printf("El tiempo de retardo es %d\n",config.retardo);
 	printf("Hay %d cajas de recursos \n",list_size(&config.listaCajas));
+
 	Caja* buffer;
 
 	buffer=list_get(&config.listaCajas,2);
-	printf("%s\n",(*buffer).itemName);
+	printf("%c\n",(*buffer).id);
 */
 	return 0;
 }

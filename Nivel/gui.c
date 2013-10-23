@@ -9,23 +9,84 @@
 #include <stdlib.h>
 #include <curses.h>
 #include <commons/collections/list.h>
+#include "cargador.h"
+#include "enemigos.h"
 
-dibujarNivel(){
-	int rows,cols;
+
+inicializarNivel(nivelConfig config,int* rows,int*cols){
+
+	int cantCajas,i;
+	Caja* buffer;
+	t_list* items;
+
+	items=list_create();
+
+	nivel_gui_inicializar();
+
+	nivel_gui_get_area_nivel(rows, cols);
+
+	cantCajas=list_size(&config.listaCajas);
+
+	for(i=0;i<cantCajas;i++){
+		buffer=list_get(&config.listaCajas,i);
+		CrearCaja(items,(*buffer).id,(*buffer).posx,(*buffer).posy,(*buffer).quantity);
+	}
+
+
+
+
+
+
+			nivel_gui_dibujar(items,config.nombre);
+
+			list_destroy(items);
+}
+
+actualizarNivel(t_list listaCajas,t_list listaEnemigos,char* nombre){
+
+
+	int cantCajas,cantEne,cantPj,i;
+
+	Caja* bufferCaja;
+	coordenadas* bufferEnemigos;
 	t_list* items;
 	items=list_create();
-	nivel_gui_inicializar();
-	nivel_gui_get_area_nivel(&rows, &cols);
+	cantCajas=list_size(&listaCajas);
+	cantEne=list_size(&listaEnemigos);
 
-	CrearPersonaje(items, '@', 1, 1);
-	CrearPersonaje(items, '#', 10, 10);
-	CrearEnemigo(items, '1', 20, 20);
-	CrearEnemigo(items, '2', 10, 10);
+	//cantPj=list_size(&listaPersonajesActivos);
+	for(i=0;i<cantCajas;i++){
+		bufferCaja=list_get(&listaCajas,i);
+		CrearCaja(items,(*bufferCaja).id,(*bufferCaja).posx,(*bufferCaja).posy,(*bufferCaja).quantity);
 
-	CrearCaja(items, 'M', 8, 15, 3);
-	CrearCaja(items, 'F', 19, 9, 2);
-	CrearCaja(items, 'H', 26, 10, 5);
-	nivel_gui_dibujar(items,"Mi primer nivel");
-	scanf("%d",&rows);
-	nivel_gui_terminar();
+	}
+	i=0;
+
+	for(i=0;i<cantEne;i++){
+		char id[1];
+
+
+		//itoa(i+1,id); //itoa() esta declarada en cargador.h
+		bufferEnemigos=list_get(&listaEnemigos,i);
+		//printf("%s\n",id);
+
+		CrearEnemigo(items,i+1,(*bufferEnemigos).posx,(*bufferEnemigos).posy);
+
+	}
+	i=0;
+
+/*
+	for(i=0;i<cantPj;i++){
+		puts("Si esto se imprime es que algo esta mal");
+		//DESARROLLAR
+	}
+*/
+
+	nivel_gui_dibujar(items,nombre);
+
+	int as;
+		scanf("%d\n",&as);
+		nivel_gui_terminar();
+
 }
+

@@ -11,7 +11,7 @@
 #include <commons/config.h>
 #include <commons/collections/list.h>
 
-typedef struct item {
+typedef struct Caja {
 	char * itemName;
 	char  id;
 	int posx;
@@ -34,6 +34,6 @@ typedef struct ncfg {
 	int retardo;
 } nivelConfig;
 
-void cargarconfig(nivelConfig*);
+void cargarconfig(nivelConfig*,t_list*);
 
 #endif /* CARGADOR_H_ */

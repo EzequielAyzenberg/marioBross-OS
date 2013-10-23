@@ -1,5 +1,5 @@
 compile:
-	gcc -o nivel nivel.c cargador.c gui.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses
+	gcc -o nivel nivel.c cargador.c gui.c enemigos.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses
 
 
 
