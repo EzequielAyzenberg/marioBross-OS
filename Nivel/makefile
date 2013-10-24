@@ -1,8 +1,13 @@
+all: compile
+
 compile:
-	gcc -o nivel nivel.c cargador.c gui.c enemigos.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses
+
+#    gcc -o nivel nivel.c cargador.c gui.c enemigos.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses -I/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID -L/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID/Debug -ltheGrid
+
+#	gcc -o nivel nivel.c cargador.c  -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons 
+	gcc -o nivel nivel.c cargador.c gui.c enemigos.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses -I/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID -L/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID/Debug -ltheGrid
 
 
 
-#nivel: nivel.c cargador.c  /home/utnso/workspace/commons/commons/config.c /home/utnso/workspace/commons/commons/collections/dictionary.c /home/utnso/workspace/commons/commons/string.c /home/utnso/workspace/commons/commons/collections/list.c
-#	gcc  -o nivel nivel.c cargador.c  /home/utnso/workspace/commons/commons/config.c /home/utnso/workspace/commons/commons/collections/dictionary.c /home/utnso/workspace/commons/commons/string.c /home/utnso/workspace/commons/commons/collections/list.c -I/home/utnso/workspace/commons
-	
+
+

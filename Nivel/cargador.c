@@ -15,12 +15,21 @@
 char *path;
 t_config config;
 char prueba[20];
-int sleep;
+//int sleep; Este int me genera Segmentatio Fault, por el nombre
 t_list cajas;
 
 
+void reverse(char s[])
+{
+     int i, j;
+     char c;
 
-
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+         c = s[i];
+         s[i] = s[j];
+         s[j] = c;
+     }
+}
 
 //funcion que le paso un int y devuelve un string
 void itoa(int n, char s[])
@@ -39,22 +48,15 @@ void itoa(int n, char s[])
      reverse(s);
 }
 //me da vuelta el string
-void reverse(char s[])
-{
-     int i, j;
-     char c;
 
-     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
-         c = s[i];
-         s[i] = s[j];
-         s[j] = c;
-     }
-}
+
+
 void cargarNombre(t_config config,char** nombre,int* valCar){
 	if (config_has_property(&config,"Nombre")){
 		*nombre=(char*)malloc(strlen(config_get_string_value(&config,"Nombre")));
 		strcpy(*nombre,config_get_string_value(&config,"Nombre"));
 		(*valCar)++;
+
 	}
 	else {
 		puts("Falta el nombre del nivel");
@@ -144,6 +146,8 @@ void cargarRetardo(t_config config,int* retardo,int* valCar){
 		exit(1);
 	};
 	}
+
+
 void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 	//Los numeros de las cajas debes ser consecutivos,sino el algoritmo no los cargara
 	int flag=1;
@@ -166,7 +170,7 @@ void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 			strcpy(aux,"[");
 			strcat(aux,config_get_string_value(&config,caja));
 			strcat(aux,"]");
-			arrayCaja=string_get_string_as_array(aux);
+			arrayCaja=(char**)string_get_string_as_array(aux);
 			cajaBuffer.itemName=(char*)malloc(strlen(arrayCaja[0]));
 			strcpy(cajaBuffer.itemName,arrayCaja[0]);
 			cajaBuffer.id=*arrayCaja[1];
@@ -181,7 +185,9 @@ void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 			cont++;
 		}
 		else flag=0;
-};
+	//free(aux);
+	//free(arrayCaja);
+	};
 
 if (cont==1){
 	puts("El nivel no tiene cajas"); //si el contador al terminar vale 1,significa que no se cargo ni una caja
@@ -190,6 +196,7 @@ if (cont==1){
 
 
 }
+
 
 verificarCargados(t_config config,int valCar){
 	if(config_keys_amount(&config)==valCar){
@@ -202,6 +209,7 @@ verificarCargados(t_config config,int valCar){
 		exit(1);
 	}
 }
+
 
 comprobarSuperposicion(t_list listaCajas){
 	int posiciones[list_size(&listaCajas)];
@@ -260,6 +268,8 @@ void cargarConfig(nivelConfig* configNivel){
 	verificarCargados(config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
 
+
 }
+
 
 

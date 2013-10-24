@@ -34,6 +34,6 @@ typedef struct ncfg {
 	int retardo;
 } nivelConfig;
 
-void cargarconfig(nivelConfig*,t_list*);
+//void cargarconfig(nivelConfig*,t_list*);
 
 #endif /* CARGADOR_H_ */

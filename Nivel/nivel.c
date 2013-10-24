@@ -14,18 +14,28 @@
 #include "enemigos.h"
 #include <commons/collections/list.h>
 #include <time.h>
+#include <sockets.h>
 
 main(){
 	nivelConfig config;
 	t_list listaEnemigos;
-	t_list listaActivos;
-	//list_create(&listaJugadoresActivos);
+	t_list listaJugadoresActivos;
+	listaJugadoresActivos=*list_create();//provisorio hasta que un proceso se encargue de crearla
 	int rows,cols;
 	cargarConfig(&config);
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	crearEnemigos(config,&listaEnemigos,rows,cols);
-	actualizarNivel(config.listaCajas,listaEnemigos,config.nombre);
-/*
+
+	sleep(1);
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
+
+	int as;
+	scanf("%d\n",&as);
+	//flush_in();
+	scanf("%d\n",&as);
+	nivel_gui_terminar();
+
+	/*
 	coordenadas* buffer;
 	buffer=list_get(&listaEnemigos,0);
 	printf("pos X :%d\n",(*buffer).posx);

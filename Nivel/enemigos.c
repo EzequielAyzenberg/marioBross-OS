@@ -50,25 +50,28 @@ cargarCoordenadasEnemigo(int j,t_list* listaEnemigos,int cantCajas,int coorCajas
 };
 
 crearEnemigos(nivelConfig config,t_list* listaEnemigos,int rows,int cols){  //recibe el archivo de configuracion y los limites de pantalla
+
 	int i=0;
 	int j=0;
 	int cantEne=0;
 	int cantCajas=0;
-
-	list_create(listaEnemigos);
+	*listaEnemigos=*list_create();
 	coordenadas enemyPos;
 	cantEne=config.enemigos;
 	cantCajas=list_size(&config.listaCajas);
 	int coorCajas[cantCajas];//este vector va a almacenar las coordenadas de cada caja
 	Caja* buffer;
+
 	for(i=0;i<cantCajas;i++){
 		buffer=list_get(&config.listaCajas,i);
 		coorCajas[i]=(*buffer).posx*100+(*buffer).posy;
 	}
 	i=0;
+
 	for(i=0;i<cantEne;i++){
 		cargarCoordenadasEnemigo(i,listaEnemigos,cantCajas,coorCajas,rows,cols);//Carga las coordenadas del numero de enemigo indicado,necesita la cantidad de columnas y filas maximas
 		}
+
 }
 
 

@@ -11,6 +11,7 @@
 #include <commons/collections/list.h>
 #include "cargador.h"
 #include "enemigos.h"
+#include <sockets.h>
 
 
 inicializarNivel(nivelConfig config,int* rows,int*cols){
@@ -39,10 +40,10 @@ inicializarNivel(nivelConfig config,int* rows,int*cols){
 
 			nivel_gui_dibujar(items,config.nombre);
 
-			list_destroy(items);
+			//list_destroy(items);
 }
 
-actualizarNivel(t_list listaCajas,t_list listaEnemigos,char* nombre){
+actualizarNivel(t_list listaCajas,t_list listaEnemigos,t_list listaJugadoresActivos,char* nombre){
 
 
 	int cantCajas,cantEne,cantPj,i;
@@ -54,7 +55,7 @@ actualizarNivel(t_list listaCajas,t_list listaEnemigos,char* nombre){
 	cantCajas=list_size(&listaCajas);
 	cantEne=list_size(&listaEnemigos);
 
-	//cantPj=list_size(&listaPersonajesActivos);
+	cantPj=list_size(&listaJugadoresActivos);
 	for(i=0;i<cantCajas;i++){
 		bufferCaja=list_get(&listaCajas,i);
 		CrearCaja(items,(*bufferCaja).id,(*bufferCaja).posx,(*bufferCaja).posy,(*bufferCaja).quantity);
@@ -75,18 +76,20 @@ actualizarNivel(t_list listaCajas,t_list listaEnemigos,char* nombre){
 	}
 	i=0;
 
-/*
+
 	for(i=0;i<cantPj;i++){
 		puts("Si esto se imprime es que algo esta mal");
 		//DESARROLLAR
 	}
-*/
+
 
 	nivel_gui_dibujar(items,nombre);
 
-	int as;
-		scanf("%d\n",&as);
-		nivel_gui_terminar();
+		//int as;
+		//scanf("%d\n",&as);
+		//flush_in();
+		//scanf("%d\n",&as);
+		//nivel_gui_terminar();
 
 }
 

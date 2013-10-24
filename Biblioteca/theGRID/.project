@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>nivel</name>
+	<name>theGrid</name>
 	<comment></comment>
 	<projects>
-		<project>Commons-Library</project>
-		<project>Nivel</project>
 		<project>commons</project>
-		<project>nivel-gui</project>
-		<project>theGrid</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
