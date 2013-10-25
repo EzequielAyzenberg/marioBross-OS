@@ -1,6 +1,9 @@
 #include"sockets.h"
 
 void terminar(int estado,int sockfd){
+
+	//Funciones internas para terminar el programa por error.
+
 	switch (estado){
 	case 0:
 		puts("Ha elegido terminar el programa, adios.");
@@ -24,12 +27,10 @@ void terminar(int estado,int sockfd){
 	}
 }
 
-void flush_in(void){
-int ch;
-while( (ch = fgetc(stdin)) != EOF && ch != '\n' && ch!='\0' ){}
-}
-
 int connectGRID(int port,char *ipdest){
+
+	//Le pasas el puerto y la IP(en string) y el chabon te devuelve el socket ya conectado.
+
 	int estado;
 	int sockfd;
 	struct sockaddr_in socket_addr;
@@ -48,6 +49,9 @@ int connectGRID(int port,char *ipdest){
 }
 
 int listenGRID(int port){
+
+	//Le pasas el puerto y el chabon te devuelve el socket escuchando.
+
 	int sock,estado;
 	struct sockaddr_in socket_addr;
 	sock=socket(AF_INET,SOCK_STREAM,0);
@@ -62,7 +66,7 @@ int listenGRID(int port){
 	if (estado==-1)terminar(4,sock);
 	estado=bind(sock, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
 	if (estado==-1)terminar(4,sock);
-	puts("Puerto asiganado correctamente.");
+	puts("Puerto asignado correctamente.");
 	estado=listen(sock,10);
 	if (estado==-1)terminar(5,sock);
 	puts("Escuchando...");
@@ -70,6 +74,9 @@ int listenGRID(int port){
 }
 
 int selectGRID(int maxfd,fd_set *dirfdRead){
+
+	//Le pasas el maxfd y la lista copia de fd_set y te devuelve lo que el select, sin errores.
+
 	int estado=0;
 	//struct timeval time;
 	while (estado<=0)	estado=select (maxfd+1,dirfdRead,NULL,NULL,NULL);
@@ -77,6 +84,9 @@ return estado;
 }
 
 int acceptGRID(int sockescucha){
+
+	//Simple...Le pasas el Listener y te devuelve un nuevo socket conectado.
+
 	struct sockaddr_in their_addr;
 	unsigned int size=sizeof(struct sockaddr_in);
 	//Los mensajes probablemente se reemplacen con salidas al log.
@@ -93,6 +103,10 @@ int acceptGRID(int sockescucha){
 }
 
 void sendHandshake(short tipo,char* nombre,char simbolo,short sockfd){
+
+	//Le pasas los datos del Handshake más el socket destino en formato short (castearlo).
+	//Nombre de un maximo de 12 Caracteres.
+
 	handshake temp;
 	temp.type=tipo;
 	temp.symbol=simbolo;
@@ -108,6 +122,9 @@ void sendHandshake(short tipo,char* nombre,char simbolo,short sockfd){
 }
 
 void sendAnswer(short mensaje,short contador, char datos, char simbolo, short sockfd){
+
+	//Lo mismo que el anterior pero con Answer.
+
 	answer temp;
 	temp.msg=mensaje;
 	temp.cont=contador;
@@ -124,6 +141,10 @@ void sendAnswer(short mensaje,short contador, char datos, char simbolo, short so
 }
 
 int recvHandshake(handshake *temp,int sockfd){
+
+	/*Le pasas una estructura Handshake vacia (por referencia) más el socket, y te da
+	el estructura->Type como resultado o 0 si se desconecto.*/
+
 	int estado=-1;
 	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.
@@ -137,6 +158,10 @@ int recvHandshake(handshake *temp,int sockfd){
 }
 
 int recvAnswer(answer *temp,int sockfd){
+
+	/*Lo mismo que el anterior pero con una estructura Answer.
+	Te devuelve el estructura->Msg como resultado o 0 si se desconecto.*/
+
 	int estado=-1;
 	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.

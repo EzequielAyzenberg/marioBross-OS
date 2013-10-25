@@ -3,6 +3,7 @@
 	<name>Biblioteca</name>
 	<comment></comment>
 	<projects>
+		<project>Commons-Library</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
