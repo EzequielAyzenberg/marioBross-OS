@@ -1,37 +1,5 @@
-#include<stdio.h>
-#include<theGRID/sockets.h>
 
-typedef struct tnuevo{
-	int pid;
-	char sym;
-	struct tnuevo* sgte;
-}nuevo;
-
-typedef struct tinfo{
-	int nid;
-	char name[17];
-	int currplay;
-	nuevo* new;
-	struct tinfo* sgte;
-}info;
-
-struct data{
-	int dist;
-	char recsol;
-};
-
-struct stack{
-	char recasig;
-	struct stack* sgte;
-};
-
-typedef struct tplayer{
-	int pid;
-	char sym;
-	struct data data;
-	struct stack* stack;
-	struct tplayer* sgte;
-}player;
+#include"Planificador.h"
 
 void inicializar(info*);
 
@@ -42,30 +10,65 @@ int leerNovedad(info*,nuevo*,player*);
 void reordenar(player**,player**);
 void cargarAlFinal(player*,player**,player**);
 
+void interrupcion(int,short,answer*,global);
+int selectear(answer*,short,fd_set*,int,int,global);
+
 int cantleidos=0,RR=0;
 
-int main(){
+void *planificador (void *parametro){
+	info*raiz=(info*)parametro;
 
 //Harcodeo
-	info*raiz;
 	nuevo*actual;
+	actual=raiz->new;
+	stack *recleft;
+	recleft=NULL;
+	player exec;
 	player*readyfte,*readyfin,*sleepfte,*sleepfin;
 	readyfte=NULL;
 	readyfin=NULL;
 	sleepfte=NULL;
 	sleepfin=NULL;
-	raiz=NULL;
-	actual=NULL;
+	fd_set master, copy;
+	int maxfd,rest=0;
+	FD_ZERO(&master);
+	FD_ZERO(&copy);
+	FD_SET(raiz->nid,&master);
+	maxfd=raiz->nid;
+	global general;
+	general.cabecera=raiz;
+	general.rfte=&readyfte;
+	general.rfin=&readyfin;
+	general.sfte=&sleepfte;
+	general.sfin=&sleepfin;
+	general.algo=&RR;
+	general.exe=&exec;
+	general.recur=&recleft;
+	general.resto=&rest;
 
 	inicializar(raiz);
 
 	player*temp;
 	int estado=1;
+	short respuesta;
 	while (estado!=0){
 		temp=(player*)malloc(sizeof(player));
 		estado=leerNovedad(raiz,actual,temp);
-		cargarAlFinal(temp,&readyfte,&readyfin);
-
+		if(estado!=0){
+			cargarAlFinal(temp,&readyfte,&readyfin);
+			FD_SET(temp->pid,&master);
+			if(temp->pid>maxfd)maxfd=temp->pid;
+			raiz->currplay++;
+			sendAnswer(7,0,' ',temp->sym,(short)raiz->nid);
+			copy=master;
+			respuesta=selectear(NULL,1,&copy,maxfd,raiz->nid,general);
+			switch (respuesta){
+			case 1:puts("--El nivel se ha enterado.--");
+				break;
+			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
+				break;
+			}
+		}
 	}
 
 
@@ -86,9 +89,9 @@ void inicializar(info*raiz){
 void borrarTanda(info*raiz){
 	int cont;
 	for(cont=1;cont<=5;cont++){
-		info*aux;
-		aux=raiz;
-		raiz=raiz->sgte;
+		nuevo*aux;
+		aux=raiz->new;
+		raiz->new=raiz->new->sgte;
 		free(aux);
 	}
 }
@@ -126,5 +129,40 @@ void cargarAlFinal(player*temp,player**lfte,player**lfin){
 	reordenar(lfte,lfin);
 }
 
+void interrupcion(int i,short respuesta,answer* aux,global tabla){
+	if(i==tabla.cabecera->nid){
+		/*switch(respuesta){
+		case 0:aLaMierdaConTodo(tabla);
+		break;
+		case 6:modificarAlgoritmo(aux->cont,tabla);
+		break;
+		case 8:muertePersonaje(aux->cont,tabla);
+		break;
+		}*/
+	}
+}
+int selectear(answer*tempo,short esperado,fd_set*readfds,int fdmax,int sock,global tabla){
+	answer*aux;
+	short respuesta;
+	do{
+		selectGRID(fdmax,readfds);
 
+		int i=0;
+		while ((!FD_ISSET(i,readfds))&&(i<=fdmax))	i++;
+		if (i>fdmax){
+			puts("--ERROR:No se encontro candidato para selectear!!--");
+			exit(1);
+		}else{
+			if (tempo!=NULL)aux=tempo;
+			respuesta=recvAnswer(aux,sock);
+			if (i==sock){
+				if((respuesta==esperado)||(respuesta==-1))return respuesta;
+				else interrupcion(i,respuesta,aux,tabla);
+			}else{
+				interrupcion(i,respuesta,aux,tabla);
+			}
+		}
+	}while(1);
+	return -1;
+}
 

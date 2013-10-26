@@ -29,7 +29,7 @@ dependents:
 	-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug && $(MAKE) all
 
 # Tool invocations
-Plataforma: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons.so
+Plataforma: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
 	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -o "Plataforma" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -44,6 +44,6 @@ clean:
 .PHONY: all clean dependents
 .SECONDARY:
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so:
-/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons.so:
+/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so:
 
 -include ../makefile.targets

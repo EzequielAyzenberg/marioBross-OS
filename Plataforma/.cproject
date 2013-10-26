@@ -31,6 +31,7 @@
 									<listOptionValue builtIn="false" value="/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library"/>
 									<listOptionValue builtIn="false" value="/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca"/>
 								</option>
+								<option id="gnu.c.compiler.option.misc.pic.66616416" name="Position Independent Code (-fPIC)" superClass="gnu.c.compiler.option.misc.pic" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1565650561" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.2039576900" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
@@ -39,9 +40,11 @@
 									<listOptionValue builtIn="false" value="/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug"/>
 								</option>
 								<option id="gnu.c.link.option.libs.1977300340" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Commons"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Commons-Library"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Biblioteca"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
 								</option>
+								<option id="gnu.c.link.option.noshared.392409110" name="No shared libraries (-static)" superClass="gnu.c.link.option.noshared" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1032826962" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -67,11 +70,11 @@
 						<entry flags="RESOLVED" kind="libraryFile" name="Biblioteca" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="Commons;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="Commons-Library;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Commons"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Commons/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="Commons" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Commons-Library"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Commons-Library/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="Commons-Library" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -135,4 +138,5 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

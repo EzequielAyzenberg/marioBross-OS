@@ -4,7 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>Biblioteca</project>
-		<project>Commons</project>
+		<project>Commons-Library</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
