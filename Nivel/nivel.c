@@ -12,6 +12,7 @@
 #include "cargador.h"
 #include "gui.h"
 #include "enemigos.h"
+#include "conexiones.h"
 #include <commons/collections/list.h>
 #include <time.h>
 #include <sockets.h>
@@ -25,15 +26,32 @@ main(){
 	cargarConfig(&config);
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	crearEnemigos(config,&listaEnemigos,rows,cols);
-
-	sleep(1);
 	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-
-	int as;
-	scanf("%d\n",&as);
-	//flush_in();
-	scanf("%d\n",&as);
 	nivel_gui_terminar();
+	t_list recorridoEnemigos[config.enemigos];
+		//sleep(1);
+
+
+
+	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
+	while(1){
+	moverEnemigos(&listaEnemigos,config.listaCajas,listaJugadoresActivos,recorridoEnemigos,rows,cols);
+
+	printf("El tamaño de la lista EN EL MAIN 0 cuando sale es %d\n",list_size(&recorridoEnemigos[0]));
+	printf("El tamaño de la lista EN EL MAIN 1 cuando sale es %d\n",list_size(&recorridoEnemigos[1]));
+	printf("El tamaño de la lista EN EL MAIN 2 cuando sale es %d\n",list_size(&recorridoEnemigos[2]));
+
+	};
+
+//	nivel_gui_terminar();
+	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
+	//handshakePlataforma(config);
+	//sleep(2);
+
+	//int as;
+	//scanf("%d\n",&as);
+	//flush_in();
+	//scanf("%d\n",&as);
 
 	/*
 	coordenadas* buffer;

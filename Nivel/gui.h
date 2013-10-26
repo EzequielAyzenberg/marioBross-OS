@@ -1,5 +1,5 @@
 /*
- * gui.h
+ * gui.hhandshakePlataforma45
  *
  *  Created on: 21/10/2013
  *      Author: utnso
