@@ -15,7 +15,7 @@
 #include "conexiones.h"
 #include <commons/collections/list.h>
 #include <time.h>
-#include <sockets.h>
+#include <theGRID/sockets.h>
 
 main(){
 	nivelConfig config;
@@ -27,19 +27,38 @@ main(){
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	crearEnemigos(config,&listaEnemigos,rows,cols);
 	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-	nivel_gui_terminar();
-	t_list recorridoEnemigos[config.enemigos];
-		//sleep(1);
+	coordenadas recorridoEnemigos[config.enemigos][4];
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
+		//nivel_gui_terminar();
+	{
+		int i=0,j=0;
+		for (i=0;i<config.enemigos;i++){
+			for(j=0;j<4;j++){
+				recorridoEnemigos[i][j].posx=0;
+				recorridoEnemigos[i][j].posy=0;
+			}
+		}
+	}
 
 
 
-	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
+
 	while(1){
+sleep(1);
 	moverEnemigos(&listaEnemigos,config.listaCajas,listaJugadoresActivos,recorridoEnemigos,rows,cols);
-
-	printf("El tamaño de la lista EN EL MAIN 0 cuando sale es %d\n",list_size(&recorridoEnemigos[0]));
-	printf("El tamaño de la lista EN EL MAIN 1 cuando sale es %d\n",list_size(&recorridoEnemigos[1]));
-	printf("El tamaño de la lista EN EL MAIN 2 cuando sale es %d\n",list_size(&recorridoEnemigos[2]));
+	coordenadas* buffer;
+/*
+	buffer=list_get(&listaEnemigos,0);
+		printf("pos X :%d\n",(*buffer).posx);
+		printf("pos Y :%d\n",(*buffer).posy);
+		buffer=list_get(&listaEnemigos,1);
+		printf("pos X :%d\n",(*buffer).posx);
+		printf("pos Y :%d\n",(*buffer).posy);
+		buffer=list_get(&listaEnemigos,2);
+		printf("pos X :%d\n",(*buffer).posx);
+		printf("pos Y :%d\n",(*buffer).posy);
+*/
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
 
 	};
 
@@ -53,38 +72,10 @@ main(){
 	//flush_in();
 	//scanf("%d\n",&as);
 
-	/*
-	coordenadas* buffer;
-	buffer=list_get(&listaEnemigos,0);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
-	buffer=list_get(&listaEnemigos,1);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
-	buffer=list_get(&listaEnemigos,2);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
 
-*/
 
-	/*
-	puts("Main program bitch");
-	printf("El nombre del Nivel es %s\n",config.nombre);
-	printf("Los datos de conexion son %s\n",config.orquestador);
-	printf("El interveo de cheque de Deadlock es %d\n",config.intervaloDeadLock);
-	printf("El revery se encuentra en estado %d\n",config.recovery);
-	printf("Hay %d enemigos\n",config.enemigos);
-	printf("El tiempo de retardo de los enemigos es %d\n",config.sleepEnemigos);
-	printf("Se usa una planificacion del tipo %s\n",config.algoritmo);
-	printf("El tiempo de quantum es %d\n",config.quantum);
-	printf("El tiempo de retardo es %d\n",config.retardo);
-	printf("Hay %d cajas de recursos \n",list_size(&config.listaCajas));
 
-	Caja* buffer;
 
-	buffer=list_get(&config.listaCajas,2);
-	printf("%c\n",(*buffer).id);
-*/
 	return 0;
 }
 

@@ -6,7 +6,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <sockets.h>
+#include <theGRID/sockets.h>
 #include "conexiones.h"
 #include <commons/string.h>
 #include "cargador.h"
