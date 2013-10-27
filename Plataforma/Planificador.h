@@ -11,13 +11,6 @@
 #include<stdio.h>
 #include<theGRID/sockets.h>
 
-
-typedef struct tnuevo{
-	int pid;
-	char sym;
-	struct tnuevo* sgte;
-}nuevo;
-
 typedef struct tinfo{
 	int nid;
 	char name[17];
