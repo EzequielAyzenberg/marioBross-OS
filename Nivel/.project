@@ -8,6 +8,7 @@
 		<project>commons</project>
 		<project>nivel-gui</project>
 		<project>theGrid</project>
+		<project>Biblioteca</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

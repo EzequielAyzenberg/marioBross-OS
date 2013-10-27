@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lnivel-gui -lCommons-Library -lBiblioteca
+LIBS :=
 
