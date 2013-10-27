@@ -4,15 +4,11 @@
 #include"Planificador.h"
 #include<pthread.h>
 
-
-//Por ahora será un servidor SUPER HARCODEADO para testear mi planificador...
-
-
+//Por ahora será un servidor SUPER HARCODEADO
+//para testear mi planificador...
 #define MYPORT 2506
 #define MYIP "192.168.0.11"
 #define MAX 64
-
-void crearTanda(nuevo**);
 
 int main(int argc, char *argv[]){
 					//Carga la IP de destino y el puerto puestos a la hora de ejecutar el programa.
@@ -57,11 +53,6 @@ int main(int argc, char *argv[]){
 		if (actual->sgte==NULL)	crearTanda(&(actual->sgte));
 		actual=actual->sgte;
 	}
-
-
-
-
-
 	return 0;
 }
 
