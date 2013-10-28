@@ -29,6 +29,7 @@ void *planificador (void *parametro){
 	stack=list_create();
 	ready=list_create();
 	sleeps=list_create();
+	puts("--PLANIFICADOR-- 1");
 	player exec;
 	fd_set master, copy;
 	int maxfd,rest=0;
@@ -36,6 +37,7 @@ void *planificador (void *parametro){
 	FD_ZERO(&copy);
 	FD_SET(raiz->nid,&master);
 	maxfd=raiz->nid;
+	puts("--PLANIFICADOR-- 2");
 	global general;
 	general.cabecera=raiz;
 	general.ready=ready;

@@ -3,7 +3,7 @@
 #include"Orquestador.h"
 
 
-#define MYPORT 2506
+#define MYPORT 2345
 #define MYIP "192.168.0.11"
 #define MAX 64
 
@@ -29,7 +29,8 @@ int main(int argc, char *argv[]){
 	registroOrquestador.puerto = puerto;
 	registroOrquestador.listaNiveles = listaNiveles;
 
-	id_orquest= hiloGRID(orquestador,&registroOrquestador);
+	id_orquest= hiloGRID(orquestador,(void*)&registroOrquestador);
+	pthread_join(id_orquest,NULL);
 
 /* HARCODEO DE UNA POSIBLE CONEXION DE UN JUGADOR
 	puts("Atendiendo Personajes ahora..");
@@ -51,22 +52,5 @@ int main(int argc, char *argv[]){
 */
 
 	return 0;
-}
-
-void crearTanda(nuevo** lista){
-	int i;
-	nuevo *tempo,*aux;
-	aux=*lista;
-	for (i=1;i<=5;i++){
-		tempo=(nuevo*)malloc(sizeof(nuevo));
-		tempo->pid=0;
-		tempo->sym=' ';
-		tempo->sgte=NULL;
-		if(*lista==NULL)*lista=tempo;
-		else{
-			aux->sgte=tempo;
-			aux=tempo;
-		}
-	}
 }
 
