@@ -1,18 +1,17 @@
 //SOY EL PADRE DE TODO LO QUE PASA AQUI!!!
 
 #include<stdio.h>
-#include"Planificador.h"
+#include"orquestador.h"
 #include<pthread.h>
+#include<commons/collections/list.h>
 
-
-//Por ahora será un servidor SUPER HARCODEADO para testear mi planificador...
-
-
+//Por ahora será un servidor SUPER HARCODEADO
+//para testear mi planificador...
 #define MYPORT 2506
 #define MYIP "192.168.0.11"
 #define MAX 64
 
-void crearTanda(nuevo**);
+t_list *listaNiveles = list_create();
 
 int main(int argc, char *argv[]){
 					//Carga la IP de destino y el puerto puestos a la hora de ejecutar el programa.
@@ -28,6 +27,7 @@ int main(int argc, char *argv[]){
 		break;
 	}
 					//Aca arranca la "Plataforma"..
+/* HARCODEO DEL ORQUESTADOR
 	info registro;
 	int listener=listenGRID(puerto);
 	int nivel=acceptGRID(listener);
@@ -38,9 +38,21 @@ int main(int argc, char *argv[]){
 	registro.new=NULL;
 	registro.sgte=NULL;
 
-	/*pthread_t idHilo;
-	if(pthread_create(&idHilo, NULL, planificador, (void*)&registro)==0)puts("Hilo creado correctamente.");
-	else puts("Hubo un problema en la creacion del hilo.");*/
+    pthread_t idHilo;
+	if(pthread_create(&idHilo, NULL, planificador, (void*)&registro)==0)
+	puts("Hilo creado correctamente.");
+	else puts("Hubo un problema en la creacion del hilo.");
+ */
+	pthread_t orquestador;
+	infoOrquestador registroOrquestador;
+	registroOrquestador.puerto = puerto;
+	registroOrquestador.listaNiveles = listaNiveles;
+
+ if(pthread_create(&orquestador, NULL, orquestador, (void*)&registroOrquestador)==0)
+	puts("Hilo creado correctamente.");
+	else puts("Hubo un problema en la creacion del orquestador.");
+
+/* HARCODEO DE UNA POSIBLE CONEXION DE UN JUGADOR
 	puts("Atendiendo Personajes ahora..");
 	crearTanda(&(registro.new));
 	int personaje;
@@ -57,10 +69,7 @@ int main(int argc, char *argv[]){
 		if (actual->sgte==NULL)	crearTanda(&(actual->sgte));
 		actual=actual->sgte;
 	}
-
-
-
-
+*/
 
 	return 0;
 }

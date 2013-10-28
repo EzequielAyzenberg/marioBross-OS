@@ -8,23 +8,9 @@
 #ifndef PLANIFICADOR_H_
 #define PLANIFICADOR_H_
 
-#include<stdio.h>
-#include<theGRID/sockets.h>
-
-
-typedef struct tnuevo{
-	int pid;
-	char sym;
-	struct tnuevo* sgte;
-}nuevo;
-
-typedef struct tinfo{
-	int nid;
-	char name[17];
-	int currplay;
-	nuevo* new;
-	struct tinfo* sgte;
-}info;
+#include <theGRID/sockets.h>
+#include <stdio.h>
+#include "Plataforma.h"
 
 struct data{
 	int dist;
