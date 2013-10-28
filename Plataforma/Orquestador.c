@@ -96,7 +96,8 @@ void crearHiloPlanificador(handshake handshakeNivel,int socketNivel){
 }
 
 void responder(int socketJugador){
-
+	//Enviarle al Personaje el mensaje de no encontrado.
+	sendAnswer(-1,0,'\0','\0',socketJugador);
 };
 
 nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles){
