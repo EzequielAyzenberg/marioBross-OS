@@ -53,6 +53,7 @@ int main(int argc, char *argv[]){
 	puts("Hilo creado correctamente.");
 	else puts("Hubo un problema en la creacion del orquestador.");
 
+/* HARCODEO DE UNA POSIBLE CONEXION DE UN JUGADOR
 	puts("Atendiendo Personajes ahora..");
 	crearTanda(&(registro.new));
 	int personaje;
@@ -69,6 +70,8 @@ int main(int argc, char *argv[]){
 		if (actual->sgte==NULL)	crearTanda(&(actual->sgte));
 		actual=actual->sgte;
 	}
+*/
+
 	return 0;
 }
 
