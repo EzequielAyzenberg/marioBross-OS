@@ -41,10 +41,10 @@ int connectGRID(int port,char *ipdest){
 	socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	//Los mensajes probablemente se reemplacen con salidas al log.
-	puts("\nEstableciendo cenexion con el servidor..");
+	puts("\n--AUX--Estableciendo cenexion con el servidor..");
 	estado=connect(sockfd,(struct sockaddr *)&socket_addr,sizeof(struct sockaddr));
 	if (estado==-1)terminar(3,sockfd);
-	puts("Conexion realizada con exito!!");
+	puts("--AUX--Conexion realizada con exito!!\n");
 	return sockfd;
 }
 
@@ -66,10 +66,10 @@ int listenGRID(int port){
 	if (estado==-1)terminar(4,sock);
 	estado=bind(sock, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
 	if (estado==-1)terminar(4,sock);
-	puts("Puerto asignado correctamente.");
+	puts("--AUX--Puerto asignado correctamente.");
 	estado=listen(sock,10);
 	if (estado==-1)terminar(5,sock);
-	puts("Escuchando...");
+	puts("--AUX--Escuchando...");
 	return sock;
 }
 
@@ -98,7 +98,7 @@ int acceptGRID(int sockescucha){
 	dir=getpeername(nuevo,(struct sockaddr *)&their_addr,(unsigned int *)&addrlen);
 	if (dir==-1)terminar(3,nuevo);
 	strcpy(direccion,inet_ntoa(their_addr.sin_addr));
-	printf("Conexion establecida con IP Nº: %s en el socket Nº: %d\n",direccion,nuevo);
+	printf("--AUX--Conexion establecida con IP Nº: %s en el socket Nº: %d\n\n",direccion,nuevo);
 	return nuevo;
 }
 
@@ -114,11 +114,11 @@ void sendHandshake(short tipo,char* nombre,char simbolo,short sockfd){
 	short estado=0;
 	while (estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("Intentando enviar mensaje..");
+		printf("\n--AUX--Intentando enviar mensaje...");
 		estado=send(sockfd,(void*)&temp,sizeof(handshake),0);
 		sleep(0.1);
 	}
-	puts("Mensaje enviado con exito!!");
+	printf("Mensaje enviado con exito!!\n\n");
 }
 
 void sendAnswer(short mensaje,short contador, char datos, char simbolo, short sockfd){
@@ -133,11 +133,11 @@ void sendAnswer(short mensaje,short contador, char datos, char simbolo, short so
 	int estado=0;
 	while (estado<sizeof(answer)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("Intentando enviar mensaje..");
+		printf("\n--AUX--Intentando enviar mensaje...");
 		estado=send(sockfd,(void*)&temp,sizeof(answer),0);
 		sleep(0.1);
 	}
-	puts("Mensaje enviado con exito!!");
+	printf("Mensaje enviado con exito!!\n\n");
 }
 
 int recvHandshake(handshake *temp,int sockfd){
@@ -145,15 +145,17 @@ int recvHandshake(handshake *temp,int sockfd){
 	/*Le pasas una estructura Handshake vacia (por referencia) más el socket, y te da
 	el estructura->Type como resultado o 0 si se desconecto.*/
 
-	int estado=-1;
+	int aux=0,estado=-1;
 	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("Recibiendo mensaje..");
+		puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(handshake*)temp,sizeof(handshake),0);
+		aux++;
+		if(aux==5)terminar(1,sockfd);
 	}
-	printf("-------El estado es: %d-------\n",estado);
+	printf("--AUX-------El estado es: %d-------\n",estado);
 	if(estado==0)return 0;
-	puts("Mensaje recibido satisfactoriamente!!");
+	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->type;
 }
 
@@ -162,13 +164,15 @@ int recvAnswer(answer *temp,int sockfd){
 	/*Lo mismo que el anterior pero con una estructura Answer.
 	Te devuelve el estructura->Msg como resultado o 0 si se desconecto.*/
 
-	int estado=-1;
+	int aux=0,estado=-1;
 	while(estado<0){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("Recibiendo mensaje..");
+		puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(answer*)temp,sizeof(*temp),0);
-	}printf("-------El estado es: %d-------\n",estado);
+		aux++;
+		if(aux==5)terminar(1,sockfd);
+	}printf("--AUX-------El estado es: %d-------\n",estado);
 	if(estado==0)return 0;
-	puts("Mensaje recibido satisfactoriamente!!");
+	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->msg;
 }
