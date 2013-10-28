@@ -17,10 +17,10 @@ typedef struct tnuevo{
 
 /* Nodos que contienen listas de novedades */
 typedef struct tnodoNivel{
-	nuevo tanda;
-	nuevo tandaActual;
+	nuevo *tanda;
+	nuevo *tandaActual;
 	char nombreNivel[13];
-	int cnatJugadores;
+	int cantJugadores;
 }nodoNivel;
 
 /* Registro que necesito el orquestador
