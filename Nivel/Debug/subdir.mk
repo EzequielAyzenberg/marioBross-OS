@@ -8,21 +8,24 @@ C_SRCS += \
 ../conexiones.c \
 ../enemigos.c \
 ../gui.c \
-../nivel.c 
+../nivel.c \
+../nivelconfig.c 
 
 OBJS += \
 ./cargador.o \
 ./conexiones.o \
 ./enemigos.o \
 ./gui.o \
-./nivel.o 
+./nivel.o \
+./nivelconfig.o 
 
 C_DEPS += \
 ./cargador.d \
 ./conexiones.d \
 ./enemigos.d \
 ./gui.d \
-./nivel.d 
+./nivel.d \
+./nivelconfig.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

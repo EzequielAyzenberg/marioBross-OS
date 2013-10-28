@@ -1,12 +1,15 @@
 
+
 #include"Planificador.h"
+
+
 #define RD_INICIAL 0
 
-void inicializar(info*);
+void inicializar(nodoNivel*);
 
-void borrarTanda(info*);
+void borrarTanda(nodoNivel*);
 void crearStruct(nuevo*,player*);
-int leerNovedad(info*,nuevo**,player*);
+int leerNovedad(nodoNivel*,nuevo**,player*);
 
 void reordenar(t_list*ready);
 void cargarAlFinal(player*,t_list*);
@@ -18,9 +21,9 @@ int cantleidos=0,RR=0;
 
 void *planificador (void *parametro){
 	puts("\nHola mundo!!--Yo planifico.");
-	info*raiz=(info*)parametro;
+	nodoNivel*raiz=(nodoNivel*)parametro;
 	nuevo*actual;
-	actual=raiz->new;
+	actual=raiz->tandaRaiz;
 	t_list *stack,*ready,*sleeps;
 
 	stack=list_create();
@@ -57,7 +60,7 @@ void *planificador (void *parametro){
 			cargarAlFinal(temp,ready);
 			FD_SET(temp->pid,&master);
 			if(temp->pid>maxfd)maxfd=temp->pid;
-			raiz->currplay++;
+			raiz->cantJugadores++;
 			puts("Avisandole al nivel..");
 			sendAnswer(7,0,' ',temp->sym,(short)raiz->nid);
 			copy=master;
@@ -77,7 +80,7 @@ puts("El hilo termina ahora!!");
 	return 0;
 }
 
-void inicializar(info*raiz){
+void inicializar(nodoNivel*raiz){
 	puts("\nPidiendo algoritmo.");
 	sendAnswer(6,0,' ',' ',(short)raiz->nid);
 	sleep(1);
@@ -88,12 +91,13 @@ void inicializar(info*raiz){
 	else printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",RR);
 }
 
-void borrarTanda(info*raiz){
+
+void borrarTanda(nodoNivel*raiz){
 	int cont;
 	for(cont=1;cont<=5;cont++){
 		nuevo*aux;
-		aux=raiz->new;
-		raiz->new=raiz->new->sgte;
+		aux=raiz->tandaRaiz;
+		raiz->tandaRaiz=raiz->tandaRaiz->sgte;
 		free(aux);
 	}
 }
@@ -104,7 +108,7 @@ void crearStruct(nuevo*actual,player*temp){
 	temp->data.recsol=' ';
 	temp->stack=list_create();
 }
-int leerNovedad(info*raiz,nuevo**actual,player*temp){
+int leerNovedad(nodoNivel*raiz,nuevo**actual,player*temp){
 	if (cantleidos==6){
 		puts("Ya van 6..");
 		borrarTanda(raiz);

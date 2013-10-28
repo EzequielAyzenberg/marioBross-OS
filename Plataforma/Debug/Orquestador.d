@@ -1,9 +1,10 @@
-Plataforma.d: ../Plataforma.c ../Orquestador.h ../Plataforma.h \
+Orquestador.d: ../Orquestador.c ../Orquestador.h ../Plataforma.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/list.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/node.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/sockets.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h \
- /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h \
+ ../Planificador.h
 
 ../Orquestador.h:
 
@@ -18,3 +19,5 @@ Plataforma.d: ../Plataforma.c ../Orquestador.h ../Plataforma.h \
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h:
+
+../Planificador.h:

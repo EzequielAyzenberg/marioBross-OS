@@ -8,8 +8,7 @@
 #ifndef PLANIFICADOR_H_
 #define PLANIFICADOR_H_
 
-#include <theGRID/sockets.h>
-#include <stdio.h>
+
 #include "Plataforma.h"
 
 struct data{
@@ -19,25 +18,21 @@ struct data{
 
 typedef struct Pstack{
 	char recurso;
-	struct Pstack* sgte;
 }stack;
 
 typedef struct Pplayer{
 	int pid;
 	char sym;
 	struct data data;
-	stack* stack;
-	struct Pplayer* sgte;
+	t_list* stack;
 }player;
 
 typedef struct Pglobal{
-	info* cabecera;
-	player** rfte;
-	player** rfin;
-	player** sfte;
-	player** sfin;
+	nodoNivel* cabecera;
+	t_list*ready;
+	t_list*sleeps;
 	player* exe;
-	stack** recur;
+	t_list*recur;
 	int* algo;
 	int* resto;
 }global;

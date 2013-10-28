@@ -10,15 +10,15 @@
 #include <sys/ioctl.h>
 #include <curses.h>
 #include "commons/config.h"
-#include "commons/string.h"
+//#include "commons/string.h"
 #include "nivelconfig.h"
 
 //PROTOTIPO DE FUNCIONES
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 =======
 
 >>>>>>> b92ce3f6dcb4efdba4957dcc9c71f950ed49441e
-
+*/
 char * nombre ( t_config * cfg);
 
 char * orquestador( t_config * cfg);
