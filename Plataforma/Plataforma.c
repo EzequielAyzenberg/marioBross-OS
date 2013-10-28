@@ -1,7 +1,6 @@
 //SOY EL PADRE DE TODO LO QUE PASA AQUI!!!
 
 #include<stdio.h>
-#include"Planificador.h"
 #include"orquestador.h"
 #include<pthread.h>
 #include<commons/collections/list.h>

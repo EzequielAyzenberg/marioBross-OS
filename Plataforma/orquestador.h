@@ -8,9 +8,21 @@
 #ifndef ORQUESTADOR_H_
 #define ORQUESTADOR_H_
 
+#include "Plataforma.h"
+#include "Planificador.h"
+#include <pthread.h>
+#include <theGRID/sockets.h>
+
+/* Nodos de la lista Ganadores */
+typedef struct{
+	char personaje;
+}jugadorGanador;
+
 static void *orquestador(infoOrquestador info);
-void clienteNuevo(handshake nuevoHandshake,int socketJugador);
-void clienteViejo(handshake nuevoHandshake,int socketJugador);
+void   nivelNuevo(handshake handshakeNivel,  int socketNivel,   t_list* listaNiveles);
+void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles);
+void clienteViejo(handshake handshakeJugador, t_list *ganadores);
+void crearHiloPlanificador(handshake handshakeNivel,int socketNivel);
 
 
 #endif /* ORQUESTADOR_H_ */
