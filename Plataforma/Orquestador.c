@@ -94,3 +94,11 @@ void crearHiloPlanificador(handshake handshakeNivel,int socketNivel){
 		else puts("Hubo un problema en la creacion del hilo.");
 
 }
+
+void responder(int socketJugador){
+
+};
+
+nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles){
+	return NULL;
+};
