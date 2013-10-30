@@ -33,8 +33,8 @@ typedef struct Pglobal{
 	t_list*sleeps;
 	player* exe;
 	t_list*recur;
-	int* algo;
-	int* resto;
+	int algo;
+	int RemainDist;
 }global;
 
 void *planificador(void *);

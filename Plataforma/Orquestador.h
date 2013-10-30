@@ -28,7 +28,7 @@ void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiv
 void clienteViejo(handshake handshakeJugador, t_list *ganadores);
 void crearHiloPlanificador(handshake handshakeNivel,nodoNivel* nivel);
 void responder(int socketJugador);
-nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles);
+nuevo** validarNivel(char nombreNivel[13],t_list* listaNiveles);
 void crearTanda(nuevo** lista);
 
 #endif /* ORQUESTADOR_H_ */

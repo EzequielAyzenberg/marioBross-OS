@@ -65,17 +65,17 @@ void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
 };
 
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
-	nuevo* tandaActual;
+	nuevo** tandaActual;
 
-	if( NULL == (tandaActual = validarNivel(handshakeJugador.name,listaNiveles))){
+	if(*(tandaActual = validarNivel(handshakeJugador.name,listaNiveles))==NULL){
 		responder(socketJugador);
 		return;
 	}
 		puts("--ORQUESTADOR--Se ha recibido un nuevo Personaje");
-		tandaActual->pid=socketJugador;
-		tandaActual->sym=handshakeJugador.symbol;
-		if( tandaActual->sgte == NULL ) crearTanda(&(tandaActual->sgte));
-	    tandaActual = tandaActual->sgte;
+		(*tandaActual)->pid=socketJugador;
+		(*tandaActual)->sym=handshakeJugador.symbol;
+		if( (*tandaActual)->sgte == NULL ) crearTanda(&((*tandaActual)->sgte));
+	    *tandaActual = (*tandaActual)->sgte;
 	    puts("--ORQUESTADOR--Info del Personaje recibida");
 };
 
@@ -96,29 +96,21 @@ void responder(int socketJugador){
 	sendAnswer(-1,0,'\0','\0',socketJugador);
 };
 
-nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles){
+nuevo** validarNivel(char nombreNivel[13],t_list* listaNiveles){
 		int _is_Nivel(nodoNivel *nivel) {
 	    if(strcmp(nivel->name,nombreNivel)==0)return true;
 	    return false;
 		}
 	nodoNivel *aux = list_find(listaNiveles, (void*) _is_Nivel);
 	if(aux == NULL) return NULL;
-	return aux->tandaActual;
+	return &(aux->tandaActual);
 };
 
 void crearTanda(nuevo** lista){
-	int i;
-	nuevo *tempo,*aux;
-	aux=*lista;
-	for (i=1;i<=5;i++){
+	nuevo *tempo;
 		tempo=(nuevo*)malloc(sizeof(nuevo));
 		tempo->pid=0;
 		tempo->sym=' ';
 		tempo->sgte=NULL;
-		if(*lista==NULL)*lista=tempo;
-		else{
-			aux->sgte=tempo;
-			aux=tempo;
-		}
-	}
+		*lista=tempo;
 }
