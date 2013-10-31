@@ -257,7 +257,7 @@ void movIzqArriba(int i,coordenadas* buffer,int rows,int cols,int* ctrl,coordena
 		else{
 			if (*ctrl<9) {
 				*ctrl=*ctrl+1;
-				movArribaDer(i,buffer,rows,cols,ctrl,recorridoEnemigos);
+				movArribaIzq(i,buffer,rows,cols,ctrl,recorridoEnemigos);
 			}
 		};
 }
@@ -314,50 +314,45 @@ void elegirMovimiento(int i,coordenadas* buffer,int rows,int cols,int cantEne,co
 	}
 }
 
-void moverEnemigos(t_list* listaEnemigos,t_list listaCajas,t_list listaJugadoresActivos,coordenadas recorridoEnemigos[][4],int rows, int cols){
+void moverEnemigos(t_list* listaEnemigos,t_list* listaCajas,t_list* listaJugadoresActivos,coordenadas recorridoEnemigos[][4],int rows, int cols){
+
 	int i=0;
 	coordenadas* buffer;
 	Caja* bufferCaja;
+	int cantCajas;
 
- //printf("LA cant de elem de la lista %d es %d\n",0,list_size(recorridoEnemigos[0]));
- int cantCajas;
-	cantCajas=list_size(&listaCajas);
+	cantCajas=list_size(listaCajas);
+
 	int coorCajas[cantCajas];
 	int cantEne;
 	cantEne=list_size(listaEnemigos);
 	for(i=0;i<cantCajas;i++){
-		bufferCaja=(list_get(&listaCajas,i));
+		bufferCaja=(list_get(listaCajas,i));
 		coorCajas[i]=(*bufferCaja).posx*100+(*bufferCaja).posy;
 	}
-/*
-	for(i=0;i<cantEne;i++){
-		buffer=list_get(listaEnemigos,i);
-		elegirMovimiento(i,buffer,coorCajas,cantCajas,rows,cols,cantEne,recorridoEnemigos);
 
-		}
-*/
-
-
-
-	if (list_size(&listaJugadoresActivos)==0){
-
-
-	for(i=0;i<cantEne;i++){
-
-		if(recorridoEnemigos[i][3].posx==0 && recorridoEnemigos[i][3].posy==0){ //pregunta si no tiene movimientos para hacer el enemigo
-
-			buffer=list_get(listaEnemigos,i);
-			elegirMovimiento(i,buffer,rows,cols,cantEne,recorridoEnemigos[i]);
-			int l=0;
-			for(l=0;l<4;l++){
-			//printf("Enemigo Nº%d posX:%d posY:%d\n",i,recorridoEnemigos[i][l].posx,recorridoEnemigos[i][l].posy);
-			}
-			//printf("El tamaño de la lista %d cuando sale es %d\n",i,list_size(recorridoEnemigos[i]));
-		}
-
+	if (list_size(listaJugadoresActivos)==0){
+		for(i=0;i<cantEne;i++){
+			if(recorridoEnemigos[i][3].posx==0 && recorridoEnemigos[i][3].posy==0){ //pregunta si no tiene movimientos para hacer el enemigo
+				buffer=list_get(listaEnemigos,i);
+				elegirMovimiento(i,buffer,rows,cols,cantEne,recorridoEnemigos[i]);
+				}
 			buffer=list_get(listaEnemigos,i);
 			int k=0;
 			while(recorridoEnemigos[i][k].posx==0 && recorridoEnemigos[i][k].posy==0) k++;
+			int l=0;
+			for(l=0;l<cantCajas;l++){
+				int flag=1;
+				while(flag){
+					if(recorridoEnemigos[i][k].posx*100+recorridoEnemigos[i][k].posy==coorCajas[l]){
+							elegirMovimiento(l,buffer,rows,cols,cantEne,recorridoEnemigos[i]);
+							k=0;
+						}
+						else{
+							flag=0;
+							}
+								}
+									}
 			(*buffer).posx=recorridoEnemigos[i][k].posx;
 			(*buffer).posy=recorridoEnemigos[i][k].posy;
 			recorridoEnemigos[i][k].posx=0;
@@ -374,8 +369,33 @@ void moverEnemigos(t_list* listaEnemigos,t_list listaCajas,t_list listaJugadores
 		puts("no entra al if");//aca es cuando hay personajes
 	}
 
+
 }
 
 
+void controlEnemigos(infoEnemigosThread* info){
 
+coordenadas recorridoEnemigos [(*info).cantEne][4];
+{
+		int i=0,j=0;
+		for (i=0;i<(*info).cantEne;i++){
+			for(j=0;j<4;j++){
+				recorridoEnemigos[i][j].posx=0;
+				recorridoEnemigos[i][j].posy=0;
+			}
+		}
+	}
+	while(1){
+
+
+		usleep((*info).sleepEnemigos*1000);
+
+		moverEnemigos((*info).listaEnemigos,(*info).listaCajas,(*info).listaJugadoresActivos,recorridoEnemigos,(*info).rows,(*info).cols);
+
+		actualizarNivel(*(*info).listaCajas,*(*info).listaEnemigos,*(*info).listaJugadoresActivos,(*info).nombreNivel);
+
+}
+
+
+}
 
