@@ -16,19 +16,22 @@
 #include <commons/collections/list.h>
 #include <time.h>
 #include <theGRID/sockets.h>
+#include <theGRID/general.h>
 
 main(){
+	pthread_mutex_t mutexEnemigos =PTHREAD_MUTEX_INITIALIZER;
 	nivelConfig config;
 	t_list listaEnemigos;
 	t_list listaJugadoresActivos;
 	listaJugadoresActivos=*list_create();//provisorio hasta que un proceso se encargue de crearla
 	int rows,cols;
 	cargarConfig(&config);
+
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	crearEnemigos(config,&listaEnemigos,rows,cols);
 	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 	coordenadas recorridoEnemigos[config.enemigos][4];
-	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 		//nivel_gui_terminar();
 	{
 		int i=0,j=0;
@@ -40,28 +43,35 @@ main(){
 		}
 	}
 
+infoEnemigosThread infoParaEnemigos;
+infoParaEnemigos.listaEnemigos=&listaEnemigos;
 
+infoParaEnemigos.listaCajas=&config.listaCajas;
+infoParaEnemigos.listaJugadoresActivos=&listaJugadoresActivos;
+infoParaEnemigos.cantEne=list_size(&listaEnemigos);
+infoParaEnemigos.rows=rows;
+infoParaEnemigos.cols=cols;
+infoParaEnemigos.sleepEnemigos=config.sleepEnemigos;
+infoParaEnemigos.nombreNivel=malloc(sizeof(config.nombre));
+strcpy(infoParaEnemigos.nombreNivel,config.nombre);
 
+//controlEnemigos(&infoParaEnemigos);
+pthread_t hiloEnemigos;
+pthread_create(&hiloEnemigos,NULL,(void*)&controlEnemigos,(void*)&infoParaEnemigos);
+while(1){
+//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
+}
+//hiloEnemigos=hiloGRID(&controlEnemigos,&infoParaEnemigos);
 
-	while(1){
-sleep(1);
-	moverEnemigos(&listaEnemigos,config.listaCajas,listaJugadoresActivos,recorridoEnemigos,rows,cols);
-	coordenadas* buffer;
 /*
-	buffer=list_get(&listaEnemigos,0);
-		printf("pos X :%d\n",(*buffer).posx);
-		printf("pos Y :%d\n",(*buffer).posy);
-		buffer=list_get(&listaEnemigos,1);
-		printf("pos X :%d\n",(*buffer).posx);
-		printf("pos Y :%d\n",(*buffer).posy);
-		buffer=list_get(&listaEnemigos,2);
-		printf("pos X :%d\n",(*buffer).posx);
-		printf("pos Y :%d\n",(*buffer).posy);
-*/
-	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,"CHINGON");
+	while(1){
+
+	usleep(config.sleepEnemigos*1000);
+	moverEnemigos(&listaEnemigos,&config.listaCajas,&listaJugadoresActivos,recorridoEnemigos,rows,cols);
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 
 	};
-
+*/
 //	nivel_gui_terminar();
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 	//handshakePlataforma(config);
