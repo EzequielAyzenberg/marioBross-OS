@@ -27,14 +27,19 @@ typedef struct Pplayer{
 	t_list* stack;
 }player;
 
+struct algo{
+	int algo;
+	int RemainDist;
+};
+
 typedef struct Pglobal{
 	nodoNivel* cabecera;
 	t_list*ready;
 	t_list*sleeps;
 	player* exe;
 	t_list*recur;
-	int algo;
-	int RemainDist;
+	fd_set*original;
+	struct algo*algo;
 }global;
 
 void *planificador(void *);

@@ -77,9 +77,13 @@ int selectGRID(int maxfd,fd_set *dirfdRead){
 
 	//Le pasas el maxfd y la lista copia de fd_set y te devuelve lo que el select, sin errores.
 
-	int estado=0;
+	int estado=0,aux=0;
 	//struct timeval time;
-	while (estado<=0)	estado=select (maxfd+1,dirfdRead,NULL,NULL,NULL);
+	while (estado<=0){
+		if(aux==5)terminar(1,0);
+		estado=select (maxfd+1,dirfdRead,NULL,NULL,NULL);
+		aux++;
+	}
 return estado;
 }
 
@@ -145,8 +149,8 @@ int recvHandshake(handshake *temp,int sockfd){
 	/*Le pasas una estructura Handshake vacia (por referencia) más el socket, y te da
 	el estructura->Type como resultado o 0 si se desconecto.*/
 
-	int aux=0,estado=-1;
-	while(estado<0){
+	int aux=1,estado=-1;
+	while(estado<0){		//Itera hasta que se reciba algo potable (incluida desconexion) o 5 veces, que se termina todo.
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(handshake*)temp,sizeof(handshake),0);
@@ -154,7 +158,7 @@ int recvHandshake(handshake *temp,int sockfd){
 		if(aux==5)terminar(1,sockfd);
 	}
 	printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return 0;
+	if(estado==0)return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
 	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->type;
 }
@@ -165,14 +169,14 @@ int recvAnswer(answer *temp,int sockfd){
 	Te devuelve el estructura->Msg como resultado o 0 si se desconecto.*/
 
 	int aux=0,estado=-1;
-	while(estado<0){
+	while(estado<0){		//Itera hasta que se reciba algo potable (incluida desconexion) o 5 veces, que se termina todo.
 		//Los mensajes probablemente se reemplacen con salidas al log.
 		puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(answer*)temp,sizeof(*temp),0);
 		aux++;
 		if(aux==5)terminar(1,sockfd);
 	}printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return 0;
+	if(estado==0)return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
 	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->msg;
 }

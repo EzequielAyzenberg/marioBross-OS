@@ -5,6 +5,10 @@
 
 #define RD_INICIAL 0
 
+void _each_Personaje(void*);
+
+void modificarAlgoritmo(answer,global);
+
 void inicializar(nodoNivel*,global*);
 
 void borrarNodo(nodoNivel*);
@@ -14,6 +18,10 @@ int leerNovedad(nodoNivel*,global*,player*);
 void reordenar(t_list*ready,int);
 void cargarAlFinal(player*,t_list*,int);
 
+void _each_Kill(void*);
+void aLaMierdaConTodo(global);
+void muertePersonaje(int, global);
+void matarPersonaje(char,global);
 void interrupcion(int,short,answer*,global);
 int selectear(answer*,short,fd_set*,int,int,global);
 
@@ -25,51 +33,54 @@ void *planificador (void *parametro){
 	stack=list_create();
 	ready=list_create();
 	sleeps=list_create();
-	puts("--PLANIFICADOR-- 1");
 	player exec;
-	fd_set master, copy;
+	fd_set master;
 	int maxfd;
 	FD_ZERO(&master);
-	FD_ZERO(&copy);
 	FD_SET(raiz->nid,&master);
 	maxfd=raiz->nid;
-	puts("--PLANIFICADOR-- 2");
 	global general;
-	general.cabecera=raiz;
-	general.ready=ready;
-	general.sleeps=sleeps;
-	general.algo=0;
-	general.RemainDist=0;
-	general.exe=&exec;
-	general.recur=stack;
+		general.algo=(struct algo*)malloc(sizeof(struct algo));
+		general.cabecera=raiz;
+		general.ready=ready;
+		general.sleeps=sleeps;
+		general.algo->RemainDist=0;
+		general.algo->algo=0;
+		general.exe=&exec;
+		general.recur=stack;
+		general.original=&master;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);
 	player*temp;
 	int estado=1;
 	short respuesta;
+	player aux;
 	while (1){ 		//Solo por ahora lee conexiones!! (estado!=0)
-		player aux;
 		estado=leerNovedad(raiz,&general,&aux);
 		if(estado!=0){
-			puts("Cargando jugador a la base de datos..");
-			temp=malloc(sizeof(player));
-			*temp=aux;
-			cargarAlFinal(temp,ready,general.algo);
-			FD_SET(temp->pid,&master);
-			if(temp->pid>maxfd)maxfd=temp->pid;
-			raiz->cantJugadores++;
 			puts("Avisandole al nivel..");
-			sendAnswer(7,0,' ',temp->sym,(short)raiz->nid);
-			copy=master;
-			puts("Selecteando..");
-			respuesta=selectear(NULL,1,&copy,maxfd,raiz->nid,general);
+			sendAnswer(7,0,' ',aux.sym,(short)raiz->nid);
+			respuesta=selectear(NULL,1,&master,maxfd,raiz->nid,general);
 			switch (respuesta){
-			case 1:puts("--El nivel se ha enterado.--");
+				case 1:puts("--El nivel ha dado el ok.--");
+				puts("Cargando jugador a la base de datos..");
+				temp=malloc(sizeof(player));
+				*temp=aux;
+				cargarAlFinal(temp,ready,general.algo->algo);
+				FD_SET(temp->pid,&master);
+				if(temp->pid>maxfd)maxfd=temp->pid;
+				raiz->cantJugadores++;
+				sendAnswer(1,0,' ',' ',temp->pid);
+				puts("\nLa lista hasta ahora a quedado asi:");
+				list_iterate(ready,_each_Personaje);
+				puts("");
 				break;
-			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
+				case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
 				break;
 			}
+
+
 		}
 		sleep(2);
 	}
@@ -78,17 +89,34 @@ puts("El hilo termina ahora!!");
 	return 0;
 }
 
+void _each_Personaje(void*jug){
+	player* jugador;
+	jugador=(player*)jug;
+	static int contador;
+	printf("El jugador Nº %d ",contador);
+	printf("es: %c\n",jugador->sym);
+	contador++;
+}
+
+void modificarAlgoritmo(answer temp,global general){
+	general.algo->algo=temp.cont;
+	general.algo->RemainDist=temp.data -'0';
+	if(general.algo->algo==0)puts("Se ha elegido usar el Algoritmo SRDF.");
+	else printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
+	printf("El Remaining Distance ahora es de: %d\n\n",general.algo->RemainDist);
+}
+
 void inicializar(nodoNivel*raiz,global*general){
+	int estado=6;
+	answer tempo;
+	do{
 	puts("\nPidiendo algoritmo.");
 	sendAnswer(6,0,' ',' ',(short)raiz->nid);
 	sleep(1);
-	answer tempo;
-	recvAnswer(&tempo,(short)raiz->nid);
-	general->algo=tempo.cont;
-	general->RemainDist=tempo.data-'0';
-	if(general->algo==0)puts("Se ha elegido usar el Algoritmo SRDF.");
-	else printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general->algo);
-	printf("El Remaining Distance ahora es de: %d\n\n",general->RemainDist);
+	estado=recvAnswer(&tempo,(short)raiz->nid);
+	if(estado!=6) puts("El nivel flasheo cualquiera!");
+	}while(estado!=6);
+	modificarAlgoritmo(tempo,*general);
 }
 
 
@@ -108,7 +136,7 @@ void crearStruct(nodoNivel*raiz,player*temp,int RD){
 int leerNovedad(nodoNivel*raiz,global*general,player*temp){
 	if (raiz->tandaRaiz->pid==0)return 0;
 	else{
-		crearStruct(raiz,temp,general->RemainDist);
+		crearStruct(raiz,temp,general->algo->RemainDist);
 		puts("Se ha conectado un jugador!!");
 		borrarNodo(raiz);
 	}
@@ -119,7 +147,7 @@ bool comparator(void*anterior, void*actual){
 	player *ant,*act;
 	ant=(player*)anterior;
 	act=(player*)actual;
-	if(ant->data.dist>act->data.dist)return true;
+	if(ant->sym<act->sym)return true;
 	else return false;
 }
 void reordenar(t_list*ready,int RR){
@@ -134,26 +162,135 @@ void cargarAlFinal(player*temp,t_list*ready,int RR){
 	reordenar(ready,RR);
 }
 
+void _each_Kill(void*jug){
+	player* jugador;
+	jugador=(player*)jug;
+	close(jugador->pid);
+}
+void aLaMierdaConTodo(global tabla){
+	puts("Se cayo el nivel, procesando..");
+	usleep(500000);
+	list_iterate(tabla.ready,_each_Kill);
+	close(tabla.cabecera->nid);
+	player*temp;
+	stack*tempstack;
+
+	puts("Eliminando jugadores activos.");
+	while(!list_is_empty(tabla.ready)){
+		temp=(player*)list_remove(tabla.ready,0);
+		while (!list_is_empty(temp->stack)){
+			puts("Recurso eliminado.");
+			tempstack=(stack*)list_remove(temp->stack,0);
+			free(tempstack);
+		}
+		free(temp->stack);
+		free(temp);
+	}
+	free(tabla.ready);
+
+	sleep(2);
+	puts("Eliminando jugadores dormidos.");
+	while(!list_is_empty(tabla.sleeps)){
+		temp=(player*)list_remove(tabla.sleeps,0);
+		while (list_is_empty(temp->stack)){
+			puts("Recurso eliminado.");
+			tempstack=(stack*)list_remove(temp->stack,0);
+			free(tempstack);
+		}
+		free(temp->stack);
+		free(temp);
+	}
+	free(tabla.sleeps);
+
+	sleep(2);
+	puts("Eliminando recursos.");
+	while (!list_is_empty(tabla.recur)){
+		tempstack=(stack*)list_remove(tabla.recur,0);
+		free(tempstack);
+	}
+	free(tabla.recur);
+	free(tabla.algo);
+
+	sleep(2);
+	puts("Nos Vamos todos al carajo!");
+	exit (EXIT_FAILURE);
+}
+void muertePersonaje(int i,global tabla){
+	puts("\nPersonaje Desconectado, Procesando..");
+	bool _is_PID(player*jugador) {
+		    if(jugador->pid==i)return true;
+		    return false;
+			}
+	usleep(500000);
+	puts("Localizando cadaver.");
+	player*aux = list_remove_by_condition(tabla.ready,(void*) _is_PID);
+	if(aux == NULL) {
+		sleep(2);
+		puts("Buscando entre los dormidos.");
+		aux=list_remove_by_condition(tabla.ready,(void*) _is_PID);
+		if(aux==NULL){
+			puts("No se ha podido ubicar el fiambre.");
+			return;
+		}
+	}
+	sleep(2);
+	puts("Fiambre localizado");
+	FD_CLR(aux->pid,tabla.original);
+	close(aux->pid);
+	puts("Vaciando la lista de recursos..");
+	while (!list_is_empty(aux->stack)){
+		stack*tempstack;
+		tempstack=(stack*)list_remove(aux->stack,0);
+		list_add(tabla.recur, (void*)tempstack);
+		puts("Borrando recurso.");
+		usleep(500000);
+	}
+	sleep(2);
+	puts("Lista vaciada.");
+	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
+	free(aux);
+	puts("Personaje Completamente eliminado!!\n");
+}
+void matarPersonaje(char simbolo,global tabla){
+	puts("Murio un Personaje.");
+	bool _is_Personaje(player*jugador) {
+		    if(jugador->sym==simbolo)return true;
+		    return false;
+			}
+	player*aux = list_find(tabla.ready, (void*) _is_Personaje);
+	if(aux == NULL) aux=list_find(tabla.sleeps, (void*) _is_Personaje);
+	puts("Avisandole sobre la situacion al pobre..");
+	sendAnswer(8,0,' ',' ',aux->pid);
+}
 void interrupcion(int i,short respuesta,answer* aux,global tabla){
+	puts("Manejando la interrupcion.");
+	sleep(1);
 	if(i==tabla.cabecera->nid){
-		/*switch(respuesta){
+		puts("La interrupcion no se puede enmascarar, atendiendo..");
+		switch(respuesta){
 		case 0:aLaMierdaConTodo(tabla);
 		break;
-		case 6:modificarAlgoritmo(aux->cont,tabla);
+		case 6:modificarAlgoritmo(*aux,tabla);
 		break;
-		case 8:muertePersonaje(aux->cont,tabla);
+		case 8:matarPersonaje(aux->symbol,tabla);
 		break;
-		}*/
+		}
+	}else{
+		if(respuesta!=0)puts("Pescado Enmascarado");
+		else muertePersonaje(i,tabla);
+
 	}
 }
-int selectear(answer*tempo,short esperado,fd_set*readfds,int fdmax,int sock,global tabla){
+int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,global tabla){
 	answer aux;
 	short respuesta;
+	fd_set readfds;
 	do{
-		selectGRID(fdmax,readfds);
-
+		readfds=*originalfds;
+		puts("Selecteando..");
+		selectGRID(fdmax,&readfds);
 		int i=0;
-		while ((!FD_ISSET(i,readfds))&&(i<=fdmax))	i++;
+		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax))	i++;
 		if (i>fdmax){
 			puts("--ERROR:No se encontro candidato para selectear!!--");
 			exit(1);
@@ -161,12 +298,14 @@ int selectear(answer*tempo,short esperado,fd_set*readfds,int fdmax,int sock,glob
 			printf("Se escuchara al socket numero %d\n",i);
 			respuesta=recvAnswer(&aux,i);
 			if (i==sock){
-				if((respuesta==esperado)||(respuesta==-1))return respuesta;
+				if((respuesta==esperado)||(respuesta==-1)){
+					if (tempo!=NULL)*tempo=aux;
+					return respuesta;
+				}
 				else interrupcion(i,respuesta,&aux,tabla);
 			}else{
 				interrupcion(i,respuesta,&aux,tabla);
 			}
-			if (tempo!=NULL)*tempo=aux;
 		}
 	}while(1);
 	return -1;

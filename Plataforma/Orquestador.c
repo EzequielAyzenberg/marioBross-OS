@@ -35,16 +35,16 @@ void *orquestador(void* infoAux){
 	handshake nuevoHandshake;
 	t_list *listaNiveles = info.listaNiveles;
 	t_list *ganadores = list_create();
-
 	socketOrquestador = listenGRID(info.puerto);
+
 	while(1){
 		socketIngresante = acceptGRID(socketOrquestador);
-		switch ( recvHandshake(&nuevoHandshake,socketIngresante) ){
+		switch (recvHandshake(&nuevoHandshake,socketIngresante)){
 		case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
 		case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
 		case 2: clienteViejo(nuevoHandshake,ganadores);
 		}
-	puts("--ORQUESTADOR-- Escuchando de vuelta..");
+		puts("--ORQUESTADOR-- Escuchando de vuelta..");
 	}
 	return 0;
 }
@@ -80,7 +80,7 @@ void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiv
 };
 
 void clienteViejo(handshake handshakeJugador, t_list *ganadores){
-	jugadorGanador *ganador = (jugadorGanador*)malloc(sizeof(jugadorGanador));
+	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
 };
@@ -97,7 +97,7 @@ void responder(int socketJugador){
 };
 
 nuevo** validarNivel(char nombreNivel[13],t_list* listaNiveles){
-		int _is_Nivel(nodoNivel *nivel) {
+		bool _is_Nivel(nodoNivel *nivel) {
 	    if(strcmp(nivel->name,nombreNivel)==0)return true;
 	    return false;
 		}
