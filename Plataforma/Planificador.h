@@ -39,6 +39,7 @@ typedef struct Pglobal{
 	player* exe;
 	t_list*recur;
 	fd_set*original;
+	int*maxfd;
 	struct algo*algo;
 }global;
 
