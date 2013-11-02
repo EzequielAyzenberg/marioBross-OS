@@ -18,12 +18,17 @@ int leerNovedad(nodoNivel*,global*,player*);
 void reordenar(t_list*ready,int);
 void cargarAlFinal(player*,t_list*,int);
 
-void _each_Kill(void*);
 void aLaMierdaConTodo(global);
 void muertePersonaje(int, global);
 void matarPersonaje(char,global);
 void interrupcion(int,short,answer*,global);
 int selectear(answer*,short,fd_set*,int,int,global);
+
+void darInstancia(player*,stack*,global*);
+void asignarRecursos(global*);
+
+void devolverRecursos(global*);
+
 
 void *planificador (void *parametro){
 	puts("\nHola mundo!!--Yo planifico.");
@@ -49,6 +54,7 @@ void *planificador (void *parametro){
 		general.exe=&exec;
 		general.recur=stack;
 		general.original=&master;
+		general.maxfd=&maxfd;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);
@@ -77,12 +83,12 @@ void *planificador (void *parametro){
 				puts("");
 				break;
 				case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
+				sendAnswer(-1,0,' ',' ',aux.pid);
 				break;
 			}
-
-
 		}
-		sleep(2);
+		asignarRecursos(&general);
+		devolverRecursos(&general);
 	}
 puts("El hilo termina ahora!!");
 
@@ -162,27 +168,24 @@ void cargarAlFinal(player*temp,t_list*ready,int RR){
 	reordenar(ready,RR);
 }
 
-void _each_Kill(void*jug){
-	player* jugador;
-	jugador=(player*)jug;
-	close(jugador->pid);
-}
 void aLaMierdaConTodo(global tabla){
 	puts("Se cayo el nivel, procesando..");
 	usleep(500000);
-	list_iterate(tabla.ready,_each_Kill);
 	close(tabla.cabecera->nid);
 	player*temp;
 	stack*tempstack;
 
 	puts("Eliminando jugadores activos.");
 	while(!list_is_empty(tabla.ready)){
+		sleep(1);
 		temp=(player*)list_remove(tabla.ready,0);
 		while (!list_is_empty(temp->stack)){
 			puts("Recurso eliminado.");
 			tempstack=(stack*)list_remove(temp->stack,0);
 			free(tempstack);
 		}
+		sendAnswer(0,0,' ',' ',temp->pid);
+		close(temp->pid);
 		free(temp->stack);
 		free(temp);
 	}
@@ -197,6 +200,8 @@ void aLaMierdaConTodo(global tabla){
 			tempstack=(stack*)list_remove(temp->stack,0);
 			free(tempstack);
 		}
+		sendAnswer(0,0,' ',' ',temp->pid);
+		close(temp->pid);
 		free(temp->stack);
 		free(temp);
 	}
@@ -216,7 +221,7 @@ void aLaMierdaConTodo(global tabla){
 	exit (EXIT_FAILURE);
 }
 void muertePersonaje(int i,global tabla){
-	puts("\nPersonaje Desconectado, Procesando..");
+	puts("Personaje Desconectado, Procesando..");
 	bool _is_PID(player*jugador) {
 		    if(jugador->pid==i)return true;
 		    return false;
@@ -258,12 +263,18 @@ void matarPersonaje(char simbolo,global tabla){
 		    return false;
 			}
 	player*aux = list_find(tabla.ready, (void*) _is_Personaje);
-	if(aux == NULL) aux=list_find(tabla.sleeps, (void*) _is_Personaje);
+	if(aux == NULL){
+		aux=list_find(tabla.sleeps, (void*) _is_Personaje);
+		if(aux==NULL){
+			puts("Parece que ya habia muerto antes, solicitud ignorada.");
+			return;
+		}
+	}
 	puts("Avisandole sobre la situacion al pobre..");
 	sendAnswer(8,0,' ',' ',aux->pid);
 }
 void interrupcion(int i,short respuesta,answer* aux,global tabla){
-	puts("Manejando la interrupcion.");
+	puts("\nManejando la interrupcion.");
 	sleep(1);
 	if(i==tabla.cabecera->nid){
 		puts("La interrupcion no se puede enmascarar, atendiendo..");
@@ -310,5 +321,74 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 	}while(1);
 	return -1;
 }
+
+
+void darInstancia(player*jugador,stack*instancia,global*tabla){
+	list_add(jugador->stack,(void*)instancia);
+	jugador->data.recsol=' ';
+	jugador->data.dist=tabla->algo->RemainDist;
+	bool _is_PID(player*personaje) {
+		if(personaje->pid==jugador->pid)return true;
+		return false;
+	}
+	list_remove_by_condition(tabla->sleeps,(void*) _is_PID);
+	list_add(tabla->ready,(void*)jugador);
+}
+void asignarRecursos(global*tabla){
+	short respuesta;
+	answer temp;
+	void intentarAsignar(void*paquete){
+		player*jugador;
+		jugador=(player*)paquete;
+		bool hayInstancia(void*dato){
+			stack*instancia;
+			instancia=(stack*)dato;
+			return instancia->recurso==jugador->data.recsol ? true : false;
+		}
+		stack*recurso=list_remove_by_condition(tabla->recur, hayInstancia);
+		if (recurso!=NULL){
+			darInstancia(jugador,recurso,tabla);
+		}else{
+			sendAnswer(2,1,jugador->data.recsol,jugador->sym,jugador->pid);
+			respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),jugador->pid,*tabla);
+			if (respuesta==-1)return;
+			stack*recnuevo=(stack*)malloc(sizeof(stack));
+			recnuevo->recurso=jugador->data.recsol;
+			darInstancia(jugador,recnuevo,tabla);
+		}
+		puts("Instancia concedida.");
+	}
+	list_iterate(tabla->sleeps,intentarAsignar);
+}
+
+void devolverRecursos(global*tabla){
+	if(!list_is_empty(tabla->recur)){
+		stack*tempstack;
+		sendAnswer(5,0,' ',' ',tabla->cabecera->nid);
+		if(selectear(NULL,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-1){
+			puts("El nivel no quiere recibir nada por ahora.");
+			return;
+		}else{
+			while (!list_is_empty(tabla->recur)){
+				tempstack=(stack*)list_remove(tabla->recur,0);
+				sendAnswer(2,0,tempstack->recurso,' ',tabla->cabecera->nid);
+				if(selectear(NULL,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-1){
+					puts("El nivel no quiso recibir nada por ahora.");
+					return;
+				}
+				free(tempstack);
+				usleep(100000);
+			}
+			sendAnswer(5,0,' ',' ',tabla->cabecera->nid);
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
