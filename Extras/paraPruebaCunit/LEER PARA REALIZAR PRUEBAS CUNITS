@@ -1,0 +1,40 @@
+hola gente depues de invetigar bastante descubri como era esto y es una buena prectica y muy sana para todos
+a continuacion les paso de detallar como usarlo:
+
+Paso 1)
+deben copiar el archivo prototipoDePrueba.c y ponerle un nombre tal como
+miPrueba.c por ejemplo:
+ si quiero probar sockets.c a prototipo lo puedo llamar pruebaUnitSocket.c
+
+
+Paso2)
+si tienen un archivo .c (me refiero a socket.c, nivel.c, lalal.c) que quieren probar puede pasar dos cosas:
+
+a) que tenga main
+ en este caso deberian deberia realizar el paso 1 agregando el include del programa que quieren probar en su prototipo de prueba
+ejemplo: 
+             su archivo que ahora se llama  pruebaUnitSocket.c deben pornerle arriba #include "socket.c"
+y en el archivo socket.c dentro del main llaman a la funcion gridTest();
+
+
+
+b)que NO tenga main
+en este caso deberan hacer el paso 1 pero hacer el include dentro de ejecutor and nothing more
+
+
+Paso 3)a
+
+compilan la aplicacion haciendo:
+
+gcc -o prueba socket.c -lcunit
+
+si siguiero los pasos que estan muy bien detallados dentro de prototipoDePrueba.c eh hicieron el paso 1 y 2a deberia andar
+
+
+Paso 3)b
+
+compilan la aplicacion haciendo:
+
+gcc -o prueba ejecutor.c -lcunit 
+
+Adios¡¡¡¡¡¡¡¡¡¡¡
