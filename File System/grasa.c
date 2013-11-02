@@ -2,6 +2,7 @@
 #include <string.h> //para strCat
 #include <sys/mman.h> //biblioteca para usar mmap y sus derivadas
 #include <commons/bitarray.c> //para las funciones que manejan el BitMap
+#include <commons/collections/list.c>
 
 #define BLOQUE 4096
 #define DISCO 10485760
@@ -19,6 +20,11 @@ agregar otra funcionalidad ademas de read con un pipe
 
 //disco de prueba tiene 6.147.455 bytes comprimido  10 mb sin comprimir 10240
 
+void imprimir(void* arch){
+	
+	printf("%s\n",(char*)arch);
+}
+
 int main (int argc, char *argv[]){
 	
 	 
@@ -28,7 +34,8 @@ int main (int argc, char *argv[]){
 	GFile* nodo;
 	ptrGBloque ptrb;
 	t_bitarray* bit;
-	bool ocupado;
+	t_list* lista = list_create();
+	
 	
 	
 	//apertura del Disco
@@ -46,13 +53,12 @@ int main (int argc, char *argv[]){
     
     bitArray(fd);  //bitArray is de new sensation
     
-   
-    
-    
     tablaDeNodos(fd); //manejo de nodos
     
-    
-   
+    nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
+    queHayAca(nodo, 0,lista);
+	list_iterate(lista, imprimir);
+	printf("tamanio lista: %d \n",list_size(lista));
 	
 
 
@@ -64,6 +70,8 @@ int main (int argc, char *argv[]){
 
 
 
+
+
 int tamanioDelDisco(){
 	
 	puts("ingrese el tamaño del disco en bytes:");
@@ -71,12 +79,12 @@ int tamanioDelDisco(){
 }
 
 
-int leerHeader(archMap){
+int leerHeader(archDisk){
 	GHeader* cabeza;
 	int error;
 	
 	//prototipo void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
-	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archMap, NULL);
+	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk, NULL);
 	if (cabeza == MAP_FAILED) puts("fallo el mapeo pues");
 	
 	printf("que tengo en la cabeza? %s \n",cabeza->grasa);
@@ -94,10 +102,12 @@ int tablaDeNodos(int archDisk){
 	
 	//Var Locales
 	GFile* nodo;
+	int i;
+	
 		
 		
-	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, NULL);
-	nodo = nodo+2; //corro 2 posiciones el puntero para que apunte al primer nodo de la tabla
+	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
+	
 	
 	printf("estado: %d \n",nodo[0].state);
 	printf("nombre: %s \n",nodo[0].fname);
@@ -106,7 +116,8 @@ int tablaDeNodos(int archDisk){
 	printf("fecha modificacion %d \n",nodo[0].m_date);
 	printf("fecha creacion %d \n",nodo[0].c_date);
 	
-	
+	for (i=0; i < 1024;i++)
+		 if ((nodo[i].parent_dir_block == nodo[0].parent_dir_block)&&(nodo[i].state!=0)) printf ("nombre: %s\n",nodo[i].fname);
 	
 	//if ((munmap( nodo,DISCO ) ) == -1) puts ("fallo el mumapi");
 	return 0;
@@ -117,6 +128,7 @@ int bitArray(archDisk){
 	t_bitarray* bit;
 	bool ocupado;
 	int i;
+	
 
 	bit = bitarray_create(bit->bitarray, 320);
 	bit->bitarray = mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
@@ -130,7 +142,18 @@ int bitArray(archDisk){
 		if (ocupado) printf ("%d) ocupado\n",i);
 		if (!ocupado) printf ("%d) desocupado\n",i);
 		}
-		
+	
+			
 		//if ((munmap( bit->bitarray,bit->size ) ) == -1) puts ("fallo el mumapi");
 }
+
+int queHayAca(GFile* nodo,int dirPadre,t_list* lista){
+	int i;
+	
+	for (i=0; i < 1023;i++)
+		 if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
+	
+return 1;	
+}
+
 
