@@ -12,7 +12,7 @@
  * RecepcionDeConexiones    --OK--
  * ClienteNuevo				--OK--
  * ClienteViejo             --OK--
- * CrearHiloPlanificador    --REMOVIDA--
+ * CrearHiloPlanificador    --OK--
  * NivelNuevo				--OK--
  * ValidarNiver xD          --OK--
  * CrearNuevaTanda          --OK--
@@ -21,7 +21,7 @@
  *
  * ChequearKoopa			--OK--
  * ActivarKoopa
- * MatarHilos
+ * MatarHilos				--OK--
  */
 
 #include"Orquestador.h"
@@ -36,12 +36,13 @@ void *orquestador(void* infoAux){
 	handshake nuevoHandshake;
 	t_list *listaNiveles = info.listaNiveles;
 	t_list *ganadores = list_create();
+	t_list *hilosPlanificadores = list_create();
 	socketOrquestador = listenGRID(info.puerto);
 
 	while(1){
 		socketIngresante = acceptGRID(socketOrquestador);
 		switch (recvHandshake(&nuevoHandshake,socketIngresante)){
-		case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
+		case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles,hilosPlanificadores); break;
 		case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
 		case 2: clienteViejo(nuevoHandshake,ganadores);
 		}
@@ -50,7 +51,7 @@ void *orquestador(void* infoAux){
 	return 0;
 }
 
-void responder(int socketDestino){
+void responderError(int socketDestino){
 	//Enviarle al destino el mensaje de no encontrado o rechazo.
 	sendAnswer(-1,0,'\0','\0',socketDestino);
 };
@@ -61,7 +62,7 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 		return;
 	};
 	puts("--ORQUESTADOR-- Nivel invasor rechazado");
-	responder(nid);
+	responderError(nid);
 	return;
 };
 
@@ -76,7 +77,14 @@ void crearTanda(nuevo** lista){
 		*lista=tempo;
 }
 
-void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
+void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores){
+	pthread_t idHilo = hiloGRID(planificador,(void*)nivel);
+		nodoPlanificador *nuevoPlanificador = (nodoPlanificador *)malloc(sizeof(nodoPlanificador));
+		nuevoPlanificador->idHilo = idHilo;
+		list_add(hilosPlanificadores,nuevoPlanificador);
+};
+
+void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores){
 	nuevo* tandaActual=(nuevo*)malloc(sizeof(nuevo));
 			puts("--ORQUESTADOR--Tenemos un nivel conectado!!");
 			nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
@@ -87,7 +95,7 @@ void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles
 			nivel->tandaActual = tandaActual;
 			nivel->nid = socketNivel;
 			list_add(listaNiveles,nivel);
-			pthread_t idHilo = hiloGRID(planificador,(void*)nivel);
+			crearHiloPlanificador(nivel,hilosPlanificadores);
 };
 
 nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
@@ -100,16 +108,16 @@ nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
 	return aux;
 }
 
-nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles){
-	nodoNivel *aux=buscarNivelEnSistema( nombreNivel,listaNiveles );
+nodoNivel* validarNivel(char nombreNivel[13],t_list* listaNiveles){
+	nodoNivel *aux = buscarNivelEnSistema( nombreNivel,listaNiveles );
 	if(aux == NULL) return NULL;
-	return aux->tandaActual;
+	return aux;
 };
 
-void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
+void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores){
 	nodoNivel *nodoNIVEL = buscarNivelEnSistema(handshakeNivel.name, listaNiveles);
 	if(nodoNIVEL == NULL){
-		agregarNivel(handshakeNivel,socketNivel,listaNiveles);
+		agregarNivel(handshakeNivel,socketNivel,listaNiveles, hilosPlanificadores);
 		return;
 	};
 	reconectarNivel(nodoNIVEL,socketNivel);
@@ -117,18 +125,18 @@ void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
 };
 
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
-	nuevo* tandaActual;
-	tandaActual = validarNivel(handshakeJugador.name,listaNiveles);
-	if( tandaActual == NULL){
-		responder(socketJugador);
+	nodoNivel *aux = validarNivel(handshakeJugador.name,listaNiveles);
+	if( aux == NULL){
+		puts("--ORQUESTADOR-- Jugador rechazado por nivel inexistenete");
+		responderError(socketJugador);
 		return;
 	}
 		puts("--ORQUESTADOR--Se ha recibido un nuevo Personaje");
-		tandaActual->pid=socketJugador;
-		tandaActual->sym=handshakeJugador.symbol;
-		if( tandaActual->sgte == NULL )
-			crearTanda( &(tandaActual->sgte) );
-	    tandaActual = tandaActual->sgte;
+		aux->tandaActual->pid=socketJugador;
+		aux->tandaActual->sym=handshakeJugador.symbol;
+		if( aux->tandaActual->sgte == NULL )
+			crearTanda( &(aux->tandaActual->sgte) );
+	    aux->tandaActual = aux->tandaActual->sgte;
 	    puts("--ORQUESTADOR--Info del Personaje recibida");
 };
 
@@ -149,6 +157,14 @@ bool chequearKoopa(t_list *ganadores, t_list* listaNiveles){
 	if( list_size(nivelesConJugadores) > 0 ) return false;
 
 	return true;
+};
+
+int _matar_hilo(nodoPlanificador *planificador){
+	return pthread_cancel( planificador->idHilo );
+};
+
+void matarHilos(t_list* hilosPlanificadores){
+	list_map(hilosPlanificadores, (void*)_matar_hilo);
 };
 
 void activarKoopa(void){
