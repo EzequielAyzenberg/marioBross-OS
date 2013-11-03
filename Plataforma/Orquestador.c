@@ -118,17 +118,16 @@ void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
 
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
 	nodoNivel *aux = validarNivel(handshakeJugador.name,listaNiveles);
-	nuevo* tandaActual = aux->tandaActual;
-	if( tandaActual == NULL){
+	if( aux == NULL){
 		responderError(socketJugador);
 		return;
 	}
 		puts("--ORQUESTADOR--Se ha recibido un nuevo Personaje");
-		tandaActual->pid=socketJugador;
-		tandaActual->sym=handshakeJugador.symbol;
-		if( tandaActual->sgte == NULL )
-			crearTanda( &(tandaActual->sgte) );
-	    tandaActual = tandaActual->sgte;
+		aux->tandaActual->pid=socketJugador;
+		aux->tandaActual->sym=handshakeJugador.symbol;
+		if( aux->tandaActual->sgte == NULL )
+			crearTanda( &(aux->tandaActual->sgte) );
+	    aux->tandaActual = aux->tandaActual->sgte;
 	    puts("--ORQUESTADOR--Info del Personaje recibida");
 };
 
