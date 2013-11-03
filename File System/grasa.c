@@ -20,11 +20,13 @@ agregar otra funcionalidad ademas de read con un pipe
 
 //disco de prueba tiene 6.147.455 bytes comprimido  10 mb sin comprimir 10240
 
+/*
 void imprimir(void* arch){
 	
 	printf("%s\n",(char*)arch);
 }
-
+*/
+/*
 int main (int argc, char *argv[]){
 	
 	 
@@ -66,7 +68,7 @@ int main (int argc, char *argv[]){
 
 	return 0;
 }
-
+*/
 
 
 
@@ -147,9 +149,13 @@ int bitArray(archDisk){
 		//if ((munmap( bit->bitarray,bit->size ) ) == -1) puts ("fallo el mumapi");
 }
 
-int queHayAca(GFile* nodo,int dirPadre,t_list* lista){
+int queHayAca(char* path,int archDisk,t_list* lista){
 	int i;
+	int dirPadre;
+	GFile* nodo;
+	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
 	
+	if (path == "/") dirPadre = 0;
 	for (i=0; i < 1023;i++)
 		 if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
 	
