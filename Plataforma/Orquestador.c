@@ -12,14 +12,14 @@
  * RecepcionDeConexiones    --OK--
  * ClienteNuevo				--OK--
  * ClienteViejo             --OK--
- * CrearHiloPlanificador    --OK--
+ * CrearHiloPlanificador    --REMOVIDA--
  * NivelNuevo				--OK--
  * ValidarNiver xD          --OK--
  * CrearNuevaTanda          --OK--
  *
  * --KOOPA--
  *
- * ChequearKoopa
+ * ChequearKoopa			--OK--
  * ActivarKoopa
  * MatarHilos
  */
@@ -27,10 +27,11 @@
 #include"Orquestador.h"
 #include"Planificador.h"
 
-//infoOrquestador
 void *orquestador(void* infoAux){
+	// Desrefereciacion de la info que recibe el orquestador
 	infoOrquestador *infoBis=(infoOrquestador*)infoAux;
 	infoOrquestador info= *infoBis;
+
 	int socketOrquestador, socketIngresante;
 	handshake nuevoHandshake;
 	t_list *listaNiveles = info.listaNiveles;
@@ -64,11 +65,6 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 	return;
 };
 
-void crearHiloPlanificador(handshake handshakeNivel,nodoNivel* nivel){
-	pthread_t idHilo;
-	idHilo=hiloGRID(planificador,(void*)nivel);
-}
-
 //no crea una tanda en el buen sentido de la palabra
 //solo mete un maldito nodo, pero el nombre le quedo bien :3
 void crearTanda(nuevo** lista){
@@ -91,7 +87,7 @@ void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles
 			nivel->tandaActual = tandaActual;
 			nivel->nid = socketNivel;
 			list_add(listaNiveles,nivel);
-			crearHiloPlanificador(handshakeNivel, nivel);
+			pthread_t idHilo = hiloGRID(planificador,(void*)nivel);
 };
 
 nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
@@ -140,4 +136,21 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
+};
+
+bool _hay_jugadores(nodoNivel *nivel) {
+	return nivel->cantJugadores > 0;
+	}
+
+bool chequearKoopa(t_list *ganadores, t_list* listaNiveles){
+	if( list_is_empty(ganadores) == 0 ) return false;
+
+	t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
+	if( list_size(nivelesConJugadores) > 0 ) return false;
+
+	return true;
+};
+
+void activarKoopa(void){
+
 };
