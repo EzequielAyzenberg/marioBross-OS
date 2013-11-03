@@ -50,7 +50,7 @@ void *orquestador(void* infoAux){
 	return 0;
 }
 
-void responder(int socketDestino){
+void responderError(int socketDestino){
 	//Enviarle al destino el mensaje de no encontrado o rechazo.
 	sendAnswer(-1,0,'\0','\0',socketDestino);
 };
@@ -61,7 +61,7 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 		return;
 	};
 	puts("--ORQUESTADOR-- Nivel invasor rechazado");
-	responder(nid);
+	responderError(nid);
 	return;
 };
 
@@ -100,10 +100,10 @@ nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
 	return aux;
 }
 
-nuevo* validarNivel(char nombreNivel[13],t_list* listaNiveles){
-	nodoNivel *aux=buscarNivelEnSistema( nombreNivel,listaNiveles );
+nodoNivel* validarNivel(char nombreNivel[13],t_list* listaNiveles){
+	nodoNivel *aux = buscarNivelEnSistema( nombreNivel,listaNiveles );
 	if(aux == NULL) return NULL;
-	return aux->tandaActual;
+	return aux;
 };
 
 void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
@@ -117,10 +117,10 @@ void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles){
 };
 
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
-	nuevo* tandaActual;
-	tandaActual = validarNivel(handshakeJugador.name,listaNiveles);
+	nodoNivel *aux = validarNivel(handshakeJugador.name,listaNiveles);
+	nuevo* tandaActual = aux->tandaActual;
 	if( tandaActual == NULL){
-		responder(socketJugador);
+		responderError(socketJugador);
 		return;
 	}
 		puts("--ORQUESTADOR--Se ha recibido un nuevo Personaje");
