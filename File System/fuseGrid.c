@@ -104,6 +104,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	(void) fi;
 	extern int fd;
 	char* nombre;
+	int i;
 
 	if (strcmp(path, "/") != 0)
 		return -ENOENT;
@@ -111,7 +112,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	t_list* archivos;
 	archivos = list_create();
 	queHayAca("/",fd,archivos);
-	list_add_in_index(archivos, 1, nombre);
+	//nombre =(char*) list_get(archivos,1);
 	
 	
 	
@@ -119,14 +120,16 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	// y la segunda indica el directorio padre
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
+
 	filler(buf, nombre, NULL, 0);
+
+	for (i=0; i < list_size(archivos); i++){
+	nombre =(char*) list_get(archivos,i);
+	filler(buf, nombre, NULL, 0);
+	}
+
 	filler(buf, DEFAULT_FILE_NAME, NULL, 0);
-	//void _iterate(char* nombre) {
-//		filler(buf, nombre, NULL, 0);
-	//}
 	
-	
-	//list_iterate(archivos, _iterate);
 
 	return 0;
 }
@@ -263,3 +266,12 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 }
 
 
+
+
+/*
+	void _iterate(char* nombre) {
+		filler(buf, nombre, NULL, 0);
+	}
+	
+	list_iterate(archivos, _iterate);
+	*/

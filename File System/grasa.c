@@ -83,10 +83,9 @@ int tamanioDelDisco(){
 
 int leerHeader(archDisk){
 	GHeader* cabeza;
-	int error;
 	
 	//prototipo void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
-	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk, NULL);
+	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk,(off_t)NULL);
 	if (cabeza == MAP_FAILED) puts("fallo el mapeo pues");
 	
 	printf("que tengo en la cabeza? %s \n",cabeza->grasa);
@@ -108,15 +107,14 @@ int tablaDeNodos(int archDisk){
 	
 		
 		
-	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
-	
+	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
 	
 	printf("estado: %d \n",nodo[0].state);
 	printf("nombre: %s \n",nodo[0].fname);
 	printf("padre %d \n",nodo[0].parent_dir_block);
 	printf("tamanio %d \n",nodo[0].file_size);
-	printf("fecha modificacion %d \n",nodo[0].m_date);
-	printf("fecha creacion %d \n",nodo[0].c_date);
+	printf("fecha modificacion %d \n",(int)nodo[0].m_date);
+	printf("fecha creacion %d \n",(int)nodo[0].c_date);
 	
 	for (i=0; i < 1024;i++)
 		 if ((nodo[i].parent_dir_block == nodo[0].parent_dir_block)&&(nodo[i].state!=0)) printf ("nombre: %s\n",nodo[i].fname);
@@ -137,8 +135,7 @@ int bitArray(archDisk){
 	
 	printf("tamaño del bitmap %d",bitarray_get_max_bit(bit));
 	
-	i=1;
-		for (i; i<bitarray_get_max_bit(bit); i++)
+		for (i=1; i<bitarray_get_max_bit(bit); i++)
 		{
 		ocupado = bitarray_test_bit(bit,i);
 		if (ocupado) printf ("%d) ocupado\n",i);
@@ -147,6 +144,7 @@ int bitArray(archDisk){
 	
 			
 		//if ((munmap( bit->bitarray,bit->size ) ) == -1) puts ("fallo el mumapi");
+	return 0;
 }
 
 int queHayAca(char* path,int archDisk,t_list* lista){
@@ -155,7 +153,7 @@ int queHayAca(char* path,int archDisk,t_list* lista){
 	GFile* nodo;
 	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
 	
-	if (path == "/") dirPadre = 0;
+	if (strcmp(path,"/")==0) dirPadre=0;
 	for (i=0; i < 1023;i++)
 		 if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
 	
