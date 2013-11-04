@@ -40,9 +40,9 @@ void reconectarNivel(nodoNivel *nodo,int nid);
 void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores);
 bool _hay_jugadores(nodoNivel *nivel);
 bool chequearKoopa(t_list *ganadores, t_list* listaNiveles);
-void activarKoopa(void);
 void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores);
 int _matar_hilo(nodoPlanificador *planificador);
 void matarHilos(t_list* hilosPlanificadores);
+void activarKoopa(t_list* hilosPlanificadores);
 
 #endif /* ORQUESTADOR_H_ */

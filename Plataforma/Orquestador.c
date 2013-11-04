@@ -20,7 +20,7 @@
  * --KOOPA--
  *
  * ChequearKoopa			--OK--
- * ActivarKoopa
+ * ActivarKoopa				--OK--
  * MatarHilos				--OK--
  */
 
@@ -46,6 +46,29 @@ void *orquestador(void* infoAux){
 		case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
 		case 2: clienteViejo(nuevoHandshake,ganadores);
 		}
+
+		// Podes sacar los comentarios, el codigo de abajo te ayuda
+		// a vigilar algunas cosas en tiempo de ejecucion
+		/*
+		if(true == chequearKoopa(ganadores,listaNiveles))
+			puts("chequearkoopa true");
+		else puts("chequearkoopa false");;
+		printf("list_is_empty ganadores %d\n",list_is_empty(ganadores));
+		printf("list_size ganadores %d\n",list_size(ganadores));
+		t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
+		printf("list_size nivelesConJugadores %d\n",list_size(nivelesConJugadores));
+		void _esplayar_nodo(nodoNivel *nivel){
+			printf("\nNombreNivel: %s\n",nivel->name);
+			printf("--Nid: %d\n",nivel->nid);
+			printf("--CantJugadores: %d\n\n",nivel->cantJugadores);
+			return;
+		};
+		if( list_size(listaNiveles) > 0 )
+		list_map(listaNiveles, (void*)_esplayar_nodo);
+		if(true == chequearKoopa(ganadores,listaNiveles))
+			activarKoopa(hilosPlanificadores);
+		*/
+
 		puts("--ORQUESTADOR-- Escuchando de vuelta..");
 	}
 	return 0;
@@ -144,6 +167,7 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
+	printf("--ORQUESTADOR-- Jugador ganador: %c\n",handshakeJugador.symbol);
 };
 
 bool _hay_jugadores(nodoNivel *nivel) {
@@ -151,11 +175,9 @@ bool _hay_jugadores(nodoNivel *nivel) {
 	}
 
 bool chequearKoopa(t_list *ganadores, t_list* listaNiveles){
-	if( list_is_empty(ganadores) == 0 ) return false;
-
+	if( list_is_empty(ganadores) > 0 ) return false;
 	t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
 	if( list_size(nivelesConJugadores) > 0 ) return false;
-
 	return true;
 };
 
@@ -167,6 +189,35 @@ void matarHilos(t_list* hilosPlanificadores){
 	list_map(hilosPlanificadores, (void*)_matar_hilo);
 };
 
-void activarKoopa(void){
-
+void activarKoopa(t_list* hilosPlanificadores){
+	int status;
+	pid_t my_pid, parent_pid, child_pid;
+	if((child_pid = fork()) < 0 ){
+	      perror("fork failure");
+	      exit(1);
+	}
+	if(child_pid == 0){ //koopa
+		  my_pid = getpid();
+		  parent_pid = getppid();
+	      printf("Child: my pid is: %d\n", my_pid);
+	      printf("Child: my parent's pid is: %d\n", parent_pid);
+	      int cont = 3;
+	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
+	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
+	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
+	      printf("Ejecutando koopa... \n\n");
+	      execlp("../koopa-x86", "koopa", 0);
+	//si se ejecuta esto es pórque hubo un problema con el exec
+	      perror("execl() failure!\n");
+	      printf("exect fallido u.u\n");
+	      _exit(1);
+	}else{ //Orquestador
+	      printf("Parent: my child's pid is: %d\n\n", child_pid);
+	   /* can use wait(NULL) since exit status
+	    * from child is not used. */
+	      wait(&status);
+	      matarHilos(hilosPlanificadores);
+	      printf("\n--Proceso Koopa finalizado--\n ");
+	}
+	return;
 };
