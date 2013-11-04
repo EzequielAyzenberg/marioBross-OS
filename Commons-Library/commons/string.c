@@ -44,6 +44,14 @@ char *string_repeat(char character, int count) {
 	return text;
 }
 
+int main(void){
+	char nivel[5];
+	char cadenaAuxiliar[]="obj[          ";
+	strcat(cadenaAuxiliar+4,nivel);
+	strcat(cadenaAuxiliar+strlen(nivel)+4,"]");
+	return 0;
+}
+
 /**
  * @NAME: string_duplicate
  * @DESC: Retorna una copia del string pasado

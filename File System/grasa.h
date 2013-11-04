@@ -37,4 +37,3 @@ typedef struct grasa_file_t { // un cuarto de bloque (256 bytes)
 	ptrGBloque blk_indirect[BLKINDIRECT];
 } GFile;
 
-

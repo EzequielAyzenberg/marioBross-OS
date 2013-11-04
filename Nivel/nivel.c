@@ -12,61 +12,80 @@
 #include "cargador.h"
 #include "gui.h"
 #include "enemigos.h"
+#include "conexiones.h"
 #include <commons/collections/list.h>
 #include <time.h>
-#include <sockets.h>
+#include <theGRID/sockets.h>
+#include <theGRID/general.h>
 
 main(){
+	pthread_mutex_t mutexEnemigos =PTHREAD_MUTEX_INITIALIZER;
 	nivelConfig config;
 	t_list listaEnemigos;
 	t_list listaJugadoresActivos;
 	listaJugadoresActivos=*list_create();//provisorio hasta que un proceso se encargue de crearla
 	int rows,cols;
 	cargarConfig(&config);
+
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	crearEnemigos(config,&listaEnemigos,rows,cols);
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
+	coordenadas recorridoEnemigos[config.enemigos][4];
+	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
+		//nivel_gui_terminar();
+	{
+		int i=0,j=0;
+		for (i=0;i<config.enemigos;i++){
+			for(j=0;j<4;j++){
+				recorridoEnemigos[i][j].posx=0;
+				recorridoEnemigos[i][j].posy=0;
+			}
+		}
+	}
 
-	sleep(1);
+infoEnemigosThread infoParaEnemigos;
+infoParaEnemigos.listaEnemigos=&listaEnemigos;
+
+infoParaEnemigos.listaCajas=&config.listaCajas;
+infoParaEnemigos.listaJugadoresActivos=&listaJugadoresActivos;
+infoParaEnemigos.cantEne=list_size(&listaEnemigos);
+infoParaEnemigos.rows=rows;
+infoParaEnemigos.cols=cols;
+infoParaEnemigos.sleepEnemigos=config.sleepEnemigos;
+infoParaEnemigos.nombreNivel=malloc(sizeof(config.nombre));
+strcpy(infoParaEnemigos.nombreNivel,config.nombre);
+
+//controlEnemigos(&infoParaEnemigos);
+pthread_t hiloEnemigos;
+pthread_create(&hiloEnemigos,NULL,(void*)&controlEnemigos,(void*)&infoParaEnemigos);
+while(1){
+//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
+}
+//hiloEnemigos=hiloGRID(&controlEnemigos,&infoParaEnemigos);
+
+/*
+	while(1){
+
+	usleep(config.sleepEnemigos*1000);
+	moverEnemigos(&listaEnemigos,&config.listaCajas,&listaJugadoresActivos,recorridoEnemigos,rows,cols);
 	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 
-	int as;
-	scanf("%d\n",&as);
+	};
+*/
+//	nivel_gui_terminar();
+	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
+	//handshakePlataforma(config);
+	//sleep(2);
+
+	//int as;
+	//scanf("%d\n",&as);
 	//flush_in();
-	scanf("%d\n",&as);
-	nivel_gui_terminar();
+	//scanf("%d\n",&as);
 
-	/*
-	coordenadas* buffer;
-	buffer=list_get(&listaEnemigos,0);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
-	buffer=list_get(&listaEnemigos,1);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
-	buffer=list_get(&listaEnemigos,2);
-	printf("pos X :%d\n",(*buffer).posx);
-	printf("pos Y :%d\n",(*buffer).posy);
 
-*/
 
-	/*
-	puts("Main program bitch");
-	printf("El nombre del Nivel es %s\n",config.nombre);
-	printf("Los datos de conexion son %s\n",config.orquestador);
-	printf("El interveo de cheque de Deadlock es %d\n",config.intervaloDeadLock);
-	printf("El revery se encuentra en estado %d\n",config.recovery);
-	printf("Hay %d enemigos\n",config.enemigos);
-	printf("El tiempo de retardo de los enemigos es %d\n",config.sleepEnemigos);
-	printf("Se usa una planificacion del tipo %s\n",config.algoritmo);
-	printf("El tiempo de quantum es %d\n",config.quantum);
-	printf("El tiempo de retardo es %d\n",config.retardo);
-	printf("Hay %d cajas de recursos \n",list_size(&config.listaCajas));
 
-	Caja* buffer;
 
-	buffer=list_get(&config.listaCajas,2);
-	printf("%c\n",(*buffer).id);
-*/
 	return 0;
 }
 

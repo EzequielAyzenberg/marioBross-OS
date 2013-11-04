@@ -248,7 +248,7 @@ void cargarConfig(nivelConfig* configNivel){
 	scanf("%s",path);
 	int result = strncmp(path, "0",100);
 	if(result==0){//
-		strcpy(path,"/home/utnso/GitMario/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
+		strcpy(path,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
 	};
 	nivelConfig configTemp; //archivo de configuracion temporal donde se guardan los datos extraidos del archivo de configuracion, luego al final se vuela en configNivel que retornara al main program
 	config=*config_create(path);

@@ -38,22 +38,44 @@ struct typeAns{
 typedef struct typeHand handshake;
 typedef struct typeAns answer;
 
-int connectGRID(int,char*);
+/* Le pasas el puerto y la IP(en string)
+ * y el chabon te devuelve el socket ya conectado.
+ */int connectGRID(int,char*);
 
-int listenGRID(int);
+/* Le pasas el puerto y el chabon te devuelve
+ * el socket escuchando.
+ */int listenGRID(int);
 
-int selectGRID(int,fd_set *);
+/* Le pasas el maxfd y la lista copia de fd_set
+ * y te devuelve lo que el select, sin errores.
+ */int selectGRID(int,fd_set *);
 
-int acceptGRID(int);
+/* Simple...Le pasas el Listener y te devuelve
+ * un nuevo socket conectado.
+ */int acceptGRID(int);
 
-void sendHandshake(short,char*,char,short);
+/* Le pasas los datos del Handshake más el
+ * socket destino en formato short (castearlo).
+ * --Nombre de un maximo de 12 Caracteres.
+ */void sendHandshake(short,char*,char,short);
 
-void sendAnswer(short,short, char, char, short);
+/* Lo mismo que el anterior pero con Answer.
+ */void sendAnswer(short,short, char, char, short);
 
-int recvHandshake(handshake *,int);
+/* Le pasas una estructura Handshake vacia
+ * (por referencia) más el socket, y te da
+ * el estructura->Type como resultado o 0
+ * si se desconecto.
+ */int recvHandshake(handshake *,int);
 
-int recvAnswer(answer *,int);
+/* Lo mismo que el anterior pero con
+ * una estructura Answer.
+ * Te devuelve el estructura->Msg como
+ * resultado o 0 si se desconecto.
+ */int recvAnswer(answer *,int);
 
-void terminar(int, int);
+/* Funciones internas para terminar el
+ * programa por error.
+ */void terminar(int, int);
 
 #endif /* SOCKETS_H_ */
