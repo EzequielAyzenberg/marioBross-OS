@@ -119,7 +119,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	// y la segunda indica el directorio padre
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
-	//filler(buf, nombre, NULL, 0);
+	filler(buf, nombre, NULL, 0);
 	filler(buf, DEFAULT_FILE_NAME, NULL, 0);
 	//void _iterate(char* nombre) {
 //		filler(buf, nombre, NULL, 0);
