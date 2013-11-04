@@ -6,6 +6,7 @@
 
 #define BLOQUE 4096
 #define DISCO 10485760
+#define correc 2
 
 
 /*datos recopilados:
@@ -152,12 +153,26 @@ int queHayAca(char* path,int archDisk,t_list* lista){
 	int dirPadre;
 	GFile* nodo;
 	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
-	
 	if (strcmp(path,"/")==0) dirPadre=0;
 	for (i=0; i < 1023;i++)
 		 if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
 	
 return 1;	
 }
+void left_strcat(char*destino,char*origen){
+	char base[72];
+	strcpy(base,origen);
+	strcat(base,destino);
+	strcpy(destino,base);
+}
 
-
+char* path_padre(uint32_t padre,GFile*nodo){
+	char*temp;
+	if(padre==0){
+		return "/";
+	}
+	strcpy(temp,(char*)nodo[padre-correc].fname);
+	strcat(temp,"/");
+	left_strcat(temp,path_padre(nodo[padre-correc].parent_dir_block,nodo));
+	return temp;
+}

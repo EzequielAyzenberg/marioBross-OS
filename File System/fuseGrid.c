@@ -68,19 +68,47 @@ static int hello_getattr(const char *path, struct stat *stbuf) {
 	memset(stbuf, 0, sizeof(struct stat));
 
 	//Si path es igual a "/" nos estan pidiendo los atributos del punto de montaje
+	extern int fd;
+	int i=0;
+	GFile* nodo;
+	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
+
+	while(i<1024){
+		char barra[72];
+		strcpy(barra,nodo[i].fname);
+		left_strcat(barra,"/"/*path_padre(nodo[i].parent_dir_block,nodo)*/);
+		if (strcmp(path,barra) == 0) break;
+		i++;
+	}
+
+	/*while(i<1024){
+		char barra[72];
+		strcpy(barra,nodo[i].fname);
+		left_strcat(barra,"/");
+		if (strcmp(path,barra) == 0) break;
+		i++;
+	}*/
 
 	if (strcmp(path, "/") == 0) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
-	} else if (strcmp(path, DEFAULT_FILE_PATH) == 0) {
-		stbuf->st_mode = S_IFREG | 0444;
-		stbuf->st_nlink = 1;
-		stbuf->st_size = strlen(DEFAULT_FILE_CONTENT);
-	} else {
+	}else if(i<1024){
+		if(nodo[i].state==2){
+			stbuf->st_mode = S_IFDIR | 0755;
+			stbuf->st_nlink = 1;
+		}else{
+			stbuf->st_mode = S_IFREG | 0444;
+			stbuf->st_nlink = 1;
+			stbuf->st_size = nodo[i].file_size;
+		}
+	}else{
 		res = -ENOENT;
 	}
-	return res;
+return res;
 }
+
+
+
 
 
 /*
@@ -112,24 +140,22 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	t_list* archivos;
 	archivos = list_create();
 	queHayAca("/",fd,archivos);
-	//nombre =(char*) list_get(archivos,1);
 	
 	
 	
+
 	// "." y ".." son entradas validas, la primera es una referencia al directorio donde estamos parados
 	// y la segunda indica el directorio padre
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 
-	filler(buf, nombre, NULL, 0);
-
 	for (i=0; i < list_size(archivos); i++){
-	nombre =(char*) list_get(archivos,i);
+	nombre =(char*)list_get(archivos,i);
 	filler(buf, nombre, NULL, 0);
 	}
 
-	filler(buf, DEFAULT_FILE_NAME, NULL, 0);
-	
+
+
 
 	return 0;
 }
@@ -265,13 +291,3 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	return fuse_main(args.argc -1, args.argv +1, &hello_oper, NULL);
 }
 
-
-
-
-/*
-	void _iterate(char* nombre) {
-		filler(buf, nombre, NULL, 0);
-	}
-	
-	list_iterate(archivos, _iterate);
-	*/
