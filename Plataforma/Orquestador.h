@@ -28,6 +28,7 @@ typedef struct{
 	 t_list *listaNiveles;
  }infoOrquestador;
 
+
 void *orquestador(void* info);
 void  nivelNuevo(handshake handshakeNivel,  int socketNivel,   t_list* listaNiveles, t_list* hilosPlanificadores);
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles);
@@ -44,5 +45,7 @@ void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores);
 int _matar_hilo(nodoPlanificador *planificador);
 void matarHilos(t_list* hilosPlanificadores);
 void activarKoopa(t_list* hilosPlanificadores);
+int selectGRID_orquestador(int fdmax, fd_set original, int tiempo);
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores);
 
 #endif /* ORQUESTADOR_H_ */

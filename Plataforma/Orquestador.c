@@ -37,19 +37,40 @@ void *orquestador(void* infoAux){
 	t_list *listaNiveles = info.listaNiveles;
 	t_list *ganadores = list_create();
 	t_list *hilosPlanificadores = list_create();
+
 	socketOrquestador = listenGRID(info.puerto);
 
-	while(1){
-		socketIngresante = acceptGRID(socketOrquestador);
-		switch (recvHandshake(&nuevoHandshake,socketIngresante)){
-		case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles,hilosPlanificadores); break;
-		case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
-		case 2: clienteViejo(nuevoHandshake,ganadores);
-		}
+	fd_set original_FD;
+	FD_ZERO(&original_FD);
+	FD_SET(socketOrquestador, &original_FD);
 
-		// Podes sacar los comentarios, el codigo de abajo te ayuda
+	while(1){
+		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
+
+			if(chequearKoopa(ganadores,listaNiveles)){
+				puts("chequearkoopa true");
+				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
+			}else puts("chequearkoopa false");
+			continue;
+
+		}else{
+			socketIngresante = acceptGRID(socketOrquestador);
+			printf("Se escuchara al socket numero %d\n",socketIngresante);
+			switch (recvHandshake(&nuevoHandshake,socketIngresante)){
+			 case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles,hilosPlanificadores); break;
+			 case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
+			 case 2: clienteViejo(nuevoHandshake,ganadores);
+			}
+
+			if(chequearKoopa(ganadores,listaNiveles)){
+				puts("chequearkoopa true");
+				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
+			}else puts("chequearkoopa false");
+
+		}
+		/* Podes sacar los comentarios, el codigo de abajo te ayuda
 		// a vigilar algunas cosas en tiempo de ejecucion
-		/*
+		//
 		if(true == chequearKoopa(ganadores,listaNiveles))
 			puts("chequearkoopa true");
 		else puts("chequearkoopa false");;
@@ -73,6 +94,29 @@ void *orquestador(void* infoAux){
 	}
 	return 0;
 }
+
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores){
+	int cont;
+	puts("--WARNING-- Esperando jugadores entrantes...");
+	for(cont = 5; cont >= 0; cont--){
+		printf("--WARNING-- Se ejecutara Koopa en: %d\n",cont);
+		if(selectGRID_orquestador(fdmax,original,2) == 0) continue;
+		else{
+		 printf("\n--ORQUESTADOR-- Se recibio una conexion. Koopa retenido\n\n");
+		 return;
+		};
+	};
+	activarKoopa(hilosPlanificadores);
+	return;
+};
+
+int selectGRID_orquestador(int fdmax, fd_set original, int tiempo){
+	fd_set readfds = original;
+	struct timeval intervalo;
+	intervalo.tv_usec = 0;
+	intervalo.tv_sec = tiempo;
+	return select(fdmax,&readfds,NULL,NULL,&intervalo);
+};
 
 void responderError(int socketDestino){
 	//Enviarle al destino el mensaje de no encontrado o rechazo.
@@ -191,33 +235,27 @@ void matarHilos(t_list* hilosPlanificadores){
 
 void activarKoopa(t_list* hilosPlanificadores){
 	int status;
-	pid_t my_pid, parent_pid, child_pid;
+	pid_t child_pid;
 	if((child_pid = fork()) < 0 ){
 	      perror("fork failure");
 	      exit(1);
 	}
 	if(child_pid == 0){ //koopa
-		  my_pid = getpid();
-		  parent_pid = getppid();
-	      printf("Child: my pid is: %d\n", my_pid);
-	      printf("Child: my parent's pid is: %d\n", parent_pid);
-	      int cont = 3;
-	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
-	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
-	      printf("Ejecutar en %d\n",cont); cont -= 1; sleep(1);
+	      int cont;
+	      for(cont = 3; cont >=0; cont--) {
+	       printf("--KOOPA-- Ejecutar en %d\n",cont); sleep(1);
+	      }
 	      printf("Ejecutando koopa... \n\n");
-	      execlp("../koopa-x86", "koopa", 0);
+	      execlp("../koopa-x86", "koopa", (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	      perror("execl() failure!\n");
 	      printf("exect fallido u.u\n");
 	      _exit(1);
 	}else{ //Orquestador
-	      printf("Parent: my child's pid is: %d\n\n", child_pid);
-	   /* can use wait(NULL) since exit status
-	    * from child is not used. */
 	      wait(&status);
+	      puts("\n--ORQUESTADOR-- Matando hilos planificadores");
 	      matarHilos(hilosPlanificadores);
 	      printf("\n--Proceso Koopa finalizado--\n ");
 	}
-	return;
+	exit(0);
 };
