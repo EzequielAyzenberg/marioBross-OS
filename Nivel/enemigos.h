@@ -16,6 +16,7 @@ typedef struct estructuraHiloEnemigos{
 	t_list* listaEnemigos;
 	t_list* listaCajas;
 	t_list* listaJugadoresActivos;
+	t_list* listaJugadoresMuertos;
 	int rows;
 	int cols;
 	int sleepEnemigos;

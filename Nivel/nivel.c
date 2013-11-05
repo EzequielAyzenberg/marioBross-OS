@@ -23,7 +23,13 @@ main(){
 	nivelConfig config;
 	t_list listaEnemigos;
 	t_list listaJugadoresActivos;
+	t_list listaJugadoresMuertos;
 	listaJugadoresActivos=*list_create();//provisorio hasta que un proceso se encargue de crearla
+	listaJugadoresMuertos=*list_create();//idem
+	crearPersonaje(&listaJugadoresActivos,4,4,'V');
+	crearPersonaje(&listaJugadoresActivos,10,10,'@');
+	crearPersonaje(&listaJugadoresActivos,20,20,'F');
+	crearPersonaje(&listaJugadoresActivos,40,15,'A');
 	int rows,cols;
 	cargarConfig(&config);
 
@@ -48,6 +54,7 @@ infoParaEnemigos.listaEnemigos=&listaEnemigos;
 
 infoParaEnemigos.listaCajas=&config.listaCajas;
 infoParaEnemigos.listaJugadoresActivos=&listaJugadoresActivos;
+infoParaEnemigos.listaJugadoresMuertos=&listaJugadoresMuertos;
 infoParaEnemigos.cantEne=list_size(&listaEnemigos);
 infoParaEnemigos.rows=rows;
 infoParaEnemigos.cols=cols;

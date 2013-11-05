@@ -8,8 +8,12 @@
 #include <stdlib.h>
 #include "cargador.h"
 #include "enemigos.h"
+#include "personajes.h"
 #include <commons/collections/list.h>
+#include <commons/log.h>
 #include <time.h>
+#include <math.h>
+#include <string.h>
 
 void cargarCoordenadasEnemigo(int j,t_list* listaEnemigos,int cantCajas,int coorCajas[cantCajas],int rows,int cols){
 	//traigo la variable de control del otro ciclo (alla i y aca j) para sumarla y obtener un numero random distinto cada vez
@@ -314,11 +318,42 @@ void elegirMovimiento(int i,coordenadas* buffer,int rows,int cols,int cantEne,co
 	}
 }
 
-void moverEnemigos(t_list* listaEnemigos,t_list* listaCajas,t_list* listaJugadoresActivos,coordenadas recorridoEnemigos[][4],int rows, int cols){
+int calcularDistancia(coordenadas enemigo,personaje pj){
+	int dis;
+	dis=sqrt(pow(pj.posx-enemigo.posx,2)+pow(pj.posy-enemigo.posy,2));
+	return dis;
+}
+
+int chequearSuperposicionCajas(coordenadas enemyPos,int cantCajas,int coorCajas[cantCajas],int ctrl){
+	int super=0;
+	int i=0;
+	switch(ctrl){
+	case 1: enemyPos.posx++; //hay que sumarle uno al eje X
+	break;
+	case 2: enemyPos.posx--; //hay que restarle uno al eje X
+	break;
+	case 3: enemyPos.posy++; //hay que sumarle uno al eje Y
+	break;
+	case 4: enemyPos.posy--; //hay que sumarle uno al eje Y
+	break;
+	};
+	for (i=0;i<cantCajas;i++){
+		if(enemyPos.posx*100+enemyPos.posy==coorCajas[i])super=1;
+
+	}
+
+	return super;
+}
+
+
+
+void moverEnemigos(t_list* listaEnemigos,t_list* listaCajas,t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,coordenadas recorridoEnemigos[][4],int rows, int cols,int flagX[]){
 
 	int i=0;
+	int j=0;
 	coordenadas* buffer;
 	Caja* bufferCaja;
+	personaje* bufferPersonaje;
 	int cantCajas;
 
 	cantCajas=list_size(listaCajas);
@@ -366,7 +401,72 @@ void moverEnemigos(t_list* listaEnemigos,t_list* listaCajas,t_list* listaJugador
 
 
 	}else{
-		puts("no entra al if");//aca es cuando hay personajes
+		int cantPjActivos=list_size(listaJugadoresActivos);
+		personaje posPjs[cantPjActivos];
+		i=0;
+		for(i=0;i<cantPjActivos;i++){
+			bufferPersonaje=list_get(listaJugadoresActivos,i);
+			posPjs[i].posx=(*bufferPersonaje).posx;
+			posPjs[i].posy=(*bufferPersonaje).posy;
+			posPjs[i].id=(*bufferPersonaje).id;
+		}
+		i=0;
+		int dist=0;
+		int distMIN=999999;
+		int numPj;
+		for (i=0;i<cantEne;i++){
+			buffer=list_get(listaEnemigos,i);
+			j=0;
+			for (j=0;j<cantPjActivos;j++){
+				dist=calcularDistancia(*buffer,posPjs[j]);//"dist" recibe el cuadrado de la distancia, para evitar el uso de sqrt
+			//	printf("%d\n",dist);
+
+				if (dist<distMIN){
+					distMIN=dist;
+					numPj=j;
+				}
+			}
+//printf("%d\n",numPj);
+
+
+			if (flagX[i]==1){
+					if((*buffer).posx==posPjs[numPj].posx||((*buffer).posx<posPjs[numPj].posx && chequearSuperposicionCajas((*buffer),cantCajas,coorCajas,1))||((*buffer).posx>posPjs[numPj].posx && chequearSuperposicionCajas((*buffer),cantCajas,coorCajas,2)))flagX[i]=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
+				};
+
+			if (flagX[i]==0){
+					if((*buffer).posy==posPjs[numPj].posy||((*buffer).posy<posPjs[numPj].posy && chequearSuperposicionCajas((*buffer),cantCajas,coorCajas,3))||((*buffer).posy>posPjs[numPj].posy && chequearSuperposicionCajas((*buffer),cantCajas,coorCajas,4)))flagX[i]=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
+
+					//if((*buffer).posy==posPjs[numPj].posy)flagX[i]=1;//si ya estoy alineado con el eje Y, voy a moverme en el eje X
+					}
+
+			if (flagX[i]==1){
+					if((*buffer).posx<posPjs[numPj].posx)(*buffer).posx=(*buffer).posx+1;
+					else (*buffer).posx=(*buffer).posx-1;
+					flagX[i]=0;
+				}else{
+					if((*buffer).posy<posPjs[numPj].posy)(*buffer).posy=(*buffer).posy+1;
+					else (*buffer).posy=(*buffer).posy-1;
+					flagX[i]=1;
+				}
+			if((*buffer).posx==posPjs[numPj].posx && (*buffer).posy==posPjs[numPj].posy){
+				printf("El jugador %c ha sido pisado por un goomba",posPjs[numPj].id);
+				char* bufferMsg=(char*)malloc(50);
+				strcpy(bufferMsg,"El jugador");
+
+				strcat(bufferMsg,"   ha sido pisado por un goomba");
+				bufferMsg[11]=posPjs[numPj].id;
+				t_log_level logDetalle=log_level_from_string("INFO");
+				t_log* logNivel=log_create("log","nivel1", 0, logDetalle);
+				log_info(logNivel,bufferMsg);
+				free(bufferMsg);
+
+				list_add(listaJugadoresMuertos,list_remove(listaJugadoresActivos,numPj));
+			}
+
+			//focusear(i,buffer,posPjs[numPj]);//Search and destroy
+			//list_replace(listaEnemigos,i,buffer);
+		}
+
 	}
 
 
@@ -374,6 +474,12 @@ void moverEnemigos(t_list* listaEnemigos,t_list* listaCajas,t_list* listaJugador
 
 
 void controlEnemigos(infoEnemigosThread* info){
+
+	int flagX[(*info).cantEne];
+	int l=0;
+	for(l=0;l<(*info).cantEne;l++){
+		flagX[l]=0;
+	}
 
 coordenadas recorridoEnemigos [(*info).cantEne][4];
 {
@@ -390,7 +496,9 @@ coordenadas recorridoEnemigos [(*info).cantEne][4];
 
 		usleep((*info).sleepEnemigos*1000);
 
-		moverEnemigos((*info).listaEnemigos,(*info).listaCajas,(*info).listaJugadoresActivos,recorridoEnemigos,(*info).rows,(*info).cols);
+
+
+		moverEnemigos((*info).listaEnemigos,(*info).listaCajas,(*info).listaJugadoresActivos,(*info).listaJugadoresMuertos,recorridoEnemigos,(*info).rows,(*info).cols,flagX);
 
 		actualizarNivel(*(*info).listaCajas,*(*info).listaEnemigos,*(*info).listaJugadoresActivos,(*info).nombreNivel);
 

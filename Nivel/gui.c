@@ -12,6 +12,7 @@
 #include <commons/collections/list.h>
 #include "cargador.h"
 #include "enemigos.h"
+#include "personajes.h"
 #include <theGRID/sockets.h>
 
 
@@ -53,12 +54,12 @@
 
 	Caja* bufferCaja;
 	coordenadas* bufferEnemigos;
-	 ITEM_NIVEL* items = NULL;
+	personaje* bufferPersonaje;
+	ITEM_NIVEL* items = NULL;
 	//t_list* items;
 	//items=list_create();
 	cantCajas=list_size(&listaCajas);
 	cantEne=list_size(&listaEnemigos);
-
 	cantPj=list_size(&listaJugadoresActivos);
 	for(i=0;i<cantCajas;i++){
 		bufferCaja=list_get(&listaCajas,i);
@@ -82,8 +83,8 @@
 
 
 	for(i=0;i<cantPj;i++){
-		puts("Si esto se imprime es que algo esta mal");
-		//DESARROLLAR
+		bufferPersonaje=list_get(&listaJugadoresActivos,i);
+		CrearPersonaje(&items,(*bufferPersonaje).id,(*bufferPersonaje).posx,(*bufferPersonaje).posy);
 	}
 
 
