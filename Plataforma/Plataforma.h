@@ -8,11 +8,15 @@
 #ifndef PLATAFORMA_H_
 #define PLATAFORMA_H_
 
-#include<commons/collections/list.h>
-#include<theGRID/sockets.h>
-#include<theGRID/general.h>
-#include<stdio.h>
-#include<pthread.h>
+#include <commons/collections/list.h>
+#include <theGRID/sockets.h>
+#include <theGRID/general.h>
+#include <theGRID/cadenas.h>
+#include <stdio.h>
+#include <pthread.h>
+#include <stdbool.h>
+#include "logger.h"
+
 
 /* Nodos de la lista NOVEDADES */
 typedef struct tnuevo{

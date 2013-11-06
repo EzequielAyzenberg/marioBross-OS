@@ -9,7 +9,6 @@
 #define ORQUESTADOR_H_
 
 #include "Plataforma.h"
-#include <stdbool.h>
 
 /* Nodos de la lista Ganadores */
 typedef struct{
