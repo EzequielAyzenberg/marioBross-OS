@@ -48,13 +48,13 @@
 }
 
  void actualizarNivel(t_list listaCajas,t_list listaEnemigos,t_list listaJugadoresActivos,char* nombre){
-
+	 int cantItems=0;
 
 	int cantCajas,cantEne,cantPj,i;
 
 	Caja* bufferCaja;
 	coordenadas* bufferEnemigos;
-	personaje* bufferPersonaje;
+	t_personaje* bufferPersonaje;
 	ITEM_NIVEL* items = NULL;
 	//t_list* items;
 	//items=list_create();
@@ -89,8 +89,20 @@
 
 
 	nivel_gui_dibujar(items,nombre);
+	ITEM_NIVEL* itemsBuffer = NULL;
 
-		//int as;
+	while(items->next!=NULL){
+		itemsBuffer=items;
+		items=items->next;
+		free(itemsBuffer);
+
+	};
+	free(items);
+	//list_destroy(items);
+	//free(bufferCaja);
+	//free(bufferEnemigos);
+	//free(bufferPersonaje);
+	//int as;
 		//scanf("%d\n",&as);
 		//flush_in();
 		//scanf("%d\n",&as);

@@ -10,6 +10,7 @@
 typedef struct datosEnemigos{
 	int posx;
 	int posy;
+	pthread_t idGoomba;
 }coordenadas;
 
 typedef struct estructuraHiloEnemigos{
@@ -21,7 +22,7 @@ typedef struct estructuraHiloEnemigos{
 	int cols;
 	int sleepEnemigos;
 	char* nombreNivel;
-	int cantEne;
+	coordenadas* myinfo;
 	coordenadas recorridoEnemigos[][4];
 }infoEnemigosThread;
 
