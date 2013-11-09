@@ -12,31 +12,38 @@
 #include "Plataforma.h"
 
 struct data{
+	int pos;
 	int dist;
 	char recsol;
 };
 
 typedef struct Pstack{
 	char recurso;
-}stack;
+}t_stack;
 
 typedef struct Pplayer{
 	int pid;
 	char sym;
 	struct data data;
-	t_list* stack;
-}player;
+	t_list* t_stack;
+}t_player;
 
 struct algo{
 	int algo;
-	int RemainDist;
+	int remainDist;
+	int retardo;
 };
+
+typedef struct execution{
+	t_player* player;
+	int rem_cuantum;
+}t_exec;
 
 typedef struct Pglobal{
 	nodoNivel* cabecera;
 	t_list*ready;
 	t_list*sleeps;
-	player* exe;
+	t_exec* exe;
 	t_list*recur;
 	fd_set*original;
 	int*maxfd;

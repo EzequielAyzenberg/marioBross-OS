@@ -12,10 +12,11 @@
 #include <theGRID/sockets.h>
 #include <theGRID/general.h>
 #include <theGRID/cadenas.h>
+#include "logger.h"
 #include <stdio.h>
 #include <pthread.h>
 #include <stdbool.h>
-#include "logger.h"
+
 
 
 /* Nodos de la lista NOVEDADES */

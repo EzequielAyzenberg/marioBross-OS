@@ -27,6 +27,7 @@
 #include"Orquestador.h"
 #include"Planificador.h"
 
+
 #define PROGRAMA "ORQUESTADOR"
 
 void *orquestador(void* infoAux){
@@ -52,7 +53,7 @@ void *orquestador(void* infoAux){
 			if(chequearKoopa(ganadores,listaNiveles)){
 				puts("chequearkoopa true");
 				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
-			}else puts("chequearkoopa false");
+			}else //puts("chequearkoopa false");
 			continue;
 
 		}else{
@@ -67,7 +68,7 @@ void *orquestador(void* infoAux){
 			if(chequearKoopa(ganadores,listaNiveles)){
 				puts("chequearkoopa true");
 				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
-			}else puts("chequearkoopa false");
+			}else; //puts("chequearkoopa false");
 
 		}
 		/* Podes sacar los comentarios, el codigo de abajo te ayuda

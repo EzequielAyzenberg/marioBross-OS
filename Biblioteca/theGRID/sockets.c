@@ -41,10 +41,10 @@ int connectGRID(int port,char *ipdest){
 	socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	//Los mensajes probablemente se reemplacen con salidas al log.
-	puts("\n--AUX--Estableciendo cenexion con el servidor..");
+	//puts("\n--AUX--Estableciendo cenexion con el servidor..");
 	estado=connect(sockfd,(struct sockaddr *)&socket_addr,sizeof(struct sockaddr));
 	if (estado==-1)terminar(3,sockfd);
-	puts("--AUX--Conexion realizada con exito!!\n");
+	//puts("--AUX--Conexion realizada con exito!!\n");
 	return sockfd;
 }
 

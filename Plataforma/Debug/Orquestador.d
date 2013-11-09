@@ -4,7 +4,8 @@ Orquestador.d: ../Orquestador.c ../Orquestador.h ../Plataforma.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/sockets.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h \
- ../Planificador.h
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/cadenas.h \
+ ../logger.h ../Planificador.h
 
 ../Orquestador.h:
 
@@ -19,5 +20,9 @@ Orquestador.d: ../Orquestador.c ../Orquestador.h ../Plataforma.h \
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h:
+
+/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/cadenas.h:
+
+../logger.h:
 
 ../Planificador.h:

@@ -4,7 +4,7 @@
 
 
 #define MYPORT 2345
-#define MYIP "192.168.0.11"
+#define MYIP "192.168.2.57"
 #define MAX 64
 #define PROGRAMA "Plataforma"
 

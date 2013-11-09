@@ -6,17 +6,20 @@
 C_SRCS += \
 ../Orquestador.c \
 ../Planificador.c \
-../Plataforma.c 
+../Plataforma.c \
+../logger.c 
 
 OBJS += \
 ./Orquestador.o \
 ./Planificador.o \
-./Plataforma.o 
+./Plataforma.o \
+./logger.o 
 
 C_DEPS += \
 ./Orquestador.d \
 ./Planificador.d \
-./Plataforma.d 
+./Plataforma.d \
+./logger.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
