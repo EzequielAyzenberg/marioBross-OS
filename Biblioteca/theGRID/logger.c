@@ -139,5 +139,11 @@ t_log* varLogError;
 		log_destroy(varLogInfo);
 	}
 
-
+	void cerrarLogs(){
+		  finLogTrace();
+		  finLogDebug();
+		  finLogWarning();
+		  finLogInfo();
+		  finLogError();
+	}
 

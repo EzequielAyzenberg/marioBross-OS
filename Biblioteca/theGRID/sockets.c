@@ -118,11 +118,11 @@ void sendHandshake(short tipo,char* nombre,char simbolo,short sockfd){
 	short estado=0;
 	while (estado<sizeof(handshake)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		printf("\n--AUX--Intentando enviar mensaje...");
+		//printf("\n--AUX--Intentando enviar mensaje...");
 		estado=send(sockfd,(void*)&temp,sizeof(handshake),0);
 		sleep(0.1);
 	}
-	printf("Mensaje enviado con exito!!\n\n");
+	//printf("Mensaje enviado con exito!!\n\n");
 }
 
 void sendAnswer(short mensaje,short contador, char datos, char simbolo, short sockfd){
@@ -137,11 +137,11 @@ void sendAnswer(short mensaje,short contador, char datos, char simbolo, short so
 	int estado=0;
 	while (estado<sizeof(answer)){
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		printf("\n--AUX--Intentando enviar mensaje...");
+		//printf("\n--AUX--Intentando enviar mensaje...");
 		estado=send(sockfd,(void*)&temp,sizeof(answer),0);
 		sleep(0.1);
 	}
-	printf("Mensaje enviado con exito!!\n\n");
+	//printf("Mensaje enviado con exito!!\n\n");
 }
 
 int recvHandshake(handshake *temp,int sockfd){
@@ -152,14 +152,14 @@ int recvHandshake(handshake *temp,int sockfd){
 	int aux=1,estado=-1;
 	while(estado<0){		//Itera hasta que se reciba algo potable (incluida desconexion) o 5 veces, que se termina todo.
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("--AUX--Recibiendo mensaje..");
+		//puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(handshake*)temp,sizeof(handshake),0);
 		aux++;
 		if(aux==5)terminar(1,sockfd);
 	}
-	printf("--AUX-------El estado es: %d-------\n",estado);
+	//printf("--AUX-------El estado es: %d-------\n",estado);
 	if(estado==0)return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
-	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
+	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->type;
 }
 
@@ -171,12 +171,12 @@ int recvAnswer(answer *temp,int sockfd){
 	int aux=0,estado=-1;
 	while(estado<0){		//Itera hasta que se reciba algo potable (incluida desconexion) o 5 veces, que se termina todo.
 		//Los mensajes probablemente se reemplacen con salidas al log.
-		puts("--AUX--Recibiendo mensaje..");
+		//puts("--AUX--Recibiendo mensaje..");
 		estado=recv(sockfd,(answer*)temp,sizeof(*temp),0);
 		aux++;
 		if(aux==5)terminar(1,sockfd);
-	}printf("--AUX-------El estado es: %d-------\n",estado);
+	}//printf("--AUX-------El estado es: %d-------\n",estado);
 	if(estado==0)return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
-	puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
+	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->msg;
 }

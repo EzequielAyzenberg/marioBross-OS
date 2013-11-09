@@ -48,6 +48,7 @@ typedef struct Pglobal{
 	fd_set*original;
 	int*maxfd;
 	struct algo*algo;
+	bool playing;
 }global;
 
 void *planificador(void *);

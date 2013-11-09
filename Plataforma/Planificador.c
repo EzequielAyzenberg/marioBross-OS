@@ -19,6 +19,7 @@ int leerNovedad(nodoNivel*,global*,t_player*);
 void reordenar(t_list*ready,int);
 void cargarAlFinal(t_player*,t_list*,int);
 
+int modoDeRecuperacion(global);
 int aLaMierdaConTodo(global);
 bool muertePersonaje(int, global);
 void matarPersonaje(char,global);
@@ -55,8 +56,7 @@ void *planificador (void *parametro){
 	fd_set master;
 	int maxfd;
 	FD_ZERO(&master);
-	FD_SET(raiz->nid,&master);
-	maxfd=raiz->nid;
+	maxfd=0;
 	global general;
 		general.algo=(struct algo*)malloc(sizeof(struct algo));
 		general.cabecera=raiz;
@@ -68,6 +68,7 @@ void *planificador (void *parametro){
 		general.recur=t_stack;
 		general.original=&master;
 		general.maxfd=&maxfd;
+		general.playing=false;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);
@@ -75,8 +76,10 @@ void *planificador (void *parametro){
 	int estado=1;
 	short respuesta;
 	t_player aux;
-	while (1){ 		//Solo por ahora lee conexiones!! (estado!=0)
+	while (1){
+
 		estado=leerNovedad(raiz,&general,&aux);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
+
 		if(estado!=0){
 			puts("Avisandole al nivel..");
 			sendAnswer(7,0,' ',aux.sym,(short)raiz->nid);	//Le aviso al nivel que hay un nuevo jugador.
@@ -84,6 +87,7 @@ void *planificador (void *parametro){
 			switch (respuesta){
 				case 1:puts("--El nivel ha dado el ok.--");
 				puts("Cargando jugador a la base de datos..");
+				borrarNodo(raiz);
 				temp=malloc(sizeof(t_player));
 				*temp=aux;
 				cargarAlFinal(temp,ready,general.algo->algo); //Carga al final y reordena si es necesario.
@@ -145,6 +149,8 @@ void modificarRetardo(answer temp,global general){
 void inicializar(nodoNivel*raiz,global*general){
 	int estado;
 	answer tempo;
+	FD_SET(raiz->nid,general->original);
+	if(raiz->nid>*(general->maxfd))*(general->maxfd)=raiz->nid;
 	do{
 	puts("\nPidiendo algoritmo.");
 	sendAnswer(6,0,' ',' ',(short)raiz->nid);
@@ -181,7 +187,6 @@ int leerNovedad(nodoNivel*raiz,global*general,t_player*temp){
 	else{
 		crearStruct(raiz,temp,general->algo->remainDist);
 		puts("Se ha conectado un jugador!!");
-		borrarNodo(raiz);
 	}
 	return 1;
 }
@@ -204,6 +209,62 @@ void cargarAlFinal(t_player*temp,t_list*ready,int RR){
 	list_add(ready, (void*)temp);
 	reordenar(ready,RR);
 }
+
+int modoDeRecuperacion(global tabla){
+	int status;
+	puts("El nivel se ha caido, limpiando registros..");
+	FD_CLR(tabla.cabecera->nid,tabla.original);
+	tabla.cabecera->nid=0;
+	list_clean(tabla.recur);
+	puts("Esperando por la reconexion");
+	do{
+		sleep(1);
+	}while(tabla.cabecera->nid==0);
+	int nid=tabla.cabecera->nid;
+	answer temp;
+
+	void _Reestablecer_Recursos(void*paquete){
+		t_player*jugador;
+		jugador=(t_player*)paquete;
+		sendAnswer(7,0,' ',jugador->sym,nid);
+		usleep(50000);
+		recvAnswer(&temp,nid);
+		sendAnswer(3,jugador->data.pos,' ',jugador->sym,nid);
+		usleep(50000);
+		recvAnswer(&temp,nid);
+		void _Pedir_El_Recurso(void*package){
+			t_stack*recurso;
+			recurso=(t_stack*)package;
+			sendAnswer(2,1,recurso->recurso,jugador->sym,nid);
+			usleep(50000);
+			recvAnswer(&temp,nid);
+		}
+		if(!list_is_empty(jugador->t_stack))list_iterate(jugador->t_stack,_Pedir_El_Recurso);
+
+	}
+	puts("El nivel se ha reconectado, reestableciendo la informacion..");
+	inicializar(tabla.cabecera,&tabla);
+	if(!list_is_empty(tabla.ready)){
+		puts("Cargando Personajes Activos..");
+		list_iterate(tabla.ready,_Reestablecer_Recursos);
+	}
+	if(!list_is_empty(tabla.sleeps)){
+		puts("Cargando Personajes Dormidos..");
+		list_iterate(tabla.sleeps,_Reestablecer_Recursos);
+	}
+	if(tabla.exe->player!=NULL){
+		puts("Cargando jugador en Ejecucion..");
+		_Reestablecer_Recursos((void*)tabla.exe->player);
+	}
+	puts("Esta todo listo para seguir con la ejecucion!");
+	if(tabla.exe->player==NULL)return 1;
+	status=tabla.exe->player->pid;
+	sleep(1);
+	return status;
+}
+
+
+
 
 int aLaMierdaConTodo(global tabla){
 	puts("Se cayo el nivel, procesando..");
@@ -335,11 +396,12 @@ void matarPersonaje(char simbolo,global tabla){
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	puts("\nManejando la interrupcion.");
 	sleep(1);
-	int status;
+	int status=-1;
 	if(i==tabla.cabecera->nid){
 		puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
-		case 0:status=aLaMierdaConTodo(tabla);
+		//case 0:status=aLaMierdaConTodo(tabla);
+		case 0:status=modoDeRecuperacion(tabla);
 		break;
 		case 4:modificarRetardo(*aux,tabla);
 		break;
@@ -382,8 +444,27 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			}else{
 				status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0&&i==sock)break;
+				/*if(status>0&&i!=sock){
+					sendAnswer(-1,0,' ',' ',status);
+					break;
+				}*/
+				if(status>0&&i==sock){
+					answer temp;
+					if(tabla.playing){
+						if(tabla.exe->player->data.recsol!=' '){
+							sendAnswer(2,0,tabla.exe->player->data.recsol,tabla.exe->player->sym,tabla.cabecera->nid);
+							usleep(50000);
+							recvAnswer(&temp,tabla.cabecera->nid);
+							if(calcularDistancia(tabla.exe->player->data.pos,temp.cont)!=tabla.exe->player->data.dist){
+								sendAnswer(2,temp.cont,' ',' ',tabla.exe->player->pid);
+								tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,temp.cont);
+							}else sendAnswer(1,0,' ',' ',tabla.exe->player->pid);
+						}
+					}
+				return -2;
+				}
 			}
-			if (status==-2)break;
+			if (status==-2/*||status>0*/)break;
 
 		}
 	}while(1);
@@ -410,28 +491,17 @@ int asignarRecursos(global*tabla){
 	void intentarAsignar(void*paquete){
 		t_player*jugador;
 		jugador=(t_player*)paquete;
-		bool hayInstancia(void*dato){
-			t_stack*instancia;
-			instancia=(t_stack*)dato;
-			return instancia->recurso==jugador->data.recsol ? true : false;
+		puts("Pidiendole recurso al nivel.");
+		sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
+		respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
+		if (respuesta==-1)return;
+		if (respuesta==-2){
+			status=-2;
+			return;
 		}
-		t_stack*recurso=list_remove_by_condition(tabla->recur, hayInstancia);
-		if (recurso!=NULL){
-			puts("Se encontro un recurso en el armario.");
-			darInstancia(jugador,recurso,tabla);
-		}else{
-			puts("Pidiendole recurso al nivel.");
-			sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
-			respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
-			if (respuesta==-1)return;
-			if (respuesta==-2){
-				status=-2;
-				return;
-			}
-			t_stack*recnuevo=(t_stack*)malloc(sizeof(t_stack));
-			recnuevo->recurso=jugador->data.recsol;
-			darInstancia(jugador,recnuevo,tabla);
-		}
+		t_stack*recnuevo=(t_stack*)malloc(sizeof(t_stack));
+		recnuevo->recurso=jugador->data.recsol;
+		darInstancia(jugador,recnuevo,tabla);
 		puts("Instancia concedida.");
 	}
 	list_iterate(tabla->sleeps,intentarAsignar);
@@ -478,11 +548,13 @@ int devolverRecursos(global*tabla){
 }
 
 void movimiento(global*tabla,answer aux){
+	tabla->playing=true;
 	sendAnswer(3,aux.cont,' ',aux.symbol,tabla->cabecera->nid);
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
-	selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
+	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-1)return;
 	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
+	tabla->playing=false;
 	if(tabla->exe->rem_cuantum!=0){
 		if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
 		else tabla->exe->rem_cuantum--;
@@ -503,10 +575,12 @@ int calcularDistancia(int inicial,int final){
 	return x+y;
 }
 void ubicacion(answer aux,global tabla){
-	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
-	selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla);
-	sendAnswer(2,aux.cont,' ',' ',tabla.exe->player->pid);
 	tabla.exe->player->data.recsol=aux.data;
+	tabla.playing=true;
+	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
+	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-1)return;
+	sendAnswer(2,aux.cont,' ',' ',tabla.exe->player->pid);
+	tabla.playing=false;
 	tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
 }
 void recurso(global*tabla,answer aux){

@@ -31,6 +31,7 @@ void finLogDebug ();
 void finLogWarning ();
 void finLogError ();
 void finLogInfo ();
+void cerrarLogs();
 
 
 
