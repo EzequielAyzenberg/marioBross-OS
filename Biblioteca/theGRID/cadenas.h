@@ -13,5 +13,7 @@
 #include <string.h>
 
 int leecad(char *cad, int n);
+char* concat(char *s1, char *s2);
+char* ctos(char caracter);
 
 #endif /* CADENAS_H_ */

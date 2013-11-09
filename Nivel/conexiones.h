@@ -7,7 +7,15 @@
 
 #ifndef CONEXIONES_H_
 #define CONEXIONES_H_
+#include <commons/collections/list.h>
+#include "cargador.h"
 
-
+typedef struct{
+	nivelConfig config;
+	t_list* listaJugadoresActivos;
+	t_list* listaJugadoresMuertos;
+	t_list* listaRecursos;
+	short socket;
+}datosConexiones;
 
 #endif /* CONEXIONES_H_ */

@@ -12,6 +12,7 @@
 #include <commons/collections/list.h>
 #include "cargador.h"
 #include "enemigos.h"
+#include "personajes.h"
 #include <theGRID/sockets.h>
 
 
@@ -47,18 +48,18 @@
 }
 
  void actualizarNivel(t_list listaCajas,t_list listaEnemigos,t_list listaJugadoresActivos,char* nombre){
-
+	 int cantItems=0;
 
 	int cantCajas,cantEne,cantPj,i;
 
 	Caja* bufferCaja;
 	coordenadas* bufferEnemigos;
-	 ITEM_NIVEL* items = NULL;
+	t_personaje* bufferPersonaje;
+	ITEM_NIVEL* items = NULL;
 	//t_list* items;
 	//items=list_create();
 	cantCajas=list_size(&listaCajas);
 	cantEne=list_size(&listaEnemigos);
-
 	cantPj=list_size(&listaJugadoresActivos);
 	for(i=0;i<cantCajas;i++){
 		bufferCaja=list_get(&listaCajas,i);
@@ -82,14 +83,26 @@
 
 
 	for(i=0;i<cantPj;i++){
-		puts("Si esto se imprime es que algo esta mal");
-		//DESARROLLAR
+		bufferPersonaje=list_get(&listaJugadoresActivos,i);
+		CrearPersonaje(&items,(*bufferPersonaje).id,(*bufferPersonaje).posx,(*bufferPersonaje).posy);
 	}
 
 
 	nivel_gui_dibujar(items,nombre);
+	ITEM_NIVEL* itemsBuffer = NULL;
 
-		//int as;
+	while(items->next!=NULL){
+		itemsBuffer=items;
+		items=items->next;
+		free(itemsBuffer);
+
+	};
+	free(items);
+	//list_destroy(items);
+	//free(bufferCaja);
+	//free(bufferEnemigos);
+	//free(bufferPersonaje);
+	//int as;
 		//scanf("%d\n",&as);
 		//flush_in();
 		//scanf("%d\n",&as);
