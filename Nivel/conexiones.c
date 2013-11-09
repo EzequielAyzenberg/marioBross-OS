@@ -78,6 +78,11 @@ void handshakePlataforma(datosConexiones info){
 			}else sendAnswer(6,0,'9',' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
 
 		}
+	answer temp;
+	//HARCODEADO!!!
+	recvAnswer(&temp,socketBuffer);
+	sendAnswer(4,info.config.retardo,' ',' ',socketBuffer);
+
 	info.socket=socketBuffer;
 	escucharPlanificador(info);
 }

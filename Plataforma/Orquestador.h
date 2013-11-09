@@ -9,6 +9,7 @@
 #define ORQUESTADOR_H_
 
 #include "Plataforma.h"
+#include <wait.h>
 
 /* Nodos de la lista Ganadores */
 typedef struct{

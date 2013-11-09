@@ -3,10 +3,10 @@
 #include"Orquestador.h"
 
 
-#define MYPORT 2345
+#define MYPORT 2600
 #define MYIP "192.168.2.57"
 #define MAX 64
-#define PROGRAMA "Plataforma"
+#define PROGRAMA "PLATAFORMA"
 
 
 int main(int argc, char *argv[]){
@@ -23,11 +23,11 @@ int main(int argc, char *argv[]){
 		break;
 	}
 
-	newArchLogWarning(PROGRAMA,true);
-	newArchLogTrace(PROGRAMA,true);
-	newArchLogDebug(PROGRAMA,true);
-	newArchLogInfo(PROGRAMA,true);
-	newArchLogError(PROGRAMA,true);
+	newArchLogWarning(PROGRAMA);
+	newArchLogTrace(PROGRAMA);
+	newArchLogDebug(PROGRAMA);
+	newArchLogInfo(PROGRAMA);
+	newArchLogError(PROGRAMA);
 
 	t_list *listaNiveles = list_create();
 	pthread_t id_orquest;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 	id_orquest= hiloGRID(orquestador,(void*)&registroOrquestador);
 	pthread_join(id_orquest,NULL);
 
-	loguearInfo("Proceso Orquestador finalizado");
+	loguearInfo("--PLTAFORMA--Proceso Orquestador finalizado");
 	loguearInfo("Cerrando logs...");
 	cerrarLogs();
 	return 0;
