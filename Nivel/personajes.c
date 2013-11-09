@@ -24,7 +24,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 	if(list_find(listaJugadoresActivos,(void*)_is_Personaje)==NULL){
 
 
-		bufferPj=malloc(16);
+		bufferPj=malloc(24);
 		bufferPj->id=id;
 		bufferPj->posx=x;
 		bufferPj->posy=y;
@@ -78,7 +78,7 @@ int moverPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){
 	int i=0;
 	t_personaje* buffer;
 
-	buffer=malloc(sizeof(personaje));
+	buffer=malloc(sizeof(24));
 	buffer->id=' ';
 	while(i<list_size(listaJugadoresActivos)){
 
@@ -96,9 +96,9 @@ int moverPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){
 }
 
 int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char pj){
-	/*
+
 	Caja *buffer;
-	personaje *bufferPj;
+	t_personaje *bufferPj;
 	bool _is_Recurso(Caja *caja){
 						if(caja->id==recurso)return true;
 						return false;
@@ -106,7 +106,7 @@ int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char 
 	buffer=list_find(listaCajas,(void*)_is_Recurso);
 	if(buffer->quantity>0){
 
-		bool _is_Personaje(personaje* pj2){
+		bool _is_Personaje(t_personaje* pj2){
 							if(pj2->id==pj)return true;
 							return false;
 						}
@@ -124,6 +124,27 @@ int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char 
 
 
 	}else  return -1;
-*/
 
+
+}
+
+int chequearRecurso(t_list* listaCajas,char recurso){
+	Caja *buffer;
+	bool _is_Recurso(Caja *caja){
+							if(caja->id==recurso)return true;
+							return false;
+		}
+	buffer=list_find(listaCajas,(void*)_is_Recurso);
+	return (buffer->posx*100+buffer->posy);
+}
+
+int recibirRecursos(t_list* listaCajas,char recurso){
+	Caja *buffer;
+	bool _is_Recurso(Caja *caja){
+								if(caja->id==recurso)return true;
+								return false;
+			}
+	buffer=list_find(listaCajas,(void*)_is_Recurso);
+	buffer->quantity++;
+	return 1;
 }

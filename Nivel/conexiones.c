@@ -26,11 +26,17 @@ void escucharPlanificador(datosConexiones info){
 	case 3:if(moverPersonaje(info.listaJugadoresActivos,bufferAnswer.cont/100,bufferAnswer.cont%100,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info.socket);
 		else(sendAnswer(-1,0,' ',' ',info.socket));
 	break;
-	/*case 2:if(bufferAnswer.cont){
+	case 2:if(bufferAnswer.cont){
 			if(otorgarRecurso(info.listaRecursos,info.listaJugadoresActivos,bufferAnswer.data,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info.socket);
 			else (sendAnswer(-1,0,' ',' ',info.socket));
+
+			}else sendAnswer(2,chequearRecurso(info.listaRecursos,bufferAnswer.data),' ',' ',info.socket);
 	break;
-			}*/
+	case 5:sendAnswer(1,0,' ',' ',info.socket);
+		   while(recvAnswer(&bufferAnswer,info.socket)==2){
+			   recibirRecursos(info.listaRecursos,bufferAnswer.data);
+		   }
+	break;
 		}
 
 	}
