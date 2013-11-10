@@ -1,1 +1,4 @@
-gcc -o nivel nivel.c cargador.c gui.c enemigos.c conexiones.c personajes.c -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lCommons-Library -I/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui -L/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/Debug -lnivel-gui -lncurses -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -lBiblioteca -lpthread -lm
+all: compile
+
+compile:
+	gcc -o Debug/Plataforma Plataforma.c Orquestador.c Planificador.c -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -lCommons-Library -lBiblioteca -lpthread

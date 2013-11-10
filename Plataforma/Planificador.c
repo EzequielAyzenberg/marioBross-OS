@@ -5,6 +5,7 @@
 
 #define RD_INICIAL 0
 
+int selectGRID_planificador(int,fd_set*);
 void _each_Personaje(void*);
 
 void modificarAlgoritmo(answer,global);
@@ -78,6 +79,10 @@ void *planificador (void *parametro){
 			aLaMierdaConTodo(general);
 			break;
 		}
+		if(selectGRID_planificador(*(general.maxfd),general.original)>0){
+			answer temp;
+			respuesta=interrupcion(general.cabecera->nid,0,&temp,general);
+		}
 		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		//puts("Asignando Recursos");
@@ -96,6 +101,14 @@ puts("El hilo termina ahora!!");
 //free(raiz);
 return 0;
 }
+
+int selectGRID_planificador(int fdmax,fd_set*original){
+	fd_set readfds = *original;
+	struct timeval intervalo;
+	intervalo.tv_usec = 100000;
+	intervalo.tv_sec = 0;
+	return select(fdmax +1,&readfds,NULL,NULL,&intervalo);
+};
 
 void _each_Personaje(void*jug){
 	t_player* jugador;
@@ -224,7 +237,7 @@ int modoDeRecuperacion(global tabla){
 	do{
 		sleep(5);
 		puts("Intentando establecer conexion.");
-		if(cont==5){
+		if(cont==5 || finalizar){
 			puts("Abortando intento de reconexion.");
 			aLaMierdaConTodo(tabla);
 			return -2;

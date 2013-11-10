@@ -5,7 +5,7 @@
 #include<theGRID/general.h>
 
 
-#define PORT 2345
+#define PORT 2600
 #define IPDEST "127.0.0.1"
 #define MAX 8
 

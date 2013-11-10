@@ -6,7 +6,7 @@
 #include<pthread.h>
 
 
-#define MYPORT 2345
+#define MYPORT 2600
 #define MYIP "127.0.0.1"
 #define MAX 64
 

@@ -49,6 +49,6 @@ int _matar_hilo(nodoPlanificador *planificador);
 void matarHilos(t_list* hilosPlanificadores);
 void activarKoopa(t_list* hilosPlanificadores);
 int selectGRID_orquestador(int fdmax, fd_set original, int tiempo);
-void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores);
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles);
 
 #endif /* ORQUESTADOR_H_ */
