@@ -14,7 +14,7 @@ void inicializar(nodoNivel*,global*);
 
 void borrarNodo(nodoNivel*);
 void crearStruct(nodoNivel*,t_player*,int);
-int leerNovedad(nodoNivel*,global*,t_player*);
+int leerNovedad(global*);
 
 void reordenar(t_list*ready,int);
 void cargarAlFinal(t_player*,t_list*,int);
@@ -72,38 +72,9 @@ void *planificador (void *parametro){
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);
-	t_player*temp;
-	int estado=1;
 	short respuesta;
-	t_player aux;
 	while (1){
-
-		estado=leerNovedad(raiz,&general,&aux);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
-
-		if(estado!=0){
-			puts("Avisandole al nivel..");
-			sendAnswer(7,0,' ',aux.sym,(short)raiz->nid);	//Le aviso al nivel que hay un nuevo jugador.
-			respuesta=selectear(NULL,1,&master,maxfd,raiz->nid,general);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
-			switch (respuesta){
-				case 1:puts("--El nivel ha dado el ok.--");
-				puts("Cargando jugador a la base de datos..");
-				borrarNodo(raiz);
-				temp=malloc(sizeof(t_player));
-				*temp=aux;
-				cargarAlFinal(temp,ready,general.algo->algo); //Carga al final y reordena si es necesario.
-				FD_SET(temp->pid,&master);
-				if(temp->pid>maxfd)maxfd=temp->pid;
-				raiz->cantJugadores++;		//Si el nivel da el ok, entonces aumento la cantidad de jugadores activos.
-				sendAnswer(1,0,' ',' ',temp->pid);
-				puts("\nLa lista hasta ahora a quedado asi:");
-				list_iterate(ready,_each_Personaje);		//Muestra por pantalla como esta la lista.
-				puts("");
-				break;
-				case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
-				sendAnswer(-1,0,' ',' ',aux.pid);
-				break;
-			}
-		}
+		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		//puts("Asignando Recursos");
 		respuesta=asignarRecursos(&general);
@@ -182,11 +153,39 @@ void crearStruct(nodoNivel*raiz,t_player*temp,int RD){
 	temp->data.recsol=' ';
 	temp->t_stack=list_create();
 }
-int leerNovedad(nodoNivel*raiz,global*general,t_player*temp){
-	if (raiz->tandaRaiz->pid==0)return 0;
+int leerNovedad(global*tanda){
+	if (tanda->cabecera->tandaRaiz->pid==0)return 0;
 	else{
-		crearStruct(raiz,temp,general->algo->remainDist);
+		int respuesta;
+		t_player*temp;
 		puts("Se ha conectado un jugador!!");
+		puts("Avisandole al nivel..");
+		sendAnswer(7,0,' ',tanda->cabecera->tandaRaiz->sym,(short)tanda->cabecera->nid);	//Le aviso al nivel que hay un nuevo jugador.
+		respuesta=selectear(NULL,1,tanda->original,*(tanda->maxfd),tanda->cabecera->nid,*tanda);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
+		switch (respuesta){
+			case 1:puts("--El nivel ha dado el ok.--");
+			puts("Cargando jugador a la base de datos..");
+			temp=malloc(sizeof(t_player));
+			crearStruct(tanda->cabecera,temp,tanda->algo->remainDist);
+			cargarAlFinal(temp,tanda->ready,tanda->algo->algo); //Carga al final y reordena si es necesario.
+			borrarNodo(tanda->cabecera);
+			FD_SET(temp->pid,tanda->original);
+			if(temp->pid>*(tanda->maxfd))*(tanda->maxfd)=temp->pid;
+			tanda->cabecera->cantJugadores++;		//Si el nivel da el ok, entonces aumento la cantidad de jugadores activos.
+			sendAnswer(1,0,' ',' ',temp->pid);
+			puts("\nLa lista hasta ahora a quedado asi:");
+			list_iterate(tanda->ready,_each_Personaje);		//Muestra por pantalla como esta la lista.
+			puts("");
+			break;
+			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
+			sendAnswer(-1,0,' ',' ',tanda->cabecera->tandaRaiz->pid);
+			borrarNodo(tanda->cabecera);
+			break;
+			case -2:return -2;
+			break;
+			case -3:return 1;
+			break;
+		}
 	}
 	return 1;
 }
@@ -216,9 +215,17 @@ int modoDeRecuperacion(global tabla){
 	FD_CLR(tabla.cabecera->nid,tabla.original);
 	tabla.cabecera->nid=0;
 	list_clean(tabla.recur);
-	puts("Esperando por la reconexion");
+	puts("Esperando por la reconexion.");
+	int cont=0;
 	do{
-		sleep(1);
+		sleep(5);
+		puts("Intentando establecer conexion.");
+		if(cont==5){
+			puts("Abortando intento de reconexion.");
+			aLaMierdaConTodo(tabla);
+			return -2;
+		}
+		cont++;
 	}while(tabla.cabecera->nid==0);
 	int nid=tabla.cabecera->nid;
 	answer temp;
@@ -263,15 +270,13 @@ int modoDeRecuperacion(global tabla){
 	return status;
 }
 
-
-
-
 int aLaMierdaConTodo(global tabla){
 	puts("Se cayo el nivel, procesando..");
 	usleep(500000);
 	close(tabla.cabecera->nid);
 	t_player*temp;
 	t_stack*tempstack;
+	nuevo*aux;
 
 	puts("Eliminando jugadores activos.");
 	while(!list_is_empty(tabla.ready)){
@@ -289,7 +294,7 @@ int aLaMierdaConTodo(global tabla){
 	}
 	free(tabla.ready);
 
-	sleep(2);
+	sleep(1);
 	puts("Eliminando jugadores dormidos.");
 	while(!list_is_empty(tabla.sleeps)){
 		temp=(t_player*)list_remove(tabla.sleeps,0);
@@ -305,7 +310,30 @@ int aLaMierdaConTodo(global tabla){
 	}
 	free(tabla.sleeps);
 
-	sleep(2);
+	sleep(1);
+	puts("Eliminando jugador en ejecucion.");
+	if(tabla.exe->player!=NULL){
+		sendAnswer(0,0,' ',' ',tabla.exe->player->pid);
+		close(tabla.exe->player->pid);
+		while (list_is_empty(tabla.exe->player->t_stack)){
+			puts("Recurso eliminado.");
+			tempstack=(t_stack*)list_remove(tabla.exe->player->t_stack,0);
+			free(tempstack);
+		}
+		free(tabla.exe->player->t_stack);
+		free(tabla.exe->player);
+	}
+	sleep(1);
+	puts("Eliminando jugadores nuevos.");
+	while(tabla.cabecera->tandaRaiz!=NULL){
+		aux=tabla.cabecera->tandaRaiz;
+		tabla.cabecera->tandaRaiz=tabla.cabecera->tandaRaiz->sgte;
+		sendAnswer(0,0,' ',' ',aux->pid);
+		close(aux->pid);
+		free(aux);
+	}
+
+	sleep(1);
 	puts("Eliminando recursos.");
 	while (!list_is_empty(tabla.recur)){
 		tempstack=(t_stack*)list_remove(tabla.recur,0);
@@ -444,10 +472,6 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			}else{
 				status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0&&i==sock)break;
-				/*if(status>0&&i!=sock){
-					sendAnswer(-1,0,' ',' ',status);
-					break;
-				}*/
 				if(status>0&&i==sock){
 					answer temp;
 					if(tabla.playing){
@@ -461,7 +485,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 							}else sendAnswer(1,0,' ',' ',tabla.exe->player->pid);
 						}
 					}
-				return -2;
+				return -3;
 				}
 			}
 			if (status==-2/*||status>0*/)break;
@@ -470,7 +494,6 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 	}while(1);
 	return status;
 }
-
 
 void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 	list_add(jugador->t_stack,(void*)instancia);
@@ -487,7 +510,7 @@ void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 int asignarRecursos(global*tabla){
 	short respuesta;
 	answer temp;
-	int status;
+	int status=1;
 	void intentarAsignar(void*paquete){
 		t_player*jugador;
 		jugador=(t_player*)paquete;
@@ -552,7 +575,7 @@ void movimiento(global*tabla,answer aux){
 	sendAnswer(3,aux.cont,' ',aux.symbol,tabla->cabecera->nid);
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
-	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-1)return;
+	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-3)return;
 	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
 	tabla->playing=false;
 	if(tabla->exe->rem_cuantum!=0){
@@ -578,7 +601,7 @@ void ubicacion(answer aux,global tabla){
 	tabla.exe->player->data.recsol=aux.data;
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
-	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-1)return;
+	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-3)return;
 	sendAnswer(2,aux.cont,' ',' ',tabla.exe->player->pid);
 	tabla.playing=false;
 	tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
