@@ -3,8 +3,8 @@
 #include"Orquestador.h"
 
 
-#define MYPORT 2345
-#define MYIP "127.0.0.1"
+#define MYPORT 2600
+#define MYIP "192.168.2.57"
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"
 

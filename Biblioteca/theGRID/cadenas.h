@@ -15,5 +15,6 @@
 int leecad(char *cad, int n);
 char* concat(char *s1, char *s2);
 char* ctos(char caracter);
+char *intToString(int num);
 
 #endif /* CADENAS_H_ */

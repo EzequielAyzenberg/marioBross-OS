@@ -5,6 +5,7 @@
  *      Author: alumno
  */
 #include "cadenas.h"
+#include <stdlib.h>;
 
 int leecad(char *cad, int n) {
     int i, c;
@@ -38,3 +39,10 @@ char* ctos(char caracter){
 	s[1] = '\0';
 	return s;
 }
+
+char *intToString(int num){
+	char *cadena = (char*)malloc(sizeof(char[2]));
+	(void)itoa(num, cadena, 10);
+	cadena[1] = '\0';
+	return cadena;
+};

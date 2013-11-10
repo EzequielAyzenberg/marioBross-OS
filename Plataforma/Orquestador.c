@@ -49,27 +49,18 @@ void *orquestador(void* infoAux){
 
 	while(1){
 		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
-
-			if(chequearKoopa(ganadores,listaNiveles)){
-				puts("chequearkoopa true");
-				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
-			}else //puts("chequearkoopa false");
+			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles);
 			continue;
-
 		}else{
 			socketIngresante = acceptGRID(socketOrquestador);
-			printf("Se escuchara al socket numero %d\n",socketIngresante);
+			loguearInfo(concat("Se escuchara al socket numero ",intToString(socketIngresante)));
 			switch (recvHandshake(&nuevoHandshake,socketIngresante)){
 			 case 0:   nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles,hilosPlanificadores); break;
 			 case 1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
-			 case 2: clienteViejo(nuevoHandshake,ganadores);
+			 case 2: clienteViejo(nuevoHandshake,ganadores); break;
+			 default: loguearWarning("Protocolo de mensaje no encontrado");
 			}
-
-			if(chequearKoopa(ganadores,listaNiveles)){
-				puts("chequearkoopa true");
-				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores);
-			}else; //puts("chequearkoopa false");
-
+			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles);
 		}
 		/* Podes sacar los comentarios, el codigo de abajo te ayuda
 		// a vigilar algunas cosas en tiempo de ejecucion
@@ -89,20 +80,28 @@ void *orquestador(void* infoAux){
 		if(true == chequearKoopa(ganadores,listaNiveles))
 			activarKoopa(hilosPlanificadores);
 		*/
-
 		puts("--ORQUESTADOR-- Escuchando de vuelta..");
 	}
 	return 0;
 }
 
-void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores){
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles){
+	if(!chequearKoopa(ganadores,listaNiveles)){
+		return;
+	};
+	puts("chequearkoopa true");
 	int cont;
-	loguearWarning("Esperando jugadores entrantes...");
+	loguearWarning("--ORQUESTADOR-- Esperando jugadores entrantes...");
 	for(cont = 5; cont >= 0; cont--){
-		printf("--WARNING-- Se ejecutara Koopa en: %d\n",cont);
-		if(selectGRID_orquestador(fdmax,original,2) == 0) continue;
+		loguearWarning(concat("--ORQUESTADOR-- Se ejecutara Koopa en: ",intToString(cont)));
+		if(!chequearKoopa(ganadores,listaNiveles)){
+			loguearInfo("--ORQUESTADOR-- Se recibio un jugador. Koopa interrumpido");
+			return;
+		};
+		if(selectGRID_orquestador(fdmax,original,2) == 0)
+			continue;
 		else{
-			loguearInfo("Se recibio una conexion. Koopa retenido");
+			loguearInfo("--ORQUESTADOR-- Se recibio una conexion. Koopa retenido");
 			return;
 		};
 	};
@@ -128,7 +127,7 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 		nodo->nid = nid;
 		return;
 	};
-	loguearInfo("Nivel invasor rechazado");
+	loguearInfo("--ORQUESTADOR-- Nivel invasor rechazado");
 	responderError(nid);
 	return;
 };
@@ -163,7 +162,7 @@ void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles
 			nivel->nid = socketNivel;
 			list_add(listaNiveles,nivel);
 			crearHiloPlanificador(nivel,hilosPlanificadores);
-			loguearInfo("Hilo planificador creado");
+			loguearInfo("--ORQUESTADOR-- Hilo planificador creado");
 };
 
 nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
@@ -195,7 +194,7 @@ void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, 
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
 	nodoNivel *aux = validarNivel(handshakeJugador.name,listaNiveles);
 	if( aux == NULL){
-		loguearInfo("Jugador rechazado por nivel inexistenete");
+		loguearInfo("--ORQUESTADOR-- Jugador rechazado por nivel inexistenete");
 		responderError(socketJugador);
 		return;
 	}
@@ -205,14 +204,14 @@ void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiv
 		if( aux->tandaActual->sgte == NULL )
 			crearTanda( &(aux->tandaActual->sgte) );
 	    aux->tandaActual = aux->tandaActual->sgte;
-	    loguearInfo("Info del Personaje recibida");
+	    loguearInfo("--ORQUESTADOR-- Info del Personaje recibida");
 };
 
 void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
-	loguearInfo(concat("Jugador ganador: ",ctos(handshakeJugador.symbol)));
+	loguearInfo(concat("--ORQUESTADOR-- Jugador ganador: ",ctos(handshakeJugador.symbol)));
 };
 
 bool _hay_jugadores(nodoNivel *nivel) {
@@ -242,17 +241,17 @@ void activarKoopa(t_list* hilosPlanificadores){
 	      exit(1);
 	}
 	if(child_pid == 0){ //koopa
-	      loguearInfo("Ejecutando koopa...");
+	      loguearInfo("--ORQUESTADOR-- Ejecutando koopa...");
 	      execlp("../koopa-x86", "koopa", (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	      perror("execl() failure!\n");
-	      loguearError("exect fallido");
+	      loguearError("--ORQUESTADOR-- exect fallido");
 	      _exit(1);
 	}else{ //Orquestador
 	      wait(&status);
-	      loguearInfo("Matando hilos planificadores");
+	      loguearInfo("--ORQUESTADOR-- Matando hilos planificadores");
 	      matarHilos(hilosPlanificadores);
-	      loguearInfo("Proceso Koopa finalizado");
+	      loguearInfo("--ORQUESTADOR-- Proceso Koopa finalizado");
 	}
 	pthread_exit(NULL);
 };
