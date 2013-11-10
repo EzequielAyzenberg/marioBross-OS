@@ -7,7 +7,7 @@
 #include "cadenas.h"
 
 int leecad(char *cad, int n) {
-    int i, c;
+    int i=0, c;
     c=getchar();
     if (c == EOF) {
         cad[i] = '\0';

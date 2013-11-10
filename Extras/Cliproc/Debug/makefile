@@ -32,7 +32,7 @@ dependents:
 Cliproc: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -o "Cliproc" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -o "Cliproc" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

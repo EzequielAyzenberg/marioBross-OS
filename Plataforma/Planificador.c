@@ -45,9 +45,9 @@ int atenderJugador(global*);
 void *planificador (void *parametro){
 	puts("\nHola mundo!!--Yo planifico.");
 	nodoNivel*raiz=(nodoNivel*)parametro;
-	t_list *t_stack,*ready,*sleeps;
+	t_list *stack,*ready,*sleeps;
 
-	t_stack=list_create();
+	stack=list_create();
 	ready=list_create();
 	sleeps=list_create();
 	t_exec exec;
@@ -65,7 +65,7 @@ void *planificador (void *parametro){
 		general.algo->remainDist=0;
 		general.algo->algo=0;
 		general.exe=&exec;
-		general.recur=t_stack;
+		general.recur=stack;
 		general.original=&master;
 		general.maxfd=&maxfd;
 		general.playing=false;
@@ -74,6 +74,10 @@ void *planificador (void *parametro){
 	inicializar(raiz,&general);
 	short respuesta;
 	while (1){
+		if(finalizar){
+			aLaMierdaConTodo(general);
+			break;
+		}
 		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		//puts("Asignando Recursos");
@@ -89,8 +93,8 @@ void *planificador (void *parametro){
 		usleep((general.algo->retardo)*1000);
 	}
 puts("El hilo termina ahora!!");
-
-	return 0;
+//free(raiz);
+return 0;
 }
 
 void _each_Personaje(void*jug){
@@ -271,9 +275,7 @@ int modoDeRecuperacion(global tabla){
 }
 
 int aLaMierdaConTodo(global tabla){
-	puts("Se cayo el nivel, procesando..");
 	usleep(500000);
-	close(tabla.cabecera->nid);
 	t_player*temp;
 	t_stack*tempstack;
 	nuevo*aux;
@@ -341,7 +343,8 @@ int aLaMierdaConTodo(global tabla){
 	}
 	free(tabla.recur);
 	free(tabla.algo);
-	tabla.cabecera->nid=0;
+	sendAnswer(0,0,' ',' ',tabla.cabecera->nid);
+	close(tabla.cabecera->nid);
 	sleep(2);
 	puts("Nos Vamos todos al carajo!");
 	return -2;
@@ -480,7 +483,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 							usleep(50000);
 							recvAnswer(&temp,tabla.cabecera->nid);
 							if(calcularDistancia(tabla.exe->player->data.pos,temp.cont)!=tabla.exe->player->data.dist){
-								sendAnswer(2,temp.cont,' ',' ',tabla.exe->player->pid);
+								sendAnswer(2,temp.cont,tabla.exe->player->data.recsol,' ',tabla.exe->player->pid);
 								tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,temp.cont);
 							}else sendAnswer(1,0,' ',' ',tabla.exe->player->pid);
 						}
@@ -602,7 +605,7 @@ void ubicacion(answer aux,global tabla){
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
 	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-3)return;
-	sendAnswer(2,aux.cont,' ',' ',tabla.exe->player->pid);
+	sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
 	tabla.playing=false;
 	tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
 }

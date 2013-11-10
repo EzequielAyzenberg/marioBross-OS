@@ -39,6 +39,7 @@ int main(int argc, char *argv[]){
 	pthread_join(id_orquest,NULL);
 
 	loguearInfo("--PLTAFORMA--Proceso Orquestador finalizado");
+	puts("--PLTAFORMA--Proceso Orquestador finalizado");
 	loguearInfo("Cerrando logs...");
 	cerrarLogs();
 	return 0;

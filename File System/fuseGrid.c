@@ -75,7 +75,7 @@ static int hello_getattr(const char *path, struct stat *stbuf) {
 
 	while(i<1024){
 		char barra[72];
-		strcpy(barra,nodo[i].fname);
+		strcpy(barra,(char*)nodo[i].fname);
 		left_strcat(barra,"/"/*path_padre(nodo[i].parent_dir_block,nodo)*/);
 		if (strcmp(path,barra) == 0) break;
 		i++;
