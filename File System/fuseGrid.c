@@ -36,8 +36,8 @@ struct t_runtime_options {
 	char* welcome_msg;
 } runtime_options;
 
-int fd;   //archivo global
-
+GFile* nodo;
+GHeader* header;
 /*
  * Esta Macro sirve para definir nuestros propios parametros que queremos que
  * FUSE interprete. Esta va a ser utilizada mas abajo para completar el campos
@@ -68,31 +68,20 @@ static int hello_getattr(const char *path, struct stat *stbuf) {
 	memset(stbuf, 0, sizeof(struct stat));
 
 	//Si path es igual a "/" nos estan pidiendo los atributos del punto de montaje
-	extern int fd;
+	
+	extern GFile* nodo;
 	int i=0;
-	GFile* nodo;
-	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
+	
 
-	while(i<1024){
-		char barra[72];
-		strcpy(barra,nodo[i].fname);
-		left_strcat(barra,"/"/*path_padre(nodo[i].parent_dir_block,nodo)*/);
-		if (strcmp(path,barra) == 0) break;
-		i++;
-	}
-
-	/*while(i<1024){
-		char barra[72];
-		strcpy(barra,nodo[i].fname);
-		left_strcat(barra,"/");
-		if (strcmp(path,barra) == 0) break;
-		i++;
-	}*/
+	//i=nodoQueQuiero(path,nodo);
+    
+	 
 
 	if (strcmp(path, "/") == 0) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
 	}else if(i<1024){
+		i=nodoByPath(path,nodo);
 		if(nodo[i].state==2){
 			stbuf->st_mode = S_IFDIR | 0755;
 			stbuf->st_nlink = 1;
@@ -130,16 +119,18 @@ return res;
 static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi) {
 	(void) offset;
 	(void) fi;
-	extern int fd;
+	extern GFile* nodo;
 	char* nombre;
 	int i;
 
-	if (strcmp(path, "/") != 0)
-		return -ENOENT;
+	//if (strcmp(path, "/") != 0)
+		//return -ENOENT;
 
 	t_list* archivos;
 	archivos = list_create();
-	queHayAca("/",fd,archivos);
+	i=nodoByPath(path,nodo);
+	if (i==-1)return -ENOENT;
+	queHayAca(i,nodo,archivos);
 	
 	
 	
@@ -154,8 +145,8 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, of
 	filler(buf, nombre, NULL, 0);
 	}
 
-
-
+list_clean(archivos);
+list_destroy(archivos);
 
 	return 0;
 }
@@ -204,14 +195,14 @@ static int hello_open(const char *path, struct fuse_file_info *fi) {
 static int hello_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
 	size_t len;
 	(void) fi;
-	if (strcmp(path, DEFAULT_FILE_PATH) != 0)
-		return -ENOENT;
+	//if (strcmp(path, DEFAULT_FILE_PATH) != 0)
+		//return -ENOENT;
 
 	len = strlen(DEFAULT_FILE_CONTENT);
 	if (offset < len) {
 		if (offset + size > len)
 			size = len - offset;
-		memcpy(buf, DEFAULT_FILE_CONTENT + offset, size);
+		memcpy(buf, DEFAULT_FILE_CONTENT + offset, size);  //desde puntero bloquenque quiero mas offset del resto size/BLOQUE
 	} else
 		size = 0;
 
@@ -262,7 +253,7 @@ static struct fuse_opt fuse_options[] = {
 // debe estar el path al directorio donde vamos a montar nuestro FS
 int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
-    extern int fd;
+    int fd;
 	// Limpio la estructura que va a contener los parametros
 	memset(&runtime_options, 0, sizeof(struct t_runtime_options));
 
@@ -284,7 +275,10 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	//abro el archivo
 	fd = open(argv[1], O_RDONLY);
     if (fd == -1) printf("error al abrir al archivo binario");
-
+    extern GFile* nodo;
+	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE); 
+	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
+	
 	// Esta es la funcion principal de FUSE, es la que se encarga
 	// de realizar el montaje, comuniscarse con el kernel, delegar todo
 	// en varios threads
