@@ -21,6 +21,10 @@ agregar otra funcionalidad ademas de read con un pipe
 */
 
 //disco de prueba tiene 6.147.455 bytes comprimido  10 mb sin comprimir 10240
+GFile* ptr_nodo;
+uint8_t* ptr_mmap;
+GHeader* ptr_header;
+t_bitarray* bitMap;
 
 /*
 void imprimir(void* arch){
@@ -33,16 +37,18 @@ int nodoByPath(const char* path,GFile*);
 int hijoDondeEstas(char* path,int padre,GFile*);
 int tablaDeNodos(int archDisk);
 */
+void* dir_bloque(int n);
 //char** dameLosNombresDelPath(char* );
 
 int main (int argc, char *argv[]){
 	
 	 
 	int fd;
-
+    
 	int bloque,i;
-	GHeader* cabeza;
-	GFile* nodo;
+	extern uint8_t* ptr_mmap;
+	extern GHeader* ptr_header;
+	extern GFile* ptr_nodo;
 	ptrGBloque ptrb;
 	char** nombre;
 	char* path;
@@ -61,15 +67,19 @@ int main (int argc, char *argv[]){
 		 fd = open(argv[1], O_RDONLY);
            if (fd == -1) printf("error al abrir al archivo binario");
     }
-    
+    ptr_mmap = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, NULL);
+    ptr_header = (GHeader*) dir_bloque(0);
+    ptr_nodo = (GFile*) dir_bloque(ptr_header->size_bitmap);
     
   //  leerHeader(fd); //Muestras el header MAN!
     
   //  bitArray(fd);  //bitArray is de new sensation
     
-    tablaDeNodos(fd); //manejo de nodos
+    tablaDeNodos(); //manejo de nodos
+   
+   
     
-    //nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
+    
     //queHayAca(nodo, 0,lista);
 	//list_iterate(lista, imprimir);
 	//printf("tamanio lista: %d \n",list_size(lista));
@@ -83,6 +93,11 @@ int main (int argc, char *argv[]){
 	return 0;
 }
 
+
+void* dir_bloque(int n){
+	extern uint8_t* ptr_mmap;
+	return ptr_mmap + BLOQUE*n;	
+}
 
 
 
@@ -115,25 +130,26 @@ return 0;
 }
 
 
-int tablaDeNodos(int archDisk){
+int tablaDeNodos(){
 	
 	//Var Locales
-	GFile* nodo;
 	ptrGBloque i;
-	const char* path = "/dir1/hola.txt";
+	extern GFile* ptr_nodo;
+	int numpadre;
+	char path[1000] = "/dir1/hola.txt";
 	char* newPath;
 	char* nombre;
-
+	char* buffer;
+    
 		
 	//path = string_new();
-	nodo = (GFile*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
+	//nodo = (GFile*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
 	//strcpy(path,"/dir1/hola.txt");
 	//strcpy(path,"/dir1/secret");
 	//strcpy(path,"/otro_dir");
 	//strcpy(path,"/ar");
-	newPath=string_new();
-	newPath=string_duplicate(path);
-	printf("cual es el path %s\n",newPath);
+	
+	//printf("cual es el path %s\n",newPath);
 	
 	//printf("total de / \n%d",strspn(path,"/"));
 	
@@ -143,7 +159,8 @@ int tablaDeNodos(int archDisk){
 	
 	t_list* archivos;
 	archivos = list_create();
-	queHayAca(path,archDisk,archivos);
+	numpadre=nodoByPath(path,ptr_nodo);
+	queHayAca(numpadre,ptr_nodo,archivos);
 		
 
 	for (i=0; i < list_size(archivos); i++){
@@ -153,32 +170,22 @@ int tablaDeNodos(int archDisk){
 
 list_destroy(archivos);
 	
-	i=nodoByPath(path,nodo);
+	i=nodoByPath(path,ptr_nodo);
 	//i=hijoDondeEstas("dir1",0,nodo);
 	printf("%d num",i);
 	
-	printf("estado: %d \n",nodo[i].state);
-	printf("nombre: %s \n",nodo[i].fname);
-	printf("padre %d \n",nodo[i].parent_dir_block);
-	printf("tamanio %d \n",nodo[i].file_size);
-	printf("fecha modificacion %d \n",(int)nodo[i].m_date);
-	printf("fecha creacion %d \n",(int)nodo[i].c_date);
+	printf("estado: %d \n",ptr_nodo[i].state);
+	printf("nombre: %s \n",ptr_nodo[i].fname);
+	printf("padre %d \n",ptr_nodo[i].parent_dir_block);
+	printf("tamanio %d \n",ptr_nodo[i].file_size);
+	printf("fecha modificacion %d \n",(int)ptr_nodo[i].m_date);
+	printf("fecha creacion %d \n",(int)ptr_nodo[i].c_date);
+	printf("bloque de indireccion numero: %d \n", (int)ptr_nodo[i].blk_indirect[0]);
+	printf("bloque de indireccion numero: %d \n", (int)ptr_nodo[i].blk_indirect[1]);
 	
-	/*
-	for (i=0;i<1024;i++){
-	printf("estado: %d \n",nodo[i].state);
-	printf("nombre: %s \n",nodo[i].fname);
-	printf("padre %d \n",nodo[i].parent_dir_block);
-	printf("tamanio %d \n",nodo[i].file_size);
-	printf("fecha modificacion %d \n",(int)nodo[i].m_date);
-	printf("fecha creacion %d \n",(int)nodo[i].c_date);
-	puts("\n \n");
-}
-*/
-	//for (i=0; i < 1024;i++)
-		// if ((nodo[i].parent_dir_block == nodo[0].parent_dir_block)&&(nodo[i].state!=0)) printf ("nombre: %s\n",nodo[i].fname);
+	cargarBuffer(buffer,BLOQUE*10-2, (off_t)4096*2+17,ptr_nodo[i]);
 	
-	//if ((munmap( nodo,DISCO ) ) == -1) puts ("fallo el mumapi");
+	
 	return 0;
 }
 
@@ -207,6 +214,102 @@ int bitArray(archDisk){
 }
 */
 
+
+int queHayAca(int numNodo,GFile* nodo,t_list* lista){
+	int i;
+	int dirPadre;
+	dirPadre=numNodo;
+	//if (strcmp(path,"/")==0) dirPadre=0;
+	//else dirPadre=nodoByPath((path,nodo);
+
+	for (i=1; i < 1023;i++)
+				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
+return 0;
+}
+
+
+int nodoByPath(const char* path,GFile* nodo){
+	char** nombreHijo;
+	int i;
+	
+	int j;
+	j=0;
+	int s;
+	s=0;
+	int numPadre;
+	int numHijo;
+	
+	nombreHijo = string_split((char*)path,"/");
+	
+	
+	numPadre=0;
+	while (nombreHijo[s]!=NULL){
+	i=1;	
+	while(i<1023){
+	if(string_equals_ignore_case(nombreHijo[s],nodo[i].fname)) j++; 
+	if((numPadre==nodo[i].parent_dir_block)) j++;
+    if (j==2) numPadre=i;
+    j=0;
+    i++;
+    
+		}
+		
+	s++;
+}
+	
+
+	
+	
+	return numPadre;
+}
+
+int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
+	
+	int hastaCualBlk_indirectLeo;
+	int desdeCualBlk_indirectLeo;
+	int hastaCualBlk_directLeo;
+	int deCualBlK_directLeo;
+	int offsetDelPrimero;
+	int cuantoLeoDelUltimo;
+	
+	
+	deCualBlK_directLeo = offset/BLOQUE; //desde cual bloque de datos voy a leer
+		
+	hastaCualBlk_directLeo = (size+offset)/BLOQUE; //hasta cual bloque de datos voy a leer
+	if(((size+offset)%BLOQUE)>0) hastaCualBlk_directLeo *= 1;
+		
+	offsetDelPrimero = offset%BLOQUE;
+	
+	cuantoLeoDelUltimo = (size + offset)%BLOQUE;
+	
+	desdeCualBlk_indirectLeo = deCualBlK_directLeo/1024;
+			   
+	hastaCualBlk_indirectLeo = hastaCualBlk_directLeo/1024; //si da 0 es el primero
+	//if((hastaCualBlk_indirectLeo%1024)>0) hastaCualBlk_indirectLeo *= 1;
+	
+	
+	 
+	
+	printf("cuantosBlk_indirectLeo: %d \n",hastaCualBlk_indirectLeo);
+	printf("deCualBlk_indirectEmpiezo: %d \n",desdeCualBlk_indirectLeo);
+	printf("cuantosBlk_directLeo: %d \n",hastaCualBlk_directLeo);
+	printf("deCualBlk_directEmpiezo: %d \n",deCualBlK_directLeo);
+	printf("cuanto leo del ultimo: %d \n",cuantoLeoDelUltimo);
+	printf("offset del primero: %d \n",offsetDelPrimero);
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+/*
 int queHayAca(const char* path,int archDisk,t_list* lista){
 	int i;
 	int dirPadre;
@@ -220,7 +323,7 @@ int queHayAca(const char* path,int archDisk,t_list* lista){
 				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
 return 0;
 }
-
+*/
 /*
 int queHayAca(char* path,int archDisk,t_list* lista){
 	int i;
@@ -254,7 +357,7 @@ char* path_padre(uint32_t padre,GFile*nodo){
 	return temp;
 }
 */
-
+/*
 int nodoByPath(const char* path,GFile* nodo){
 	char** nombreHijo;
 	char* newPath;
@@ -314,6 +417,8 @@ int newStrlen(char**str){
 }
 */
 
+
+/*
 int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
 	int i;
 	i=1;
@@ -323,7 +428,7 @@ int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
     return  i;
 	
 }
-
+*/
 
 /*
  * casos de prueba un rato

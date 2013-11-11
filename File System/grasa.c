@@ -151,6 +151,43 @@ int nodoByPath(const char* path,GFile* nodo){
 }
 	
 
+int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
+	
+	int hastaCualBlk_indirectLeo;
+	int desdeCualBlk_indirectLeo;
+	int hastaCualBlk_directLeo;
+	int deCualBlK_directLeo;
+	int offsetDelPrimero;
+	int cuantoLeoDelUltimo;
+	
+	
+	deCualBlK_directLeo = offset/BLOQUE; //desde cual bloque de datos voy a leer
+		
+	hastaCualBlk_directLeo = (size+offset)/BLOQUE; //hasta cual bloque de datos voy a leer
+	if(((size+offset)%BLOQUE)>0) hastaCualBlk_directLeo *= 1;
+		
+	offsetDelPrimero = offset%BLOQUE;
+	
+	cuantoLeoDelUltimo = (size + offset)%BLOQUE;
+	
+	desdeCualBlk_indirectLeo = deCualBlK_directLeo/1024;
+			   
+	hastaCualBlk_indirectLeo = hastaCualBlk_directLeo/1024; //si da 0 es el primero
+	//if((hastaCualBlk_indirectLeo%1024)>0) hastaCualBlk_indirectLeo *= 1;
+	
+	
+	 
+	
+	printf("cuantosBlk_indirectLeo: %d \n",hastaCualBlk_indirectLeo);
+	printf("deCualBlk_indirectEmpiezo: %d \n",desdeCualBlk_indirectLeo);
+	printf("cuantosBlk_directLeo: %d \n",hastaCualBlk_directLeo);
+	printf("deCualBlk_directEmpiezo: %d \n",deCualBlK_directLeo);
+	printf("cuanto leo del ultimo: %d \n",cuantoLeoDelUltimo);
+	printf("offset del primero: %d \n",offsetDelPrimero);
+	
+	
+	
+}
 	
 	
 
