@@ -268,16 +268,16 @@ int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
 	int hastaCualBlk_indirectLeo;
 	int desdeCualBlk_indirectLeo;
 	int hastaCualBlk_directLeo;
-	int deCualBlK_directLeo;
+	int deCualBlk_directLeo;
 	int offsetDelPrimero;
 	int cuantoLeoDelUltimo;
-	int dirBloqueArrayDatos;
+	int dirBloqueArray;
 	int offsetBuff;
 	ptrGBloque* ptrBloque;
 	int primero;
 	uint8_t* ptr_datos;
 	
-	deCualBlK_directLeo = offset/BLOQUE; //desde cual bloque de datos voy a leer
+	deCualBlk_directLeo = offset/BLOQUE; //desde cual bloque de datos voy a leer
 		
 	hastaCualBlk_directLeo = (size+offset)/BLOQUE; //hasta cual bloque de datos voy a leer
 	if(((size+offset)%BLOQUE)>0) hastaCualBlk_directLeo *= 1;
@@ -286,7 +286,7 @@ int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
 	
 	cuantoLeoDelUltimo = (size + offset)%BLOQUE;
 	
-	desdeCualBlk_indirectLeo = deCualBlK_directLeo/1024;
+	desdeCualBlk_indirectLeo = deCualBlk_directLeo/1024;
 			   
 	hastaCualBlk_indirectLeo = hastaCualBlk_directLeo/1024; //si da 0 es el primero
 	//if((hastaCualBlk_indirectLeo%1024)>0) hastaCualBlk_indirectLeo *= 1;
@@ -297,7 +297,7 @@ int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
 	printf("cuantosBlk_indirectLeo: %d \n",hastaCualBlk_indirectLeo);
 	printf("deCualBlk_indirectEmpiezo: %d \n",desdeCualBlk_indirectLeo);
 	printf("cuantosBlk_directLeo: %d \n",hastaCualBlk_directLeo);
-	printf("deCualBlk_directEmpiezo: %d \n",deCualBlK_directLeo);
+	printf("deCualBlk_directEmpiezo: %d \n",deCualBlk_directLeo);
 	printf("cuanto leo del ultimo: %d \n",cuantoLeoDelUltimo);
 	printf("offset del primero: %d \n",offsetDelPrimero);
 	
@@ -305,20 +305,20 @@ int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
 	primero=1;
 	dirBloqueArray=inodo->blk_indirect[desdeCualBlk_indirectLeo]; //tengo la direcion del bloque de array con puntero a bloques de datos
 	ptrBloque =(ptrGBloque*) dir_bloque(dirBloqueArray); //ahora estoy apuntando a la primera posicion del bloque de array con punteros a bloque de datos
-	ptrBloque=ptrBloque+deCualBlK_directLeo;         //ahora estoy apundo a la direccion del bloque que quiero leer
-	ptr_datos = (uint8_t*)dir_bloque(ptrBloque*);   //ahora estoy AL FIN estoy apuntando al la primer posicion del bloque de datos que tengo que leer
+	ptrBloque=ptrBloque+deCualBlk_directLeo;         //ahora estoy apundo a la direccion del bloque que quiero leer
+	ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy AL FIN estoy apuntando al la primer posicion del bloque de datos que tengo que leer
 	ptrBloque+=1;	                                //ahora apuntado a la proxima direccion del bloque de datos que tengo que leer
 	//primer lectura, el offset
-	memcpy(buf,ptr_datos+offsetDelPrimer,BLOQUE-offsetDelPrimero);   //copio los primero datos, aquellos cuyos podrian tener offset De Bloque
+	memcpy(buf,ptr_datos+offsetDelPrimero,BLOQUE-offsetDelPrimero);   //copio los primero datos, aquellos cuyos podrian tener offset De Bloque
 	offsetBuff=BLOQUE-offsetDelPrimero;     //actulizo el offset del buff para que no se sobresquiban los datos
 	
 	//esto es por si hay intermedios
 	do{
 			
 		
-			while((deCualBlK_directLeo<hastaCualBlk_directLeo)||((deCualBlk_directo%1024)==0)){  //sin desde es menor que hasta entro y si no estoy apuntando al ultimo bloque 
-			deCualBlK_directLeo+=1;                         //actualizo desde donde debo leer
-			ptr_datos = (uint8_t*)dir_bloque(ptrBloque*);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
+			while((deCualBlk_directLeo<hastaCualBlk_directLeo)||((deCualBlk_directLeo%1024)==0)){  //sin desde es menor que hasta entro y si no estoy apuntando al ultimo bloque 
+			deCualBlk_directLeo+=1;                         //actualizo desde donde debo leer
+			ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
 			memcpy(buf+offsetBuff,ptr_datos,BLOQUE); 		//copio los datos
 			offsetBuff+=BLOQUE;  						    //actulizo el offset del Bloque
 			ptrBloque+=1;                                   //ahora estoy apundo a la direccion del bloque que quiero leer
@@ -335,8 +335,8 @@ int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
 	//Esto es para guardar en el buff lo que queda del ultimo bloque, si es que queda
 	if(cuantoLeoDelUltimo) 
 	{
-	ptr_datos = (uint8_t*)dir_bloque(ptrBloque*);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
-	memcpy(buf+offsetBuff,ptr_datos,cuantosLeoDelUltimo); 		//copio los datos que faltan del ultimo bloque
+	ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
+	memcpy(buf+offsetBuff,ptr_datos,cuantoLeoDelUltimo); 		//copio los datos que faltan del ultimo bloque
 	}
 	
 	return 0;
