@@ -36,8 +36,9 @@ struct t_runtime_options {
 	char* welcome_msg;
 } runtime_options;
 
-GFile* nodo;
-GHeader* header;
+GFile* ptr_nodo;
+GHeader* ptr_header;
+uint8_t* ptr_mmap;
 /*
  * Esta Macro sirve para definir nuestros propios parametros que queremos que
  * FUSE interprete. Esta va a ser utilizada mas abajo para completar el campos
@@ -62,41 +63,34 @@ GHeader* header;
  * 	@RETURN
  * 		O archivo/directorio fue encontrado. -ENOENT archivo/directorio no encontrado
  */
-static int hello_getattr(const char *path, struct stat *stbuf) {
-	int res = 0;
+static int theGrid_getattr(const char *path, struct stat *stbuf) {
+	int res; 
+	res= 0;
 
 	memset(stbuf, 0, sizeof(struct stat));
 
 	//Si path es igual a "/" nos estan pidiendo los atributos del punto de montaje
 	
-	extern GFile* nodo;
+	extern GFile* ptr_nodo;
 	int i=0;
-	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
-
-	while(i<1024){
-		char barra[72];
-		strcpy(barra,(char*)nodo[i].fname);
-		left_strcat(barra,"/"/*path_padre(nodo[i].parent_dir_block,nodo)*/);
-		if (strcmp(path,barra) == 0) break;
-		i++;
-	}
+	
 
 	//i=nodoQueQuiero(path,nodo);
     
-	 
+	 i=nodoByPath(path,ptr_nodo);
 
 	if (strcmp(path, "/") == 0) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
 	}else if(i<1024){
-		i=nodoByPath(path,nodo);
-		if(nodo[i].state==2){
+		
+		if(ptr_nodo[i].state==2){
 			stbuf->st_mode = S_IFDIR | 0755;
 			stbuf->st_nlink = 1;
 		}else{
 			stbuf->st_mode = S_IFREG | 0444;
 			stbuf->st_nlink = 1;
-			stbuf->st_size = nodo[i].file_size;
+			stbuf->st_size = ptr_nodo[i].file_size;
 		}
 	}else{
 		res = -ENOENT;
@@ -124,21 +118,18 @@ return res;
  * 	@RETURN
  * 		O directorio fue encontrado. -ENOENT directorio no encontrado
  */
-static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi) {
+static int theGrid_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi) {
 	(void) offset;
 	(void) fi;
-	extern GFile* nodo;
+	extern GFile* ptr_nodo;
 	char* nombre;
 	int i;
 
-	//if (strcmp(path, "/") != 0)
-		//return -ENOENT;
-
 	t_list* archivos;
 	archivos = list_create();
-	i=nodoByPath(path,nodo);
-	if (i==-1)return -ENOENT;
-	queHayAca(i,nodo,archivos);
+	i=nodoByPath(path,ptr_nodo);
+	
+	queHayAca(i,ptr_nodo,archivos);
 	
 	
 	
@@ -172,7 +163,8 @@ list_destroy(archivos);
  * 	@RETURN
  * 		O archivo fue encontrado. -EACCES archivo no es accesible
  */
-static int hello_open(const char *path, struct fuse_file_info *fi) {
+static int theGrid_open(const char *path, struct fuse_file_info *fi) {
+	
 	if (strcmp(path, DEFAULT_FILE_PATH) != 0)
 		return -ENOENT;
 
@@ -200,19 +192,17 @@ static int hello_open(const char *path, struct fuse_file_info *fi) {
  * 		la cantidad de bytes leidos o -ENOENT si ocurrio un error. ( Este comportamiento es igual
  * 		para la funcion write )
  */
-static int hello_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
 	size_t len;
 	(void) fi;
+	int numNodo;
+	extern GFile* ptr_nodo;
 	//if (strcmp(path, DEFAULT_FILE_PATH) != 0)
 		//return -ENOENT;
-
-	len = strlen(DEFAULT_FILE_CONTENT);
-	if (offset < len) {
-		if (offset + size > len)
-			size = len - offset;
-		memcpy(buf, DEFAULT_FILE_CONTENT + offset, size);  //desde puntero bloquenque quiero mas offset del resto size/BLOQUE
-	} else
-		size = 0;
+//	numNodo=nodoByPath(path,ptr_nodo);
+	//aca nuevamente me falta chequear si encontro el archivo
+	//cargarBuffer(buf,size,offset,ptr_nodo+numNodo);
+	
 
 	return size;
 }
@@ -224,11 +214,11 @@ static int hello_read(const char *path, char *buf, size_t size, off_t offset, st
  * Como se observa la estructura contiene punteros a funciones.
  */
 
-static struct fuse_operations hello_oper = {
-		.getattr = hello_getattr,
-		.readdir = hello_readdir,
-		.open = hello_open,
-		.read = hello_read,
+static struct fuse_operations theGrid_oper = {
+		.getattr = theGrid_getattr,
+		.readdir = theGrid_readdir,
+		.open = theGrid_open,
+		.read = theGrid_read,
 };
 
 
@@ -283,13 +273,22 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	//abro el archivo
 	fd = open(argv[1], O_RDONLY);
     if (fd == -1) printf("error al abrir al archivo binario");
-    extern GFile* nodo;
-	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE); 
+    extern GFile* ptr_nodo;
+    extern GHeader* ptr_header;
+    extern uint8_t* ptr_mmap;
+	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd,NULL);
+	ptr_header = (GHeader*) dir_bloque(0);
+    ptr_nodo = (GFile*) dir_bloque(1); 
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
 	
 	// Esta es la funcion principal de FUSE, es la que se encarga
 	// de realizar el montaje, comuniscarse con el kernel, delegar todo
 	// en varios threads
-	return fuse_main(args.argc -1, args.argv +1, &hello_oper, NULL);
+	return fuse_main(args.argc -1, args.argv +1, &theGrid_oper, NULL);
 }
 
+
+void* dir_bloque(int n){
+	extern uint8_t* ptr_mmap;
+	return ptr_mmap + BLOQUE*n;	
+}
