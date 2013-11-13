@@ -24,7 +24,7 @@ typedef struct ncfg {
 	char* orquestador;
 	int intervaloDeadLock;
 	int cantidadCajas;
-	t_list listaCajas;
+	t_list* listaCajas;
 	Caja* cajasNivel;
 	int recovery;
 	int enemigos;
@@ -32,6 +32,7 @@ typedef struct ncfg {
 	char* algoritmo;
 	int quantum;
 	int retardo;
+	int remainingDistance;
 } nivelConfig;
 
 //void cargarconfig(nivelConfig*,t_list*);

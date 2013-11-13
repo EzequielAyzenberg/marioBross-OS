@@ -10,12 +10,50 @@
 #include "conexiones.h"
 #include <commons/string.h>
 #include "cargador.h"
-
+#include <sys/inotify.h>
+#include "cargador.h"
 answer bufferAnswer;
 
 void escucharPlanificador(datosConexiones info){
+	nivelConfig bufferConfig;
 	int i=0;
+	fd_set readfds,active; //necesito un mejor nombre
+	int fd;
+	int watch;
+	int socketMAX;
+	struct timeval time;
+	time.tv_sec = 1;
+	time.tv_usec = 0;
+	int socketBuffer=info.socket;
+	fd=inotify_init();//crea el inotify al comienzo de cada loop
+	watch=inotify_add_watch(fd,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg",IN_MODIFY);
+	FD_ZERO (&active);
+	FD_SET (fd, &active);
+	FD_SET (info.socket, &active);
+
 	while(1){
+	FD_ZERO (&active);
+	FD_SET (fd, &active);
+	FD_SET (info.socket, &active);
+
+	readfds=active;
+	time.tv_sec = 1;
+	time.tv_usec = 0;
+	//fd=inotify_init();//crea el inotify al comienzo de cada loop
+	//watch=inotify_add_watch(fd,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg",IN_MODIFY);
+
+	if(info.socket>fd)socketMAX=info.socket;
+	else socketMAX=fd;
+
+	//FD_ZERO (&readfds);
+	//FD_SET (fd, &readfds);
+	//FD_SET (info.socket, &readfds);
+	//puts("selecteando");
+	select(socketMAX+1,&readfds,NULL,NULL,&time);
+	i=0;
+	while ((!FD_ISSET(i,&readfds))&&(i<=socketMAX+1)) i++;
+
+	if (i==info.socket){
 
 	recvAnswer(&bufferAnswer,info.socket);
 	int ctrl=bufferAnswer.msg;
@@ -37,22 +75,51 @@ void escucharPlanificador(datosConexiones info){
 			   recibirRecursos(info.listaRecursos,bufferAnswer.data);
 		   }
 	break;
+	case 8:matarPersonaje(info.listaJugadoresActivos,info.listaJugadoresMuertos,bufferAnswer.symbol);
+	break;
 		}
 
 	}
-};
+
+	if(i==fd){
+		cargarConfig(bufferConfig);
+		if(info.config->algoritmo!=bufferConfig.algoritmo||info.config->quantum!=bufferConfig.quantum){
+			*info.config=bufferConfig;
+			if(!strcmp(info.config->algoritmo,"RR")){
+				sendAnswer(6,info.config->quantum,'5',' ',socketBuffer);
+				}else sendAnswer(6,0,'9',' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
+
+		}
+		if(info.config->retardo!=bufferConfig.retardo){
+			*info.config=bufferConfig;
+			//mandar mensaje de retardo, aun no especificado
+		}
+
+		//puts("modificaron el archivo");
+	}
+
+
+
+	inotify_rm_watch(fd,watch);
+	close(fd);
+	fd=inotify_init();//crea el inotify al comienzo de cada loop
+	watch=inotify_add_watch(fd,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg",IN_MODIFY);
+	time.tv_sec = 1;
+	time.tv_usec = 0;
+	};
+}
 
 void handshakePlataforma(datosConexiones info){
 	//char* puertoAux,ip,buffer;
 
 	char* buffer;
-	buffer=(char*)malloc(sizeof(info.config.orquestador));
+	buffer=(char*)malloc(sizeof(info.config->orquestador));
 	char* puertoAux;
-	puertoAux=(char*)malloc(sizeof(info.config.orquestador));
+	puertoAux=(char*)malloc(sizeof(info.config->orquestador));
 	char* ip;
-	ip=(char*)malloc(sizeof(info.config.orquestador));
+	ip=(char*)malloc(sizeof(info.config->orquestador));
 	int puerto;
-	strcpy(buffer,info.config.orquestador);
+	strcpy(buffer,info.config->orquestador);
 	strcpy(ip,*string_split(buffer,":"));
 	strcpy(puertoAux,string_substring_from(buffer,strlen(ip)+1));
 	//puts(ip);
@@ -60,7 +127,7 @@ void handshakePlataforma(datosConexiones info){
 	//printf("%d\n",puerto);
 	int socketPlataforma = connectGRID(puerto,ip);
 	short socketBuffer=(short)socketPlataforma; //te odio Cristian, que necesidad habia? no podias simplemente recibir un int?? ¬¬
-	sendHandshake(0,info.config.nombre,' ',socketBuffer);
+	sendHandshake(0,info.config->nombre,' ',socketBuffer);
 	recvAnswer(&bufferAnswer,socketBuffer);
 //	printf("La plataforma quiere un %d\n",bufferAnswer.msg);
 	if(bufferAnswer.msg==-1){
@@ -73,15 +140,15 @@ void handshakePlataforma(datosConexiones info){
 		}
 	if(bufferAnswer.msg==6){
 		//puts("La plataforma ha solitica el tipo de algoritomo, informando...");
-		if(!strcmp(info.config.algoritmo,"RR")){
-			sendAnswer(6,info.config.quantum,'5',' ',socketBuffer);
+		if(!strcmp(info.config->algoritmo,"RR")){
+			sendAnswer(6,info.config->quantum,'5',' ',socketBuffer);
 			}else sendAnswer(6,0,'9',' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
 
 		}
 	answer temp;
 	//HARCODEADO!!!
 	recvAnswer(&temp,socketBuffer);
-	sendAnswer(4,info.config.retardo,' ',' ',socketBuffer);
+	sendAnswer(4,info.config->retardo,' ',' ',socketBuffer);
 
 	info.socket=socketBuffer;
 	escucharPlanificador(info);

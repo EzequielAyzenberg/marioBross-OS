@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <commons/collections/list.h>
+#include "semaforos.h"
+#include <theGRID/general.h>
+
+pthread_mutex_t mutexMatarPersonaje;
 
 int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMENTAR QUE REVISE SI ESE PERSONAJE NO EXISTIA YA
 
@@ -24,7 +28,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 	if(list_find(listaJugadoresActivos,(void*)_is_Personaje)==NULL){
 
 
-		bufferPj=malloc(24);
+		bufferPj=malloc(sizeof(t_personaje));
 		bufferPj->id=id;
 		bufferPj->posx=x;
 		bufferPj->posy=y;
@@ -74,11 +78,27 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 	}
 */}
 
+int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,char id){
+	t_personaje *bufferPj;
+	bool _is_Personaje(t_personaje* pj2){
+							if(pj2->id==id)return true;
+							return false;
+						}
+		bufferPj=list_find(listaJugadoresActivos,(void*)_is_Personaje);
+		if(bufferPj!=NULL){
+			pthread_mutex_lock( &mutexMatarPersonaje);
+			list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
+			pthread_mutex_unlock( &mutexMatarPersonaje);
+			return 1;
+		}
+		else return -1;
+}
+
 int moverPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){
 	int i=0;
 	t_personaje* buffer;
 
-	buffer=malloc(sizeof(24));
+	buffer=malloc(sizeof(t_personaje));
 	buffer->id=' ';
 	while(i<list_size(listaJugadoresActivos)){
 

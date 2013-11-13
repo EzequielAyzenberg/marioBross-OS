@@ -17,9 +17,9 @@
 #include <theGRID/general.h>
 #include "semaforos.h"
 
-pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t mutexMatarPersonaje =PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t mutexLog =PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexDibujar;
+pthread_mutex_t mutexMatarPersonaje;
+pthread_mutex_t mutexLog;
 
 void cargarCoordenadasEnemigo(infoEnemigosThread info,int cantCajas,int coorCajas[cantCajas],int rows,int cols){
 	//traigo la variable de control del otro ciclo (alla i y aca j) para sumarla y obtener un numero random distinto cada vez
@@ -558,9 +558,12 @@ coordenadas recorridoEnemigos [4];
 //printf("Estoy en hilo %d\n",(int)info->myinfo->idGoomba);
 	crearEnemigos(*info,(*info).rows,(*info).cols);
 	pthread_mutex_lock( &mutexDibujar);
-	actualizarNivel(*(*info).listaCajas,*(*info).listaEnemigos,*(*info).listaJugadoresActivos,(*info).nombreNivel);
+	//printf("%d\n",info->myinfo->posx);
+	//printf("%d\n",info->myinfo->posy);
+	actualizarNivel(*info->listaCajas,*info->listaEnemigos,*info->listaJugadoresActivos,info->nombreNivel);
 	pthread_mutex_unlock( &mutexDibujar);
 	//actualizarNivel(*(*info).listaCajas,*(*info).listaEnemigos,*(*info).listaJugadoresActivos,(*info).nombreNivel);
+	//printf("%d\n",list_size(info->listaEnemigos));
 	while(1){
 
 

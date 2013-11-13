@@ -11,7 +11,7 @@
 #include "cargador.h"
 
 typedef struct{
-	nivelConfig config;
+	nivelConfig* config;
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
 	t_list* listaRecursos;

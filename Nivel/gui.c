@@ -30,10 +30,10 @@
 
 	nivel_gui_get_area_nivel(rows, cols);
 
-	cantCajas=list_size(&config.listaCajas);
+	cantCajas=list_size(config.listaCajas);
 
 	for(i=0;i<cantCajas;i++){
-		buffer=list_get(&config.listaCajas,i);
+		buffer=list_get(config.listaCajas,i);
 		CrearCaja(&items,(*buffer).id,(*buffer).posx,(*buffer).posy,(*buffer).quantity);
 	}
 
@@ -48,6 +48,7 @@
 }
 
  void actualizarNivel(t_list listaCajas,t_list listaEnemigos,t_list listaJugadoresActivos,char* nombre){
+
 	 int cantItems=0;
 
 	int cantCajas,cantEne,cantPj,i;
@@ -55,10 +56,13 @@
 	Caja* bufferCaja;
 	coordenadas* bufferEnemigos;
 	t_personaje* bufferPersonaje;
+
 	ITEM_NIVEL* items = NULL;
 	//t_list* items;
 	//items=list_create();
+
 	cantCajas=list_size(&listaCajas);
+
 	cantEne=list_size(&listaEnemigos);
 	cantPj=list_size(&listaJugadoresActivos);
 	for(i=0;i<cantCajas;i++){

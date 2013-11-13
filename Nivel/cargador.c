@@ -53,7 +53,7 @@ void itoa(int n, char s[])
 
 void cargarNombre(t_config config,char** nombre,int* valCar){
 	if (config_has_property(&config,"Nombre")){
-		*nombre=(char*)malloc(strlen(config_get_string_value(&config,"Nombre")));
+		*nombre=(char*)malloc(strlen(config_get_string_value(&config,"Nombre"))+1);
 		strcpy(*nombre,config_get_string_value(&config,"Nombre"));
 		(*valCar)++;
 
@@ -65,7 +65,7 @@ void cargarNombre(t_config config,char** nombre,int* valCar){
 	}
 void cargarOrquestador(t_config config,char** orquestador,int* valCar){
 	if (config_has_property(&config,"orquestador")){
-		*orquestador=(char*)malloc(strlen(config_get_string_value(&config,"orquestador")));
+		*orquestador=(char*)malloc(strlen(config_get_string_value(&config,"orquestador"))+1);
 		strcpy(*orquestador,config_get_string_value(&config,"orquestador"));
 		(*valCar)++;
 	}
@@ -117,7 +117,7 @@ void cargarSleepEnemigos(t_config config,int* sleep,int* valCar){
 	}
 void cargarAlgoritmo(t_config config,char** algoritmo,int* valCar){
 	if (config_has_property(&config,"algoritmo")){
-		*algoritmo=(char*)malloc(strlen(config_get_string_value(&config,"algoritmo")));
+		*algoritmo=(char*)malloc(strlen(config_get_string_value(&config,"algoritmo"))+1);
 		strcpy(*algoritmo,config_get_string_value(&config,"algoritmo"));
 		(*valCar)++;
 	}
@@ -148,7 +148,19 @@ void cargarRetardo(t_config config,int* retardo,int* valCar){
 	}
 
 
-void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
+void cargarRemainingDistance(t_config config,int* distance,int* valCar){
+	if (config_has_property(&config,"remainingDistance")){
+		*distance=config_get_int_value(&config,"remainingDistance");
+		(*valCar)++;
+	}
+	else {
+		puts("Falta la distancia inicial default");
+		exit(1);
+	};
+	}
+
+
+void cargarCajas(t_config config,t_list** listaCajas,int* valCar){
 	//Los numeros de las cajas debes ser consecutivos,sino el algoritmo no los cargara
 	int flag=1;
 	int cont=1;
@@ -159,19 +171,20 @@ void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 	aux=(char*)malloc(25);
 	arrayCaja=(char**)malloc(25);
 	Caja cajaBuffer;              //En esta caja se van a volcar los valores de cada caja sacados directamente del archivo de config.
-	*listaCajas=*list_create();
+	*listaCajas=list_create();//LINEA DEL PANICO
 	while(flag){
 
 		strcpy(caja,"Caja");
 		itoa(cont,numCja);
 		strcat(caja,numCja);
+		printf("%s\n",caja);
 		if (config_has_property(&config,caja)){
 
 			strcpy(aux,"[");
 			strcat(aux,config_get_string_value(&config,caja));
 			strcat(aux,"]");
 			arrayCaja=(char**)string_get_string_as_array(aux);
-			cajaBuffer.itemName=(char*)malloc(strlen(arrayCaja[0]));
+			cajaBuffer.itemName=(char*)malloc(strlen(arrayCaja[0])+1);
 			strcpy(cajaBuffer.itemName,arrayCaja[0]);
 			cajaBuffer.id=*arrayCaja[1];
 			cajaBuffer.quantity=atoi(arrayCaja[2]);
@@ -180,13 +193,14 @@ void cargarCajas(t_config config,t_list* listaCajas,int* valCar){
 			Caja* cajaTemp;  //Esta caja es creada para asignarle memoria con malloc, y asi podes guardar esa direccion de memoria en la lista
 			cajaTemp=(Caja*)malloc(25);
 			*cajaTemp=cajaBuffer;
-			list_add(listaCajas,cajaTemp);//despues para obtener los datos, se deben guardar en un puntero ya que devuelve un void*
+			list_add(*listaCajas,cajaTemp);//despues para obtener los datos, se deben guardar en un puntero ya que devuelve un void*
 			(*valCar)++;
 			cont++;
 		}
 		else flag=0;
 	//free(aux);
 	//free(arrayCaja);
+
 	};
 
 if (cont==1){
@@ -211,20 +225,22 @@ verificarCargados(t_config config,int valCar){
 }
 
 
-comprobarSuperposicion(t_list listaCajas){
-	int posiciones[list_size(&listaCajas)];
+comprobarSuperposicion(t_list* listaCajas){
+
+	int posiciones[list_size(listaCajas)];
+
 	int i=0;
 	Caja* Buffer;
-	for(i=0;i<list_size(&listaCajas);i++){
-		Buffer=list_get(&listaCajas,i);
+	for(i=0;i<list_size(listaCajas);i++){
+		Buffer=list_get(listaCajas,i);
 		posiciones[i]=((*Buffer).posx)*100+(*Buffer).posy;
 
 		}
 	i=0;
 	int flag=0;
 	int j=0;
-	for(i=0;i<list_size(&listaCajas);i++){
-		for(j=i+1;j<list_size(&listaCajas);j++){
+	for(i=0;i<list_size(listaCajas);i++){
+		for(j=i+1;j<list_size(listaCajas);j++){
 			if(posiciones[i]==posiciones[j]){
 				printf("La Caja%d se superpone con la Caja%d\n",i+1,j+1);
 				flag=1;
@@ -242,7 +258,7 @@ comprobarSuperposicion(t_list listaCajas){
 //Recibe la estructura donde va a guardar los datos
 void cargarConfig(nivelConfig* configNivel){
 	puts("Por favor,ingrese la ruta del archivo de configuracion");
-	t_config config;
+	t_config* config;
 	char* path;
 	path=malloc(250);
 	scanf("%s",path);
@@ -251,22 +267,32 @@ void cargarConfig(nivelConfig* configNivel){
 		strcpy(path,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
 	};
 	nivelConfig configTemp; //archivo de configuracion temporal donde se guardan los datos extraidos del archivo de configuracion, luego al final se vuela en configNivel que retornara al main program
-	config=*config_create(path);
+	config=config_create(path);
 	free(path);
 	int valCar=0;// cantidad de valores que se cargaron exitosamente
-	cargarNombre(config,&configTemp.nombre,&valCar);
-	cargarCajas(config,&configTemp.listaCajas,&valCar);
-	cargarOrquestador(config,&configTemp.orquestador,&valCar);
-	cargarDeadlock(config,&configTemp.intervaloDeadLock,&valCar);//carga el intervalo de Deadlock
-	cargarRecovery(config,&configTemp.recovery,&valCar);
-	cargarEnemigos(config,&configTemp.enemigos,&valCar);
-	cargarSleepEnemigos(config,&configTemp.sleepEnemigos,&valCar);
-	cargarAlgoritmo(config,&configTemp.algoritmo,&valCar);
-	cargarQuantum(config,&configTemp.quantum,&valCar);
-	cargarRetardo(config,&configTemp.retardo,&valCar);
+	//configTemp.listaCajas=list_create();
+	cargarNombre(*config,&configTemp.nombre,&valCar);
+
+	cargarCajas(*config,&configTemp.listaCajas,&valCar);
+
+	cargarOrquestador(*config,&configTemp.orquestador,&valCar);
+	cargarDeadlock(*config,&configTemp.intervaloDeadLock,&valCar);//carga el intervalo de Deadlock
+	cargarRecovery(*config,&configTemp.recovery,&valCar);
+	cargarEnemigos(*config,&configTemp.enemigos,&valCar);
+	cargarSleepEnemigos(*config,&configTemp.sleepEnemigos,&valCar);
+	cargarAlgoritmo(*config,&configTemp.algoritmo,&valCar);
+	cargarQuantum(*config,&configTemp.quantum,&valCar);
+	cargarRetardo(*config,&configTemp.retardo,&valCar);
+	cargarRemainingDistance(*config,&configTemp.remainingDistance,&valCar);
+
+
 	comprobarSuperposicion(configTemp.listaCajas);
-	verificarCargados(config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
+
+	verificarCargados(*config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
+
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
+	config_destroy(config);
+
 
 
 }

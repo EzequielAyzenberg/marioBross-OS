@@ -19,6 +19,9 @@
 #include <theGRID/general.h>
 #include "semaforos.h"
 
+pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexMatarPersonaje =PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexLog =PTHREAD_MUTEX_INITIALIZER;
 main(){
 	newArchLogInfo("nivel1");
 
@@ -26,11 +29,11 @@ main(){
 	pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
 	pthread_t hiloEnemigos;
 	nivelConfig config;
-	t_list listaEnemigos;
-	t_list listaJugadoresActivos;
-	t_list listaJugadoresMuertos;
-	listaJugadoresActivos=*list_create();//provisorio hasta que un proceso se encargue de crearla
-	listaJugadoresMuertos=*list_create();//idem
+	t_list* listaEnemigos;
+	t_list* listaJugadoresActivos;
+	t_list* listaJugadoresMuertos;
+	listaJugadoresActivos=list_create();//provisorio hasta que un proceso se encargue de crearla
+	listaJugadoresMuertos=list_create();//idem
 	//crearPersonaje(&listaJugadoresActivos,0,0,'V');
 	//crearPersonaje(&listaJugadoresActivos,10,10,'@');
 	//crearPersonaje(&listaJugadoresActivos,20,20,'F');
@@ -39,27 +42,28 @@ main(){
 	int rows,cols;
 	cargarConfig(&config);
 	datosConexiones datosConexiones;
-	datosConexiones.config=config;
-	datosConexiones.listaJugadoresActivos=&listaJugadoresActivos;
-	datosConexiones.listaJugadoresMuertos=&listaJugadoresMuertos;
-	datosConexiones.listaRecursos=&config.listaCajas;
+	datosConexiones.config=&config;
+	datosConexiones.listaJugadoresActivos=listaJugadoresActivos;
+	datosConexiones.listaJugadoresMuertos=listaJugadoresMuertos;
+	datosConexiones.listaRecursos=config.listaCajas;
 
 
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	infoEnemigosThread infoParaEnemigos;
-	infoParaEnemigos.listaEnemigos=&listaEnemigos;
+	listaEnemigos=list_create();
+	infoParaEnemigos.listaEnemigos=listaEnemigos;
 
-	infoParaEnemigos.listaCajas=&config.listaCajas;
-	infoParaEnemigos.listaJugadoresActivos=&listaJugadoresActivos;
-	infoParaEnemigos.listaJugadoresMuertos=&listaJugadoresMuertos;
+	infoParaEnemigos.listaCajas=config.listaCajas;
+	infoParaEnemigos.listaJugadoresActivos=listaJugadoresActivos;
+	infoParaEnemigos.listaJugadoresMuertos=listaJugadoresMuertos;
 
 	infoParaEnemigos.rows=rows;
 	infoParaEnemigos.cols=cols;
 	infoParaEnemigos.sleepEnemigos=config.sleepEnemigos;
-	infoParaEnemigos.nombreNivel=(char*)malloc(sizeof(config.nombre));
+	infoParaEnemigos.nombreNivel=(char*)malloc(strlen(config.nombre)+1);
 	strcpy(infoParaEnemigos.nombreNivel,config.nombre);
 
-	listaEnemigos=*list_create();
+
 														//nivel_gui_terminar();
 	int i=0;
 	pthread_t ejemplo;
@@ -70,7 +74,7 @@ main(){
 		//printf("mi memoria:%d\n",(int)infoParaEnemigosBuffer->myinfo);
 		pthread_create(&hiloEnemigos,NULL,(void*)&controlEnemigos,(void*)infoParaEnemigosBuffer);
 		infoParaEnemigosBuffer->myinfo->idGoomba=hiloEnemigos;
-		list_add(&listaEnemigos,infoParaEnemigosBuffer->myinfo);
+		list_add(listaEnemigos,infoParaEnemigosBuffer->myinfo);
 
 		i++;
 	}
@@ -93,7 +97,7 @@ main(){
 //controlEnemigos(&infoParaEnemigos);
 
 
-handshakePlataforma(datosConexiones);
+//handshakePlataforma(datosConexiones);
 while(1){
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
 }
@@ -120,8 +124,15 @@ while(1){
 
 
 
-
-
+/*
+free(config.algoritmo);
+free(config.nombre);
+free(config.orquestador);
+list_destroy(config.listaCajas);
+list_destroy(listaJugadoresActivos);
+list_destroy(listaJugadoresMuertos);
+list_destroy(listaEnemigos);
+*/
 	return 0;
 }
 
