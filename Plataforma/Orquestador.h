@@ -10,6 +10,7 @@
 
 #include "Plataforma.h"
 #include <wait.h>
+#include <signal.h>
 
 /* Nodos de la lista Ganadores */
 typedef struct{
@@ -28,7 +29,9 @@ typedef struct{
 	 t_list *listaNiveles;
  }infoOrquestador;
 
-
+void cerrarTodo(int);
+void borrarTodoNivel(void*);
+void finalizarTodo(t_list*,t_list*,t_list*,int);
 void *orquestador(void* info);
 void  nivelNuevo(handshake handshakeNivel,  int socketNivel,   t_list* listaNiveles, t_list* hilosPlanificadores);
 void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles);

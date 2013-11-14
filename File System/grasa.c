@@ -1,12 +1,12 @@
 #include "grasa.h"
-#include <string.h> //para strCat
 #include <sys/mman.h> //biblioteca para usar mmap y sus derivadas
 #include <commons/bitarray.c> //para las funciones que manejan el BitMap
-#include <commons/collections/list.c>
+#include <commons/collections/list.c> //para devolver listas en queHayAca
+#include <commons/string.h>//para usar split en how
 
 #define BLOQUE 4096
 #define DISCO 10485760
-#define correc 2
+
 
 
 /*datos recopilados:
@@ -20,72 +20,25 @@ agregar otra funcionalidad ademas de read con un pipe
 */
 
 //disco de prueba tiene 6.147.455 bytes comprimido  10 mb sin comprimir 10240
+void* dir_bloque(int n);
+void left_strcat(char*destino,char*origen);
 
-/*
-void imprimir(void* arch){
-	
-	printf("%s\n",(char*)arch);
+/* funcion direccion bloque
+void* dir_bloque(int n){
+	return ptr_mmap + BLOCK_SIZE*n;	
 }
-*/
-/*
-int main (int argc, char *argv[]){
-	
-	 
-	int fd;
-	int bloque,i;
-	GHeader* cabeza;
-	GFile* nodo;
-	ptrGBloque ptrb;
-	t_bitarray* bit;
-	t_list* lista = list_create();
-	
-	
-	
-	//apertura del Disco
-	if (argc != 2) {
-		perror("error en las cantidad de argumentos");
-		return EXIT_FAILURE;
-	}
-	else {//si pasaron la cantidad de parametro correctos abrimos el archivo
-		 fd = open(argv[1], O_RDONLY);
-           if (fd == -1) printf("error al abrir al archivo binario");
-    }
-    
-    
-    leerHeader(fd); //Muestras el header MAN!
-    
-    bitArray(fd);  //bitArray is de new sensation
-    
-    tablaDeNodos(fd); //manejo de nodos
-    
-    nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd, BLOQUE*2);
-    queHayAca(nodo, 0,lista);
-	list_iterate(lista, imprimir);
-	printf("tamanio lista: %d \n",list_size(lista));
-	
-
-
-	close(fd);
-
-	return 0;
-}
-*/
-
-
-
-
-
+* */
 int tamanioDelDisco(){
 	
 	puts("ingrese el tamaño del disco en bytes:");
 	return 4096;	
 }
 
-
+/*
 int leerHeader(archDisk){
 	GHeader* cabeza;
 	
-	//prototipo void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
+	//prototipo void *mmapnew(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
 	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk,(off_t)NULL);
 	if (cabeza == MAP_FAILED) puts("fallo el mapeo pues");
 	
@@ -94,45 +47,45 @@ int leerHeader(archDisk){
 	printf("bloque de inicio: %d \n",cabeza->blk_bitmap);
 	printf("tamanio del bitmap en bloques %d \n",cabeza->size_bitmap);
 	
-	//int munmap(void *addr, size_t len);
-	//if ((munmap( cabeza,BLOQUE ) ) == -1) puts ("fallo el mumapi"); se los debo por ahora
 	
 return 0;
 }
-
+*/
+/*
 int tablaDeNodos(int archDisk){
 	
 	//Var Locales
 	GFile* nodo;
-	int i;
-	
+	ptrGBloque i;
+	char path[100];
+
 		
-		
-	nodo = (GFile*)mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
+	//path = string_new();
+	nodo = (GFile*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
+	strcpy(path,"/dir1/hola.txt");
+	printf("cual es el path %s\n",path);
+	i=nodoByPath(path,nodo);
+	//i=hijoDondeEstas("dir1",0,nodo);
+	printf("%d num",i);
 	
-	printf("estado: %d \n",nodo[0].state);
-	printf("nombre: %s \n",nodo[0].fname);
-	printf("padre %d \n",nodo[0].parent_dir_block);
-	printf("tamanio %d \n",nodo[0].file_size);
-	printf("fecha modificacion %d \n",(int)nodo[0].m_date);
-	printf("fecha creacion %d \n",(int)nodo[0].c_date);
+	printf("estado: %d \n",nodo[i].state);
+	printf("nombre: %s \n",nodo[i].fname);
+	printf("padre %d \n",nodo[i].parent_dir_block);
+	printf("tamanio %d \n",nodo[i].file_size);
+	printf("fecha modificacion %d \n",(int)nodo[i].m_date);
+	printf("fecha creacion %d \n",(int)nodo[i].c_date);
 	
-	for (i=0; i < 1024;i++)
-		 if ((nodo[i].parent_dir_block == nodo[0].parent_dir_block)&&(nodo[i].state!=0)) printf ("nombre: %s\n",nodo[i].fname);
-	
-	//if ((munmap( nodo,DISCO ) ) == -1) puts ("fallo el mumapi");
 	return 0;
 }
-
-
+*/
+/*
 int bitArray(archDisk){
 	t_bitarray* bit;
 	bool ocupado;
 	int i;
 	
 
-	bit = bitarray_create(bit->bitarray, 320);
-	bit->bitarray = mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
+	bit = bitarray_create(dir_block(header->blk_bitmap), 320);
 	
 	printf("tamaño del bitmap %d",bitarray_get_max_bit(bit));
 	
@@ -143,22 +96,178 @@ int bitArray(archDisk){
 		if (!ocupado) printf ("%d) desocupado\n",i);
 		}
 	
-			
+	bitarray_destroy(bit);		
 		//if ((munmap( bit->bitarray,bit->size ) ) == -1) puts ("fallo el mumapi");
 	return 0;
 }
+*/
 
-int queHayAca(char* path,int archDisk,t_list* lista){
+int queHayAca(int numNodo,GFile* nodo,t_list* lista){
 	int i;
 	int dirPadre;
-	GFile* nodo;
-	nodo = mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE*2);
-	if (strcmp(path,"/")==0) dirPadre=0;
-	for (i=0; i < 1023;i++)
-		 if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
-	
-return 1;	
+	dirPadre=numNodo;
+	//if (strcmp(path,"/")==0) dirPadre=0;
+	//else dirPadre=nodoByPath((path,nodo);
+
+	for (i=1; i < 1023;i++)
+				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
+return 0;
 }
+
+/*
+ * A partir del path consigue el inodo correspondiente
+ */
+int nodoByPath(const char* path,GFile* nodo){
+	char** nombreHijo;
+	int i;
+	
+	int j;
+	j=0;
+	int s;
+	s=0;
+	int numPadre;
+	
+	
+	nombreHijo = string_split((char*)path,"/");
+	
+	
+	numPadre=0;
+	while (nombreHijo[s]!=NULL){
+		i=1;	
+		while(i<1024){
+			if(string_equals_ignore_case(nombreHijo[s],nodo[i].fname)) j++; 
+			if((numPadre==nodo[i].parent_dir_block)) j++;
+			if (j==2) numPadre=i;
+			j=0;
+			i++;
+		
+		}
+			
+		s++;
+	}
+	
+	//if(!string_equals_ignore_case(nodo[numPadre].fname,nombreHijo[s-1])) numPadre = -1;
+	
+	
+	return numPadre;
+}
+
+
+int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
+	
+	int hastaCualBlk_indirectLeo;
+	int desdeCualBlk_indirectLeo;
+	int hastaCualBlk_directLeo;
+	int deCualBlk_directLeo;
+	int offsetDelPrimero;
+	int cuantoLeoDelUltimo;
+	int dirBloqueArray;
+	int offsetBuff;
+	ptrGBloque* ptrBloque;
+	int primero;
+	uint8_t* ptr_datos;
+	
+	deCualBlk_directLeo = offset/BLOQUE; //desde cual bloque de datos voy a leer
+		
+	hastaCualBlk_directLeo = (size+offset)/BLOQUE; //hasta cual bloque de datos voy a leer
+	if(((size+offset)%BLOQUE)>0) hastaCualBlk_directLeo *= 1;
+		
+	offsetDelPrimero = offset%BLOQUE;
+	
+	cuantoLeoDelUltimo = (size + offset)%BLOQUE;
+	
+	desdeCualBlk_indirectLeo = deCualBlk_directLeo/1024;
+			   
+	hastaCualBlk_indirectLeo = hastaCualBlk_directLeo/1024; //si da 0 es el primero
+	//if((hastaCualBlk_indirectLeo%1024)>0) hastaCualBlk_indirectLeo *= 1;
+	
+	
+	 
+	
+	printf("cuantosBlk_indirectLeo: %d \n",hastaCualBlk_indirectLeo);
+	printf("deCualBlk_indirectEmpiezo: %d \n",desdeCualBlk_indirectLeo);
+	printf("cuantosBlk_directLeo: %d \n",hastaCualBlk_directLeo);
+	printf("deCualBlk_directEmpiezo: %d \n",deCualBlk_directLeo);
+	printf("cuanto leo del ultimo: %d \n",cuantoLeoDelUltimo);
+	printf("offset del primero: %d \n",offsetDelPrimero);
+	
+	buf=malloc(size);
+	
+
+	primero=1;
+	dirBloqueArray=inodo->blk_indirect[desdeCualBlk_indirectLeo]; //tengo la direcion del bloque de array con puntero a bloques de datos
+	ptrBloque =(ptrGBloque*) dir_bloque(dirBloqueArray); //ahora estoy apuntando a la primera posicion del bloque de array con punteros a bloque de datos
+	ptrBloque=ptrBloque+deCualBlk_directLeo;         //ahora estoy apundo a la direccion del bloque que quiero leer
+	ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy AL FIN estoy apuntando al la primer posicion del bloque de datos que tengo que leer
+	ptrBloque+=1;	                                //ahora apuntado a la proxima direccion del bloque de datos que tengo que leer
+	//primer lectura, el offset
+	memcpy(buf,ptr_datos+offsetDelPrimero,BLOQUE-offsetDelPrimero);   //copio los primero datos, aquellos cuyos podrian tener offset De Bloque
+	offsetBuff=BLOQUE-offsetDelPrimero;     //actulizo el offset del buff para que no se sobresquiban los datos
+	
+	//esto es por si hay intermedios
+	do{
+			
+		
+			while((deCualBlk_directLeo<hastaCualBlk_directLeo)||((deCualBlk_directLeo%1024)==0)){  //sin desde es menor que hasta entro y si no estoy apuntando al ultimo bloque 
+			deCualBlk_directLeo+=1;                         //actualizo desde donde debo leer
+			ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
+			memcpy(buf+offsetBuff,ptr_datos,BLOQUE); 		//copio los datos
+			offsetBuff+=BLOQUE;  						    //actulizo el offset del Bloque
+			ptrBloque+=1;                                   //ahora estoy apundo a la direccion del bloque que quiero leer
+			}
+		desdeCualBlk_indirectLeo+=1;						//actulizo desde donde leo los directos
+		if(!(inodo->blk_indirect[desdeCualBlk_indirectLeo])) //si el proximo indirecto es no es 0
+		{
+		dirBloqueArray=inodo->blk_indirect[desdeCualBlk_indirectLeo];
+	    ptrBloque =(ptrGBloque*) dir_bloque(dirBloqueArray);
+	    }
+		
+	}while(desdeCualBlk_indirectLeo<hastaCualBlk_indirectLeo);
+	
+	//Esto es para guardar en el buff lo que queda del ultimo bloque, si es que queda
+	if(cuantoLeoDelUltimo) 
+	{
+	ptr_datos = (uint8_t*)dir_bloque(*ptrBloque);   //ahora estoy apuntando a la primer posicion de memoria del bloque de datos que quiero cargar en el buffer
+	memcpy(buf+offsetBuff,ptr_datos,cuantoLeoDelUltimo); 		//copio los datos que faltan del ultimo bloque
+	}
+	
+	return 0;
+}
+	
+	
+
+int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
+	int i;
+	i=1;
+	int j;
+	j=0;
+	while(1){
+	if(string_equals_ignore_case(nombreHijo,nodo[i].fname)) j++; 
+	if((padre==nodo[i].parent_dir_block)) j++;
+    if (j==2)break;
+    j=0;
+    i++;
+  }
+    return  i;
+	
+}
+
+int nodoQueQuiero (const char* path,GFile* nodo){
+		int i=1;
+	
+	
+	while(i<1024){
+		char barra[72];
+		strcpy(barra,nodo[i].fname);
+		left_strcat(barra,"/");
+		if (strcmp(path,barra) == 0) break;
+		i++;
+		}
+	
+	
+	return i;
+}
+
 void left_strcat(char*destino,char*origen){
 	char base[72];
 	strcpy(base,origen);
@@ -166,13 +275,4 @@ void left_strcat(char*destino,char*origen){
 	strcpy(destino,base);
 }
 
-char* path_padre(uint32_t padre,GFile*nodo){
-	char*temp;
-	if(padre==0){
-		return "/";
-	}
-	strcpy(temp,(char*)nodo[padre-correc].fname);
-	strcat(temp,"/");
-	left_strcat(temp,path_padre(nodo[padre-correc].parent_dir_block,nodo));
-	return temp;
-}
+

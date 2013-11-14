@@ -27,13 +27,19 @@
 #include"Orquestador.h"
 #include"Planificador.h"
 
-
 #define PROGRAMA "ORQUESTADOR"
+
+
+void cerrarTodo(int senial){
+	finalizar=true;
+}
 
 void *orquestador(void* infoAux){
 	// Desrefereciacion de la info que recibe el orquestador
 	infoOrquestador *infoBis=(infoOrquestador*)infoAux;
 	infoOrquestador info= *infoBis;
+	signal(SIGINT,cerrarTodo);
+	finalizar=false;
 
 	int socketOrquestador, socketIngresante;
 	handshake nuevoHandshake;
@@ -48,7 +54,12 @@ void *orquestador(void* infoAux){
 	FD_SET(socketOrquestador, &original_FD);
 
 	while(1){
+		if(finalizar)finalizarTodo(listaNiveles,ganadores,hilosPlanificadores,socketOrquestador);
 		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
+			if(chequearKoopa(ganadores,listaNiveles)){
+				puts("chequearkoopa true");
+				koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles);
+			}else //puts("chequearkoopa false");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles);
 			continue;
 		}else{
@@ -85,11 +96,38 @@ void *orquestador(void* infoAux){
 	return 0;
 }
 
+void borrarTodoNivel(void*temp){
+	nodoNivel*nivel;
+	nivel=(nodoNivel*)temp;
+	nuevo*aux;
+	puts("Borrando el nodo");
+	while(nivel->tandaActual==NULL){
+		aux=nivel->tandaActual;
+		nivel->tandaActual=nivel->tandaActual->sgte;
+		free(aux);
+	}
+	free(nivel->tandaRaiz);
+	free(nivel);
+}
+
+void finalizarTodo(t_list*niveles,t_list*ganadores,t_list*planificadores,int sock){
+    loguearInfo("Matando hilos planificadores");
+    puts("Matando hilos planificadores");
+	matarHilos(planificadores);
+	loguearInfo("Limpiando las listas");
+	puts("Limpiando las listas");
+	list_clean(planificadores);
+	list_clean(ganadores);
+	list_iterate(niveles,borrarTodoNivel);
+	list_clean(niveles);
+	free(planificadores);
+	free(ganadores);
+	free(niveles);
+	pthread_exit(NULL);
+}
+
 void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles){
-	if(!chequearKoopa(ganadores,listaNiveles)){
-		return;
-	};
-	puts("chequearkoopa true");
+	if(!chequearKoopa(ganadores,listaNiveles))return;
 	int cont;
 	loguearWarning("--ORQUESTADOR-- Esperando jugadores entrantes...");
 	for(cont = 5; cont >= 0; cont--){
@@ -133,7 +171,7 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 };
 
 //no crea una tanda en el buen sentido de la palabra
-//solo mete un maldito nodo, pero el nombre le quedo bien :3
+//solo mete un maldito nodo, pero el nombre le quedo bien
 void crearTanda(nuevo** lista){
 	nuevo *tempo;
 		tempo=(nuevo*)malloc(sizeof(nuevo));
@@ -145,31 +183,32 @@ void crearTanda(nuevo** lista){
 
 void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores){
 	pthread_t idHilo = hiloGRID(planificador,(void*)nivel);
-		nodoPlanificador *nuevoPlanificador = (nodoPlanificador *)malloc(sizeof(nodoPlanificador));
-		nuevoPlanificador->idHilo = idHilo;
-		list_add(hilosPlanificadores,nuevoPlanificador);
+	nivel->idHilo=idHilo;
+	nodoPlanificador *nuevoPlanificador = (nodoPlanificador *)malloc(sizeof(nodoPlanificador));
+	nuevoPlanificador->idHilo = idHilo;
+	list_add(hilosPlanificadores,nuevoPlanificador);
 };
 
 void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores){
-	nuevo* tandaActual=(nuevo*)malloc(sizeof(nuevo));
-			loguearInfo(concat("Nivel conectado: ",handshakeNivel.name));
-			nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
-			crearTanda(&(tandaActual));
-			strcpy(nivel->name,handshakeNivel.name);
-			nivel->cantJugadores = 0;
-			nivel->tandaRaiz = tandaActual;
-			nivel->tandaActual = tandaActual;
-			nivel->nid = socketNivel;
-			list_add(listaNiveles,nivel);
-			crearHiloPlanificador(nivel,hilosPlanificadores);
-			loguearInfo("--ORQUESTADOR-- Hilo planificador creado");
+	nuevo* tandaActual;//=(nuevo*)malloc(sizeof(nuevo));
+	loguearInfo(concat("Nivel conectado: ",handshakeNivel.name));
+	nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
+	crearTanda(&(tandaActual));
+	strcpy(nivel->name,handshakeNivel.name);
+	nivel->cantJugadores = 0;
+	nivel->tandaRaiz = tandaActual;
+	nivel->tandaActual = tandaActual;
+	nivel->nid = socketNivel;
+	list_add(listaNiveles,nivel);
+	crearHiloPlanificador(nivel,hilosPlanificadores);
+	loguearInfo("Hilo planificador creado");
 };
 
 nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
 	//Declaracion de una funcion de forma temporal y dinamica
 	bool _is_Nivel(nodoNivel *nivel) {
-		    if(strcmp(nivel->name,nombreNivel)==0)return true;
-		    return false;
+	if(strcmp(nivel->name,nombreNivel)==0)return true;
+		return false;
 	}
 	nodoNivel *aux = list_find(listaNiveles, (void*) _is_Nivel);
 	return aux;
@@ -198,13 +237,12 @@ void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiv
 		responderError(socketJugador);
 		return;
 	}
-		loguearInfo("Se ha recibido un nuevo Personaje");
-		aux->tandaActual->pid=socketJugador;
-		aux->tandaActual->sym=handshakeJugador.symbol;
-		if( aux->tandaActual->sgte == NULL )
-			crearTanda( &(aux->tandaActual->sgte) );
-	    aux->tandaActual = aux->tandaActual->sgte;
-	    loguearInfo("--ORQUESTADOR-- Info del Personaje recibida");
+	loguearInfo("Se ha recibido un nuevo Personaje");
+	aux->tandaActual->pid=socketJugador;
+	aux->tandaActual->sym=handshakeJugador.symbol;
+	if( aux->tandaActual->sgte == NULL ) crearTanda( &(aux->tandaActual->sgte) );
+	aux->tandaActual = aux->tandaActual->sgte;
+	loguearInfo("Info del Personaje recibida");
 };
 
 void clienteViejo(handshake handshakeJugador, t_list *ganadores){
@@ -226,7 +264,9 @@ bool chequearKoopa(t_list *ganadores, t_list* listaNiveles){
 };
 
 int _matar_hilo(nodoPlanificador *planificador){
-	return pthread_cancel( planificador->idHilo );
+	//pthread_cancel( planificador->idHilo );
+	pthread_join(planificador->idHilo,NULL);
+	return 1;
 };
 
 void matarHilos(t_list* hilosPlanificadores){
@@ -237,21 +277,20 @@ void activarKoopa(t_list* hilosPlanificadores){
 	int status;
 	pid_t child_pid;
 	if((child_pid = fork()) < 0 ){
-	      perror("fork failure");
-	      exit(1);
+		perror("fork failure");
+	    exit(1);
 	}
 	if(child_pid == 0){ //koopa
-	      loguearInfo("--ORQUESTADOR-- Ejecutando koopa...");
-	      execlp("../koopa-x86", "koopa", (char *)0);
+		loguearInfo("Ejecutando koopa...");
+	    execlp("../koopa-x86", "koopa", (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
-	      perror("execl() failure!\n");
-	      loguearError("--ORQUESTADOR-- exect fallido");
-	      _exit(1);
+	    perror("execl() failure!\n");
+	    loguearError("exect fallido");
+	    _exit(1);
 	}else{ //Orquestador
-	      wait(&status);
-	      loguearInfo("--ORQUESTADOR-- Matando hilos planificadores");
-	      matarHilos(hilosPlanificadores);
-	      loguearInfo("--ORQUESTADOR-- Proceso Koopa finalizado");
+	    wait(&status);
+	    loguearInfo("Proceso Koopa finalizado");
+	    finalizar=true;
 	}
-	pthread_exit(NULL);
+	return;
 };

@@ -4,7 +4,7 @@
 
 
 #define MYPORT 2600
-#define MYIP "192.168.2.57"
+#define MYIP "127.0.0.1"
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"
 
@@ -39,6 +39,7 @@ int main(int argc, char *argv[]){
 	pthread_join(id_orquest,NULL);
 
 	loguearInfo("--PLTAFORMA--Proceso Orquestador finalizado");
+	puts("--PLTAFORMA--Proceso Orquestador finalizado");
 	loguearInfo("Cerrando logs...");
 	cerrarLogs();
 	return 0;

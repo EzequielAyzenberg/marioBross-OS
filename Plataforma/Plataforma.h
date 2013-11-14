@@ -18,6 +18,7 @@
 #include <stdbool.h>
 
 
+bool finalizar;
 
 /* Nodos de la lista NOVEDADES */
 typedef struct tnuevo{
@@ -33,6 +34,7 @@ typedef struct tnodoNivel{
 	nuevo *tandaActual;
 	char name[13];
 	int cantJugadores;
+	pthread_t idHilo;
 }nodoNivel;
 
 
