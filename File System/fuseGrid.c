@@ -8,22 +8,6 @@
 #include "grasa.c"
 
 
-/* Este es el contenido por defecto que va a contener
- * el unico archivo que se encuentre presente en el FS.
- * Si se modifica la cadena se podra ver reflejado cuando
- * se lea el contenido del archivo
- */
-#define DEFAULT_FILE_CONTENT "Hello World!\n"
-
-/*
- * Este es el nombre del archivo que se va a encontrar dentro de nuestro FS
- */
-#define DEFAULT_FILE_NAME "hello"
-
-/*
- * Este es el path de nuestro, relativo al punto de montaje, archivo dentro del FS
- */
-#define DEFAULT_FILE_PATH "/" DEFAULT_FILE_NAME
 
 
 
@@ -64,38 +48,47 @@ uint8_t* ptr_mmap;
  * 		O archivo/directorio fue encontrado. -ENOENT archivo/directorio no encontrado
  */
 static int theGrid_getattr(const char *path, struct stat *stbuf) {
-	int res; 
-	res= 0;
+	
+	
 
 	memset(stbuf, 0, sizeof(struct stat));
 
 	//Si path es igual a "/" nos estan pidiendo los atributos del punto de montaje
 	
 	extern GFile* ptr_nodo;
-	int i=0;
+	int numNodo;
 	
 
-	//i=nodoQueQuiero(path,nodo);
     
-	 i=nodoByPath(path,ptr_nodo);
-
+	 numNodo=nodoByPath(path,ptr_nodo);
+	
 	if (strcmp(path, "/") == 0) {
-		stbuf->st_mode = S_IFDIR | 0755;
-		stbuf->st_nlink = 2;
-	}else if(i<1024){
-		
-		if(ptr_nodo[i].state==2){
 			stbuf->st_mode = S_IFDIR | 0755;
-			stbuf->st_nlink = 1;
-		}else{
-			stbuf->st_mode = S_IFREG | 0444;
-			stbuf->st_nlink = 1;
-			stbuf->st_size = ptr_nodo[i].file_size;
+			stbuf->st_nlink = 2;
+			return 0;
+			
 		}
-	}else{
-		res = -ENOENT;
+    
+
+	if(numNodo!=FAIL){
+		
+						if(ptr_nodo[numNodo].state==2){
+							stbuf->st_mode = S_IFDIR | 0755;
+							stbuf->st_nlink = 1;
+						}
+						else{
+							stbuf->st_mode = S_IFREG | 0444;
+							stbuf->st_nlink = 1;
+							stbuf->st_size = ptr_nodo[numNodo].file_size;
+						}
+	return 0;
 	}
-return res;
+	
+	else return -ENOENT;
+	
+	
+	
+
 }
 
 
@@ -123,13 +116,18 @@ static int theGrid_readdir(const char *path, void *buf, fuse_fill_dir_t filler, 
 	(void) fi;
 	extern GFile* ptr_nodo;
 	char* nombre;
+	int numNodo;
 	int i;
 
 	t_list* archivos;
 	archivos = list_create();
-	i=nodoByPath(path,ptr_nodo);
 	
-	queHayAca(i,ptr_nodo,archivos);
+	numNodo=nodoByPath(path,ptr_nodo);
+	
+	if (numNodo==FAIL) return -ENOENT;
+	
+	else {
+	queHayAca(numNodo,ptr_nodo,archivos);
 	
 	
 	
@@ -148,6 +146,7 @@ list_clean(archivos);
 list_destroy(archivos);
 
 	return 0;
+	}
 }
 
 /*
@@ -164,13 +163,15 @@ list_destroy(archivos);
  * 		O archivo fue encontrado. -EACCES archivo no es accesible
  */
 static int theGrid_open(const char *path, struct fuse_file_info *fi) {
+	int res;
+	res=0;
 	
-	if (strcmp(path, DEFAULT_FILE_PATH) != 0)
-		return -ENOENT;
-
+	
+	res = nodoByPath(path,ptr_nodo);
 	if ((fi->flags & 3) != O_RDONLY)
 		return -EACCES;
 
+	if (res == FAIL) return -ENOENT;
 	return 0;
 }
 
@@ -197,13 +198,14 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	(void) fi;
 	int numNodo;
 	extern GFile* ptr_nodo;
-	//if (strcmp(path, DEFAULT_FILE_PATH) != 0)
-		//return -ENOENT;
-//	numNodo=nodoByPath(path,ptr_nodo);
+	numNodo=nodoByPath(path,ptr_nodo);
+	
+	if (numNodo==FAIL) return -ENOENT;
+
 	//aca nuevamente me falta chequear si encontro el archivo
 	//cargarBuffer(buf,size,offset,ptr_nodo+numNodo);
 	
-
+	else
 	return size;
 }
 
