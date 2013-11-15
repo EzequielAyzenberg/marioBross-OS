@@ -6,6 +6,9 @@
 
 #define BLOQUE 4096
 #define DISCO 10485760
+#define MAXNODO 1023
+#define FAIL -1
+
 
 
 
@@ -119,37 +122,42 @@ return 0;
  */
 int nodoByPath(const char* path,GFile* nodo){
 	char** nombreHijo;
-	int i;
+	int numNodo;
+	int acierto;
+	acierto=0;
+	int numHijo;
+	numHijo=0;
+	int encontrado;
 	
-	int j;
-	j=0;
-	int s;
-	s=0;
 	int numPadre;
+	
 	
 	
 	nombreHijo = string_split((char*)path,"/");
 	
 	
 	numPadre=0;
-	while (nombreHijo[s]!=NULL){
-		i=1;	
-		while(i<1024){
-			if(string_equals_ignore_case(nombreHijo[s],nodo[i].fname)) j++; 
-			if((numPadre==nodo[i].parent_dir_block)) j++;
-			if (j==2) numPadre=i;
-			j=0;
-			i++;
+	while (nombreHijo[numHijo]!=NULL){
+		numNodo=1;	
+		encontrado = 0;
+		while(numNodo<=MAXNODO){
+			if(string_equals_ignore_case(nombreHijo[numHijo],nodo[numNodo].fname)) acierto++; 
+			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
+			if (acierto==2) {numPadre=numNodo; encontrado=1;}
+			acierto=0;
+			numNodo++;
 		
 		}
 			
-		s++;
+		numHijo++;
 	}
 	
-	//if(!string_equals_ignore_case(nodo[numPadre].fname,nombreHijo[s-1])) numPadre = -1;
+	
+	if(strcmp(path, "/") == 0) encontrado=1;
 	
 	
-	return numPadre;
+	if(!encontrado) return FAIL;    
+	else return numPadre;
 }
 
 

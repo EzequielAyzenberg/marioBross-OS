@@ -7,7 +7,8 @@
 
 #define BLOQUE 4096
 #define DISCO 10485760
-#define correc 2
+#define FAIL -1
+#define MAXNODO 1023
 
 
 /*datos recopilados:
@@ -136,7 +137,7 @@ int tablaDeNodos(){
 	ptrGBloque i;
 	extern GFile* ptr_nodo;
 	int numpadre;
-	char path[1000] = "/dir1/hola.txt";
+	char path[1000] = "/dir1/la.txt";
 	char* newPath;
 	char* nombre;
 	char* buffer;
@@ -160,6 +161,11 @@ int tablaDeNodos(){
 	t_list* archivos;
 	archivos = list_create();
 	numpadre=nodoByPath(path,ptr_nodo);
+	
+	if (numpadre==FAIL) printf("dir no existe man");
+	
+	else{
+	
 	queHayAca(numpadre,ptr_nodo,archivos);
 		
 
@@ -183,9 +189,9 @@ list_destroy(archivos);
 	printf("bloque de indireccion numero: %d \n", (int)ptr_nodo[i].blk_indirect[0]);
 	printf("bloque de indireccion numero: %d \n", (int)ptr_nodo[i].blk_indirect[1]);
 	
-	cargarBuffer(buffer,BLOQUE*10-2, (off_t)4096*2+17,ptr_nodo[i]);
+	//cargarBuffer(buffer,BLOQUE*10-2, (off_t)4096*2+17,ptr_nodo[i]);
 	
-	
+	}
 	return 0;
 }
 
@@ -227,40 +233,53 @@ int queHayAca(int numNodo,GFile* nodo,t_list* lista){
 return 0;
 }
 
-
 int nodoByPath(const char* path,GFile* nodo){
 	char** nombreHijo;
-	int i;
-	
-	int j;
-	j=0;
-	int s;
-	s=0;
-	int numPadre;
+	int numNodo;
+	int acierto;
+	acierto=0;
 	int numHijo;
+	numHijo=0;
+	int encontrado;
+	
+	int numPadre;
+	
+	
 	
 	nombreHijo = string_split((char*)path,"/");
 	
 	
 	numPadre=0;
-	while (nombreHijo[s]!=NULL){
-	i=1;	
-	while(i<1023){
-	if(string_equals_ignore_case(nombreHijo[s],nodo[i].fname)) j++; 
-	if((numPadre==nodo[i].parent_dir_block)) j++;
-    if (j==2) numPadre=i;
-    j=0;
-    i++;
-    
-		}
+	
+	//cuando entra en hawaii baila la osa
+	while (nombreHijo[numHijo]!=NULL){
+		numNodo=1;	
+		encontrado = 0;
+		while(numNodo<=MAXNODO){
+			if(string_equals_ignore_case(nombreHijo[numHijo],nodo[numNodo].fname)) acierto++; 
+			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
+			if (acierto==2) {numPadre=numNodo; encontrado=1;}
+			acierto=0;
+			numNodo++;
 		
-	s++;
-}
+		}
+			
+		numHijo++;
+	}
+	
+	
+	if(strcmp(path, "/") == 0) encontrado=1;
+	
+	
+	if(!encontrado) return FAIL;    
+	else return numPadre;
+
+
 	
 
 	
 	
-	return numPadre;
+	
 }
 
 int cargarBuffer(char *buf, size_t size, off_t offset,GFile* inodo){
