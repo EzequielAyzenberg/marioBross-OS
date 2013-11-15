@@ -33,6 +33,7 @@ typedef struct ncfg {
 	int quantum;
 	int retardo;
 	int remainingDistance;
+	char* path;
 } nivelConfig;
 
 //void cargarconfig(nivelConfig*,t_list*);

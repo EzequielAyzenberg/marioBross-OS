@@ -177,7 +177,7 @@ void cargarCajas(t_config config,t_list** listaCajas,int* valCar){
 		strcpy(caja,"Caja");
 		itoa(cont,numCja);
 		strcat(caja,numCja);
-		printf("%s\n",caja);
+		//printf("%s\n",caja);
 		if (config_has_property(&config,caja)){
 
 			strcpy(aux,"[");
@@ -214,8 +214,8 @@ if (cont==1){
 
 verificarCargados(t_config config,int valCar){
 	if(config_keys_amount(&config)==valCar){
-		printf("Se han cargado %d valores de %d\n",valCar,config_keys_amount(&config));
-		puts("Archivo de configuracion cargado exitosamente");
+		//printf("Se han cargado %d valores de %d\n",valCar,config_keys_amount(&config));
+		//puts("Archivo de configuracion cargado exitosamente");
 	}
 	else{
 		printf("Se han cargado %d valores de %d\n",valCar,config_keys_amount(&config));
@@ -257,16 +257,14 @@ comprobarSuperposicion(t_list* listaCajas){
 
 //Recibe la estructura donde va a guardar los datos
 void cargarConfig(nivelConfig* configNivel){
-	puts("Por favor,ingrese la ruta del archivo de configuracion");
+	//puts("Por favor,ingrese la ruta del archivo de configuracion");
 	t_config* config;
 	char* path;
-	path=malloc(250);
-	scanf("%s",path);
-	int result = strncmp(path, "0",100);
-	if(result==0){//
-		strcpy(path,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
-	};
+	path=(char*)malloc(250);
+	strcpy(path,configNivel->path);
 	nivelConfig configTemp; //archivo de configuracion temporal donde se guardan los datos extraidos del archivo de configuracion, luego al final se vuela en configNivel que retornara al main program
+	configTemp.path=malloc(strlen(configNivel->path)+1);
+	strcpy(configTemp.path,configNivel->path);
 	config=config_create(path);
 	free(path);
 	int valCar=0;// cantidad de valores que se cargaron exitosamente
@@ -291,6 +289,7 @@ void cargarConfig(nivelConfig* configNivel){
 	verificarCargados(*config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
+	puts("todo bien cargador");
 	config_destroy(config);
 
 

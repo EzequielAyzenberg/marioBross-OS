@@ -21,11 +21,14 @@ pthread_mutex_t mutexDibujar;
 pthread_mutex_t mutexMatarPersonaje;
 pthread_mutex_t mutexLog;
 
+
 void cargarCoordenadasEnemigo(infoEnemigosThread info,int cantCajas,int coorCajas[cantCajas],int rows,int cols){
 	//traigo la variable de control del otro ciclo (alla i y aca j) para sumarla y obtener un numero random distinto cada vez
 	int i=0;
 	int seed=0;//variable q sumo en cada iteracion para modificar la semilla de srand()
-	int j=(int)info.myinfo->idGoomba;
+
+	int j;
+	 j= (int)info.myinfo->idGoomba;
 
 	coordenadas enemyPos;
 	srand(time(NULL));
@@ -57,7 +60,7 @@ void cargarCoordenadasEnemigo(infoEnemigosThread info,int cantCajas,int coorCaja
 
 
 
-};
+}
 
 void crearEnemigos(infoEnemigosThread info,int rows,int cols){  //recibe el archivo de configuracion y los limites de pantalla
 

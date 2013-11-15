@@ -33,7 +33,9 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 		bufferPj->posx=x;
 		bufferPj->posy=y;
 	bufferPj->recursos=list_create();
-		list_add(listaJugadoresActivos,bufferPj);
+
+	list_add(listaJugadoresActivos,bufferPj);
+
 		return 1;
 	}else return -1;
 

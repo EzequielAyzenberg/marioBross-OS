@@ -10,4 +10,5 @@
 
 extern pthread_mutex_t mutexDibujar;
 extern pthread_mutex_t mutexMatarPersonaje;
+
 #endif /* SEMAFOROS_H_ */

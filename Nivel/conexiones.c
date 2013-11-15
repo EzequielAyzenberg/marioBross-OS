@@ -16,6 +16,10 @@ answer bufferAnswer;
 
 void escucharPlanificador(datosConexiones info){
 	nivelConfig bufferConfig;
+	bufferConfig.path=(char*)malloc(strlen(info.config->path)+1);
+	//strcpy(info.config->path,"hola");
+	//printf("%s\n",info.config->path);
+	strcpy(bufferConfig.path,info.config->path);
 	int i=0;
 	fd_set readfds,active; //necesito un mejor nombre
 	int fd;
@@ -82,7 +86,7 @@ void escucharPlanificador(datosConexiones info){
 	}
 
 	if(i==fd){
-		cargarConfig(bufferConfig);
+		cargarConfig(&bufferConfig);
 		if(info.config->algoritmo!=bufferConfig.algoritmo||info.config->quantum!=bufferConfig.quantum){
 			*info.config=bufferConfig;
 			if(!strcmp(info.config->algoritmo,"RR")){
@@ -112,12 +116,13 @@ void escucharPlanificador(datosConexiones info){
 void handshakePlataforma(datosConexiones info){
 	//char* puertoAux,ip,buffer;
 
+	//printf ("puerto %s",info.config->orquestador);
 	char* buffer;
-	buffer=(char*)malloc(sizeof(info.config->orquestador));
+	buffer=(char*)malloc(strlen(info.config->orquestador)+1);
 	char* puertoAux;
-	puertoAux=(char*)malloc(sizeof(info.config->orquestador));
+	puertoAux=(char*)malloc(strlen(info.config->orquestador)+1);
 	char* ip;
-	ip=(char*)malloc(sizeof(info.config->orquestador));
+	ip=(char*)malloc(strlen(info.config->orquestador)+1);
 	int puerto;
 	strcpy(buffer,info.config->orquestador);
 	strcpy(ip,*string_split(buffer,":"));
@@ -127,6 +132,7 @@ void handshakePlataforma(datosConexiones info){
 	//printf("%d\n",puerto);
 	int socketPlataforma = connectGRID(puerto,ip);
 	short socketBuffer=(short)socketPlataforma; //te odio Cristian, que necesidad habia? no podias simplemente recibir un int?? ¬¬
+
 	sendHandshake(0,info.config->nombre,' ',socketBuffer);
 	recvAnswer(&bufferAnswer,socketBuffer);
 //	printf("La plataforma quiere un %d\n",bufferAnswer.msg);

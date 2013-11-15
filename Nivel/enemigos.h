@@ -23,7 +23,7 @@ typedef struct estructuraHiloEnemigos{
 	int sleepEnemigos;
 	char* nombreNivel;
 	coordenadas* myinfo;
-	coordenadas recorridoEnemigos[][4];
+
 }infoEnemigosThread;
 
 void controlEnemigos(infoEnemigosThread* info);

@@ -57,7 +57,7 @@
 	coordenadas* bufferEnemigos;
 	t_personaje* bufferPersonaje;
 
-	ITEM_NIVEL* items = NULL;
+	  ITEM_NIVEL* items = NULL;
 	//t_list* items;
 	//items=list_create();
 

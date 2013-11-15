@@ -22,13 +22,31 @@
 pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexMatarPersonaje =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexLog =PTHREAD_MUTEX_INITIALIZER;
-main(){
+
+main(int argc, char *argv[]){
+	nivelConfig config;
+	switch (argc){
+		case 2:
+			config.path=malloc(strlen(argv[1])+1);
+			strcpy(config.path,argv[1]);
+			printf("La ruta es %s", config.path);
+			break;
+		default:
+			config.path=malloc(strlen("/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg")+1);
+			strcpy(config.path,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg");
+			puts("Se usara la direccion estandar");
+			break;
+		}
+
+
+
+
 	newArchLogInfo("nivel1");
 
 
 	pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
 	pthread_t hiloEnemigos;
-	nivelConfig config;
+
 	t_list* listaEnemigos;
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
@@ -71,7 +89,10 @@ main(){
 		infoEnemigosThread* infoParaEnemigosBuffer=(infoEnemigosThread*)malloc(sizeof(infoEnemigosThread));
 		*infoParaEnemigosBuffer=infoParaEnemigos;
 		infoParaEnemigosBuffer->myinfo=(coordenadas*)malloc(sizeof(coordenadas));
+		infoParaEnemigosBuffer->myinfo->posx=0;
+		infoParaEnemigosBuffer->myinfo->posy=0;
 		//printf("mi memoria:%d\n",(int)infoParaEnemigosBuffer->myinfo);
+		infoParaEnemigosBuffer->myinfo->idGoomba=0;
 		pthread_create(&hiloEnemigos,NULL,(void*)&controlEnemigos,(void*)infoParaEnemigosBuffer);
 		infoParaEnemigosBuffer->myinfo->idGoomba=hiloEnemigos;
 		list_add(listaEnemigos,infoParaEnemigosBuffer->myinfo);
@@ -83,6 +104,8 @@ main(){
 	coordenadas recorridoEnemigos[config.enemigos][4];
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 		//nivel_gui_terminar();
+
+	/*
 	{
 		int i=0,j=0;
 		for (i=0;i<config.enemigos;i++){
@@ -92,37 +115,16 @@ main(){
 			}
 		}
 	}
-
+*/
 
 //controlEnemigos(&infoParaEnemigos);
 
 
-//handshakePlataforma(datosConexiones);
-while(1){
+handshakePlataforma(datosConexiones);
+//while(1){
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
-}
+//}
 //hiloEnemigos=hiloGRID(&controlEnemigos,&infoParaEnemigos);
-
-/*
-	while(1){
-
-	usleep(config.sleepEnemigos*1000);
-	moverEnemigos(&listaEnemigos,&config.listaCajas,&listaJugadoresActivos,recorridoEnemigos,rows,cols);
-	actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-
-	};
-*/
-//	nivel_gui_terminar();
-	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-
-	//sleep(2);
-
-	//int as;
-	//scanf("%d\n",&as);
-	//flush_in();
-	//scanf("%d\n",&as);
-
-
 
 /*
 free(config.algoritmo);
