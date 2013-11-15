@@ -75,6 +75,10 @@ int main(int argc, char *argv[]) {
 	return 0;
 };
 
+bool _recursoAgarrado(trecurso *recurso){
+	return recurso->checked;
+}
+
 
 void *jugar (void *minipersonaje){
 	answer ordenPlanificador;
@@ -90,7 +94,7 @@ void *jugar (void *minipersonaje){
 	info.posX=0;
 	info.posY=0;
 	puts("Antes del while");
-	while(info.planDeRecursos->elements_count>0){
+	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoAgarrado))==false){
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
@@ -264,7 +268,7 @@ char ** recursos( t_config * cfgPersonaje, char *nivel)
 int cantidadElementosArray(char **array){
 	int tamanioArray,tamanioElemento;
 	tamanioElemento=sizeof(array[0]);
-	tamanioArray=strlen(array);
+	tamanioArray=strlen((char*)array);
 	return tamanioArray/tamanioElemento;
 }
 
@@ -298,10 +302,6 @@ int actualizarRP(t_list*planDeRecursos,int posicion){
 		recursoSiguiente->posY=posY;
 		free(recursoSiguiente);
 	return 0;
-}
-
-bool _recursoAgarrado(trecurso *recurso){
-	return recurso->checked;
 }
 
 int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char simbolo,int *moverEnX,int *esInstancia){
