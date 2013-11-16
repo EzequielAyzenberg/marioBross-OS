@@ -199,13 +199,20 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	int numNodo;
 	extern GFile* ptr_nodo;
 	numNodo=nodoByPath(path,ptr_nodo);
+	len = ptr_nodo[numNodo].file_size;
 	
 	if (numNodo==FAIL) return -ENOENT;
 
-	//aca nuevamente me falta chequear si encontro el archivo
-	//cargarBuffer(buf,size,offset,ptr_nodo+numNodo);
 	
-	else
+	if (offset<len) { 
+		if (offset + size > len) size = len - offset;
+		
+	     cargarBuffer(buf,size,offset,ptr_nodo+numNodo);
+	    
+	}
+	else size = 0;
+	
+		
 	return size;
 }
 
