@@ -207,7 +207,7 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	if (offset<len) { 
 		if (offset + size > len) size = len - offset;
 		
-	     cargarBuffer(buf,size,offset,ptr_nodo+numNodo);
+	     readGrid(buf,size,offset,ptr_nodo+numNodo);
 	    
 	}
 	else size = 0;
@@ -216,6 +216,14 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	return size;
 }
 
+/*
+static int32_t pfs_mkdir(const char * path,mode_t mode)
+{   int res;
+	
+	res = crearDirectorio(path);
+	return res;
+}
+*/
 
 /*
  * Esta es la estructura principal de FUSE con la cual nosotros le decimos a
@@ -228,6 +236,7 @@ static struct fuse_operations theGrid_oper = {
 		.readdir = theGrid_readdir,
 		.open = theGrid_open,
 		.read = theGrid_read,
+		//.mkdir = theGrid_mkdir, 
 };
 
 
@@ -280,12 +289,12 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	}
 	
 	//abro el archivo
-	fd = open(argv[1], O_RDONLY);
+	fd = open(argv[1], O_RDWR);
     if (fd == -1) printf("error al abrir al archivo binario");
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
-	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,fd,NULL);
+	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
 	ptr_header = (GHeader*) dir_bloque(0);
     ptr_nodo = (GFile*) dir_bloque(1); 
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
