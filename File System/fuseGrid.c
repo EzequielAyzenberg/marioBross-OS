@@ -217,12 +217,14 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 }
 
 /*
-static int32_t pfs_mkdir(const char * path,mode_t mode)
+
+static int32_t theGrid_mkdir(const char * path,mode_t mode)
 {   int res;
 	
 	res = crearDirectorio(path);
 	return res;
 }
+
 */
 
 /*
@@ -236,7 +238,7 @@ static struct fuse_operations theGrid_oper = {
 		.readdir = theGrid_readdir,
 		.open = theGrid_open,
 		.read = theGrid_read,
-		//.mkdir = theGrid_mkdir, 
+		.mkdir = theGrid_mkdir 
 };
 
 
@@ -295,7 +297,7 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
 	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
-	ptr_header = (GHeader*) dir_bloque(0);
+	ptr_header = (GHeader*) dir_bloque(INICIO);
     ptr_nodo = (GFile*) dir_bloque(1); 
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
 	

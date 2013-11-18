@@ -8,6 +8,7 @@
 #define DISCO 10485760
 #define MAXNODO 1023
 #define FAIL -1
+#define INICIO 0
 
 
 
@@ -222,25 +223,47 @@ uint8_t* bloqueDondeEstaElByte(GFile* nodo,int byte){
 
 }
 
-/*	
+/*
+
 int crearDirectorio(const char* path,GFile* inodo){
 	int numNodo;
-	char** subDirectorios;
+	int nodoPadre;
+	int nodoLibre;
 	int i;
+	char** subDirectorios;
+	char* exPath;
+	nodoLibre=0;
 	i=0;
 	
 	numNodo=nodoByPath(path,inodo);
 	if (numNodo!=FAIL) return -EEXIST;
 	
-	else
 	
+	else {
+	puts("pase a crear\n");
 	subDirectorios = string_split(path,"/");
-	while (subDirectorios[i])i++;        //cuento los subdirectorios     
-	char *string_substring_until(char *text, int length)
+	while (subDirectorios[i])i++;        //cuento los subdirectorios
+	printf("El que quiero agragar es: %s\n",subDirectorios[i-1]);     
+	exPath = string_substring_until(path, strlen(subDirectorios[i-1]-1));
+	printf("la ruta donde lo agrego es: %s\n",exPath);
+	nodoPadre=nodoByPath(exPath,inodo);
+	while((inodo[nodoLibre].state!=0)||(nodoLibre<1024))nodoLibre++;
 	
+	//grabo
+	inodo[nodoLibre].state=2;
+	strcpy(inodo[nodoLibre].fname,subDirectorios[i-1]);
+	inodo[nodoLibre].parent_dir_block=nodoPadre;
+	inodo[nodoLibre].m_date=111111;
+	inodo[nodoLibre].c_date=111111;
+	inodo[nodoLibre].file_size=0;
 	
+	return 0;
+	}
+	
+		
 }
-*/
+*/ 
+
 int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
 	int i;
 	i=1;
