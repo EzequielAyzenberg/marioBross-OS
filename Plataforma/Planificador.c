@@ -237,9 +237,16 @@ int modoDeRecuperacion(global tabla){
 	tabla.cabecera->nid=0;
 	list_clean(tabla.recur);
 	puts("Esperando por la reconexion.");
-	int cont=0;
+	int i,cont=0;
 	do{
-		sleep(5);
+		for(i=0;i<5;i++){
+			sleep(1);
+			if(finalizar){
+				puts("Abortando intento de reconexion.");
+				aLaMierdaConTodo(tabla);
+				return -2;
+			}
+		}
 		puts("Intentando establecer conexion.");
 		if(cont==5 || finalizar){
 			puts("Abortando intento de reconexion.");
@@ -255,10 +262,10 @@ int modoDeRecuperacion(global tabla){
 		t_player*jugador;
 		jugador=(t_player*)paquete;
 		sendAnswer(7,0,' ',jugador->sym,nid);
-		usleep(50000);
+		usleep(20000);
 		recvAnswer(&temp,nid);
 		sendAnswer(3,jugador->data.pos,' ',jugador->sym,nid);
-		usleep(50000);
+		usleep(30000);
 		recvAnswer(&temp,nid);
 		void _Pedir_El_Recurso(void*package){
 			t_stack*recurso;
@@ -287,19 +294,18 @@ int modoDeRecuperacion(global tabla){
 	puts("Esta todo listo para seguir con la ejecucion!");
 	if(tabla.exe->player==NULL)return 1;
 	status=tabla.exe->player->pid;
-	sleep(1);
+	usleep(300000);
 	return status;
 }
 
 int aLaMierdaConTodo(global tabla){
-	usleep(500000);
 	t_player*temp;
 	t_stack*tempstack;
 	nuevo*aux;
 
 	puts("Eliminando jugadores activos.");
 	while(!list_is_empty(tabla.ready)){
-		sleep(1);
+		usleep(200000);
 		temp=(t_player*)list_remove(tabla.ready,0);
 		while (!list_is_empty(temp->t_stack)){
 			puts("Recurso eliminado.");
@@ -313,7 +319,7 @@ int aLaMierdaConTodo(global tabla){
 	}
 	free(tabla.ready);
 
-	sleep(1);
+	usleep(200000);
 	puts("Eliminando jugadores dormidos.");
 	while(!list_is_empty(tabla.sleeps)){
 		temp=(t_player*)list_remove(tabla.sleeps,0);
@@ -329,7 +335,7 @@ int aLaMierdaConTodo(global tabla){
 	}
 	free(tabla.sleeps);
 
-	sleep(1);
+	usleep(200000);
 	puts("Eliminando jugador en ejecucion.");
 	if(tabla.exe->player!=NULL){
 		sendAnswer(0,0,' ',' ',tabla.exe->player->pid);
@@ -342,7 +348,7 @@ int aLaMierdaConTodo(global tabla){
 		free(tabla.exe->player->t_stack);
 		free(tabla.exe->player);
 	}
-	sleep(1);
+	usleep(200000);
 	puts("Eliminando jugadores nuevos.");
 	while(tabla.cabecera->tandaRaiz!=NULL){
 		aux=tabla.cabecera->tandaRaiz;
@@ -352,7 +358,7 @@ int aLaMierdaConTodo(global tabla){
 		free(aux);
 	}
 
-	sleep(1);
+	usleep(200000);
 	puts("Eliminando recursos.");
 	while (!list_is_empty(tabla.recur)){
 		tempstack=(t_stack*)list_remove(tabla.recur,0);
@@ -362,8 +368,8 @@ int aLaMierdaConTodo(global tabla){
 	free(tabla.algo);
 	sendAnswer(0,0,' ',' ',tabla.cabecera->nid);
 	close(tabla.cabecera->nid);
-	sleep(2);
-	printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
+	usleep(400000);
+	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
 	puts("Nos Vamos todos al carajo!");
 	return -2;
