@@ -27,6 +27,7 @@ agregar otra funcionalidad ademas de read con un pipe
 void* dir_bloque(int n);
 void left_strcat(char*destino,char*origen);
 uint8_t* bloqueDondeEstaElByte(GFile* nodo,int byte);
+char* lastNameFromPath(char* path);
 
 /* funcion direccion bloque
 void* dir_bloque(int n){
@@ -165,9 +166,9 @@ int nodoByPath(const char* path,GFile* nodo){
 int readGrid(char *buf, size_t size, off_t offset,GFile* nodo){
 	
 	int bytesLeidos;
-	int byteRestantes;//HAY QUE BORRAR ESTA QUE NO SE USA
+	int byteRestantes;
 	int bytePedido;
-	int bytesParaCopiar;//HAY QUE BORRAR ESTA QUE NO SE USA
+	int bytesParaCopiar;
 	uint8_t* ptr_datos;
 	
 	printf("soy el nodo: %s dentro de cargar buffer \n",nodo[0].fname);
@@ -223,7 +224,7 @@ uint8_t* bloqueDondeEstaElByte(GFile* nodo,int byte){
 
 }
 
-/*
+
 
 int crearDirectorio(const char* path,GFile* inodo){
 	int numNodo;
@@ -231,30 +232,36 @@ int crearDirectorio(const char* path,GFile* inodo){
 	int nodoLibre;
 	int i;
 	char** subDirectorios;
-	char* exPath;
+	char* pathPadre;
 	nodoLibre=0;
 	i=0;
 	
+	printf("la ruta que llego es: %s\n",path);
+	
 	numNodo=nodoByPath(path,inodo);
+	
+	printf("el resultado de nodobypath es: %d\n",numNodo);
+	puts("entonces el directorio no existe\n");
 	if (numNodo!=FAIL) return -EEXIST;
 	
 	
 	else {
 	puts("pase a crear\n");
-	subDirectorios = string_split(path,"/");
-	while (subDirectorios[i])i++;        //cuento los subdirectorios
-	printf("El que quiero agragar es: %s\n",subDirectorios[i-1]);     
-	exPath = string_substring_until(path, strlen(subDirectorios[i-1]-1));
-	printf("la ruta donde lo agrego es: %s\n",exPath);
-	nodoPadre=nodoByPath(exPath,inodo);
-	while((inodo[nodoLibre].state!=0)||(nodoLibre<1024))nodoLibre++;
+	howIsMyFather((char*)path,&pathPadre);
+	printf("la ruta padre es: %s\n",pathPadre);
+	nodoPadre=nodoByPath(pathPadre,inodo);
+	printf("el resultado de nodobypath es: %d\n",nodoPadre);
+	while((inodo[nodoLibre].state!=0)&&(nodoLibre<1024))nodoLibre++;
 	
+	
+	printf("el primer nodo libre es: %d\n",nodoLibre);
+	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	//grabo
 	inodo[nodoLibre].state=2;
-	strcpy(inodo[nodoLibre].fname,subDirectorios[i-1]);
+	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
-	inodo[nodoLibre].m_date=111111;
-	inodo[nodoLibre].c_date=111111;
+	//inodo[nodoLibre].m_date=111111;
+	//inodo[nodoLibre].c_date=111111;
 	inodo[nodoLibre].file_size=0;
 	
 	return 0;
@@ -262,7 +269,54 @@ int crearDirectorio(const char* path,GFile* inodo){
 	
 		
 }
-*/ 
+ int howIsMyFather(char* src, char** dest){
+	
+	
+	char* lastName;
+	int tamRuta;
+	int i=0;
+	
+	
+	
+	puts("entre a how is my father");
+	printf("la ruta que entro es: %s\n",src);
+	
+	
+	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath(src));   
+	tamRuta= strlen(src) - strlen(lastNameFromPath(src));
+	printf("tamaño de la ruta: %d\n",tamRuta);
+	*dest=string_duplicate(string_substring_until(src,strlen(src) - (strlen(lastNameFromPath(src))+1)));
+	printf("la ruta donde lo agrego es: %s\n",*dest);
+	
+	
+	
+	
+	
+	
+	return 0;
+	
+}
+
+char* lastNameFromPath(char* path){
+	char** subDirectorios;
+	subDirectorios = string_split(path,"/");
+	return subDirectorios[strlenTwo(subDirectorios)-1];
+}
+
+
+int strlenTwo(char**str){
+	int i=0;
+		while(str[i])i++;
+	return i;
+}
+
+
+
+
+
+
+////////////////////////////funciones de ABAJO fuera de uso por el momento  
+
 
 int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
 	int i;

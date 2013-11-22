@@ -168,8 +168,8 @@ static int theGrid_open(const char *path, struct fuse_file_info *fi) {
 	
 	
 	res = nodoByPath(path,ptr_nodo);
-	if ((fi->flags & 3) != O_RDONLY)
-		return -EACCES;
+	//if ((fi->flags & 3) != O_RDONLY)
+		//return -EACCES;
 
 	if (res == FAIL) return -ENOENT;
 	return 0;
@@ -216,16 +216,17 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	return size;
 }
 
-/*
 
-static int32_t theGrid_mkdir(const char * path,mode_t mode)
+
+static int32_t theGrid_mkdir(const char *path,mode_t mode)
 {   int res;
 	
-	res = crearDirectorio(path);
+	printf("la ruta que esta en mkdir es: %s\n",path);
+	res = crearDirectorio(path,ptr_nodo);
 	return res;
 }
 
-*/
+
 
 /*
  * Esta es la estructura principal de FUSE con la cual nosotros le decimos a
@@ -238,7 +239,7 @@ static struct fuse_operations theGrid_oper = {
 		.readdir = theGrid_readdir,
 		.open = theGrid_open,
 		.read = theGrid_read,
-		.mkdir = theGrid_mkdir,
+		.mkdir = theGrid_mkdir 
 };
 
 
@@ -296,7 +297,7 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
-	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,(off_t)NULL);//Le agregue el casteo
+	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
 	ptr_header = (GHeader*) dir_bloque(INICIO);
     ptr_nodo = (GFile*) dir_bloque(1); 
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
@@ -305,7 +306,6 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	// de realizar el montaje, comuniscarse con el kernel, delegar todo
 	// en varios threads
 	return fuse_main(args.argc -1, args.argv +1, &theGrid_oper, NULL);
-	//Demasiados Argumentos para la funcion fuse_main_compat2??? CORREGIR!!!
 }
 
 
