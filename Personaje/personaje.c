@@ -70,7 +70,7 @@ int movimientoConc(int,int*,int*);
 
 int main(int argc, char *argv[]) {
 	path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
-	personajeCargado=cargaPersonaje(&path);
+	personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
 	pthread_join(hilo,NULL);
 	return 0;
 };
@@ -145,7 +145,7 @@ int cargaPersonaje(char *argv[]){
 	answer conexionSaliente;
 	tminipersonaje *miniPersonaje;
 	t_config * cfgPersonaje;
-	cfgPersonaje=config_create(argv[0]);
+	cfgPersonaje=config_create(argv[1]);//ACA CAMBIE LO QUE LE MANDA AL CONFIG
 	tinfo *infoNivel;
 	infoNivel=(tinfo*)malloc(sizeof(tinfo));
 	miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));

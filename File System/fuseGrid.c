@@ -238,7 +238,7 @@ static struct fuse_operations theGrid_oper = {
 		.readdir = theGrid_readdir,
 		.open = theGrid_open,
 		.read = theGrid_read,
-		.mkdir = theGrid_mkdir 
+		.mkdir = theGrid_mkdir,
 };
 
 
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
-	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
+	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,(off_t)NULL);//Le agregue el casteo
 	ptr_header = (GHeader*) dir_bloque(INICIO);
     ptr_nodo = (GFile*) dir_bloque(1); 
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
@@ -305,6 +305,7 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	// de realizar el montaje, comuniscarse con el kernel, delegar todo
 	// en varios threads
 	return fuse_main(args.argc -1, args.argv +1, &theGrid_oper, NULL);
+	//Demasiados Argumentos para la funcion fuse_main_compat2??? CORREGIR!!!
 }
 
 

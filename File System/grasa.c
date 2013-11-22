@@ -143,7 +143,7 @@ int nodoByPath(const char* path,GFile* nodo){
 		numNodo=1;	
 		encontrado = 0;
 		while(numNodo<=MAXNODO){
-			if(string_equals_ignore_case(nombreHijo[numHijo],nodo[numNodo].fname)) acierto++; 
+			if(string_equals_ignore_case(nombreHijo[numHijo],(char*)nodo[numNodo].fname)) acierto++; //Le agregue el casteo
 			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
 			if (acierto==2) {numPadre=numNodo; encontrado=1;}
 			acierto=0;
@@ -165,14 +165,14 @@ int nodoByPath(const char* path,GFile* nodo){
 int readGrid(char *buf, size_t size, off_t offset,GFile* nodo){
 	
 	int bytesLeidos;
-	int byteRestantes;
+	int byteRestantes;//HAY QUE BORRAR ESTA QUE NO SE USA
 	int bytePedido;
-	int bytesParaCopiar;
+	int bytesParaCopiar;//HAY QUE BORRAR ESTA QUE NO SE USA
 	uint8_t* ptr_datos;
 	
 	printf("soy el nodo: %s dentro de cargar buffer \n",nodo[0].fname);
 	printf("cuanto es el size: %d \n",(int)size);
-	printf("cuanto es el offset: %d \n",offset);
+	printf("cuanto es el offset: %d \n",(int)offset);//Le agregue el casteo
 	
 	bytePedido=offset;
 	bytesLeidos=0;
@@ -195,7 +195,7 @@ while (bytesLeidos < size) {
    
 	}
 
-	
+	return 0;//Le agregue el return con caca.
 }
 
 
@@ -270,7 +270,7 @@ int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
 	int j;
 	j=0;
 	while(1){
-	if(string_equals_ignore_case(nombreHijo,nodo[i].fname)) j++; 
+	if(string_equals_ignore_case(nombreHijo,(char*)nodo[i].fname)) j++;//Le agregue el casteo
 	if((padre==nodo[i].parent_dir_block)) j++;
     if (j==2)break;
     j=0;
@@ -286,7 +286,7 @@ int nodoQueQuiero (const char* path,GFile* nodo){
 	
 	while(i<1024){
 		char barra[72];
-		strcpy(barra,nodo[i].fname);
+		strcpy(barra,(char*)nodo[i].fname);//Le agregue el casteo
 		left_strcat(barra,"/");
 		if (strcmp(path,barra) == 0) break;
 		i++;

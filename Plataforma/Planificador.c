@@ -25,6 +25,7 @@ int aLaMierdaConTodo(global);
 bool muertePersonaje(int, global);
 void matarPersonaje(char,global);
 int interrupcion(int,short,answer*,global);
+//int selectear2(answer*,short,int,global);
 int selectear(answer*,short,fd_set*,int,int,global);
 
 void darInstancia(t_player*,t_stack*,global*);
@@ -79,9 +80,11 @@ void *planificador (void *parametro){
 			aLaMierdaConTodo(general);
 			break;
 		}
-		if(selectGRID_planificador(*(general.maxfd),general.original)>0){
-			answer temp;
-			respuesta=interrupcion(general.cabecera->nid,0,&temp,general);
+		if(general.cabecera->cantJugadores==0){
+			if(selectGRID_planificador(*(general.maxfd),general.original)>0){
+				answer temp;
+				respuesta=interrupcion(general.cabecera->nid,0,&temp,general);
+			}
 		}
 		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
@@ -178,6 +181,7 @@ int leerNovedad(global*tanda){
 		puts("Se ha conectado un jugador!!");
 		puts("Avisandole al nivel..");
 		sendAnswer(7,0,' ',tanda->cabecera->tandaRaiz->sym,(short)tanda->cabecera->nid);	//Le aviso al nivel que hay un nuevo jugador.
+		//respuesta=selectear2(NULL,1,tanda->cabecera->nid,*tanda);
 		respuesta=selectear(NULL,1,tanda->original,*(tanda->maxfd),tanda->cabecera->nid,*tanda);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
 		switch (respuesta){
 			case 1:puts("--El nivel ha dado el ok.--");
@@ -313,7 +317,7 @@ int aLaMierdaConTodo(global tabla){
 	puts("Eliminando jugadores dormidos.");
 	while(!list_is_empty(tabla.sleeps)){
 		temp=(t_player*)list_remove(tabla.sleeps,0);
-		while (list_is_empty(temp->t_stack)){
+		while (!list_is_empty(temp->t_stack)){
 			puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(temp->t_stack,0);
 			free(tempstack);
@@ -330,7 +334,7 @@ int aLaMierdaConTodo(global tabla){
 	if(tabla.exe->player!=NULL){
 		sendAnswer(0,0,' ',' ',tabla.exe->player->pid);
 		close(tabla.exe->player->pid);
-		while (list_is_empty(tabla.exe->player->t_stack)){
+		while (!list_is_empty(tabla.exe->player->t_stack)){
 			puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(tabla.exe->player->t_stack,0);
 			free(tempstack);
@@ -359,6 +363,8 @@ int aLaMierdaConTodo(global tabla){
 	sendAnswer(0,0,' ',' ',tabla.cabecera->nid);
 	close(tabla.cabecera->nid);
 	sleep(2);
+	printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
+	pthread_cancel(tabla.cabecera->idHilo);
 	puts("Nos Vamos todos al carajo!");
 	return -2;
 }
@@ -404,14 +410,15 @@ bool muertePersonaje(int i,global tabla){
 	if(tabla.cabecera->cantJugadores==0)printf("\n--ATENCION--No quedan jugadores!!\n");
 	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
 	puts("Personaje Completamente eliminado!!\n");
-	if(aux->pid==tabla.exe->player->pid){
-		tabla.exe->player=NULL;
-		chosen =true;
+	if(tabla.exe->player!=NULL){
+		if(aux->pid==tabla.exe->player->pid){
+			tabla.exe->player=NULL;
+			chosen =true;
+		}
 	}
 	close(aux->pid);
 	free(aux);
 	return chosen;
-
 }
 void matarPersonaje(char simbolo,global tabla){
 	puts("Murio un Personaje.");
@@ -444,7 +451,6 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	if(i==tabla.cabecera->nid){
 		puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
-		//case 0:status=aLaMierdaConTodo(tabla);
 		case 0:status=modoDeRecuperacion(tabla);
 		break;
 		case 4:modificarRetardo(*aux,tabla);
@@ -462,6 +468,52 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	}
 	return status;
 }
+
+/*int selectear2(answer*paqueteDeRespuesta,short respuestaEsperada,int socketEsperado,global tabla){
+	answer aux;
+	short respuesta;
+	fd_set readfds;
+	int status, fdmax=*(tabla.maxfd);
+	do{
+		readfds=*(tabla.original);
+		puts("Selecteando..");
+		selectGRID(fdmax,&readfds);
+		int i=0;
+		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax))	i++;
+		printf("Escuchamos al socket Nº: %d",i);
+		if(i==tabla.cabecera->nid)printf(" -- NID\n");
+		else printf("\n");
+		respuesta=recvAnswer(&aux,i);
+		if(i==socketEsperado){	//Me habla quien yo esperaba que me hable
+			puts("Me hablo quien YO queria");
+			if((respuesta==respuestaEsperada)||(respuesta==-1)||(respuestaEsperada==10)){	//Me dice lo que esperaba me dijera
+				if (paqueteDeRespuesta!=NULL)*paqueteDeRespuesta=aux;
+				return respuesta;
+			}else {puts("Me estadiciendo cualquier otra cosa");status=interrupcion(i,respuesta,&aux,tabla); }//Me dice otra cosa
+			if (status==0)break;	//Si alguien murio y soy yo, No tiene sentido seguir esperando una respuesta.
+			if(status>0){		//Sirve para la reconexion del Nivel
+				answer temp;
+				if(tabla.playing){
+					if(tabla.exe->player->data.recsol!=' '){
+						sendAnswer(2,0,tabla.exe->player->data.recsol,tabla.exe->player->sym,tabla.cabecera->nid);
+						usleep(50000);
+						recvAnswer(&temp,tabla.cabecera->nid);
+						if(calcularDistancia(tabla.exe->player->data.pos,temp.cont)!=tabla.exe->player->data.dist){
+							sendAnswer(2,temp.cont,tabla.exe->player->data.recsol,' ',tabla.exe->player->pid);
+							tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,temp.cont);
+						}else sendAnswer(1,0,' ',' ',tabla.exe->player->pid);
+					}
+				}
+			return -3;
+			}
+		}else {puts("QUIEN CARAJO ME HABLO!!");status=interrupcion(i,respuesta,&aux,tabla);	}	//Me hablo otra persona que nada que ver.
+		if(status==-2)break;
+		puts("Termine una iteracion");
+	}while(1);
+	return status;
+}*/
+
+
 int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,global tabla){
 	answer aux;
 	short respuesta;
@@ -504,7 +556,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 				return -3;
 				}
 			}
-			if (status==-2/*||status>0*/)break;
+			if (status==-2)break;
 
 		}
 	}while(1);
@@ -532,13 +584,15 @@ int asignarRecursos(global*tabla){
 		jugador=(t_player*)paquete;
 		puts("Pidiendole recurso al nivel.");
 		sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
+		//respuesta=selectear2(&temp,1,tabla->cabecera->nid,*tabla);
 		respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
 		if (respuesta==-1)return;
 		if (respuesta==-2){
 			status=-2;
 			return;
 		}
-		t_stack*recnuevo=(t_stack*)malloc(sizeof(t_stack));
+		t_stack*recnuevo;
+		recnuevo=(t_stack*)malloc(sizeof(t_stack));
 		recnuevo->recurso=jugador->data.recsol;
 		darInstancia(jugador,recnuevo,tabla);
 		puts("Instancia concedida.");
@@ -553,6 +607,7 @@ int devolverRecursos(global*tabla){
 	if(!list_is_empty(tabla->recur)){
 		t_stack*tempstack;
 		sendAnswer(5,0,' ',' ',tabla->cabecera->nid);
+		//status=selectear2(NULL,1,tabla->cabecera->nid,*tabla);
 		status=selectear(NULL,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
 		switch(status){
 		case -1:
@@ -566,6 +621,7 @@ int devolverRecursos(global*tabla){
 			while (!list_is_empty(tabla->recur)){
 				tempstack=(t_stack*)list_remove(tabla->recur,0);
 				sendAnswer(2,0,tempstack->recurso,' ',tabla->cabecera->nid);
+				//status=selectear2(NULL,1,tabla->cabecera->nid,*tabla);
 				status=selectear(NULL,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
 				switch (status){
 				case -1:
@@ -591,6 +647,7 @@ void movimiento(global*tabla,answer aux){
 	sendAnswer(3,aux.cont,' ',aux.symbol,tabla->cabecera->nid);
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
+	//if(selectear2(&aux,1,tabla->cabecera->nid,*tabla)==-3)return;
 	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-3)return;
 	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
 	tabla->playing=false;
@@ -617,6 +674,7 @@ void ubicacion(answer aux,global tabla){
 	tabla.exe->player->data.recsol=aux.data;
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
+	//if(selectear2(&aux,2,tabla.cabecera->nid,tabla)==-3)return;
 	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-3)return;
 	sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
 	tabla.playing=false;
@@ -653,6 +711,7 @@ int atenderJugador(global*tabla){
 	answer back;
 	if(!concederTurno(tabla))return 0;
 	sock=tabla->exe->player->pid;
+	//respuesta=selectear2(&back,10,sock,*tabla);
 	respuesta=selectear(&back,10,tabla->original,*(tabla->maxfd),sock,*tabla);
 	switch(respuesta){
 	case -2:
