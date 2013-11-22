@@ -289,7 +289,7 @@ void cargarConfig(nivelConfig* configNivel){
 	verificarCargados(*config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
-	puts("todo bien cargador");
+//	puts("todo bien cargador");
 	config_destroy(config);
 
 

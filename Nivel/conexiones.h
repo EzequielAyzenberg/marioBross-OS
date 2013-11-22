@@ -15,6 +15,7 @@ typedef struct{
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
 	t_list* listaRecursos;
+	t_list* listaEnemigos;
 	short socket;
 }datosConexiones;
 

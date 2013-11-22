@@ -14,6 +14,77 @@
 
 pthread_mutex_t mutexMatarPersonaje;
 
+int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char pj){
+
+	Caja *buffer;
+	t_personaje *bufferPj;
+	bool _is_Recurso(Caja *caja){
+						if(caja->id==recurso)return true;
+						return false;
+	}
+	buffer=list_find(listaCajas,(void*)_is_Recurso);
+	if(buffer->quantity>0){
+
+		bool _is_Personaje(t_personaje* pj2){
+							if(pj2->id==pj)return true;
+							return false;
+						}
+
+		bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
+		if(bufferPj!=NULL){
+			char* bufferRecurso=malloc(1);
+			*bufferRecurso=recurso;
+			buffer->quantity--;
+			list_add(bufferPj->recursos,bufferRecurso);
+			return 1;
+		}
+
+		else return -1;
+
+
+	}else  return -1;
+
+
+}
+
+int chequearRecurso(t_list* listaCajas,char recurso){
+	Caja *buffer;
+	bool _is_Recurso(Caja *caja){
+							if(caja->id==recurso)return true;
+							return false;
+		}
+	buffer=list_find(listaCajas,(void*)_is_Recurso);
+	return (buffer->posx*100+buffer->posy);
+}
+
+int recibirRecursos(t_list* listaCajas,char recurso){
+	Caja *buffer;
+	bool _is_Recurso(Caja *caja){
+								if(caja->id==recurso)return true;
+								return false;
+			}
+	buffer=list_find(listaCajas,(void*)_is_Recurso);
+	buffer->quantity++;
+	return 1;
+}
+
+void recibirRecursoPersonaje (char pj,t_list* listaCajas,t_list* listaPersonajes){//recibe los recursos de un Pj y destruye la lista de recursos de ese pj, ya que a continuacion el pj va a morir SIEMPRE
+	t_personaje *bufferPj;
+	int cantRecursosPj;
+	int i=0;
+	bool _is_Personaje(t_personaje* pj2){
+								if(pj2->id==pj)return true;
+								return false;
+							}
+	bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
+	cantRecursosPj=list_size(bufferPj->recursos);
+	for(i=0;i<cantRecursosPj;i++){
+		recibirRecursos(listaCajas,*((char*)(list_get(bufferPj->recursos,i))));
+	}
+	list_destroy(bufferPj->recursos);
+}
+
+
 int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMENTAR QUE REVISE SI ESE PERSONAJE NO EXISTIA YA
 
 	t_personaje *bufferPj;
@@ -80,7 +151,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 	}
 */}
 
-int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,char id){
+int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t_list* listaCajas,char id){
 	t_personaje *bufferPj;
 	bool _is_Personaje(t_personaje* pj2){
 							if(pj2->id==id)return true;
@@ -89,7 +160,9 @@ int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,c
 		bufferPj=list_find(listaJugadoresActivos,(void*)_is_Personaje);
 		if(bufferPj!=NULL){
 			pthread_mutex_lock( &mutexMatarPersonaje);
-			list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
+			recibirRecursoPersonaje(id,listaCajas,listaJugadoresActivos);
+			list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje);
+			//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
 			pthread_mutex_unlock( &mutexMatarPersonaje);
 			return 1;
 		}
@@ -117,56 +190,3 @@ int moverPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){
 	}
 }
 
-int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char pj){
-
-	Caja *buffer;
-	t_personaje *bufferPj;
-	bool _is_Recurso(Caja *caja){
-						if(caja->id==recurso)return true;
-						return false;
-	}
-	buffer=list_find(listaCajas,(void*)_is_Recurso);
-	if(buffer->quantity>0){
-
-		bool _is_Personaje(t_personaje* pj2){
-							if(pj2->id==pj)return true;
-							return false;
-						}
-
-		bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
-		if(bufferPj!=NULL){
-			char* bufferRecurso=malloc(1);
-			*bufferRecurso=recurso;
-			buffer->quantity--;
-			list_add(bufferPj->recursos,bufferRecurso);
-			return 1;
-		}
-
-		else return -1;
-
-
-	}else  return -1;
-
-
-}
-
-int chequearRecurso(t_list* listaCajas,char recurso){
-	Caja *buffer;
-	bool _is_Recurso(Caja *caja){
-							if(caja->id==recurso)return true;
-							return false;
-		}
-	buffer=list_find(listaCajas,(void*)_is_Recurso);
-	return (buffer->posx*100+buffer->posy);
-}
-
-int recibirRecursos(t_list* listaCajas,char recurso){
-	Caja *buffer;
-	bool _is_Recurso(Caja *caja){
-								if(caja->id==recurso)return true;
-								return false;
-			}
-	buffer=list_find(listaCajas,(void*)_is_Recurso);
-	buffer->quantity++;
-	return 1;
-}

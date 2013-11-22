@@ -376,7 +376,7 @@ void jugadoresFocuseables(t_list* listaJugadoresActivos,t_list* listaJugadoresFo
 
 }
 
-void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,coordenadas recorridoEnemigos[4],int rows, int cols,int* flagX){
+void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,coordenadas recorridoEnemigos[4],int rows, int cols,short *socketPlataforma,int* flagX){
 	//t_log_level logDetalle=log_level_from_string("INFO");
 	//t_log* logNivel=log_create("log","nivel1", 0, logDetalle);
 	t_list* listaJugadoresFocuseables;
@@ -493,7 +493,14 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 					*flagX=1;
 				}
 			if(myinfo->posx==posPjs[numPj].posx && myinfo->posy==posPjs[numPj].posy){
-				printf("El jugador %c ha sido pisado por un goomba",posPjs[numPj].id);
+				pthread_mutex_lock( &mutexMatarPersonaje);
+				bool _is_Personaje(t_personaje* pj2){
+											if(pj2->id==posPjs[numPj].id)return true;
+											return false;
+										}
+
+				if((list_find(listaJugadoresFocuseables,(void*)_is_Personaje))!=NULL){
+				//printf("El jugador %c ha sido pisado por un goomba",posPjs[numPj].id);
 				char* bufferMsg=(char*)malloc(50);
 				strcpy(bufferMsg,"El jugador");
 
@@ -528,12 +535,16 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 					return false;
 				}
 
-				pthread_mutex_lock( &mutexMatarPersonaje);
-				list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));//CUIDADO CUANDO DOS ENEMIGOS MATAN A LA VEZ AL MISMO SEGMENTATION FAULT PONER SEMAFORO
+				recibirRecursoPersonaje(posPjs[numPj].id,listaCajas,listaJugadoresActivos);
+				list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje);
+				//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));//CUIDADO CUANDO DOS ENEMIGOS MATAN A LA VEZ AL MISMO SEGMENTATION FAULT PONER SEMAFORO
+				sendAnswer(8,0,' ',posPjs[numPj].id,*socketPlataforma);
+				//printf("%d",*socketPlataforma);
 				pthread_mutex_unlock( &mutexMatarPersonaje);
 
+				}
+				else pthread_mutex_unlock( &mutexMatarPersonaje);
 			}
-
 			//focusear(i,buffer,posPjs[numPj]);//Search and destroy
 
 
@@ -574,7 +585,7 @@ coordenadas recorridoEnemigos [4];
 
 
 
-		moverEnemigos((*info).myinfo,(*info).listaCajas,(*info).listaJugadoresActivos,(*info).listaJugadoresMuertos,recorridoEnemigos,(*info).rows,(*info).cols,&flagX);
+		moverEnemigos((*info).myinfo,(*info).listaCajas,(*info).listaJugadoresActivos,(*info).listaJugadoresMuertos,recorridoEnemigos,(*info).rows,(*info).cols,info->socket,&flagX);
 
 		pthread_mutex_lock( &mutexDibujar);
 

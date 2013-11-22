@@ -23,6 +23,7 @@ typedef struct estructuraHiloEnemigos{
 	int sleepEnemigos;
 	char* nombreNivel;
 	coordenadas* myinfo;
+	short *socket;
 
 }infoEnemigosThread;
 

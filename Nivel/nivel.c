@@ -64,11 +64,12 @@ main(int argc, char *argv[]){
 	datosConexiones.listaJugadoresActivos=listaJugadoresActivos;
 	datosConexiones.listaJugadoresMuertos=listaJugadoresMuertos;
 	datosConexiones.listaRecursos=config.listaCajas;
-
+	datosConexiones.socket=-1;
 
 	inicializarNivel(config,&rows,&cols);//Crea el nivel por primera vez,carga las cajas y devuelve el tamaño de la pantalla
 	infoEnemigosThread infoParaEnemigos;
 	listaEnemigos=list_create();
+	datosConexiones.listaEnemigos=listaEnemigos;
 	infoParaEnemigos.listaEnemigos=listaEnemigos;
 
 	infoParaEnemigos.listaCajas=config.listaCajas;
@@ -79,6 +80,7 @@ main(int argc, char *argv[]){
 	infoParaEnemigos.cols=cols;
 	infoParaEnemigos.sleepEnemigos=config.sleepEnemigos;
 	infoParaEnemigos.nombreNivel=(char*)malloc(strlen(config.nombre)+1);
+	infoParaEnemigos.socket=&datosConexiones.socket;
 	strcpy(infoParaEnemigos.nombreNivel,config.nombre);
 
 
@@ -120,7 +122,7 @@ main(int argc, char *argv[]){
 //controlEnemigos(&infoParaEnemigos);
 
 
-handshakePlataforma(datosConexiones);
+handshakePlataforma(&datosConexiones);
 //while(1){
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
 //}
