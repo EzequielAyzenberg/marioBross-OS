@@ -249,6 +249,7 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
+	puts("--ORQUESTADOR-- Jugador Ganador Recibido.");
 	loguearInfo(concat("--ORQUESTADOR-- Jugador ganador: ",ctos(handshakeJugador.symbol)));
 };
 

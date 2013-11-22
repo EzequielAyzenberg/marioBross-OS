@@ -364,7 +364,7 @@ int aLaMierdaConTodo(global tabla){
 	close(tabla.cabecera->nid);
 	sleep(2);
 	printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
-	pthread_cancel(tabla.cabecera->idHilo);
+	//pthread_cancel(tabla.cabecera->idHilo);
 	puts("Nos Vamos todos al carajo!");
 	return -2;
 }
@@ -514,6 +514,21 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 }*/
 
 
+char buscarSimbolo(int i, global tabla){
+	bool _is_PID(t_player*personaje) {
+		if(personaje->pid==i)return true;
+		return false;
+	}
+	t_player*jugador;
+	jugador=list_find(tabla.ready,(void*)_is_PID);
+	if(jugador==NULL){
+		jugador=list_find(tabla.sleeps,(void*)_is_PID);
+		if(jugador==NULL&&tabla.exe->player!=NULL)jugador=tabla.exe->player;
+		else puts("NO SE ENCONTRO A NADIE");
+	}
+	return jugador->sym;
+}
+
 int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,global tabla){
 	answer aux;
 	short respuesta;
@@ -521,7 +536,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 	int status;
 	do{
 		readfds=*originalfds;
-		puts("Selecteando..");
+		printf("Selecteando..Esperado/Recibido: %d-/",sock);
 		selectGRID(fdmax,&readfds);
 		int i=0;
 		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax))	i++;
@@ -529,8 +544,13 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			puts("--ERROR:No se encontro candidato para selectear!!--");
 			exit(1);
 		}else{
-			printf("Se escuchara al socket numero %d\n",i);
+			printf("=>%d",i);
 			respuesta=recvAnswer(&aux,i);
+			printf("--Msg:%d-Cnt:%d-Dta:%c-",(int)aux.msg,(int)aux.cont,aux.data);
+			if(i==tabla.cabecera->nid)printf("==>NID\n");
+			else {
+				printf("-- %c\n",buscarSimbolo(i,tabla));
+			}
 			if (i==sock&&respuesta!=0){
 				if((respuesta==esperado)||(respuesta==-1)||(esperado==10)){
 					if (tempo!=NULL)*tempo=aux;
@@ -690,13 +710,13 @@ void cargarAExec(global*tabla){
 }
 bool concederTurno(global*tabla){
 	if(tabla->exe->rem_cuantum==-1){
-		puts("Hora de que termine un jugador.");
+		//puts("Hora de que termine su turno un jugador.");
 		cargarAlFinal(tabla->exe->player,tabla->ready,tabla->algo->algo);
 		tabla->exe->player=NULL;
 	}
 	if (tabla->exe->player==NULL){
 		if(!list_is_empty(tabla->ready)){
-			puts("Nuevo Jugador cargado");
+			//puts("Nuevo Jugador cargado a exec");
 			cargarAExec(tabla);
 		}else return false;
 	}else{
