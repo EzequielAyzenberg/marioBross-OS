@@ -9,6 +9,7 @@
 #define PLATAFORMA_H_
 
 #include <commons/collections/list.h>
+#include <commons/log.h>
 #include <theGRID/sockets.h>
 #include <theGRID/general.h>
 #include <theGRID/cadenas.h>

@@ -158,7 +158,10 @@ int recvHandshake(handshake *temp,int sockfd){
 		if(aux==5)terminar(1,sockfd);
 	}
 	//printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
+	if(estado==0){
+		temp->type=0;
+		return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
+	}
 	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->type;
 }
@@ -176,7 +179,13 @@ int recvAnswer(answer *temp,int sockfd){
 		aux++;
 		if(aux==5)terminar(1,sockfd);
 	}//printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
+	if(estado==0){
+		temp->msg=0;
+		temp->cont=0;
+		temp->data=' ';
+		temp->symbol=' ';
+		return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
+	}
 	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->msg;
 }

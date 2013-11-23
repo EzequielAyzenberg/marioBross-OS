@@ -39,17 +39,27 @@ typedef struct execution{
 	int rem_cuantum;
 }t_exec;
 
+typedef struct t_logs{
+	t_log*trace;
+	t_log*debug;
+	t_log*warning;
+	t_log*info;
+	t_log*error;
+}logs;
+
 typedef struct Pglobal{
 	nodoNivel* cabecera;
 	t_list*ready;
 	t_list*sleeps;
-	t_exec* exe;
+	t_exec*exe;
 	t_list*recur;
 	fd_set*original;
+	logs logging;
 	int*maxfd;
 	struct algo*algo;
 	bool playing;
 }global;
+
 
 void *planificador(void *);
 
