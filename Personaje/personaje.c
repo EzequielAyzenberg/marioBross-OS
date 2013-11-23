@@ -10,7 +10,13 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+
 //Variables
+typedef struct hilos{
+	int nombre;
+	char *nivel;
+}thilo;
+
 typedef struct info{
 	char *nivel;
 }tinfo;
@@ -22,6 +28,7 @@ typedef struct personaje {
 	int vidas;
 	int orquestadorPort;
 	char *orquestadorIP;
+	t_list *miniPersonajes;
 }tpersonaje;
 
 typedef struct miniPersonaje{
@@ -40,13 +47,16 @@ typedef struct recurso{
 	bool checked;
 }trecurso;
 
-int sockfd,socketEscucha,personajeCargado,nuevo;
+
+int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,limboOK=0;
 tpersonaje personaje;
 char *recurso;
 t_list *lista,*listaRecursos;
 pid_t pid;
 pthread_t hilo;
 char * path;
+char *nivelAux;
+
 
 
 //Prototipos
@@ -56,33 +66,67 @@ char * nombrePersonaje ( t_config * cfgPersonaje);
 char * orquestador( t_config * cfgPersonaje);
 char ** niveles( t_config * cfgPersonaje);
 char ** recursos( t_config * cfgPersonaje, char *nivel);
+
 int cargaPersonaje(char *argv[]);
-void * jugar(void* niveles);
-int cantidadElementosArray(char **array);
-int estoyMuerto(t_list *,int*,int*);
+void * jugar(void*);
+int cantidadElementosArray(char **);
+int estoyMuerto(tminipersonaje*);
 int actualizarRP(t_list*,int);
 int gestionTurno(t_list*,int,int*,int*,char,int*,int*);
 int instanciaConc(t_list*,int*);
 int movimientoConc(int,int*,int*);
+void cierraHilos();
 
 
 
 
 int main(int argc, char *argv[]) {
+	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
 	path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
 	personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
-	pthread_join(hilo,NULL);
+	if(personajeCargado==-1){
+		printf("Error al cargar configuracion del personaje.\n");
+		return 0;
+	}
+	while(personaje.miniPersonajes!=NULL){
+		//Recibe señales
+		if(ganado==personaje.planDeNiveles->elements_count){
+			printf("Ganamos! venga koopa, te hago frente\n");
+			cierraHilos();
+			return 0;
+		}
+	}
+	if(limboOK==1){
+		printf("Caimos al limbo de muerte.\n");
+		return 0;
+	}
+	printf("Perdimos :(\n");
 	return 0;
 };
+
+/*
+ * Retorna true si el recurso fue agarrado
+ *
+ */
 
 bool _recursoAgarrado(trecurso *recurso){
 	return recurso->checked;
 }
 
+/*
+ * Retorna true si el recurso no fue agarrado
+ *
+ */
+
 bool _recursoNoAgarrado(trecurso *recurso){
 	return !(recurso->checked);
 }
 
+/*
+ * Gestiona las ordenes del planificador y delega a otras funciones
+ * cada opcion por orden
+ *
+ */
 
 void *jugar (void *minipersonaje){
 	answer ordenPlanificador;
@@ -97,14 +141,14 @@ void *jugar (void *minipersonaje){
 	tminipersonaje info= *infoBis;
 	info.posX=0;
 	info.posY=0;
-
+	printf("Soy la preOrden\n");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
 				printf("Estoy muerto\n");
-				estoyMuerto(info.planDeRecursos,&(info.posX),&(info.posY));
+				estoyMuerto(&info);
 				break;
 			case 1: //Instancia o movimiento concedido
 				printf("Es instancia?: %d\n",*esInstancia);
@@ -123,14 +167,13 @@ void *jugar (void *minipersonaje){
 				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),info.simbolo,moverEnX,esInstancia);
 				break;
 			case 0: //Limbo
+				printf("Se fue la plataforma, panico panico!\n");
+				cierraHilos();
 				return 0;
-				break;
 		}
 	}
 	printf("Ganamos bitches\n");
-
-
-
+	ganado++;
 	return NULL;
 };
 
@@ -142,6 +185,9 @@ void *jugar (void *minipersonaje){
  *
  */
 int cargaPersonaje(char *argv[]){
+	thilo *miniHilo;
+	miniHilo=(thilo*)malloc(sizeof(thilo));
+	miniHilo->nivel=(char*)malloc(16);
 	answer conexionSaliente;
 	tminipersonaje *miniPersonaje;
 	t_config * cfgPersonaje;
@@ -245,12 +291,19 @@ int cargaPersonaje(char *argv[]){
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 				sendHandshake(1,ptrAux->nivel,miniPersonaje->simbolo,(short)sockfd);
 				recvAnswer(&conexionSaliente,sockfd);
+				printf("Coneccion establecida\n");
 				if(conexionSaliente.msg==-1){
 					printf("Conexion imposible de realizar\n");
 					return -1;
 				}
 				miniPersonaje->orquestadorSocket=sockfd;
+				miniHilo->nombre=sockfd;
+				printf("Buffer de hilo cargado\n");
+				list_add(personaje.miniPersonajes,(void*)miniHilo);
+				printf("Funciona?\n");
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
+				strcpy(miniHilo->nivel,infoNivel->nivel);
+
 		}
 	}else {
 		printf("Archivo de configuracion incompleto, falta campo: Plan de Niveles\n");
@@ -260,10 +313,20 @@ int cargaPersonaje(char *argv[]){
 	return EXIT_SUCCESS;
 }
 
+/*
+ * Retorna las vidas del personaje
+ *
+ */
+
 int vidasPersonaje( t_config * cfgPersonaje)
 {
 	return config_get_int_value(cfgPersonaje,"vidas");
 }
+
+/*
+ * Retorna el identificador del personaje
+ *
+ */
 
 char identificadorPersonaje ( t_config * cfgPersonaje)
 {
@@ -271,20 +334,39 @@ char identificadorPersonaje ( t_config * cfgPersonaje)
 
 }
 
+/*
+ * Retorna el nombre del personaje
+ *
+ */
 char * nombrePersonaje ( t_config * cfgPersonaje)
 {
 	return config_get_string_value(cfgPersonaje,"nombre");
 }
+
+/*
+ * Retorna el orquestador en formato IP-Puerto
+ *
+ */
 
 char * orquestador( t_config * cfgPersonaje)
 {
 	return config_get_string_value(cfgPersonaje,"orquestador");
 }
 
+/*
+ * Retorna los niveles en forma de array de char*
+ *
+ */
+
 char ** niveles( t_config * cfgPersonaje)
 {
 	return config_get_array_value(cfgPersonaje,"planDeNiveles");
 }
+
+/*
+ * Retorna los recursos en forma de array de char*
+ *
+ */
 
 char ** recursos( t_config * cfgPersonaje, char *nivel)
 {
@@ -297,6 +379,11 @@ char ** recursos( t_config * cfgPersonaje, char *nivel)
 	return config_get_array_value(cfgPersonaje,cadenaFinal);
 }
 
+/*
+ * Devuelve la cantidad de elementos en un array de char*
+ *
+ */
+
 int cantidadElementosArray(char **array){
 	int tamanioArray,tamanioElemento;
 	tamanioElemento=sizeof(array[0]);
@@ -305,25 +392,54 @@ int cantidadElementosArray(char **array){
 }
 
 /*
+ * Devuelve true si el hilo corresponde a ese miniPersonaje
+ */
+
+bool _esElHiloBuscado(thilo miniPersonaje){
+	return miniPersonaje.nivel==nivelAux;
+}
+
+/*
  * Baja una vida en el padre
  * Retorna a la posicion 0,0
  * Reinicia sus recursos
  *
  */
-int estoyMuerto(t_list *planDeRecursos,int*posX,int*posY){
-	int i;
+
+int estoyMuerto(tminipersonaje *info){
+	int i,sockfd;
 	trecurso *aux;
+	answer conexionSaliente;
 	aux=(trecurso*)malloc(sizeof(trecurso));
 	personaje.vidas-=1;
 	printf("Vidas restantes: %d\n",personaje.vidas);
-	*posX=0;
-	*posY=0;
-	for(i=0;planDeRecursos->elements_count;i++){
-		aux=(trecurso*)list_get(planDeRecursos,i);
+	info->posX=0;
+	info->posY=0;
+	for(i=0;info->planDeRecursos->elements_count;i++){
+		aux=(trecurso*)list_get(info->planDeRecursos,i);
 		aux->checked=false;
+	}
+	close(info->orquestadorSocket);
+	if(personaje.vidas>0){
+		sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
+		sendHandshake(1,info->nivel,info->simbolo,(short)sockfd);
+		recvAnswer(&conexionSaliente,sockfd);
+		if(conexionSaliente.msg==-1){
+			printf("Conexion imposible de realizar\n");
+			return -1;
+		}
+		info->orquestadorSocket=sockfd;
+	}else{
+		nivelAux=info->nivel;
+		list_remove_by_condition(personaje.miniPersonajes, (void*)_esElHiloBuscado);
 	}
 	return 0;
 }
+
+/*
+ * Pide la posicion del recurso siguiente
+ *
+ */
 
 int actualizarRP(t_list*planDeRecursos,int posicion){
 		trecurso *recursoSiguiente;
@@ -338,6 +454,13 @@ int actualizarRP(t_list*planDeRecursos,int posicion){
 		recursoSiguiente->posY=posY;
 	return 0;
 }
+
+/*
+ * Si no tiene la posicion del siguiente recurso la pide
+ * Si tiene la posicion del siguiente recurso pide movimiento
+ * Si esta en el recurso pide una instancia
+ *
+ */
 
 int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char simbolo,int *moverEnX,int *esInstancia){
 	trecurso *recursoSiguiente;
@@ -401,6 +524,11 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char sim
 return 0;
 }
 
+/*
+ * Marca como levantado el recurso concedido
+ *
+ */
+
 int instanciaConc(t_list * planDeRecursos,int* esInstancia){
 	trecurso *aux;
 	aux=(trecurso*)malloc(sizeof(trecurso));
@@ -412,8 +540,27 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia){
 	return 0;
 }
 
+/*
+ * Modifica su posicion por la concedida
+ *
+ */
+
 int movimientoConc(int posicion,int*posX,int*posY){
 	*posX=posicion/100;
 	*posY=posicion-(*posX*100);
 	return 0;
+}
+
+/*
+ * Cierra los sockets de los hilos de miniPersonajes
+ *
+ */
+
+void cierraHilos(){
+	int j;
+	thilo* aux;
+	for (j = 0; j < personaje.miniPersonajes->elements_count; j++) {
+		aux=(thilo*)list_get(personaje.miniPersonajes,j);
+		close(aux->nombre);
+	}
 }
