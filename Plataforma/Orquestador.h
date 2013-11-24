@@ -27,6 +27,10 @@ typedef struct{
  */typedef struct tinfoOrquestador{
 	 int puerto;
 	 t_list *listaNiveles;
+	 char * ip;
+	 char * koopa;
+	 char * script;
+	 int remainingDistance;
  }infoOrquestador;
 
 void cerrarTodo(int);
@@ -47,8 +51,8 @@ bool chequearKoopa(t_list *ganadores, t_list* listaNiveles);
 void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores);
 int _matar_hilo(nodoPlanificador *planificador);
 void matarHilos(t_list* hilosPlanificadores);
-void activarKoopa(t_list* hilosPlanificadores);
+void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script);
 int selectGRID_orquestador(int fdmax, fd_set original, int tiempo);
-void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles);
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles, char * koopa, char * script);
 
 #endif /* ORQUESTADOR_H_ */

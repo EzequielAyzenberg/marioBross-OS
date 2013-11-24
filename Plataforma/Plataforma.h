@@ -47,7 +47,10 @@ typedef struct tnodoNivel{
  */void crearTanda(nuevo**);
 pthread_t cargarOrquestador(char *path);
 int puertoPlataforma( t_config * cfgPlataforma);
+int rdPlataforma( t_config * cfgPlataforma);
 char * pathKoopaPlataforma( t_config * cfgPlataforma);
 char * pathScriptPlataforma( t_config * cfgPlataforma);
+char * ipPlataforma( t_config * cfgPlataforma);
+
 
 #endif /* PLATAFORMA_H_ */

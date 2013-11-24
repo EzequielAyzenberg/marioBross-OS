@@ -2,7 +2,6 @@
 
 #include"Orquestador.h"
 
-#define MYIP "127.0.0.1"
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"
 
@@ -49,6 +48,14 @@ pthread_t cargarOrquestador(char *path){
 			return -1;
 		}
 
+		if (config_has_property(cfgPlataforma,"ip")){
+			registroOrquestador.ip=ipPlataforma(cfgPlataforma);
+			printf("IP: %s.\n", registroOrquestador.ip);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: ip\n");
+			return -1;
+		}
+
 		if (config_has_property(cfgPlataforma,"koopa")){
 			registroOrquestador.koopa=pathKoopaPlataforma(cfgPlataforma);
 			printf("Path de koopa: %s.\n", registroOrquestador.koopa);
@@ -65,6 +72,14 @@ pthread_t cargarOrquestador(char *path){
 			return -1;
 		}
 
+		if (config_has_property(cfgPlataforma,"remainingDistance")){
+			registroOrquestador.remainingDistance=rdPlataforma(cfgPlataforma);
+			printf("Remaining Distance Default: %d.\n", registroOrquestador.remainingDistance);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: remainingDistance\n");
+			return -1;
+		}
+
 		t_list *listaNiveles = list_create();
 		registroOrquestador.listaNiveles = listaNiveles;
 		pthread_t id_orquest = id_orquest=hiloGRID(orquestador,(void*)&registroOrquestador);
@@ -75,10 +90,18 @@ int puertoPlataforma( t_config * cfgPlataforma){
 	return config_get_int_value(cfgPlataforma,"puerto");
 }
 
+int rdPlataforma( t_config * cfgPlataforma){
+	return config_get_int_value(cfgPlataforma,"remainingDistance");
+}
+
 char * pathKoopaPlataforma( t_config * cfgPlataforma){
 	return config_get_string_value(cfgPlataforma,"koopa");
 }
 
 char * pathScriptPlataforma( t_config * cfgPlataforma){
 	return config_get_string_value(cfgPlataforma,"script");
+}
+
+char * ipPlataforma( t_config * cfgPlataforma){
+	return config_get_string_value(cfgPlataforma,"ip");
 }
