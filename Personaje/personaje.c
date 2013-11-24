@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <signal.h>
 
 
 //Variables
@@ -48,7 +49,7 @@ typedef struct recurso{
 }trecurso;
 
 
-int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,limboOK=0;
+int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,limboOK=0,repetir=1,repeticiones=0;
 tpersonaje personaje;
 char *recurso;
 t_list *lista,*listaRecursos;
@@ -76,33 +77,80 @@ int gestionTurno(t_list*,int,int*,int*,char,int*,int*);
 int instanciaConc(t_list*,int*);
 int movimientoConc(int,int*,int*);
 void cierraHilos();
-
+void aumentaVida(int);
+void restaVida(int);
+void finDeNivel(int,char);
 
 
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
-	path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
-	personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
-	if(personajeCargado==-1){
-		printf("Error al cargar configuracion del personaje.\n");
-		return 0;
-	}
-	while(personaje.miniPersonajes!=NULL){
-		//Recibe señales
-		if(ganado==personaje.planDeNiveles->elements_count){
-			printf("Ganamos! venga koopa, te hago frente\n");
-			cierraHilos();
+	char* intentarlo="";
+	while(repetir==1){
+		repetir=0;
+		path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
+		personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
+		if(personajeCargado==-1){
+			printf("Error al cargar configuracion del personaje.\n");
 			return 0;
 		}
+		while(personaje.miniPersonajes!=NULL){
+			//Recibe señales
+			signal(SIGUSR1,aumentaVida);
+			signal(SIGTERM,restaVida);
+			if(ganado==personaje.planDeNiveles->elements_count){
+				printf("Ganamos! venga koopa, te hago frente\n");
+				return 0;
+			}
+		}
+		if(limboOK==1){
+			printf("Caimos al limbo de muerte.\n");
+			return 0;
+		}
+		if(repetir==1){
+			printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
+			scanf("%s",intentarlo);
+			if(strcmp(intentarlo,"N")){
+				repetir=0;
+			}else{
+				repeticiones++;
+				printf("\nEste es tu reintento numero: %d\n",repeticiones);
+			}
+		}
 	}
-	if(limboOK==1){
-		printf("Caimos al limbo de muerte.\n");
-		return 0;
-	}
+	cierraHilos();
 	printf("Perdimos :(\n");
 	return 0;
 };
+
+/*
+ * Avisa que termino el nivel al orquestador
+ * Cierra el socket
+ *
+ */
+
+void finDeNivel(int sockfd,char simbolo){
+	sendAnswer(8,0,0,simbolo, sockfd); //Mensaje de fin de nivel
+	close(sockfd);
+}
+
+/*
+ * Suma una vida al personaje
+ *
+ */
+
+void aumentaVida(int senial){
+	printf("Se recibio la señal: %d",senial);
+	personaje.vidas++;
+}
+
+/*
+ * Resta una vida al personaje
+ */
+void restaVida(int senial){
+	printf("Se recibio la señal: %d",senial);
+	personaje.vidas--;
+}
 
 /*
  * Retorna true si el recurso fue agarrado
@@ -145,6 +193,7 @@ void *jugar (void *minipersonaje){
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
+		printf("Vidas: %d\n",personaje.vidas);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
 				printf("Estoy muerto\n");
@@ -173,7 +222,7 @@ void *jugar (void *minipersonaje){
 		}
 	}
 	printf("Ganamos bitches\n");
-	ganado++;
+	finDeNivel(info.orquestadorSocket,info.simbolo);
 	return NULL;
 };
 
@@ -392,14 +441,6 @@ int cantidadElementosArray(char **array){
 }
 
 /*
- * Devuelve true si el hilo corresponde a ese miniPersonaje
- */
-
-bool _esElHiloBuscado(thilo miniPersonaje){
-	return miniPersonaje.nivel==nivelAux;
-}
-
-/*
  * Baja una vida en el padre
  * Retorna a la posicion 0,0
  * Reinicia sus recursos
@@ -430,8 +471,9 @@ int estoyMuerto(tminipersonaje *info){
 		}
 		info->orquestadorSocket=sockfd;
 	}else{
-		nivelAux=info->nivel;
-		list_remove_by_condition(personaje.miniPersonajes, (void*)_esElHiloBuscado);
+		list_clean(personaje.miniPersonajes);
+		repetir=1;
+		return 0;
 	}
 	return 0;
 }
