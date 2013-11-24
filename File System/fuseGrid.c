@@ -7,7 +7,28 @@
 #include <fcntl.h>
 #include "grasa.c"
 
+/*
+ * TAREAS QUE DEBE REALIZAR FUSEVO
+ * 
+ * Leer archivos                  HECHO
+ * Crear archivos                 HECHO
+ * Escribir archivos                
+ * Borrar archivos                                       
+ * Crear directorios y dos niveles de subdirecctorios     HECHO
+ * Borrar direcctorios vacíos
+ * */
 
+/*
+ * TAREAS DERIVADAS DE LAS PRINCIPALES
+ * 
+ * truncar archivos           puesto pero sin terminar
+ * modificar fecha            puesto pero sin terminar
+ * getatribute                 HECHO
+ * readdir                     HECHO
+ * setaer bitmap
+ * consultar un bit map        HECHO
+ * sincronizar esc/lec
+ * /
 
 
 
@@ -75,11 +96,19 @@ static int theGrid_getattr(const char *path, struct stat *stbuf) {
 						if(ptr_nodo[numNodo].state==2){
 							stbuf->st_mode = S_IFDIR | 0755;
 							stbuf->st_nlink = 1;
+							stbuf->st_mtim.tv_nsec = ptr_nodo[numNodo].m_date;   //tipo LOng
+							//stbuf->st_atim.tv_sec = ptr_nodo[numNodo].m_date;            //tipo_t_time
+							stbuf->st_atim.tv_nsec = ptr_nodo[numNodo].c_date;
+							//stbuf->st_ctim.tv_sec = ptr_nodo[numNodo].c_date;
 						}
 						else{
 							stbuf->st_mode = S_IFREG | 0444;
 							stbuf->st_nlink = 1;
 							stbuf->st_size = ptr_nodo[numNodo].file_size;
+							stbuf->st_mtim.tv_nsec = ptr_nodo[numNodo].m_date;   //tipo LOng
+							//stbuf->st_atim.tv_sec = ptr_nodo[numNodo].m_date;            //tipo_t_time
+							stbuf->st_atim.tv_nsec = ptr_nodo[numNodo].c_date;
+							//stbuf->st_ctim.tv_sec = ptr_nodo[numNodo].c_date;
 						}
 	return 0;
 	}
@@ -218,7 +247,7 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 
 
 
-static int32_t theGrid_mkdir(const char *path,mode_t mode)
+static int theGrid_mkdir(const char *path,mode_t mode)
 {   int res;
 	
 	printf("la ruta que esta en mkdir es: %s\n",path);
@@ -226,6 +255,45 @@ static int32_t theGrid_mkdir(const char *path,mode_t mode)
 	return res;
 }
 
+
+/*
+ * @DESC
+ *  esta funcio se llama cuando quiero crear un archivo.
+ *
+ * @PARAMETROS
+ * 		no tenemos precondiciones, las mismas las pone fuse, 
+ *      debemos usar el path para crear el archivo en el no llega la ruta con el nombre del archivo que 
+ * 		queremos crear
+ *
+ * 	@RETURN
+ * 		O archivo fue creado. -EEXIST archivo/directorio ya existe
+ */
+
+
+static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *fi)
+{
+	int res = 0;
+	puts("entre a create");
+	res=crearArchivo(path,ptr_nodo);
+	return res;
+}
+
+
+int theGrid_truncate(const char * path, off_t offset) {
+// funcion dummy para que no se queje de "function not implemented"
+return 0;
+}
+
+static int theGrid_utimens(const char *path, const struct timespec ts[2])
+{
+        /*int res;
+        // don't use utime/utimes since they follow symlinks 
+        res = utimensat(0, path, ts, AT_SYMLINK_NOFOLLOW);
+        if (res == -1)
+                return -errno;
+        */
+        return 0;
+}
 
 
 /*
@@ -239,7 +307,10 @@ static struct fuse_operations theGrid_oper = {
 		.readdir = theGrid_readdir,
 		.open = theGrid_open,
 		.read = theGrid_read,
-		.mkdir = theGrid_mkdir 
+		.mkdir = theGrid_mkdir,
+		.create = theGrid_create,
+		.truncate = theGrid_truncate,
+		.utimens  = theGrid_utimens, 
 };
 
 
