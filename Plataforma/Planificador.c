@@ -132,17 +132,44 @@ void _each_Personaje(void*jug){
 
 void modificarAlgoritmo(answer temp,global general){
 	general.algo->algo=temp.cont;
-	general.algo->remainDist=(temp.data-'0')*10;
-	if(general.algo->algo==0)puts("Se ha elegido usar el Algoritmo SRDF.");
-	else printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
-	printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
-
-	printf("letra: %c ---",temp.data);
-	printf("letra: %c ---",temp.data);
+	char mensaje[128],numero[16];
+	strcpy(mensaje,"Nuevo Algoritmo--");
+	if(general.algo->algo==0){
+		strcat(mensaje,"SRDF--");
+		puts("Se ha elegido usar el Algoritmo SRDF.");
+	}
+	else {
+		strcat(mensaje,"RR-Q=");
+		itoa(general.algo->algo,numero,10);
+		strcat(mensaje,numero);
+		strcat(mensaje,"--");
+		printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
+	}
+	//extern remDist;
+	//if (remDist==-1){
+		general.algo->remainDist=(temp.data-'0')*10;
+		printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
+		strcat(mensaje,"\t--Remaining Distance: ");
+		itoa(general.algo->remainDist,numero,10);
+		strcat(mensaje,numero);
+		strcat(mensaje,"--MODIFICADO");
+	/*}else{
+		strcat(mensaje,"\t--Remaining Distance: ");
+		itoa(general.algo->remainDist,numero,10);
+		strcat(mensaje,numero);
+		strcat(mensaje,"--SIN MODIFICAR");
+	}*/
+	log_info(general.logging.info,mensaje,"WARNING");
 }
 void modificarRetardo(answer temp,global general){
 	general.algo->retardo=temp.cont;
 	printf("El Retardo entre turnos ahora es de: %d\n\n",general.algo->retardo);
+	char mensaje[64],numero[12];
+	strcpy(mensaje,"Nuevo retardo entre turnos: ");
+	itoa(general.algo->retardo,numero,10);
+	strcat(mensaje,numero);
+	strcat(mensaje," mSeg--");
+	log_info(general.logging.info,mensaje,"WARNING");
 }
 
 void inicializar(nodoNivel*raiz,global*general){
@@ -189,7 +216,15 @@ int leerNovedad(global*tanda){
 		puts("Se ha conectado un jugador!!");
 		puts("Avisandole al nivel..");
 		sendAnswer(7,0,' ',tanda->cabecera->tandaRaiz->sym,(short)tanda->cabecera->nid);	//Le aviso al nivel que hay un nuevo jugador.
-		//respuesta=selectear2(NULL,1,tanda->cabecera->nid,*tanda);
+		char mensaje[64],numero[16],*string;
+		strcpy(mensaje,"Salida");
+		strcat(mensaje,"\t--Msg:7--Cont:0--Data:' '--Sym:");
+		string=ctos(tanda->cabecera->tandaRaiz->sym);
+		strcat(mensaje,string);
+		free(string);
+		strcat(mensaje,"--\t --Cliente:");
+		strcat(mensaje,tanda->cabecera->name);
+		log_info(tanda->logging.info,mensaje,"INFO");
 		respuesta=selectear(NULL,1,tanda->original,*(tanda->maxfd),tanda->cabecera->nid,*tanda);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
 		switch (respuesta){
 			case 1:puts("--El nivel ha dado el ok.--");
@@ -227,7 +262,7 @@ int leerNovedad(global*tanda){
 			strcat(mensaje,"--Socekt Nº:");
 			strcat(mensaje,numero);
 			strcat(mensaje,".");
-			log_trace(tanda->logging.warning,mensaje,"WARNING");
+			log_info(tanda->logging.info,mensaje,"WARNING");
 			break;
 			case -2:return -2;
 			break;
@@ -323,7 +358,7 @@ int modoDeRecuperacion(global tabla){
 	if(tabla.exe->player==NULL)return 1;
 	status=tabla.exe->player->pid;
 	usleep(300000);
-	log_trace(tabla.logging.warning,"Nivel reconectado.","WARNING");
+	log_info(tabla.logging.info,"Nivel reconectado.","INFO");
 	return status;
 }
 
@@ -401,7 +436,7 @@ int aLaMierdaConTodo(global tabla){
 	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
 	puts("Nos Vamos todos al carajo!");
-	log_trace(tabla.logging.error,"Nivel terminado por desconexion.","ERROR");
+	log_info(tabla.logging.info,"Nivel terminado por desconexion.","ERROR");
 	return -2;
 }
 bool muertePersonaje(int i,global tabla){
@@ -454,7 +489,7 @@ bool muertePersonaje(int i,global tabla){
 			chosen =true;
 		}
 	}
-	log_warning(tabla.logging.warning,mensaje,"WARNING");
+	log_info(tabla.logging.info,mensaje,"WARNING");
 	close(aux->pid);
 	free(aux);
 	puts("Personaje Completamente eliminado!!");
@@ -483,7 +518,7 @@ void matarPersonaje(char simbolo,global tabla){
 	dato[1]='\0';
 	dato[2]='-';
 	strcat(mensaje,dato);
-	log_trace(tabla.logging.info,mensaje,"INFO");
+	log_info(tabla.logging.info,mensaje,"INFO");
 	sendAnswer(8,0,' ',' ',aux->pid);
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
@@ -530,7 +565,7 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	strcat(mensaje,string);
 	free(string);
 	strcat(mensaje,"--");
-	log_warning(tabla.logging.warning,mensaje,"WARNING");
+	log_info(tabla.logging.info,mensaje,"WARNING");
 	puts("--CLI--\n");
 	return status;
 }
@@ -585,7 +620,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			strcpy(mensajeError,"Nº:");
 			strcat(mensajeError,numero);
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
-			log_error(tabla.logging.error,mensaje,"ERROR");
+			log_info(tabla.logging.info,mensaje,"ERROR");
 			exit(1);
 		}else{
 			printf("%d",i);
