@@ -9,6 +9,7 @@
 #define PLATAFORMA_H_
 
 #include <commons/collections/list.h>
+#include <commons/config.h>
 #include <theGRID/sockets.h>
 #include <theGRID/general.h>
 #include <theGRID/cadenas.h>
@@ -43,5 +44,9 @@ typedef struct tnodoNivel{
 /* Crea una tanda vacia con el argumento
  * apuntando a la cabeza de la lista
  */void crearTanda(nuevo**);
+pthread_t cargarOrquestador(char *path);
+int puertoPlataforma( t_config * cfgPlataforma);
+char * pathKoopaPlataforma( t_config * cfgPlataforma);
+char * pathScriptPlataforma( t_config * cfgPlataforma);
 
 #endif /* PLATAFORMA_H_ */
