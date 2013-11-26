@@ -20,7 +20,15 @@ int main(int argc, char *argv[]){
 	newArchLogInfo(PROGRAMA);
 	newArchLogError(PROGRAMA);
 
-	pthread_t id_orquest = cargadorOrquestador(argv[1]);
+	infoOrquestador registroOrquestador;
+	t_list *listaNiveles = list_create();
+
+	registroOrquestador.cfg = argv[1];
+	registroOrquestador.listaNiveles = listaNiveles;
+	printf("CFG_PATH: %s\n", registroOrquestador.cfg);
+
+	int defaultDistance = cargarRemainingDistance(argv[1]);
+	pthread_t id_orquest = hiloGRID(orquestador,(void*)&registroOrquestador);
 
 	if(id_orquest == -1){
 		puts("Hubo un error en la carga");
@@ -28,80 +36,24 @@ int main(int argc, char *argv[]){
 	};
 	pthread_join(id_orquest,NULL);
 
-	loguearInfo("--PLTAFORMA--Proceso Orquestador finalizado");
-	puts("--PLTAFORMA--Proceso Orquestador finalizado");
+	loguearInfo("--PLATAFORMA--Proceso Orquestador finalizado");
+	puts("--PLATAFORMA--Proceso Orquestador finalizado");
 	loguearInfo("Cerrando logs...");
 	cerrarLogs();
 	return 0;
 }
 
-pthread_t cargarOrquestador(char *path){
-		t_config * cfgPlataforma;
-		infoOrquestador registroOrquestador;
-		cfgPlataforma=config_create(path);
+int cargarRemainingDistance(char * CFG_PATH){
+	t_config * cfgPlataforma = config_create(CFG_PATH);
+	int RD;
 
-		if (config_has_property(cfgPlataforma,"puerto")){
-			registroOrquestador.puerto=puertoPlataforma(cfgPlataforma);
-			printf("Puerto: %d.\n", registroOrquestador.puerto);
-		}else{
-			printf("Archivo de configuracion incompleto, falta campo: puerto\n");
-			return -1;
-		}
-
-		if (config_has_property(cfgPlataforma,"ip")){
-			registroOrquestador.ip=ipPlataforma(cfgPlataforma);
-			printf("IP: %s.\n", registroOrquestador.ip);
-		}else{
-			printf("Archivo de configuracion incompleto, falta campo: ip\n");
-			return -1;
-		}
-
-		if (config_has_property(cfgPlataforma,"koopa")){
-			registroOrquestador.koopa=pathKoopaPlataforma(cfgPlataforma);
-			printf("Path de koopa: %s.\n", registroOrquestador.koopa);
-		}else{
-			printf("Archivo de configuracion incompleto, falta campo: koopa\n");
-			return -1;
-		}
-
-		if (config_has_property(cfgPlataforma,"script")){
-			registroOrquestador.script=pathScriptPlataforma(cfgPlataforma);
-			printf("Path del script: %s.\n", registroOrquestador.script);
-		}else{
-			printf("Archivo de configuracion incompleto, falta campo: script\n");
-			return -1;
-		}
-
-		if (config_has_property(cfgPlataforma,"remainingDistance")){
-			registroOrquestador.remainingDistance=rdPlataforma(cfgPlataforma);
-			printf("Remaining Distance Default: %d.\n", registroOrquestador.remainingDistance);
-		}else{
-			printf("Archivo de configuracion incompleto, falta campo: remainingDistance\n");
-			return -1;
-		}
-
-		t_list *listaNiveles = list_create();
-		registroOrquestador.listaNiveles = listaNiveles;
-		pthread_t id_orquest = id_orquest=hiloGRID(orquestador,(void*)&registroOrquestador);
-		return id_orquest;
-};
-
-int puertoPlataforma( t_config * cfgPlataforma){
-	return config_get_int_value(cfgPlataforma,"puerto");
-}
-
-int rdPlataforma( t_config * cfgPlataforma){
-	return config_get_int_value(cfgPlataforma,"remainingDistance");
-}
-
-char * pathKoopaPlataforma( t_config * cfgPlataforma){
-	return config_get_string_value(cfgPlataforma,"koopa");
-}
-
-char * pathScriptPlataforma( t_config * cfgPlataforma){
-	return config_get_string_value(cfgPlataforma,"script");
-}
-
-char * ipPlataforma( t_config * cfgPlataforma){
-	return config_get_string_value(cfgPlataforma,"ip");
+	if (config_has_property(cfgPlataforma,"remainingDistance")){
+		RD = config_get_int_value(cfgPlataforma,"remainingDistance");
+		printf("Remaining Distance Default: %d.\n", RD);
+	}else{
+		printf("Archivo de configuracion incompleto, falta campo: remainingDistance\n");
+		exit(0);
+	}
+	config_destroy(cfgPlataforma);
+	return RD;
 }

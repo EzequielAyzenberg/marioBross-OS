@@ -25,13 +25,17 @@ typedef struct{
 /* Registro que necesito el orquestador
  * al ser llamado por la plataforma
  */typedef struct tinfoOrquestador{
-	 int puerto;
 	 t_list *listaNiveles;
+	 char * cfg;
+ }infoOrquestador;
+
+ /* Registro del archivo del orquestador
+  */typedef struct{
 	 char * ip;
 	 char * koopa;
 	 char * script;
-	 int remainingDistance;
- }infoOrquestador;
+	 int puerto;
+ }cfgOrquestador;
 
 void cerrarTodo(int);
 void borrarTodoNivel(void*);
@@ -54,5 +58,11 @@ void matarHilos(t_list* hilosPlanificadores);
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script);
 int selectGRID_orquestador(int fdmax, fd_set original, int tiempo);
 void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles, char * koopa, char * script);
+
+cfgOrquestador cargarOrquestador(char *path);
+int puertoPlataforma( t_config * cfgPlataforma);
+char * pathKoopaPlataforma( t_config * cfgPlataforma);
+char * pathScriptPlataforma( t_config * cfgPlataforma);
+char * ipPlataforma( t_config * cfgPlataforma);
 
 #endif /* ORQUESTADOR_H_ */
