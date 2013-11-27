@@ -1,7 +1,4 @@
-
-
 #include"Planificador.h"
-
 
 #define LOCAL_LOG "/home/utnso/GRIDLogs/"
 #define muestreo false
@@ -47,6 +44,8 @@ int atenderJugador(global*);
 logs crearLogs(nodoNivel*);
 void cerrarLogging(global);
 
+extern int defaultRD;
+
 void *planificador (void *parametro){
 	puts("\nHola mundo!!--Yo planifico.");
 	nodoNivel*raiz=(nodoNivel*)parametro;
@@ -80,6 +79,7 @@ void *planificador (void *parametro){
 		general.logging=logueo;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
+	printf("El RD actual es %d\n",defaultRD);
 	inicializar(raiz,&general);
 	short respuesta;
 	while (1){
@@ -132,7 +132,10 @@ void _each_Personaje(void*jug){
 
 void modificarAlgoritmo(answer temp,global general){
 	general.algo->algo=temp.cont;
-	general.algo->remainDist=(temp.data-'0')*10;
+	if(defaultRD == -1)
+		general.algo->remainDist=(temp.data-'0')*10;
+	else
+		general.algo->remainDist = defaultRD;
 	if(general.algo->algo==0)puts("Se ha elegido usar el Algoritmo SRDF.");
 	else printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
 	printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
@@ -893,14 +896,3 @@ void cerrarLogging(global tabla){
 	log_destroy(tabla.logging.trace);
 	log_destroy(tabla.logging.warning);
 }
-
-
-
-
-
-
-
-
-
-
-

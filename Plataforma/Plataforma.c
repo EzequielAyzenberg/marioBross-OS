@@ -5,6 +5,7 @@
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"
 
+int defaultRD;
 
 int main(int argc, char *argv[]){
 					//Carga la IP de destino y el puerto puestos a la hora de ejecutar el programa.
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]){
 	registroOrquestador.listaNiveles = listaNiveles;
 	printf("CFG_PATH: %s\n", registroOrquestador.cfg);
 
-	int defaultDistance = cargarRemainingDistance(argv[1]);
+	defaultRD = cargarRemainingDistance(argv[1]);
 	pthread_t id_orquest = hiloGRID(orquestador,(void*)&registroOrquestador);
 
 	if(id_orquest == -1){
