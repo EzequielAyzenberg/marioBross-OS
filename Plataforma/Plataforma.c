@@ -6,14 +6,16 @@
 #define PROGRAMA "PLATAFORMA"
 
 int defaultRD;
+t_list *listaNiveles;
+char * CFG_PATH;
 
 int main(int argc, char *argv[]){
-					//Carga la IP de destino y el puerto puestos a la hora de ejecutar el programa.
-	int puerto;
 	if(argc==1){
 		puts("Uso: pasar por argumento el path del .cfg");
 		return 0;
 	};
+
+	listaNiveles = list_create();
 
 	newArchLogWarning(PROGRAMA);
 	newArchLogTrace(PROGRAMA);
@@ -21,15 +23,11 @@ int main(int argc, char *argv[]){
 	newArchLogInfo(PROGRAMA);
 	newArchLogError(PROGRAMA);
 
-	infoOrquestador registroOrquestador;
-	t_list *listaNiveles = list_create();
-
-	registroOrquestador.cfg = argv[1];
-	registroOrquestador.listaNiveles = listaNiveles;
-	printf("CFG_PATH: %s\n", registroOrquestador.cfg);
+	CFG_PATH = argv[1];
+	printf("CFG_PATH: %s\n", CFG_PATH);
 
 	defaultRD = cargarRemainingDistance(argv[1]);
-	pthread_t id_orquest = hiloGRID(orquestador,(void*)&registroOrquestador);
+	pthread_t id_orquest = hiloGRID(orquestador,NULL);
 
 	if(id_orquest == -1){
 		puts("Hubo un error en la carga");

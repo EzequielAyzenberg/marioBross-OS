@@ -19,7 +19,6 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-
 bool finalizar;
 
 /* Nodos de la lista NOVEDADES */
@@ -38,9 +37,6 @@ typedef struct tnodoNivel{
 	int cantJugadores;
 	pthread_t idHilo;
 }nodoNivel;
-
-
-
 
 /* Crea una tanda vacia con el argumento
  * apuntando a la cabeza de la lista

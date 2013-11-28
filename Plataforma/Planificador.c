@@ -99,8 +99,8 @@ void *planificador (void *parametro){
 		respuesta=asignarRecursos(&general);
 		if (respuesta==-2) break;
 		//puts("Devolviendo Recursos");
-		respuesta=devolverRecursos(&general);
-		if (respuesta==-2) break;
+	//	respuesta=devolverRecursos(&general);
+	//	if (respuesta==-2) break;
 		//puts("Atendiendo al jugador");
 		respuesta=atenderJugador(&general);
 		if (respuesta==-2) break;
@@ -695,14 +695,19 @@ int asignarRecursos(global*tabla){
 	void intentarAsignar(void*paquete){
 		t_player*jugador;
 		jugador=(t_player*)paquete;
-		puts("Pidiendole recurso al nivel.");
-		sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
-		respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
-		if (respuesta==-1)return;
-		if (respuesta==-2){
-			status=-2;
-			return;
-		}
+		if(jugador!=NULL){
+			puts("Pidiendole recurso al nivel.");
+			printf("%c\n",jugador->data.recsol);
+			printf("%c\n",jugador->sym);
+			sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
+			puts("Entrando a selectear.");
+			respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
+			if (respuesta==-1)return;
+			if (respuesta==-2){
+				status=-2;
+				return;
+			}
+		}else return;
 		t_stack*recnuevo;
 		recnuevo=(t_stack*)malloc(sizeof(t_stack));
 		recnuevo->recurso=jugador->data.recsol;
@@ -758,11 +763,13 @@ void movimiento(global*tabla,answer aux){
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
 	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-3)return;
+	if (tabla->exe->player!=NULL){
 	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
-	tabla->playing=false;
-	if(tabla->exe->rem_cuantum!=0){
-		if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
-		else tabla->exe->rem_cuantum--;
+		tabla->playing=false;
+		if(tabla->exe->rem_cuantum!=0){
+			if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
+			else tabla->exe->rem_cuantum--;
+		}
 	}
 }
 void dormirJugador(t_player*jugador,t_list*dormidos){
@@ -797,9 +804,11 @@ void ubicacion(answer aux,global tabla){
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
 	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-3)return;
-	sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
-	tabla.playing=false;
-	tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
+	if (tabla.exe->player!=NULL){
+		sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
+		tabla.playing=false;
+		tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
+	}
 }
 void recurso(global*tabla,answer aux){
 	if(aux.cont==0) ubicacion(aux,*tabla);
