@@ -96,13 +96,13 @@ void *planificador (void *parametro){
 				respuesta=interrupcion(general.cabecera->nid,0,&temp,general);
 			}
 		}else loggearListas(general);
-		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
-		if (respuesta==-2) break;
 		respuesta=asignarRecursos(&general);
 		if (respuesta==-2) break;
 	//	respuesta=devolverRecursos(&general);
 	//	if (respuesta==-2) break;
 		respuesta=atenderJugador(&general);
+		if (respuesta==-2) break;
+		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		usleep((general.algo->retardo)*1000);
 	}
