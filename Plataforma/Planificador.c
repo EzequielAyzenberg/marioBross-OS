@@ -280,7 +280,7 @@ bool comparator(void*anterior, void*actual){
 	if(ant->sym<act->sym)return true;
 	else return false;
 }
-void reordenar(t_list*ready,int RR){
+void reordenar(t_list*ready,int RR){mm
 	if (RR!=0)puts("--Planificación Round Robins => Sin Reordenar--");
 	else{
 		puts("--Planificación SRDF => Reordenando..--");

@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 	int listener,fdmax,newfd;
 	FD_ZERO(&master);
 	FD_ZERO(&readfds);				//Se setean a 0 ambas estructuras.
-	listener=listenGRID(puerto);		//Se deja el Listener escucha
+	listener=listenGRID(puerto,NULL);		//Se deja el Listener escucha
 	FD_SET(listener,&master);			//Se agrega al Listener a la lista maestra.
 	fdmax = listener;
 	while(1){

@@ -1,109 +1,159 @@
-==5059== Memcheck, a memory error detector
-==5059== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==5059== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==5059== Command: ./Plataforma
-==5059== Parent PID: 2594
-==5059== 
---5059-- 
---5059-- Valgrind options:
---5059--    --suppressions=/usr/lib/valgrind/debian-libc6-dbg.supp
---5059--    -v
---5059--    --log-file=problemas.log
---5059--    --leak-check=full
---5059-- Contents of /proc/version:
---5059--   Linux version 3.5.0-41-generic (buildd@batsu) (gcc version 4.7.2 (Ubuntu/Linaro 4.7.2-2ubuntu1) ) #64-Ubuntu SMP Wed Sep 11 15:40:48 UTC 2013
---5059-- Arch and hwcaps: X86, x86-sse1-sse2
---5059-- Page sizes: currently 4096, max supported 4096
---5059-- Valgrind library directory: /usr/lib/valgrind
---5059-- Reading syms from /lib/i386-linux-gnu/ld-2.15.so (0x4000000)
---5059--   Considering /lib/i386-linux-gnu/ld-2.15.so ..
---5059--   .. CRC mismatch (computed e3398cb0 wanted 236b4260)
---5059--   Considering /usr/lib/debug/lib/i386-linux-gnu/ld-2.15.so ..
---5059--   .. CRC is valid
---5059-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma (0x8048000)
---5059-- Reading syms from /usr/lib/valgrind/memcheck-x86-linux (0x38000000)
---5059--   Considering /usr/lib/valgrind/memcheck-x86-linux ..
---5059--   .. CRC mismatch (computed 1ec895f5 wanted ee7c0008)
---5059--    object doesn't have a symbol table
---5059--    object doesn't have a dynamic symbol table
---5059-- Reading suppressions file: /usr/lib/valgrind/debian-libc6-dbg.supp
---5059-- Reading suppressions file: /usr/lib/valgrind/default.supp
-==5059== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-5059-by-utnso-on-???
-==5059== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-5059-by-utnso-on-???
-==5059== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-5059-by-utnso-on-???
-==5059== 
-==5059== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==5059== don't want to do, unless you know exactly what you're doing,
-==5059== or are doing some strange experiment):
-==5059==   /usr/lib/valgrind/../../bin/vgdb --pid=5059 ...command...
-==5059== 
-==5059== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==5059==   /path/to/gdb ./Plataforma
-==5059== and then give GDB the following command
-==5059==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=5059
-==5059== --pid is optional if only one valgrind process is running
-==5059== 
---5059-- REDIR: 0x40182e0 (strlen) redirected to 0x380552b4 (???)
---5059-- REDIR: 0x4018060 (index) redirected to 0x3805528f (???)
---5059-- Reading syms from /usr/lib/valgrind/vgpreload_core-x86-linux.so (0x4025000)
---5059--   Considering /usr/lib/valgrind/vgpreload_core-x86-linux.so ..
---5059--   .. CRC mismatch (computed 653f7e0c wanted 326ec8e5)
---5059--    object doesn't have a symbol table
---5059-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so (0x4029000)
---5059--   Considering /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so ..
---5059--   .. CRC mismatch (computed 919ad9e6 wanted fadf83d3)
---5059--    object doesn't have a symbol table
---5059-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so (0x4034000)
---5059-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so (0x403c000)
---5059-- Reading syms from /lib/i386-linux-gnu/libpthread-2.15.so (0x4051000)
---5059--   Considering /lib/i386-linux-gnu/libpthread-2.15.so ..
---5059--   .. CRC mismatch (computed 01567a82 wanted f8f252c4)
---5059--   Considering /usr/lib/debug/lib/i386-linux-gnu/libpthread-2.15.so ..
---5059--   .. CRC is valid
---5059-- Reading syms from /lib/i386-linux-gnu/libc-2.15.so (0x406c000)
---5059--   Considering /lib/i386-linux-gnu/libc-2.15.so ..
---5059--   .. CRC mismatch (computed 3d29d361 wanted 3b11973a)
---5059--   Considering /usr/lib/debug/lib/i386-linux-gnu/libc-2.15.so ..
---5059--   .. CRC is valid
---5059-- REDIR: 0x40ea010 (strnlen) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40eb560 (strncasecmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40e9f00 (strlen) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40e9340 (strcat) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40ea0b0 (strncmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40e9760 (strcmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40eb510 (strcasecmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40ea100 (strncpy) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40e9820 (strcpy) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40eaf70 (memmove) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40e9550 (index) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x40eb030 (memset) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x4103050 (strstr) redirected to 0x402556d (_vgnU_ifunc_wrapper)
---5059-- REDIR: 0x4102c90 (__GI_strstr) redirected to 0x402fb70 (strstr)
---5059-- REDIR: 0x40ea1b0 (__GI_strrchr) redirected to 0x402ce10 (__GI_strrchr)
---5059-- REDIR: 0x40e9f50 (__GI_strlen) redirected to 0x402d2a0 (__GI_strlen)
---5059-- REDIR: 0x40e5d80 (malloc) redirected to 0x402caf5 (malloc)
---5059-- REDIR: 0x40e6da0 (calloc) redirected to 0x402b555 (calloc)
---5059-- REDIR: 0x41a04b0 (__memset_sse2) redirected to 0x402f420 (memset)
---5059-- REDIR: 0x40ec880 (strchrnul) redirected to 0x402f760 (strchrnul)
---5059-- REDIR: 0x40e6260 (free) redirected to 0x402be81 (free)
---5059-- REDIR: 0x40f08c0 (__strcpy_ssse3) redirected to 0x402d2c0 (strcpy)
-==5059== Thread 2:
-==5059== Invalid write of size 1
-==5059==    at 0x40385B6: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==5059==    by 0x403D550: intToString (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
-==5059==    by 0x80494D5: orquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==5059==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==5059==    by 0x415ADDD: clone (clone.S:130)
-==5059==  Address 0x4218c02 is 0 bytes after a block of size 2 alloc'd
-==5059==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==5059==    by 0x403D533: intToString (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
-==5059==    by 0x80494D5: orquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==5059==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==5059==    by 0x415ADDD: clone (clone.S:130)
-==5059== 
---5059-- REDIR: 0x40f0740 (__strlen_sse2_bsf) redirected to 0x402d280 (strlen)
---5059-- REDIR: 0x40fbe80 (__strcat_ssse3) redirected to 0x402cf60 (strcat)
---5059-- REDIR: 0x40e6310 (realloc) redirected to 0x402cba4 (realloc)
---5059-- REDIR: 0x40e9880 (__GI_strcpy) redirected to 0x402d390 (__GI_strcpy)
---5059-- REDIR: 0x40e97b0 (__GI_strcmp) redirected to 0x402de80 (__GI_strcmp)
---5059-- REDIR: 0x40ec7b0 (__GI___rawmemchr) redirected to 0x402f7b0 (__GI___rawmemchr)
+==7228== Memcheck, a memory error detector
+==7228== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==7228== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==7228== Command: ./Plataforma /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/config.cfg
+==7228== Parent PID: 2594
+==7228== 
+--7228-- 
+--7228-- Valgrind options:
+--7228--    --suppressions=/usr/lib/valgrind/debian-libc6-dbg.supp
+--7228--    -v
+--7228--    --log-file=problemas.log
+--7228--    --leak-check=full
+--7228-- Contents of /proc/version:
+--7228--   Linux version 3.5.0-41-generic (buildd@batsu) (gcc version 4.7.2 (Ubuntu/Linaro 4.7.2-2ubuntu1) ) #64-Ubuntu SMP Wed Sep 11 15:40:48 UTC 2013
+--7228-- Arch and hwcaps: X86, x86-sse1-sse2
+--7228-- Page sizes: currently 4096, max supported 4096
+--7228-- Valgrind library directory: /usr/lib/valgrind
+--7228-- Reading syms from /lib/i386-linux-gnu/ld-2.15.so (0x4000000)
+--7228--   Considering /lib/i386-linux-gnu/ld-2.15.so ..
+--7228--   .. CRC mismatch (computed e3398cb0 wanted 236b4260)
+--7228--   Considering /usr/lib/debug/lib/i386-linux-gnu/ld-2.15.so ..
+--7228--   .. CRC is valid
+--7228-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma (0x8048000)
+--7228-- Reading syms from /usr/lib/valgrind/memcheck-x86-linux (0x38000000)
+--7228--   Considering /usr/lib/valgrind/memcheck-x86-linux ..
+--7228--   .. CRC mismatch (computed 1ec895f5 wanted ee7c0008)
+--7228--    object doesn't have a symbol table
+--7228--    object doesn't have a dynamic symbol table
+--7228-- Reading suppressions file: /usr/lib/valgrind/debian-libc6-dbg.supp
+--7228-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==7228== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-7228-by-utnso-on-???
+==7228== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-7228-by-utnso-on-???
+==7228== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-7228-by-utnso-on-???
+==7228== 
+==7228== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==7228== don't want to do, unless you know exactly what you're doing,
+==7228== or are doing some strange experiment):
+==7228==   /usr/lib/valgrind/../../bin/vgdb --pid=7228 ...command...
+==7228== 
+==7228== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==7228==   /path/to/gdb ./Plataforma
+==7228== and then give GDB the following command
+==7228==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=7228
+==7228== --pid is optional if only one valgrind process is running
+==7228== 
+--7228-- REDIR: 0x40182e0 (strlen) redirected to 0x380552b4 (???)
+--7228-- REDIR: 0x4018060 (index) redirected to 0x3805528f (???)
+--7228-- Reading syms from /usr/lib/valgrind/vgpreload_core-x86-linux.so (0x4025000)
+--7228--   Considering /usr/lib/valgrind/vgpreload_core-x86-linux.so ..
+--7228--   .. CRC mismatch (computed 653f7e0c wanted 326ec8e5)
+--7228--    object doesn't have a symbol table
+--7228-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so (0x4029000)
+--7228--   Considering /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so ..
+--7228--   .. CRC mismatch (computed 919ad9e6 wanted fadf83d3)
+--7228--    object doesn't have a symbol table
+--7228-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so (0x4034000)
+--7228-- Reading syms from /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so (0x403c000)
+--7228-- Reading syms from /lib/i386-linux-gnu/libpthread-2.15.so (0x4051000)
+--7228--   Considering /lib/i386-linux-gnu/libpthread-2.15.so ..
+--7228--   .. CRC mismatch (computed 01567a82 wanted f8f252c4)
+--7228--   Considering /usr/lib/debug/lib/i386-linux-gnu/libpthread-2.15.so ..
+--7228--   .. CRC is valid
+--7228-- Reading syms from /lib/i386-linux-gnu/libc-2.15.so (0x406c000)
+--7228--   Considering /lib/i386-linux-gnu/libc-2.15.so ..
+--7228--   .. CRC mismatch (computed 3d29d361 wanted 3b11973a)
+--7228--   Considering /usr/lib/debug/lib/i386-linux-gnu/libc-2.15.so ..
+--7228--   .. CRC is valid
+--7228-- REDIR: 0x40ea010 (strnlen) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40eb560 (strncasecmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40e9f00 (strlen) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40e9340 (strcat) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40ea0b0 (strncmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40e9760 (strcmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40eb510 (strcasecmp) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40ea100 (strncpy) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40e9820 (strcpy) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40eaf70 (memmove) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40e9550 (index) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x40eb030 (memset) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x4103050 (strstr) redirected to 0x402556d (_vgnU_ifunc_wrapper)
+--7228-- REDIR: 0x4102c90 (__GI_strstr) redirected to 0x402fb70 (strstr)
+--7228-- REDIR: 0x40ea1b0 (__GI_strrchr) redirected to 0x402ce10 (__GI_strrchr)
+--7228-- REDIR: 0x40e5d80 (malloc) redirected to 0x402caf5 (malloc)
+--7228-- REDIR: 0x40e9f50 (__GI_strlen) redirected to 0x402d2a0 (__GI_strlen)
+--7228-- REDIR: 0x40e6da0 (calloc) redirected to 0x402b555 (calloc)
+--7228-- REDIR: 0x40e6310 (realloc) redirected to 0x402cba4 (realloc)
+--7228-- REDIR: 0x40e6260 (free) redirected to 0x402be81 (free)
+--7228-- REDIR: 0x40f0740 (__strlen_sse2_bsf) redirected to 0x402d280 (strlen)
+--7228-- REDIR: 0x41ac030 (__strncmp_ssse3) redirected to 0x402d720 (strncmp)
+--7228-- REDIR: 0x40ec880 (strchrnul) redirected to 0x402f760 (strchrnul)
+--7228-- REDIR: 0x41aabc0 (__strcmp_ssse3) redirected to 0x402de30 (strcmp)
+==7228== Thread 2:
+==7228== Invalid read of size 1
+==7228==    at 0x402DE4A: strcmp (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==7228==    by 0x403DB10: listenGRID (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
+==7228==    by 0x80495E3: orquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==7228==    by 0x415ADDD: clone (clone.S:130)
+==7228==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==7228== 
+==7228== 
+==7228== Process terminating with default action of signal 11 (SIGSEGV)
+==7228==  Access not within mapped region at address 0x0
+==7228==    at 0x402DE4A: strcmp (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==7228==    by 0x403DB10: listenGRID (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
+==7228==    by 0x80495E3: orquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==7228==    by 0x415ADDD: clone (clone.S:130)
+==7228==  If you believe this happened as a result of a stack
+==7228==  overflow in your program's main thread (unlikely but
+==7228==  possible), you can try to increase the size of the
+==7228==  main thread stack using the --main-stacksize= flag.
+==7228==  The main thread stack size used in this run was 8388608.
+==7228== 
+==7228== HEAP SUMMARY:
+==7228==     in use at exit: 2,502 bytes in 38 blocks
+==7228==   total heap usage: 77 allocs, 39 frees, 3,827 bytes allocated
+==7228== 
+==7228== Searching for pointers to 38 not-freed blocks
+==7228== Checked 8,490,900 bytes
+==7228== 
+==7228== Thread 1:
+==7228== 136 bytes in 1 blocks are possibly lost in loss record 21 of 27
+==7228==    at 0x402B629: calloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==7228==    by 0x4011304: allocate_dtv (dl-tls.c:297)
+==7228==    by 0x4011AAB: _dl_allocate_tls (dl-tls.c:461)
+==7228==    by 0x4058470: pthread_create@@GLIBC_2.1 (allocatestack.c:571)
+==7228==    by 0x403D5E1: hiloGRID (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
+==7228==    by 0x8049478: cargarOrquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228==    by 0x804926C: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228== 
+==7228== 294 (8 direct, 286 indirect) bytes in 1 blocks are definitely lost in loss record 22 of 27
+==7228==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==7228==    by 0x40377C6: config_create (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==7228==    by 0x80492DF: cargarOrquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228==    by 0x804926C: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228== 
+==7228== LEAK SUMMARY:
+==7228==    definitely lost: 8 bytes in 1 blocks
+==7228==    indirectly lost: 286 bytes in 15 blocks
+==7228==      possibly lost: 136 bytes in 1 blocks
+==7228==    still reachable: 2,072 bytes in 21 blocks
+==7228==         suppressed: 0 bytes in 0 blocks
+==7228== Reachable blocks (those to which a pointer was found) are not shown.
+==7228== To see them, rerun with: --leak-check=full --show-reachable=yes
+==7228== 
+==7228== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+==7228== 
+==7228== 1 errors in context 1 of 3:
+==7228== Thread 2:
+==7228== Invalid read of size 1
+==7228==    at 0x402DE4A: strcmp (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==7228==    by 0x403DB10: listenGRID (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug/libBiblioteca.so)
+==7228==    by 0x80495E3: orquestador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==7228==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==7228==    by 0x415ADDD: clone (clone.S:130)
+==7228==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==7228== 
+==7228== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
