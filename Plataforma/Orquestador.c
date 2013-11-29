@@ -39,10 +39,9 @@ void *orquestador(void* infoAux){
 	FD_SET(socketOrquestador, &original_FD);
 
 	while(1){
-		if(finalizar)finalizarTodo(listaNiveles,ganadores,hilosPlanificadores,socketOrquestador);
+		if(finalizar)finalizarTodo(ganadores,hilosPlanificadores,socketOrquestador);
 		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
-			if(chequearKoopa(ganadores))
-				puts("chequearkoopa true");
+			if(chequearKoopa(ganadores))puts("chequearkoopa true");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
@@ -76,7 +75,7 @@ void borrarTodoNivel(void*temp){
 	free(nivel);
 }
 
-void finalizarTodo(t_list*niveles,t_list*ganadores,t_list*planificadores,int sock){
+void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
     loguearInfo("Matando hilos planificadores");
     puts("Matando hilos planificadores");
 	matarHilos(planificadores);
@@ -84,11 +83,11 @@ void finalizarTodo(t_list*niveles,t_list*ganadores,t_list*planificadores,int soc
 	puts("Limpiando las listas");
 	list_clean(planificadores);
 	list_clean(ganadores);
-	list_iterate(niveles,borrarTodoNivel);
-	list_clean(niveles);
-	free(planificadores);
-	free(ganadores);
-	free(niveles);
+	list_iterate(listaNiveles,borrarTodoNivel);
+	list_clean(listaNiveles);
+	list_destroy(planificadores);
+	list_destroy(ganadores);
+	list_destroy(listaNiveles);
 	pthread_exit(NULL);
 }
 
@@ -258,9 +257,10 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	    _exit(1);
 	}else{ //Orquestador
 	    wait(&status);
+	    puts("NININININININI");
 	    loguearInfo("Proceso Koopa finalizado");
-	    finalizar=true;
 	}
+	finalizar=true;
 	return;
 };
 

@@ -39,7 +39,6 @@ typedef struct{
 
 void cerrarTodo(int);
 void borrarTodoNivel(void*);
-void finalizarTodo(t_list*,t_list*,t_list*,int);
 void *orquestador(void* info);
 void  nivelNuevo(handshake handshakeNivel,  int socketNivel, t_list* hilosPlanificadores);
 void clienteNuevo(handshake handshakeJugador,int socketJugador);
@@ -58,6 +57,7 @@ void matarHilos(t_list* hilosPlanificadores);
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script);
 int selectGRID_orquestador(int fdmax, fd_set original, int tiempo);
 void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, char * koopa, char * script);
+void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock);
 
 cfgOrquestador cargarOrquestador(char *path);
 int puertoPlataforma( t_config * cfgPlataforma);
