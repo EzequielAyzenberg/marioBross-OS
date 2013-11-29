@@ -1,7 +1,4 @@
-
-
 #include"Planificador.h"
-
 
 #define LOCAL_LOG "/home/utnso/GRIDLogs/"
 #define muestreo false
@@ -47,6 +44,8 @@ int atenderJugador(global*);
 logs crearLogs(nodoNivel*);
 void cerrarLogging(global);
 
+extern int defaultRD;
+
 void *planificador (void *parametro){
 	puts("\nHola mundo!!--Yo planifico.");
 	nodoNivel*raiz=(nodoNivel*)parametro;
@@ -80,6 +79,7 @@ void *planificador (void *parametro){
 		general.logging=logueo;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
+	printf("El RD actual es %d\n",defaultRD);
 	inicializar(raiz,&general);
 	short respuesta;
 	while (1){
@@ -99,8 +99,8 @@ void *planificador (void *parametro){
 		respuesta=asignarRecursos(&general);
 		if (respuesta==-2) break;
 		//puts("Devolviendo Recursos");
-		respuesta=devolverRecursos(&general);
-		if (respuesta==-2) break;
+	//	respuesta=devolverRecursos(&general);
+	//	if (respuesta==-2) break;
 		//puts("Atendiendo al jugador");
 		respuesta=atenderJugador(&general);
 		if (respuesta==-2) break;
@@ -145,20 +145,20 @@ void modificarAlgoritmo(answer temp,global general){
 		strcat(mensaje,"--");
 		printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
 	}
-	//extern remDist;
-	//if (remDist==-1){
+	if(defaultRD == -1){
 		general.algo->remainDist=(temp.data-'0')*10;
 		printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
 		strcat(mensaje,"\t--Remaining Distance: ");
 		itoa(general.algo->remainDist,numero,10);
 		strcat(mensaje,numero);
 		strcat(mensaje,"--MODIFICADO");
-	/*}else{
+	}else{
+	  	general.algo->remainDist = defaultRD;
 		strcat(mensaje,"\t--Remaining Distance: ");
 		itoa(general.algo->remainDist,numero,10);
 		strcat(mensaje,numero);
 		strcat(mensaje,"--SIN MODIFICAR");
-	}*/
+	}
 	log_info(general.logging.info,mensaje,"WARNING");
 }
 void modificarRetardo(answer temp,global general){
@@ -233,6 +233,7 @@ int leerNovedad(global*tanda){
 			crearStruct(tanda->cabecera,temp,tanda->algo->remainDist);
 			cargarAlFinal(temp,tanda->ready,tanda->algo->algo); //Carga al final y reordena si es necesario.
 			borrarNodo(tanda->cabecera);
+//puts("Nodo Borrado!");
 			FD_SET(temp->pid,tanda->original);
 			if(temp->pid>*(tanda->maxfd))*(tanda->maxfd)=temp->pid;
 			tanda->cabecera->cantJugadores++;		//Si el nivel da el ok, entonces aumento la cantidad de jugadores activos.
@@ -249,7 +250,7 @@ int leerNovedad(global*tanda){
 			numero[1]='\0';
 			strcat(mensaje,numero);
 			strcat(mensaje,".");
-			log_trace(tanda->logging.info,mensaje,"INFO");
+			log_info(tanda->logging.info,mensaje,"INFO");
 			break;
 			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
 			sendAnswer(-1,0,' ',' ',tanda->cabecera->tandaRaiz->pid);
@@ -280,7 +281,7 @@ bool comparator(void*anterior, void*actual){
 	if(ant->sym<act->sym)return true;
 	else return false;
 }
-void reordenar(t_list*ready,int RR){mm
+void reordenar(t_list*ready,int RR){
 	if (RR!=0)puts("--Planificación Round Robins => Sin Reordenar--");
 	else{
 		puts("--Planificación SRDF => Reordenando..--");
@@ -727,19 +728,26 @@ int asignarRecursos(global*tabla){
 	void intentarAsignar(void*paquete){
 		t_player*jugador;
 		jugador=(t_player*)paquete;
-		puts("Pidiendole recurso al nivel.");
-		sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
-		respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
-		if (respuesta==-1)return;
-		if (respuesta==-2){
-			status=-2;
-			return;
+		if(jugador!=NULL){
+			puts("Pidiendole recurso al nivel.");
+			printf("%c\n",jugador->data.recsol);
+			printf("%c\n",jugador->sym);
+			sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
+			puts("Entrando a selectear.");
+			respuesta=selectear(&temp,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla);
+			if (respuesta==-1)return;
+			if (respuesta==-2){
+				status=-2;
+				return;
+			}
+		}else return;
+		if(jugador!=NULL){
+			t_stack*recnuevo;
+			recnuevo=(t_stack*)malloc(sizeof(t_stack));
+			recnuevo->recurso=jugador->data.recsol;
+			darInstancia(jugador,recnuevo,tabla);
+			puts("Instancia concedida.");
 		}
-		t_stack*recnuevo;
-		recnuevo=(t_stack*)malloc(sizeof(t_stack));
-		recnuevo->recurso=jugador->data.recsol;
-		darInstancia(jugador,recnuevo,tabla);
-		puts("Instancia concedida.");
 	}
 	list_iterate(tabla->sleeps,intentarAsignar);
 	if(status==-2)return -2;
@@ -790,11 +798,13 @@ void movimiento(global*tabla,answer aux){
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
 	if(selectear(&aux,1,tabla->original,*(tabla->maxfd),tabla->cabecera->nid,*tabla)==-3)return;
+	if (tabla->exe->player!=NULL){
 	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
-	tabla->playing=false;
-	if(tabla->exe->rem_cuantum!=0){
-		if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
-		else tabla->exe->rem_cuantum--;
+		tabla->playing=false;
+		if(tabla->exe->rem_cuantum!=0){
+			if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
+			else tabla->exe->rem_cuantum--;
+		}
 	}
 }
 void dormirJugador(t_player*jugador,t_list*dormidos){
@@ -829,9 +839,11 @@ void ubicacion(answer aux,global tabla){
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
 	if(selectear(&aux,2,tabla.original,*(tabla.maxfd),tabla.cabecera->nid,tabla)==-3)return;
-	sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
-	tabla.playing=false;
-	tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
+	if (tabla.exe->player!=NULL){
+		sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
+		tabla.playing=false;
+		tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
+	}
 }
 void recurso(global*tabla,answer aux){
 	if(aux.cont==0) ubicacion(aux,*tabla);
@@ -928,14 +940,3 @@ void cerrarLogging(global tabla){
 	log_destroy(tabla.logging.trace);
 	log_destroy(tabla.logging.warning);
 }
-
-
-
-
-
-
-
-
-
-
-

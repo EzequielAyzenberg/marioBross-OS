@@ -5,93 +5,58 @@
  *      Author: EzequielAyzenberg
  */
 
-/* Lista de Eventos tipo Analisis de Sistemas xD
- *
- * --DELEGACION DE CONEXIONES--
- *
- * RecepcionDeConexiones    --OK--
- * ClienteNuevo				--OK--
- * ClienteViejo             --OK--
- * CrearHiloPlanificador    --OK--
- * NivelNuevo				--OK--
- * ValidarNiver xD          --OK--
- * CrearNuevaTanda          --OK--
- *
- * --KOOPA--
- *
- * ChequearKoopa			--OK--
- * ActivarKoopa				--OK--
- * MatarHilos				--OK--
- */
-
 #include"Orquestador.h"
 #include"Planificador.h"
-
 #define PROGRAMA "ORQUESTADOR"
-
 
 void cerrarTodo(int senial){
 	finalizar=true;
+	signal(SIGINT,SIG_DFL);
 }
 
+extern char * CFG_PATH;
+extern t_list *listaNiveles;
+
 void *orquestador(void* infoAux){
-	// Desrefereciacion de la info que recibe el orquestador
-	infoOrquestador *infoBis=(infoOrquestador*)infoAux;
-	infoOrquestador info= *infoBis;
 	signal(SIGINT,cerrarTodo);
 	finalizar=false;
 
+	cfgOrquestador cfg = cargarOrquestador(CFG_PATH);
+
+	printf("--ORQUESTADOR-- IP: %s.\n", cfg.ip);
+	printf("--ORQUESTADOR-- Puerto: %d.\n", cfg.puerto);
+	printf("--ORQUESTADOR-- Path de koopa: %s.\n", cfg.koopa);
+	printf("--ORQUESTADOR-- Path del script: %s.\n", cfg.script);
+
 	int socketOrquestador, socketIngresante;
 	handshake nuevoHandshake;
-	t_list *listaNiveles = info.listaNiveles;
 	t_list *ganadores = list_create();
 	t_list *hilosPlanificadores = list_create();
-
-	socketOrquestador = listenGRID(info.puerto,info.ip);
-
+	socketOrquestador = listenGRID(cfg.puerto,cfg.ip);
 	fd_set original_FD;
 	FD_ZERO(&original_FD);
 	FD_SET(socketOrquestador, &original_FD);
 
-	while(1){
-		if(finalizar)finalizarTodo(listaNiveles,ganadores,hilosPlanificadores,socketOrquestador);
+	while(!finalizar){
 		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
-			if(chequearKoopa(ganadores,listaNiveles))
-				puts("chequearkoopa true");
-			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles,info.koopa,info.script);
+			if(chequearKoopa(ganadores))puts("chequearkoopa true");
+			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
 			socketIngresante = acceptGRID(socketOrquestador);
 			loguearInfo(concat("Se escuchara al socket numero ",intToString(socketIngresante)));
 			switch (recvHandshake(&nuevoHandshake,socketIngresante)){
 			 case -1: close(socketIngresante); break;
-			 case  0: nivelNuevo(nuevoHandshake,socketIngresante,listaNiveles,hilosPlanificadores); break;
-			 case  1: clienteNuevo(nuevoHandshake,socketIngresante,listaNiveles); break;
+			 case  0: nivelNuevo(nuevoHandshake,socketIngresante,hilosPlanificadores); break;
+			 case  1: clienteNuevo(nuevoHandshake,socketIngresante); break;
 			 case  2: clienteViejo(nuevoHandshake,ganadores); break;
 			 default: loguearWarning("Protocolo de mensaje no encontrado"); close(socketIngresante);
 			}
-			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,listaNiveles,info.koopa,info.script);
+			puts("--ORQUESTADOR-- Escuchando de vuelta...");
+			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
-		/* Podes sacar los comentarios, el codigo de abajo te ayuda
-		// a vigilar algunas cosas en tiempo de ejecucion
-		//
-		printf("list_is_empty ganadores %d\n",list_is_empty(ganadores));
-		printf("list_size ganadores %d\n",list_size(ganadores));
-		t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
-		printf("list_size nivelesConJugadores %d\n",list_size(nivelesConJugadores));
-		void _esplayar_nodo(nodoNivel *nivel){
-			printf("\nNombreNivel: %s\n",nivel->name);
-			printf("--Nid: %d\n",nivel->nid);
-			printf("--CantJugadores: %d\n\n",nivel->cantJugadores);
-			return;
-		};
-		if( list_size(listaNiveles) > 0 )
-		list_map(listaNiveles, (void*)_esplayar_nodo);
-		if(true == chequearKoopa(ganadores,listaNiveles))
-			activarKoopa(hilosPlanificadores);
-		*/
-		puts("--ORQUESTADOR-- Escuchando de vuelta..");
 	}
+	finalizarTodo(ganadores,hilosPlanificadores,socketOrquestador);
 	return 0;
 }
 
@@ -109,7 +74,7 @@ void borrarTodoNivel(void*temp){
 	free(nivel);
 }
 
-void finalizarTodo(t_list*niveles,t_list*ganadores,t_list*planificadores,int sock){
+void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
     loguearInfo("Matando hilos planificadores");
     puts("Matando hilos planificadores");
 	matarHilos(planificadores);
@@ -117,21 +82,21 @@ void finalizarTodo(t_list*niveles,t_list*ganadores,t_list*planificadores,int soc
 	puts("Limpiando las listas");
 	list_clean(planificadores);
 	list_clean(ganadores);
-	list_iterate(niveles,borrarTodoNivel);
-	list_clean(niveles);
-	free(planificadores);
-	free(ganadores);
-	free(niveles);
+	list_iterate(listaNiveles,borrarTodoNivel);
+	list_clean(listaNiveles);
+	list_destroy(planificadores);
+	list_destroy(ganadores);
+	list_destroy(listaNiveles);
 	pthread_exit(NULL);
 }
 
-void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, t_list* listaNiveles, char * koopa, char * script){
-	if(!chequearKoopa(ganadores,listaNiveles))return;
+void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, char * koopa, char * script){
+	if(!chequearKoopa(ganadores))return;
 	int cont;
 	loguearWarning("--ORQUESTADOR-- Esperando jugadores entrantes...");
 	for(cont = 5; cont >= 0; cont--){
 		loguearWarning(concat("--ORQUESTADOR-- Se ejecutara Koopa en: ",intToString(cont)));
-		if(!chequearKoopa(ganadores,listaNiveles)){
+		if(!chequearKoopa(ganadores)){
 			loguearInfo("--ORQUESTADOR-- Se recibio un jugador. Koopa interrumpido");
 			return;
 		};
@@ -188,7 +153,7 @@ void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores){
 	list_add(hilosPlanificadores,nuevoPlanificador);
 };
 
-void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores){
+void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* hilosPlanificadores){
 	nuevo* tandaActual;//=(nuevo*)malloc(sizeof(nuevo));
 	loguearInfo(concat("Nivel conectado: ",handshakeNivel.name));
 	nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
@@ -203,7 +168,7 @@ void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* listaNiveles
 	loguearInfo("Hilo planificador creado");
 };
 
-nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
+nodoNivel *buscarNivelEnSistema(char nombreNivel[13]){
 	//Declaracion de una funcion de forma temporal y dinamica
 	bool _is_Nivel(nodoNivel *nivel) {
 	if(strcmp(nivel->name,nombreNivel)==0)return true;
@@ -213,24 +178,24 @@ nodoNivel *buscarNivelEnSistema(char nombreNivel[13],t_list* listaNiveles){
 	return aux;
 }
 
-nodoNivel* validarNivel(char nombreNivel[13],t_list* listaNiveles){
-	nodoNivel *aux = buscarNivelEnSistema( nombreNivel,listaNiveles );
+nodoNivel* validarNivel(char nombreNivel[13]){
+	nodoNivel *aux = buscarNivelEnSistema(nombreNivel);
 	if(aux == NULL) return NULL;
 	return aux;
 };
 
-void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* listaNiveles, t_list* hilosPlanificadores){
-	nodoNivel *nodoNIVEL = buscarNivelEnSistema(handshakeNivel.name, listaNiveles);
+void nivelNuevo(handshake handshakeNivel,int socketNivel, t_list* hilosPlanificadores){
+	nodoNivel *nodoNIVEL = buscarNivelEnSistema(handshakeNivel.name);
 	if(nodoNIVEL == NULL){
-		agregarNivel(handshakeNivel,socketNivel,listaNiveles, hilosPlanificadores);
+		agregarNivel(handshakeNivel,socketNivel, hilosPlanificadores);
 		return;
 	};
 	reconectarNivel(nodoNIVEL,socketNivel);
 	return;
 };
 
-void clienteNuevo(handshake handshakeJugador,int socketJugador, t_list* listaNiveles){
-	nodoNivel *aux = validarNivel(handshakeJugador.name,listaNiveles);
+void clienteNuevo(handshake handshakeJugador,int socketJugador){
+	nodoNivel *aux = validarNivel(handshakeJugador.name);
 	if( aux == NULL){
 		loguearInfo("--ORQUESTADOR-- Jugador rechazado por nivel inexistenete");
 		responderError(socketJugador);
@@ -256,7 +221,7 @@ bool _hay_jugadores(nodoNivel *nivel) {
 	return nivel->cantJugadores > 0;
 	}
 
-bool chequearKoopa(t_list *ganadores, t_list* listaNiveles){
+bool chequearKoopa(t_list *ganadores){
 	if( list_is_empty(ganadores) > 0 ) return false;
 	t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
 	if( list_size(nivelesConJugadores) > 0 ) return false;
@@ -282,15 +247,74 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	}
 	if(child_pid == 0){ //koopa
 		loguearInfo("Ejecutando koopa...");
-	    execlp(koopa, "koopa", "/home/utnso/temp",script, (char *)0);
+	    puts("Ejecutando Koopa...");
+
+		execlp(koopa, "koopa", "/home/utnso/temp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	    perror("execl() failure!\n");
 	    loguearError("exect fallido");
 	    _exit(1);
 	}else{ //Orquestador
 	    wait(&status);
+	    puts("NININININININI");
 	    loguearInfo("Proceso Koopa finalizado");
-	    finalizar=true;
 	}
+	finalizar=true;
 	return;
 };
+
+cfgOrquestador cargarOrquestador(char *path){
+		t_config * cfgPlataforma;
+		cfgOrquestador registroOrquestador;
+		cfgPlataforma=config_create(path);
+
+		if (config_has_property(cfgPlataforma,"puerto")){
+			registroOrquestador.puerto=puertoPlataforma(cfgPlataforma);
+			printf("Puerto: %d.\n", registroOrquestador.puerto);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: puerto\n");
+			exit(0);
+		}
+
+		if (config_has_property(cfgPlataforma,"ip")){
+			registroOrquestador.ip=ipPlataforma(cfgPlataforma);
+			printf("IP: %s.\n", registroOrquestador.ip);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: ip\n");
+			exit(0);
+		}
+
+		if (config_has_property(cfgPlataforma,"koopa")){
+			registroOrquestador.koopa=pathKoopaPlataforma(cfgPlataforma);
+			printf("Path de koopa: %s.\n", registroOrquestador.koopa);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: koopa\n");
+			exit(0);
+		}
+
+		if (config_has_property(cfgPlataforma,"script")){
+			registroOrquestador.script=pathScriptPlataforma(cfgPlataforma);
+			printf("Path del script: %s.\n", registroOrquestador.script);
+		}else{
+			printf("Archivo de configuracion incompleto, falta campo: script\n");
+			exit(0);
+		}
+
+		return registroOrquestador;
+};
+
+int puertoPlataforma( t_config * cfgPlataforma){
+	return config_get_int_value(cfgPlataforma,"puerto");
+}
+
+char * pathKoopaPlataforma( t_config * cfgPlataforma){
+	return config_get_string_value(cfgPlataforma,"koopa");
+}
+
+char * pathScriptPlataforma( t_config * cfgPlataforma){
+	return config_get_string_value(cfgPlataforma,"script");
+}
+
+char * ipPlataforma( t_config * cfgPlataforma){
+	return config_get_string_value(cfgPlataforma,"ip");
+}
