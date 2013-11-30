@@ -9,6 +9,8 @@
 #define PLATAFORMA_H_
 
 #include <commons/collections/list.h>
+#include <commons/config.h>
+#include <commons/log.h>
 #include <theGRID/sockets.h>
 #include <theGRID/general.h>
 #include <theGRID/cadenas.h>
@@ -16,7 +18,6 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdbool.h>
-
 
 bool finalizar;
 
@@ -37,11 +38,9 @@ typedef struct tnodoNivel{
 	pthread_t idHilo;
 }nodoNivel;
 
-
-
-
 /* Crea una tanda vacia con el argumento
  * apuntando a la cabeza de la lista
  */void crearTanda(nuevo**);
+   int cargarRemainingDistance(char * CFG_PATH);
 
 #endif /* PLATAFORMA_H_ */

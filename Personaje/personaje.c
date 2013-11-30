@@ -3,12 +3,15 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <commons/config.h>
+#include <commons/string.h>
 #include <commons/collections/list.h>
 #include <theGRID/general.h>
 #include <theGRID/sockets.h>
+#include <theGRID/cadenas.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <signal.h>
 
 
 //Variables
@@ -48,7 +51,7 @@ typedef struct recurso{
 }trecurso;
 
 
-int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,limboOK=0;
+int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,finalizados=0,repetir=1,repeticiones=0,limboOK=0,hilosMuertos=0;
 tpersonaje personaje;
 char *recurso;
 t_list *lista,*listaRecursos;
@@ -76,33 +79,93 @@ int gestionTurno(t_list*,int,int*,int*,char,int*,int*);
 int instanciaConc(t_list*,int*);
 int movimientoConc(int,int*,int*);
 void cierraHilos();
-
+void aumentaVida(int);
+void restaVida(int);
+void finDeNivel(int,char);
 
 
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
+	char* intentarlo;
+
+	signal(SIGUSR1,aumentaVida);
+	signal(SIGTERM,restaVida);
+
 	path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
-	personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
-	if(personajeCargado==-1){
-		printf("Error al cargar configuracion del personaje.\n");
-		return 0;
-	}
-	while(personaje.miniPersonajes!=NULL){
-		//Recibe señales
-		if(ganado==personaje.planDeNiveles->elements_count){
-			printf("Ganamos! venga koopa, te hago frente\n");
-			cierraHilos();
+
+	while(repetir==1){
+		puts("Listos para arrancar?");
+		sleep(1);
+		personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
+		if(personajeCargado==-1){
+			printf("Error al cargar configuracion del personaje.\n");
+			list_destroy(personaje.miniPersonajes);
 			return 0;
 		}
+		while(personaje.miniPersonajes!=NULL && personaje.vidas>0){
+			if(personaje.planDeNiveles->elements_count==ganado){
+				int sockfdAux;
+				printf("Ganamos! venga koopa, te hago frente\n");
+				printf("Conectando con plataforma\n");
+				sockfdAux=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
+				printf("Avisando a plataforma que soy un groso\n");
+				sendHandshake(2,"",personaje.simbolo,(short)sockfdAux);
+				printf("Ahora si, koopa, dame a la princesa\n");
+				//list_destroy(personaje.miniPersonajes);
+				//QUIZAS DEBERIA ESPERAR A VER COMO SALIO KOOPA.
+				exit(0);
+			}
+			if(personaje.planDeNiveles->elements_count==finalizados){
+				exit(1);//TAMBIEN DEBERIA DESTRUIR TODOS LOS NODOS!!!
+			}
+		}
+		while( personaje.miniPersonajes->elements_count > hilosMuertos);
+		{/* No hacer nada hasta que los hilos terminen */}
+			list_clean(personaje.miniPersonajes);
+			sleep(2);
+			printf("\nSe han agotado todas las vidas, desea reintentarlo?: S/N: ");
+			leecad(intentarlo,1);
+			if(!strcmp(intentarlo,"S")){ //hay que ponerle el admiracion xq el strcmp te lo devuelve al revez
+				repeticiones++;
+				hilosMuertos = 0;
+				printf("\nEste es tu reintento numero: %d\n",repeticiones);
+			}else repetir=0;
 	}
-	if(limboOK==1){
-		printf("Caimos al limbo de muerte.\n");
-		return 0;
-	}
+	cierraHilos();
 	printf("Perdimos :(\n");
+	list_destroy(personaje.miniPersonajes);
 	return 0;
 };
+
+/*
+ * Avisa que termino el nivel al orquestador
+ * Cierra el socket
+ *
+ */
+
+void finDeNivel(int sockfd,char simbolo){
+	//sendAnswer(8,0,0,simbolo, sockfd); //Mensaje de fin de nivel--QUE CARAJO MANDANDOME UN 8!!!!
+	close(sockfd);
+}
+
+/*
+ * Suma una vida al personaje
+ *
+ */
+
+void aumentaVida(int senial){
+	printf("Se recibio la señal: %d",senial);
+	personaje.vidas++;
+}
+
+/*
+ * Resta una vida al personaje
+ */
+void restaVida(int senial){
+	printf("Se recibio la señal: %d",senial);
+	personaje.vidas--;
+}
 
 /*
  * Retorna true si el recurso fue agarrado
@@ -143,12 +206,25 @@ void *jugar (void *minipersonaje){
 	info.posY=0;
 	printf("Soy la preOrden\n");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
+
+		if(personaje.vidas<=0){
+			printf("Estoy muerto\n");
+			estoyMuerto(&info);
+			hilosMuertos ++;
+			return 0;
+		}
+
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
+		printf("Vidas: %d\n",personaje.vidas);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
 				printf("Estoy muerto\n");
 				estoyMuerto(&info);
+				if(personaje.vidas<=0){
+					hilosMuertos ++;
+					return 0;
+				}
 				break;
 			case 1: //Instancia o movimiento concedido
 				printf("Es instancia?: %d\n",*esInstancia);
@@ -168,12 +244,16 @@ void *jugar (void *minipersonaje){
 				break;
 			case 0: //Limbo
 				printf("Se fue la plataforma, panico panico!\n");
-				cierraHilos();
+				//cierraHilos();
+				finDeNivel(info.orquestadorSocket,info.simbolo);
+				finalizados++;
 				return 0;
+				break;
 		}
 	}
 	printf("Ganamos bitches\n");
 	ganado++;
+	finDeNivel(info.orquestadorSocket,info.simbolo);
 	return NULL;
 };
 
@@ -227,7 +307,8 @@ int cargaPersonaje(char *argv[]){
 		char *orquestadorAux,*aux1,*aux2;
 		orquestadorAux=orquestador(cfgPersonaje);
 		aux1=(strchr(orquestadorAux,':'))+1;
-		aux2=(char*)string_substring_until(orquestadorAux,strlen(orquestadorAux)-strlen(((aux1)))-1);
+		int monto=strlen(orquestadorAux)-strlen(aux1)-1;
+		aux2=(char*)string_substring_until((char*)orquestadorAux,monto);
 		personaje.orquestadorPort=atoi(aux1);
 		strcpy(personaje.orquestadorIP,aux2);
 		printf("El orquestador esta en la IP: %s y el puerto: %i.\n", personaje.orquestadorIP,personaje.orquestadorPort);
@@ -392,14 +473,6 @@ int cantidadElementosArray(char **array){
 }
 
 /*
- * Devuelve true si el hilo corresponde a ese miniPersonaje
- */
-
-bool _esElHiloBuscado(thilo miniPersonaje){
-	return miniPersonaje.nivel==nivelAux;
-}
-
-/*
  * Baja una vida en el padre
  * Retorna a la posicion 0,0
  * Reinicia sus recursos
@@ -411,27 +484,40 @@ int estoyMuerto(tminipersonaje *info){
 	trecurso *aux;
 	answer conexionSaliente;
 	aux=(trecurso*)malloc(sizeof(trecurso));
+
 	personaje.vidas-=1;
 	printf("Vidas restantes: %d\n",personaje.vidas);
 	info->posX=0;
 	info->posY=0;
-	for(i=0;info->planDeRecursos->elements_count;i++){
+	printf("Reseteada la posicion del personaje\n");
+	for(i=0;(info->planDeRecursos->elements_count)>i;i++){
+		printf("Levantando el recurso %d\n",i);
 		aux=(trecurso*)list_get(info->planDeRecursos,i);
+		printf("Restaurando recurso\n");
 		aux->checked=false;
+		aux->posX=-1; //tenemos que resetear la posicion para evitar errores locos D:
+		aux->posY=-1;
 	}
+	printf("Cerrando socket del hilo\n");
 	close(info->orquestadorSocket);
+	printf("Socket cerrado\n");
 	if(personaje.vidas>0){
+		printf("Reconectando personaje \n");
 		sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
+		printf("Conectado. Avisando a los chamigos que volvi\n");
 		sendHandshake(1,info->nivel,info->simbolo,(short)sockfd);
+		printf("Esperando seniales de vida\n");
 		recvAnswer(&conexionSaliente,sockfd);
 		if(conexionSaliente.msg==-1){
 			printf("Conexion imposible de realizar\n");
 			return -1;
 		}
+		printf("Volvimos al juego, yeah\n");
 		info->orquestadorSocket=sockfd;
 	}else{
-		nivelAux=info->nivel;
-		list_remove_by_condition(personaje.miniPersonajes, (void*)_esElHiloBuscado);
+		printf("No hay mas vidas, limpiando lista de mini personajes\n");
+		//list_clean(personaje.miniPersonajes);
+		//repetir=1;
 	}
 	return 0;
 }
@@ -444,7 +530,7 @@ int estoyMuerto(tminipersonaje *info){
 int actualizarRP(t_list*planDeRecursos,int posicion){
 		trecurso *recursoSiguiente;
 		int posX,posY;
-		recursoSiguiente=(trecurso*)malloc(sizeof(trecurso));
+		//recursoSiguiente=(trecurso*)malloc(sizeof(trecurso));  NO HACER MALLOC SI VAS A CAMBIARLO POR OTRA DIRECCION!!
 		recursoSiguiente=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
 		posX=posicion/100;
 		printf("Posicion en X: %d\n",posX);

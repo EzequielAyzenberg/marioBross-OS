@@ -2,26 +2,20 @@
 
 #include"Orquestador.h"
 
-
-#define MYPORT 2600
-#define MYIP "127.0.0.1"
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"
 
+int defaultRD;
+t_list *listaNiveles;
+char * CFG_PATH;
 
 int main(int argc, char *argv[]){
-					//Carga la IP de destino y el puerto puestos a la hora de ejecutar el programa.
-	int puerto;
-	switch (argc){
-	case 2:
-		puerto=atoi(argv[1]);
-		printf("Se usara el siguiente puerto:\t%d\n", puerto);
-		break;
-	default:
-		puerto=MYPORT;
-		puts("Se usara el puerto estandar.");
-		break;
-	}
+	if(argc==1){
+		puts("Uso: pasar por argumento el path del .cfg");
+		return 0;
+	};
+
+	listaNiveles = list_create();
 
 	newArchLogWarning(PROGRAMA);
 	newArchLogTrace(PROGRAMA);
@@ -29,18 +23,35 @@ int main(int argc, char *argv[]){
 	newArchLogInfo(PROGRAMA);
 	newArchLogError(PROGRAMA);
 
-	t_list *listaNiveles = list_create();
-	pthread_t id_orquest;
-	infoOrquestador registroOrquestador;
-	registroOrquestador.puerto = puerto;
-	registroOrquestador.listaNiveles = listaNiveles;
+	CFG_PATH = argv[1];
+	printf("CFG_PATH: %s\n", CFG_PATH);
+	defaultRD = cargarRemainingDistance(argv[1]);
+	pthread_t id_orquest = hiloGRID(orquestador,NULL);
 
-	id_orquest= hiloGRID(orquestador,(void*)&registroOrquestador);
+	if(id_orquest == -1){
+		puts("Hubo un error en la carga");
+		return -1;
+	};
 	pthread_join(id_orquest,NULL);
 
-	loguearInfo("--PLTAFORMA--Proceso Orquestador finalizado");
-	puts("--PLTAFORMA--Proceso Orquestador finalizado");
+	loguearInfo("--PLATAFORMA--Proceso Orquestador finalizado");
+	puts("--PLATAFORMA--Proceso Orquestador finalizado");
 	loguearInfo("Cerrando logs...");
 	cerrarLogs();
 	return 0;
+}
+
+int cargarRemainingDistance(char * CFG_PATH){
+	t_config * cfgPlataforma = config_create(CFG_PATH);
+	int RD;
+
+	if (config_has_property(cfgPlataforma,"remainingDistance")){
+		RD = config_get_int_value(cfgPlataforma,"remainingDistance");
+		printf("Remaining Distance Default: %d.\n", RD);
+	}else{
+		printf("Archivo de configuracion incompleto, falta campo: remainingDistance\n");
+		exit(0);
+	}
+	config_destroy(cfgPlataforma);
+	return RD;
 }

@@ -15,4 +15,5 @@ EXECUTABLES :=
 SUBDIRS := \
 . \
 Extras \
+Extras/pruebaGrasa \
 

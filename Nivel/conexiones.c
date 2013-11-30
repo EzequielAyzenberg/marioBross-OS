@@ -145,7 +145,7 @@ void escucharPlanificador(datosConexiones *info){
 	watch=inotify_add_watch(fd,info->config->path,IN_MODIFY);
 	time.tv_sec = 1;
 	time.tv_usec = 0;
-	pthread_mutex_lock( &mutexDibujar);
+	pthread_mutex_lock(&mutexDibujar);
 
 	actualizarNivel(*info->listaRecursos,*info->listaEnemigos,*info->listaJugadoresActivos,info->config->nombre);
 

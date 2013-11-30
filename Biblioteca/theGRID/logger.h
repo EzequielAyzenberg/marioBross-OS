@@ -8,11 +8,11 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#define DIRECTORIO_LOG_TRACE "/home/utnso/errorTrace.txt"
-#define DIRECTORIO_LOG_DEBUG "/home/utnso/errorDebug.txt"
-#define DIRECTORIO_LOG_WARNING "/home/utnso/errorWarning.txt"
-#define DIRECTORIO_LOG_INFO "/home/utnso/errorInfo.txt"
-#define DIRECTORIO_LOG_ERROR "/home/utnso/errorFatalityError.txt"
+#define DIRECTORIO_LOG_TRACE "/home/utnso/GRIDLogs/errorTrace.txt"
+#define DIRECTORIO_LOG_DEBUG "/home/utnso/GRIDLogs/errorDebug.txt"
+#define DIRECTORIO_LOG_WARNING "/home/utnso/GRIDLogs/errorWarning.txt"
+#define DIRECTORIO_LOG_INFO "/home/utnso/GRIDLogs/errorInfo.txt"
+#define DIRECTORIO_LOG_ERROR "/home/utnso/GRIDLogs/errorFatalityError.txt"
 
 
 

@@ -260,8 +260,8 @@ int crearDirectorio(const char* path,GFile* inodo){
 	inodo[nodoLibre].state=2;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
-	//inodo[nodoLibre].m_date=111111;
-	//inodo[nodoLibre].c_date=111111;
+	inodo[nodoLibre].m_date=(uint64_t)1381272974;
+	inodo[nodoLibre].c_date=(uint64_t)1381272974;
 	inodo[nodoLibre].file_size=0;
 	
 	return 0;
@@ -310,7 +310,50 @@ int strlenTwo(char**str){
 	return i;
 }
 
-
+int crearArchivo(const char* path,GFile* inodo){
+	int numNodo;
+	int nodoPadre;
+	int nodoLibre;
+	int i;
+	char* pathPadre;
+	nodoLibre=0;
+	i=0;
+	
+	printf("la ruta que llego es: %s\n",path);
+	
+	numNodo=nodoByPath(path,inodo);
+	
+	printf("el resultado de nodobypath es: %d\n",numNodo);
+	if (numNodo!=FAIL) 
+	{
+		puts("entonces el archivo no existe\n");
+		inodo[nodoLibre].m_date=1381272974;
+	}
+	
+	else {
+	puts("pase a crear\n");
+	howIsMyFather((char*)path,&pathPadre);
+	printf("la ruta padre es: %s\n",pathPadre);
+	nodoPadre=nodoByPath(pathPadre,inodo);
+	printf("el resultado de nodobypath es: %d\n",nodoPadre);
+	while((inodo[nodoLibre].state!=0)&&(nodoLibre<1024))nodoLibre++;
+	
+	
+	printf("el primer nodo libre es: %d\n",nodoLibre);
+	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
+	//grabo
+	inodo[nodoLibre].state=1;
+	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
+	inodo[nodoLibre].parent_dir_block=nodoPadre;
+	inodo[nodoLibre].m_date=(uint64_t)1381272974;
+	inodo[nodoLibre].c_date=(uint64_t)1381272974;
+	inodo[nodoLibre].file_size=0;
+	
+	return 0;
+	}
+	
+	
+}
 
 
 

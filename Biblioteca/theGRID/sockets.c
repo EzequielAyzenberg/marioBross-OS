@@ -40,27 +40,24 @@ int connectGRID(int port,char *ipdest){
 	socket_addr.sin_port=htons(port);
 	socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
-	//Los mensajes probablemente se reemplacen con salidas al log.
-	//puts("\n--AUX--Estableciendo cenexion con el servidor..");
 	estado=connect(sockfd,(struct sockaddr *)&socket_addr,sizeof(struct sockaddr));
 	if (estado==-1)terminar(3,sockfd);
-	//puts("--AUX--Conexion realizada con exito!!\n");
 	return sockfd;
 }
 
-int listenGRID(int port){
+int listenGRID(int port,char *ipdest){
 
 	//Le pasas el puerto y el chabon te devuelve el socket escuchando.
-
+	//Optativo mandarle la ip o un NULL para que la elija solo.
 	int sock,estado;
 	struct sockaddr_in socket_addr;
 	sock=socket(AF_INET,SOCK_STREAM,0);
 	if (sock==-1) terminar(2,sock);
 	socket_addr.sin_family =AF_INET;
 	socket_addr.sin_port=htons(port);
-	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
+	if(strcmp(ipdest,"NULL")==0)	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
+	else socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
-	//Los mensajes probablemente se reemplacen con salidas al log.
 	int yes=1;
 	estado=setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yes,sizeof(int));
 	if (estado==-1)terminar(4,sock);
@@ -158,7 +155,10 @@ int recvHandshake(handshake *temp,int sockfd){
 		if(aux==5)terminar(1,sockfd);
 	}
 	//printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
+	if(estado==0){
+		temp->type=-1;
+		return -1; 	//Si el Cliente se desconecta antes de enviar el primer handshake, devuelve -1.
+	}
 	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->type;
 }
@@ -176,7 +176,13 @@ int recvAnswer(answer *temp,int sockfd){
 		aux++;
 		if(aux==5)terminar(1,sockfd);
 	}//printf("--AUX-------El estado es: %d-------\n",estado);
-	if(estado==0)return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
+	if(estado==0){
+		temp->msg=0;
+		temp->cont=0;
+		temp->data=' ';
+		temp->symbol=' ';
+		return 0;	//Si se detecta una desconexion entonces devuelve 0 como habitualmente hace el recv.
+	}
 	//puts("--AUX--Mensaje recibido satisfactoriamente!!\n");
 	return (int)temp->msg;
 }

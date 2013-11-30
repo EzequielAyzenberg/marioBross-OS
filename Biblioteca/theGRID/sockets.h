@@ -44,7 +44,7 @@ typedef struct typeAns answer;
 
 /* Le pasas el puerto y el chabon te devuelve
  * el socket escuchando.
- */int listenGRID(int);
+ */int listenGRID(int,char*);
 
 /* Le pasas el maxfd y la lista copia de fd_set
  * y te devuelve lo que el select, sin errores.
