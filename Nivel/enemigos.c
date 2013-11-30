@@ -536,7 +536,8 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 				}
 
 				recibirRecursoPersonaje(posPjs[numPj].id,listaCajas,listaJugadoresActivos);
-				list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje);
+				free(list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
+
 				//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));//CUIDADO CUANDO DOS ENEMIGOS MATAN A LA VEZ AL MISMO SEGMENTATION FAULT PONER SEMAFORO
 				sendAnswer(8,0,' ',posPjs[numPj].id,*socketPlataforma);
 				//printf("%d",*socketPlataforma);

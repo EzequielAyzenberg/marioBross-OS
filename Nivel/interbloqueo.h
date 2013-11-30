@@ -13,6 +13,7 @@ typedef struct estructuraInterbloqueo{
 	t_list *listaJugadoresMuertos;
 	t_list *listaJugadores;
 	int tiempoEspera;
+	short *socket;
 }infoInterbloqueo;
 
 void controlInterbloqueo(infoInterbloqueo *info);
