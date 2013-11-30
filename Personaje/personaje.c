@@ -51,7 +51,7 @@ typedef struct recurso{
 }trecurso;
 
 
-int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,finalizados=0,repetir=1,repeticiones=0,limboOK=0;
+int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,finalizados=0,repetir=1,repeticiones=0,limboOK=0,hilosMuertos=0;
 tpersonaje personaje;
 char *recurso;
 t_list *lista,*listaRecursos;
@@ -120,11 +120,15 @@ int main(int argc, char *argv[]) {
 				exit(1);//TAMBIEN DEBERIA DESTRUIR TODOS LOS NODOS!!!
 			}
 		}
-			printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
+		while( personaje.miniPersonajes->elements_count > hilosMuertos);
+		{/* No hacer nada hasta que los hilos terminen */}
 			list_clean(personaje.miniPersonajes);
+			sleep(2);
+			printf("\nSe han agotado todas las vidas, desea reintentarlo?: S/N: ");
 			leecad(intentarlo,1);
 			if(!strcmp(intentarlo,"S")){ //hay que ponerle el admiracion xq el strcmp te lo devuelve al revez
 				repeticiones++;
+				hilosMuertos = 0;
 				printf("\nEste es tu reintento numero: %d\n",repeticiones);
 			}else repetir=0;
 	}
@@ -202,6 +206,14 @@ void *jugar (void *minipersonaje){
 	info.posY=0;
 	printf("Soy la preOrden\n");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
+
+		if(personaje.vidas<=0){
+			printf("Estoy muerto\n");
+			estoyMuerto(&info);
+			hilosMuertos ++;
+			return 0;
+		}
+
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
 		printf("Vidas: %d\n",personaje.vidas);
@@ -209,7 +221,10 @@ void *jugar (void *minipersonaje){
 			case 8: //Estoy muerto
 				printf("Estoy muerto\n");
 				estoyMuerto(&info);
-				if(personaje.vidas<=0) return 0;
+				if(personaje.vidas<=0){
+					hilosMuertos ++;
+					return 0;
+				}
 				break;
 			case 1: //Instancia o movimiento concedido
 				printf("Es instancia?: %d\n",*esInstancia);
