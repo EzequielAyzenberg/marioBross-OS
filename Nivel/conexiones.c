@@ -12,11 +12,20 @@
 #include "cargador.h"
 #include <sys/inotify.h>
 #include "cargador.h"
+#include <signal.h>
+#include "personajes.h"
+#include <string.h>
 answer bufferAnswer;
-
+//int a=0;
 pthread_mutex_t mutexDibujar;
+/*void controlador(int signal){
+	int a=1;
+
+
+}*/
 
 void escucharPlanificador(datosConexiones *info){
+	int a=0;
 	nivelConfig bufferConfig;
 	bufferConfig.path=(char*)malloc(strlen(info->config->path)+1);
 	//strcpy(info.config->path,"hola");
@@ -39,6 +48,28 @@ void escucharPlanificador(datosConexiones *info){
 	FD_SET (info->socket, &active);
 
 	while(1){
+	if (a==1){
+		t_personaje *bufferPersonaje;
+		nivel_gui_terminar();
+			int i=0;
+			char msg[200];
+							char *itoas=malloc(1);
+							char *itoas2=malloc(1);
+							char *itoas3=malloc(1);
+			for (i=0;i<list_size(info->listaJugadoresActivos);i++){
+				bufferPersonaje=list_get(info->listaJugadoresActivos,i);
+				strcpy(msg,"SEÑAL: el pj num:");
+
+				strcat(msg,&bufferPersonaje->id);
+				strcat(msg,"quiere un:");
+
+				strcat(msg,&bufferPersonaje->recursoEspera);
+
+							loguearInfo(msg);
+			}
+			exit(0);
+	}
+	//signal(SIGINT,&controlador);
 	FD_ZERO (&active);
 	FD_SET (fd, &active);
 	FD_SET (info->socket, &active);
@@ -89,6 +120,7 @@ void escucharPlanificador(datosConexiones *info){
 	}
 
 	if(i==fd){
+		a=1;
 		cargarConfig(&bufferConfig);
 		if(info->config->algoritmo!=bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
 			*info->config=bufferConfig;

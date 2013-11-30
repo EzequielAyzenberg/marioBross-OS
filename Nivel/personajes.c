@@ -42,7 +42,21 @@ int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char 
 		else return -1;
 
 
-	}else  return -1;
+	}
+	else  {
+
+		bool _is_Personaje(t_personaje* pj2){
+									if(pj2->id==pj)return true;
+									return false;
+								}
+
+		bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
+		if(bufferPj!=NULL){
+			bufferPj->recursoEspera=recurso;
+			//printf("%c esta esperando una %c",bufferPj->id,bufferPj->recursoEspera);
+		}
+		return -1;
+	}
 
 
 }
@@ -103,6 +117,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 		bufferPj->id=id;
 		bufferPj->posx=x;
 		bufferPj->posy=y;
+		bufferPj->recursoEspera=' ';
 	bufferPj->recursos=list_create();
 
 	list_add(listaJugadoresActivos,bufferPj);

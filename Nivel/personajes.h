@@ -21,6 +21,7 @@ typedef struct infoPersonajes2{
 	int posy;
 	char id;
 	t_list *recursos;
+	char recursoEspera;
 }t_personaje;
 
 

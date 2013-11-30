@@ -18,10 +18,14 @@
 #include <theGRID/sockets.h>
 #include <theGRID/general.h>
 #include "semaforos.h"
+#include "interbloqueo.h"
+#include <signal.h>
 
 pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexMatarPersonaje =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexLog =PTHREAD_MUTEX_INITIALIZER;
+
+
 
 main(int argc, char *argv[]){
 	nivelConfig config;
@@ -52,6 +56,7 @@ main(int argc, char *argv[]){
 	t_list* listaJugadoresMuertos;
 	listaJugadoresActivos=list_create();//provisorio hasta que un proceso se encargue de crearla
 	listaJugadoresMuertos=list_create();//idem
+
 	//crearPersonaje(&listaJugadoresActivos,0,0,'V');
 	//crearPersonaje(&listaJugadoresActivos,10,10,'@');
 	//crearPersonaje(&listaJugadoresActivos,20,20,'F');
@@ -121,7 +126,13 @@ main(int argc, char *argv[]){
 
 //controlEnemigos(&infoParaEnemigos);
 
-
+infoInterbloqueo infoParaInterbloqueo;
+infoParaInterbloqueo.listaRecursos=config.listaCajas;
+infoParaInterbloqueo.listaJugadores=listaJugadoresActivos;
+infoParaInterbloqueo.listaJugadoresMuertos=listaJugadoresMuertos;
+infoParaInterbloqueo.tiempoEspera=config.intervaloDeadLock;
+pthread_t hiloInterbloqueo;
+pthread_create(&hiloInterbloqueo,NULL,(void*)&controlInterbloqueo,(void*)&infoParaInterbloqueo);
 handshakePlataforma(&datosConexiones);
 //while(1){
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa

@@ -1,28 +1,183 @@
-==7472== Memcheck, a memory error detector
-==7472== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==7472== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==7472== Command: ./nivel
-==7472== Parent PID: 7327
-==7472== 
-==7472== Syscall param socketcall.send(msg) points to uninitialised byte(s)
-==7472==    at 0x4085E88: send (socket.S:100)
-==7472==    by 0x804C5FD: handshakePlataforma (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
-==7472==    by 0x80495D4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
-==7472==  Address 0xbee61e35 is on thread 1's stack
-==7472== 
-==7472== 
-==7472== HEAP SUMMARY:
-==7472==     in use at exit: 56,324 bytes in 562 blocks
-==7472==   total heap usage: 361,668 allocs, 361,106 frees, 8,223,924 bytes allocated
-==7472== 
-==7472== LEAK SUMMARY:
-==7472==    definitely lost: 898 bytes in 40 blocks
-==7472==    indirectly lost: 500 bytes in 82 blocks
-==7472==      possibly lost: 952 bytes in 7 blocks
-==7472==    still reachable: 53,974 bytes in 433 blocks
-==7472==         suppressed: 0 bytes in 0 blocks
-==7472== Rerun with --leak-check=full to see details of leaked memory
-==7472== 
-==7472== For counts of detected and suppressed errors, rerun with: -v
-==7472== Use --track-origins=yes to see where uninitialised values come from
-==7472== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==11058== Memcheck, a memory error detector
+==11058== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==11058== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==11058== Command: ./nivel /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/Nivel1.cfg sd
+==11058== Parent PID: 2312
+==11058== 
+==11058== Syscall param socketcall.send(msg) points to uninitialised byte(s)
+==11058==    at 0x4085E88: send (socket.S:100)
+==11058==    by 0x804C915: handshakePlataforma (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804962B: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==  Address 0xbee92ef5 is on thread 1's stack
+==11058== 
+==11058== Thread 3:
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x8049701: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DACE: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x8049747: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DACE: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402D288: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x8049667: reverse (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x8049754: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DACE: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402D293: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x8049667: reverse (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x8049754: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DACE: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x8049701: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DAE6: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x8049747: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DAE6: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402D288: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x8049667: reverse (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x8049754: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DAE6: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402D293: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x8049667: reverse (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x8049754: itoa (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DAE6: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402CF8B: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402CF9D: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFBA: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFC3: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFC5: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFD3: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB29: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402CF8B: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB88: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Use of uninitialised value of size 4
+==11058==    at 0x402CF9D: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB88: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFBA: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB88: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFC3: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB88: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== Conditional jump or move depends on uninitialised value(s)
+==11058==    at 0x402CFD3: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==11058==    by 0x804DB88: detectarInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x804DC91: controlInterbloqueo (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+vex x86->IR: unhandled instruction bytes: 0xFF 0xFF 0x8B 0x8B
+==11058== 
+==11058== Process terminating with default action of signal 11 (SIGSEGV)
+==11058==  General Protection Fault
+==11058==    at 0x407D941: __pthread_initialize_minimal (nptl-init.c:430)
+==11058== 
+==11058== Process terminating with default action of signal 11 (SIGSEGV)
+==11058==  Bad permissions for mapped region at address 0x4088105
+==11058==    at 0x400E2CF: _dl_fixup (dl-machine.h:277)
+==11058==    by 0x401469F: _dl_runtime_resolve (dl-trampoline.S:37)
+==11058==    by 0x4176E85: ??? (syscall-template.S:82)
+==11058==    by 0x407ED4B: start_thread (pthread_create.c:308)
+==11058==    by 0x41ADD3D: clone (clone.S:130)
+==11058== 
+==11058== HEAP SUMMARY:
+==11058==     in use at exit: 54,310 bytes in 428 blocks
+==11058==   total heap usage: 762 allocs, 334 frees, 63,532 bytes allocated
+==11058== 
+==11058== LEAK SUMMARY:
+==11058==    definitely lost: 339 bytes in 15 blocks
+==11058==    indirectly lost: 111 bytes in 19 blocks
+==11058==      possibly lost: 272 bytes in 2 blocks
+==11058==    still reachable: 53,588 bytes in 392 blocks
+==11058==         suppressed: 0 bytes in 0 blocks
+==11058== Rerun with --leak-check=full to see details of leaked memory
+==11058== 
+==11058== For counts of detected and suppressed errors, rerun with: -v
+==11058== Use --track-origins=yes to see where uninitialised values come from
+==11058== ERROR SUMMARY: 39 errors from 20 contexts (suppressed: 0 from 0)
