@@ -7,6 +7,7 @@
 #include <commons/collections/list.h>
 #include <theGRID/general.h>
 #include <theGRID/sockets.h>
+#include <theGRID/cadenas.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -86,21 +87,23 @@ void finDeNivel(int,char);
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
-	char* intentarlo="";
+	char* intentarlo;
 
 	signal(SIGUSR1,aumentaVida);
 	signal(SIGTERM,restaVida);
 
+	path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
+
 	while(repetir==1){
-		repetir=0;
-		path="/home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje/mario.cfg"; //De prueba
+		puts("Listos para arrancar?");
+		sleep(1);
 		personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
 		if(personajeCargado==-1){
 			printf("Error al cargar configuracion del personaje.\n");
 			list_destroy(personaje.miniPersonajes);
 			return 0;
 		}
-		while(personaje.miniPersonajes!=NULL){
+		while(personaje.miniPersonajes!=NULL && personaje.vidas>0){
 			if(personaje.planDeNiveles->elements_count==ganado){
 				int sockfdAux;
 				printf("Ganamos! venga koopa, te hago frente\n");
@@ -117,17 +120,13 @@ int main(int argc, char *argv[]) {
 				exit(1);//TAMBIEN DEBERIA DESTRUIR TODOS LOS NODOS!!!
 			}
 		}
-		if(repetir==1){
 			printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
-			flush_in();
-			scanf("%s",intentarlo);
-			if(strcmp(intentarlo,"N")){
-				repetir=0;
-			}else{
+			list_clean(personaje.miniPersonajes);
+			leecad(intentarlo,1);
+			if(!strcmp(intentarlo,"S")){ //hay que ponerle el admiracion xq el strcmp te lo devuelve al revez
 				repeticiones++;
 				printf("\nEste es tu reintento numero: %d\n",repeticiones);
-			}
-		}
+			}else repetir=0;
 	}
 	cierraHilos();
 	printf("Perdimos :(\n");
@@ -210,6 +209,7 @@ void *jugar (void *minipersonaje){
 			case 8: //Estoy muerto
 				printf("Estoy muerto\n");
 				estoyMuerto(&info);
+				if(personaje.vidas<=0) return 0;
 				break;
 			case 1: //Instancia o movimiento concedido
 				printf("Es instancia?: %d\n",*esInstancia);
@@ -500,10 +500,9 @@ int estoyMuerto(tminipersonaje *info){
 		printf("Volvimos al juego, yeah\n");
 		info->orquestadorSocket=sockfd;
 	}else{
-		printf("No hay mas vidas, limpiando lista de mini personajes");
-		list_clean(personaje.miniPersonajes);
-		repetir=1;
-		return 0;
+		printf("No hay mas vidas, limpiando lista de mini personajes\n");
+		//list_clean(personaje.miniPersonajes);
+		//repetir=1;
 	}
 	return 0;
 }

@@ -256,7 +256,6 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	    _exit(1);
 	}else{ //Orquestador
 	    wait(&status);
-	    puts("NININININININI");
 	    loguearInfo("Proceso Koopa finalizado");
 	}
 	finalizar=true;
