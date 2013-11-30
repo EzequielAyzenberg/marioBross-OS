@@ -51,7 +51,9 @@ typedef struct recurso{
 }trecurso;
 
 
-int sockfd,socketEscucha,personajeCargado,nuevo,ganado=0,finalizados=0,repetir=1,repeticiones=0,limboOK=0,hilosMuertos=0;
+int sockfd,socketEscucha,personajeCargado,nuevo,
+	ganado=0,finalizados=0,repetir=1,repeticiones=0,
+	limboOK=0,hilosMuertos=0;
 tpersonaje personaje;
 char *recurso;
 t_list *lista,*listaRecursos;
@@ -59,8 +61,6 @@ pid_t pid;
 pthread_t hilo;
 char * path;
 char *nivelAux;
-
-
 
 //Prototipos
 int vidasPersonaje( t_config * cfgPersonaje);
@@ -87,7 +87,6 @@ void finDeNivel(int,char);
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
-	char* intentarlo;
 
 	signal(SIGUSR1,aumentaVida);
 	signal(SIGTERM,restaVida);
@@ -116,24 +115,40 @@ int main(int argc, char *argv[]) {
 				//QUIZAS DEBERIA ESPERAR A VER COMO SALIO KOOPA.
 				exit(0);
 			}
-			if(personaje.planDeNiveles->elements_count==finalizados){
-				exit(1);//TAMBIEN DEBERIA DESTRUIR TODOS LOS NODOS!!!
+			if(limboOK==1){
+				repetir=0;
+				break;
 			}
 		}
-		while( personaje.miniPersonajes->elements_count > hilosMuertos);
+
+		while(personaje.planDeNiveles->elements_count > hilosMuertos && limboOK==0);
 		{/* No hacer nada hasta que los hilos terminen */}
+
+		if(limboOK==0){
+			char* intentarlo;
 			list_clean(personaje.miniPersonajes);
 			sleep(2);
-			printf("\nSe han agotado todas las vidas, desea reintentarlo?: S/N: ");
-			leecad(intentarlo,1);
-			if(!strcmp(intentarlo,"S")){ //hay que ponerle el admiracion xq el strcmp te lo devuelve al revez
-				repeticiones++;
-				hilosMuertos = 0;
-				printf("\nEste es tu reintento numero: %d\n",repeticiones);
-			}else repetir=0;
+			bool esWeon=true;
+			while(esWeon){
+				printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
+				leecad(intentarlo,1);
+				switch(intentarlo[0]){
+				case 'S': repeticiones++;
+						  hilosMuertos = 0;
+						  printf("\nEste es tu reintento numero: %d\n",repeticiones);
+						  esWeon=false;
+						  break;
+				case 'N': repetir=0;
+					  	  printf("\nPerdimos :(\n");
+					  	  esWeon=false;
+					  	  break;
+				default:  puts("\n  NO SEA WEON Y PONGA BIEN 'S' o 'N'\n");
+						  break;
+				}
+			}
+		}else puts("El personaje se perdió en el limbo X$");
 	}
 	cierraHilos();
-	printf("Perdimos :(\n");
 	list_destroy(personaje.miniPersonajes);
 	return 0;
 };
@@ -246,7 +261,7 @@ void *jugar (void *minipersonaje){
 				printf("Se fue la plataforma, panico panico!\n");
 				//cierraHilos();
 				finDeNivel(info.orquestadorSocket,info.simbolo);
-				finalizados++;
+				limboOK=1;
 				return 0;
 				break;
 		}
