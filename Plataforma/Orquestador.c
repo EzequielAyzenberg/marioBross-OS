@@ -43,14 +43,18 @@ void *orquestador(void* infoAux){
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
+			char mensaje[64],valor[8];
 			socketIngresante = acceptGRID(socketOrquestador);
-			loguearInfo(concat("Se escuchara al socket numero ",intToString(socketIngresante)));
+			strcpy(mensaje,"Se escuchara al socket numero ");
+			itoa(socketIngresante,valor,10);
+			strcat(mensaje,valor);
+			loguearInfo(mensaje);
 			switch (recvHandshake(&nuevoHandshake,socketIngresante)){
 			 case -1: close(socketIngresante); break;
 			 case  0: nivelNuevo(nuevoHandshake,socketIngresante,hilosPlanificadores); break;
 			 case  1: clienteNuevo(nuevoHandshake,socketIngresante); break;
 			 case  2: clienteViejo(nuevoHandshake,ganadores); break;
-			 default: loguearWarning("Protocolo de mensaje no encontrado"); close(socketIngresante);
+			 default: loguearWarning("Protocolo de mensaje no encontrado"); close(socketIngresante); break;
 			}
 			puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
@@ -92,10 +96,14 @@ void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
 
 void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, char * koopa, char * script){
 	if(!chequearKoopa(ganadores))return;
+	char mensaje[64],valor[8];
 	int cont;
 	loguearWarning("--ORQUESTADOR-- Esperando jugadores entrantes...");
 	for(cont = 5; cont >= 0; cont--){
-		loguearWarning(concat("--ORQUESTADOR-- Se ejecutara Koopa en: ",intToString(cont)));
+		strcpy(mensaje,"--ORQUESTADOR-- Se ejecutara Koopa en: ");
+		itoa(cont,valor,10);
+		strcat(mensaje,valor);
+		loguearWarning(mensaje);
 		if(!chequearKoopa(ganadores)){
 			loguearInfo("--ORQUESTADOR-- Se recibio un jugador. Koopa interrumpido");
 			return;
@@ -155,7 +163,10 @@ void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores){
 
 void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* hilosPlanificadores){
 	nuevo* tandaActual;//=(nuevo*)malloc(sizeof(nuevo));
-	loguearInfo(concat("Nivel conectado: ",handshakeNivel.name));
+	char mensaje[64];
+	strcpy(mensaje,"Nivel conectado: ");
+	strcat(mensaje,handshakeNivel.name);
+	loguearInfo(mensaje);
 	nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
 	crearTanda(&(tandaActual));
 	strcpy(nivel->name,handshakeNivel.name);
@@ -214,7 +225,12 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
 	puts("--ORQUESTADOR-- Jugador Ganador Recibido.");
-	loguearInfo(concat("--ORQUESTADOR-- Jugador ganador: ",ctos(handshakeJugador.symbol)));
+	char mensaje[64],valor[8];
+	valor[0]=handshakeJugador.symbol;
+	valor[1]='\0';
+	strcpy(mensaje,"--ORQUESTADOR-- Jugador ganador: ");
+	strcat(mensaje,valor);
+	loguearInfo(mensaje);
 };
 
 bool _hay_jugadores(nodoNivel *nivel) {
