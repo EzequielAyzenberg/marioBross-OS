@@ -42,9 +42,6 @@ typedef struct execution{
 typedef struct t_logs{
 	t_log*trace;
 	t_log*debug;
-	t_log*warning;
-	t_log*info;
-	t_log*error;
 }logs;
 
 typedef struct Pglobal{
