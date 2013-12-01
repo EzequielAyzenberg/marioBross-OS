@@ -464,7 +464,7 @@ int modoDeRecuperacion(global tabla){
 	status=tabla.exe->player->pid;
 	usleep(300000);
 	log_debug(tabla.logging.debug,"Nivel reconectado.","DEBUG");
-	log_info(tabla.logging.info,"Nivel reconectado.","INFO");
+	//log_info(tabla.logging.info,"Nivel reconectado.","INFO");
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
@@ -1054,7 +1054,7 @@ logs crearLogs(nodoNivel*raiz){
 	strcat(file,"-Debug");
 	strcat(file,".txt");
 	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
-	strcpy(file,LOCAL_LOG);
+	/*strcpy(file,LOCAL_LOG);
 	strcat(file,raiz->name);
 	strcat(file,"-Warning");
 	strcat(file,".txt");
@@ -1074,7 +1074,7 @@ logs crearLogs(nodoNivel*raiz){
 	strcat(file,".txt");
 	strcpy(program_name,"PLANIFICADOR_");
 	strcat(program_name,raiz->name);
-	paquete.error=log_create(file,program_name,muestreo,LOG_LEVEL_ERROR);
+	paquete.error=log_create(file,program_name,muestreo,LOG_LEVEL_ERROR);*/
 	return paquete;
 }
 void loggearActivos(global tabla){
@@ -1188,8 +1188,8 @@ void loggearListas(global tabla){
 }
 void cerrarLogging(global tabla){
 	log_destroy(tabla.logging.debug);
-	//log_destroy(tabla.logging.error);
-	log_destroy(tabla.logging.info);
 	log_destroy(tabla.logging.trace);
-	log_destroy(tabla.logging.warning);
+	/*log_destroy(tabla.logging.error);
+	log_destroy(tabla.logging.info);
+	log_destroy(tabla.logging.warning);*/
 }
