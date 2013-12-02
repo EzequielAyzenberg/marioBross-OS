@@ -1,21 +1,6 @@
-==7861== Memcheck, a memory error detector
-==7861== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==7861== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==7861== Command: ./Debug/Plataforma config.cfg
-==7861== Parent PID: 7857
-==7861== 
-==7861== 
-==7861== HEAP SUMMARY:
-==7861==     in use at exit: 3,612 bytes in 77 blocks
-==7861==   total heap usage: 11,148 allocs, 11,071 frees, 525,579 bytes allocated
-==7861== 
-==7861== LEAK SUMMARY:
-==7861==    definitely lost: 54 bytes in 12 blocks
-==7861==    indirectly lost: 260 bytes in 18 blocks
-==7861==      possibly lost: 272 bytes in 2 blocks
-==7861==    still reachable: 3,026 bytes in 45 blocks
-==7861==         suppressed: 0 bytes in 0 blocks
-==7861== Rerun with --leak-check=full to see details of leaked memory
-==7861== 
-==7861== For counts of detected and suppressed errors, rerun with: -v
-==7861== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==20548== Memcheck, a memory error detector
+==20548== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==20548== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==20548== Command: ./Debug/Plataforma config.cfg
+==20548== Parent PID: 20544
+==20548== 

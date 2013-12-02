@@ -22,14 +22,7 @@ typedef struct{
 	pthread_t idHilo;
 }nodoPlanificador;
 
-/* Registro que necesito el orquestador
- * al ser llamado por la plataforma
- */typedef struct tinfoOrquestador{
-	 t_list *listaNiveles;
-	 char * cfg;
- }infoOrquestador;
-
- /* Registro del archivo del orquestador
+ /* Registro del archivo cfg del orquestador
   */typedef struct{
 	 char * ip;
 	 char * koopa;
@@ -50,7 +43,7 @@ void crearTanda(nuevo** lista);
 void reconectarNivel(nodoNivel *nodo,int nid);
 void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* hilosPlanificadores);
 bool _hay_jugadores(nodoNivel *nivel);
-bool chequearKoopa(t_list *ganadores);
+bool chequearKoopa();
 void crearHiloPlanificador(nodoNivel *nivel,t_list* hilosPlanificadores);
 int _matar_hilo(nodoPlanificador *planificador);
 void matarHilos(t_list* hilosPlanificadores);
@@ -64,5 +57,12 @@ int puertoPlataforma( t_config * cfgPlataforma);
 char * pathKoopaPlataforma( t_config * cfgPlataforma);
 char * pathScriptPlataforma( t_config * cfgPlataforma);
 char * ipPlataforma( t_config * cfgPlataforma);
+
+void loguearDatosIniciales(cfgOrquestador cfg);
+void loggearRecepcion(handshake paquete, int sock);
+void loggearEnvio(int sock,int msg,int cont,char data,char sym);
+void loggearProtocolo(char* accion, int protocol);
+void mensajeTrace(char*mensaje);
+void mensajeWarning(char*mensaje);
 
 #endif /* ORQUESTADOR_H_ */

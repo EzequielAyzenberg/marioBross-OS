@@ -650,6 +650,8 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		switch(respuesta){
 		case 0:status=modoDeRecuperacion(tabla);
 		break;
+		//case 2:asignarRecurso(tabla,aux);//CREARLA FUNCION!!!
+		//break;
 		case 4:modificarRetardo(*aux,tabla);
 		break;
 		case 6:modificarAlgoritmo(*aux,tabla);
@@ -826,18 +828,10 @@ void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 	jugador->data.dist=tabla->algo->remainDist;
 
 
-
-	/*bool _is_SYM(t_player*personaje) {
-		if(personaje->sym==jugador->sym)return true;
-		return false;
-	}
-	list_remove_by_condition(tabla->sleeps,(void*) _is_SYM);
-	*/
-
-
 	//list_add(tabla->ready,(void*)jugador);
 	//log_info(tabla->logging.info,mensaje,"INFO");
 	//sendAnswer(1,0,' ',' ',jugador->pid);
+
 }
 int asignarRecursos(global*tabla){
 	short respuesta;
@@ -881,13 +875,23 @@ int asignarRecursos(global*tabla){
 	//---------------------------------------------------------------
 	int i=list_size(tabla->sleeps)-1;
 	t_player*auxiliar;
+	char carater;
 	while(i>=0){
 		auxiliar=list_get(tabla->sleeps,i);
+		carater=auxiliar->sym;
+		bool _is_SYM(t_player*jugador) {
+				    if(carater==jugador->sym)return true;
+				    return false;
+					}
 		if(intentarAsignar(auxiliar)){
-			//BUSCARLO
-			list_add(tabla->ready,(void*)auxiliar);
-			sendAnswer(1,0,' ',' ',auxiliar->pid);
-		}else list_add(tabla->sleeps,(void*)auxiliar);
+			auxiliar=list_remove_by_condition(tabla->sleeps,(void*)_is_SYM);
+			if(auxiliar!=NULL){
+				list_add(tabla->ready,(void*)auxiliar);
+				sendAnswer(1,0,' ',' ',auxiliar->pid);
+			}
+		}else {
+			//if(auxiliar!=NULL) list_add(tabla->sleeps,(void*)auxiliar);
+		}
 		i--;
 	}
 
