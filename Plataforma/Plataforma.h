@@ -19,6 +19,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 
+#define LOCAL_LOG "/home/utnso/GRIDLogs/LOGPlataforma/"
 bool finalizar;
 
 /* Nodos de la lista NOVEDADES */

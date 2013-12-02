@@ -1,6 +1,5 @@
 #include"Planificador.h"
 
-#define LOCAL_LOG "/home/utnso/GRIDLogs/"
 #define muestreo false
 void enviarLog(int,global,int,int,char,char);
 void recibirLog(global,int,answer);
