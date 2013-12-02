@@ -23,6 +23,7 @@
 
 pthread_mutex_t mutexDibujar =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexMatarPersonaje =PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexCrearPersonaje =PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexLog =PTHREAD_MUTEX_INITIALIZER;
 
 
