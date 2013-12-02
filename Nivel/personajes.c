@@ -13,6 +13,7 @@
 #include <theGRID/general.h>
 
 pthread_mutex_t mutexMatarPersonaje;
+pthread_mutex_t mutexCrearPersonaje;
 
 int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char pj){
 
@@ -119,9 +120,9 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 		bufferPj->posy=y;
 		bufferPj->recursoEspera=' ';
 	bufferPj->recursos=list_create();
-
+	pthread_mutex_lock(&mutexCrearPersonaje);
 	list_add(listaJugadoresActivos,bufferPj);
-
+	pthread_mutex_unlock(&mutexCrearPersonaje);
 		return 1;
 	}else return -1;
 

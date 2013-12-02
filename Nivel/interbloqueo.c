@@ -12,7 +12,10 @@
 #include "personajes.h"
 #include "interbloqueo.h"
 #include <string.h>
+#include "semaforos.h"
 
+pthread_mutex_t mutexCrearPersonaje;
+pthread_mutex_t mutexMatarPersonaje;
 
 int posicionIndice(char recurso,char indice[]){
 	int i=0;
@@ -39,39 +42,8 @@ int tengoRecursos(int work[],int espera[],int cantCajas){
 }
 void detectarInterbloqueo(infoInterbloqueo *info){
 
-	{			// LOGGEO!!!!
-		int i=0;
-		char msg[512],valor[16];
-		t_personaje *bufferPersonaje;
-		char *recursoPj;
-		strcpy(msg,"Inicio del log de personajes (ID/RS/[-RA-]):");
-		void _cargarLogRec(char*rc){
-			valor[0]=*rc;
-			valor[1]='-';
-			valor[2]='\0';
-			strcat(msg,valor);
-		}
-		void _cargarLogJug(t_personaje*pj){
-			strcat(msg,"--(");
-			itoa(pj->id,valor);
-			strcat(msg,valor);
-			strcat(msg,"/");
-			valor[0]=pj->recursoEspera;
-			valor[1]='/';
-			valor[2]='[';
-			valor[3]='-';
-			valor[4]='\0';
-			strcat(msg,valor);
-			list_iterate(pj->recursos,(void*)_cargarLogRec);
-			strcat(msg,"])--");
-		}
-		list_iterate(info->listaJugadores,(void*)_cargarLogJug);
-
-		loguearInfo(msg);
-	}
-
-
-
+	pthread_mutex_lock(&mutexCrearPersonaje);
+	pthread_mutex_lock(&mutexMatarPersonaje);
 	int disponible[list_size(info->listaRecursos)];//este array va a almacenar la cantidad de recursos disponibles
 		int work[list_size(info->listaRecursos)];
 		char indice[list_size(info->listaRecursos)];//indica que tipo de recurso hay en cada pos del array disponible
@@ -235,6 +207,8 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 			}
 
 
+		pthread_mutex_unlock(&mutexCrearPersonaje);
+		pthread_mutex_unlock(&mutexMatarPersonaje);
 }
 void controlInterbloqueo(infoInterbloqueo *info){
 
