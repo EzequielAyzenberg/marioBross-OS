@@ -7,6 +7,7 @@
 
 #ifndef PLATAFORMA_H_
 #define PLATAFORMA_H_
+#define LOCAL_LOG "/home/utnso/GRIDLogs/LOGPlataforma/"
 
 #include <commons/collections/list.h>
 #include <commons/config.h>
