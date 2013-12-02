@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <commons/config.h>
 #include <commons/string.h>
+#include <commons/log.h>
 #include <commons/collections/list.h>
 #include <theGRID/general.h>
 #include <theGRID/sockets.h>
@@ -13,6 +14,8 @@
 #include <sys/types.h>
 #include <signal.h>
 
+#define LOCAL_LOG "/home/utnso/GRIDLogs/GRIDPersonaje/"
+#define muestreo false
 
 //Variables
 typedef struct hilos{
@@ -50,6 +53,11 @@ typedef struct recurso{
 	bool checked;
 }trecurso;
 
+typedef struct{
+	t_log* debug;
+	t_log* trace;
+}logs;
+
 
 int sockfd,socketEscucha,personajeCargado,nuevo,
 	ganado=0,finalizados=0,repetir=1,repeticiones=0,
@@ -61,6 +69,7 @@ pid_t pid;
 pthread_t hilo;
 char * path;
 char *nivelAux;
+logs log;
 
 //Prototipos
 int vidasPersonaje( t_config * cfgPersonaje);
@@ -82,6 +91,7 @@ void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
 void finDeNivel(int,char);
+logs crearLogs(tminipersonaje*);
 
 
 
@@ -280,6 +290,7 @@ void *jugar (void *minipersonaje){
  *
  */
 int cargaPersonaje(char *argv[]){
+	char mensaje[256],auxiliar[256];
 	thilo *miniHilo;
 	miniHilo=(thilo*)malloc(sizeof(thilo));
 	miniHilo->nivel=(char*)malloc(16);
@@ -292,7 +303,7 @@ int cargaPersonaje(char *argv[]){
 	miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
 	miniPersonaje->nivel=(char*)malloc(16);
 	personaje.orquestadorIP=(char*)malloc(16);
-
+	strcpy(mensaje,"--Config:-(Nivel/Sym/Nivele)-Socket:(Env.)--(");
 	if (config_has_property(cfgPersonaje,"vidas")){ //Si tiene cargadas las vidas las mete en la variable vidas
 		personaje.vidas=vidasPersonaje(cfgPersonaje);
 		printf("Vidas de personaje: %d.\n", personaje.vidas);
@@ -304,6 +315,8 @@ int cargaPersonaje(char *argv[]){
 	if (config_has_property(cfgPersonaje,"nombre")){ //Si tiene cargado el nombre lo mete en la variable nombre
 		personaje.nombre=nombrePersonaje(cfgPersonaje);
 		printf("Nombre de personaje: %s.\n", personaje.nombre);
+		strcat(mensaje,personaje.nombre);
+		strcat(mensaje,"/");
 	} else {
 		printf("Archivo de configuracion incompleto, falta campo: Nombre\n");
 		return -1;
@@ -313,6 +326,8 @@ int cargaPersonaje(char *argv[]){
 		personaje.simbolo=identificadorPersonaje(cfgPersonaje);
 		miniPersonaje->simbolo=personaje.simbolo;
 		printf("Identificador de personaje: %c.\n", personaje.simbolo);
+		strcat(mensaje,&personaje.simbolo);
+		strcat(mensaje,"/[");
 	} else {
 		printf("Archivo de configuracion incompleto, falta campo: Simbolo\n");
 		return -1;
@@ -348,13 +363,14 @@ int cargaPersonaje(char *argv[]){
 		tamanioArrayNivel=cantidadElementosArray(planNivelesPersonaje);
 		for (i=0;i<tamanioArrayNivel;i++){ //Carga en nodos los niveles
 				printf("Se carga el nivel: %s\n", *(planNivelesPersonaje+i));
-				//Funca
 				strcpy(infoNivel->nivel,*(planNivelesPersonaje+i));
 				strcpy(miniPersonaje->nivel,infoNivel->nivel);
+				printf("Cargado el nivel, ahora vamos por los recursos\n");
 				recursosNivel=recursos(cfgPersonaje,infoNivel->nivel);
 				if((cantidadElementosArray(recursosNivel))==0)return -1;
 				listaRecursos=list_create();
 				tamanioArrayRecursos=cantidadElementosArray(recursosNivel);
+				puts("Lista de recursos creada, a cargarla");
 				for (j=0;j<tamanioArrayRecursos;j++){
 				     trecurso*temp;
 				     trecurso*temp2;
@@ -376,7 +392,10 @@ int cargaPersonaje(char *argv[]){
 				contador=list_add(lista,(void*)infoNivel);
 				if(i==0) personaje.planDeNiveles=lista;
 				ptrAux=list_get(lista,contador);
+				strcat(mensaje,ptrAux->nivel);
+				strcat(mensaje,"]");
 				printf("Nivel cargado: %s\n",ptrAux->nivel);
+				log=crearLogs(miniPersonaje);
 				char *temp2;
 				for (j=0;j<tamanioArrayRecursos;j++){
 				  	temp2=(char*)list_get(miniPersonaje->planDeRecursos,j);
@@ -387,7 +406,7 @@ int cargaPersonaje(char *argv[]){
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 				sendHandshake(1,ptrAux->nivel,miniPersonaje->simbolo,(short)sockfd);
 				recvAnswer(&conexionSaliente,sockfd);
-				printf("Coneccion establecida\n");
+				printf("Conexion establecida\n");
 				if(conexionSaliente.msg==-1){
 					printf("Conexion imposible de realizar\n");
 					return -1;
@@ -399,8 +418,12 @@ int cargaPersonaje(char *argv[]){
 				printf("Funciona?\n");
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				strcpy(miniHilo->nivel,infoNivel->nivel);
+				list_destroy(listaRecursos);
+				log_trace(log.trace,mensaje,"TRACE");
 
 		}
+		strncpy(auxiliar,mensaje,strlen(mensaje)-6);
+		strcpy(mensaje,auxiliar);
 	}else {
 		printf("Archivo de configuracion incompleto, falta campo: Plan de Niveles\n");
 		return -1;
@@ -545,7 +568,6 @@ int estoyMuerto(tminipersonaje *info){
 int actualizarRP(t_list*planDeRecursos,int posicion){
 		trecurso *recursoSiguiente;
 		int posX,posY;
-		//recursoSiguiente=(trecurso*)malloc(sizeof(trecurso));  NO HACER MALLOC SI VAS A CAMBIARLO POR OTRA DIRECCION!!
 		recursoSiguiente=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
 		posX=posicion/100;
 		printf("Posicion en X: %d\n",posX);
@@ -665,3 +687,26 @@ void cierraHilos(){
 		close(aux->nombre);
 	}
 }
+
+logs crearLogs(tminipersonaje*raiz){
+	char file[64],program_name[32];
+	logs paquete;
+	strcpy(file,LOCAL_LOG);
+	strcat(file,personaje.nombre);
+	strcat(file,"-");
+	strcat(file,raiz->nivel);
+	strcat(file,"-Trace");
+	strcat(file,".txt");
+	strcpy(program_name,"PERSONAJE_");
+	strcat(program_name,raiz->nivel);
+	paquete.trace=log_create(file,program_name,muestreo,LOG_LEVEL_TRACE);
+	strcpy(file,LOCAL_LOG);
+	strcat(file,personaje.nombre);
+	strcat(file,"-");
+	strcat(file,raiz->nivel);
+	strcat(file,"-Debug");
+	strcat(file,".txt");
+	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
+	return paquete;
+}
+
