@@ -121,6 +121,8 @@ void escucharPlanificador(datosConexiones *info){
 
 	if(i==fd){
 		a=1;
+		puts("TODAVIA SIRVE");
+		sleep(1);
 		cargarConfig(&bufferConfig);
 		if(info->config->algoritmo!=bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
 			*info->config=bufferConfig;

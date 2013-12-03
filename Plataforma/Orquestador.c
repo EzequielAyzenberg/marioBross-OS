@@ -151,6 +151,10 @@ void responderError(int socketDestino){
 void reconectarNivel(nodoNivel *nodo,int nid){
 	if( nodo->nid == 0 ){
 		nodo->nid = nid;
+		char mensaje[32];
+		strcpy(mensaje,"*Nivel reconectado: ");
+		strcat(mensaje,nodo->name);
+		mensajeTrace(mensaje);
 		return;
 	};
 	mensajeTrace("*Nivel invasor rechazado");
@@ -373,6 +377,7 @@ void loggearEstado_Debug(){
 	char mensaje[128],valor[16];
 
 	void _logNodoNivel(nodoNivel* nivel){
+		strcpy(mensaje," ");
 		strcat(mensaje,nivel->name);
 		strcat(mensaje," (socket/hiloID/cantJugadores) [nov(pid/sym)] :- (");
 		itoa(nivel->nid,valor,10);
@@ -408,7 +413,6 @@ void loggearEstado_Debug(){
 	if( list_is_empty(listaNiveles) ){
 		log_debug(logsOrquestador.debug,"--NO HAY NIVELES CONECTADOS--","DEBUG");
 	}else{
-		strcpy(mensaje," ");
 		list_iterate(listaNiveles,(void*)_logNodoNivel);
 	}
 
@@ -445,20 +449,20 @@ void loguearDatosIniciales(cfgOrquestador cfg){
 	char mensaje[128],valor[16];
 	strcpy(mensaje,"Programa: ");
 	strcat(mensaje,PROGRAMA);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 	strcpy(mensaje,"IP: ");
 	strcat(mensaje,cfg.ip);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 	strcpy(mensaje,"Puerto: ");
 	itoa(cfg.puerto,valor,10);
 	strcat(mensaje,valor);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 	strcpy(mensaje,"Path del script: ");
 	strcat(mensaje,cfg.script);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 	strcpy(mensaje,"Path de KOOPA: ");
 	strcat(mensaje,cfg.koopa);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 	log_trace(logsOrquestador.trace,"\t\t\t---------------------------\t\t\t","TRACE");
 }
 
@@ -479,7 +483,7 @@ void loggearEnvio(int sock,int msg,int cont,char data,char sym){
 	strcat(mensaje,") SocketDestino: ");
 	itoa(sock,valor,10);
 	strcat(mensaje,valor);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 }
 void loggearRecepcion(handshake paquete, int sock){
 	char mensaje[256],valor[16];
@@ -495,7 +499,7 @@ void loggearRecepcion(handshake paquete, int sock){
 	strcat(mensaje,") Socket: ");
 	itoa(sock,valor,10);
 	strcat(mensaje,valor);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 }
 
 void loggearProtocolo(char* accion, int protocol){
@@ -505,7 +509,7 @@ void loggearProtocolo(char* accion, int protocol){
 	strcat(mensaje,valor);
 	strcat(mensaje,": ");
 	strcat(mensaje,accion);
-	log_trace(logsOrquestador.trace,mensaje,"TRACE");
+	mensajeTrace(mensaje);
 }
 
 void mensajeTrace(char*mensaje){
