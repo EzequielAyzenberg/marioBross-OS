@@ -1,6 +1,70 @@
-==20548== Memcheck, a memory error detector
-==20548== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==20548== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==20548== Command: ./Debug/Plataforma config.cfg
-==20548== Parent PID: 20544
-==20548== 
+==9982== Memcheck, a memory error detector
+==9982== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==9982== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==9982== Command: ./Debug/Plataforma config.cfg
+==9982== Parent PID: 9978
+==9982== 
+==9982== Thread 3:
+==9982== Invalid read of size 1
+==9982==    at 0x402D288: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==9982==    by 0x4037EC4: string_append (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x40384F4: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037B5F: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x804F64F: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x8050CA9: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x804B7AF: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==9982==    by 0x415ADDD: clone (clone.S:130)
+==9982==  Address 0x4237210 is 0 bytes after a block of size 0 alloc'd
+==9982==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==9982==    by 0x40384B9: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037B5F: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x804F64F: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x8050CA9: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x804B7AF: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==9982==    by 0x415ADDD: clone (clone.S:130)
+==9982== 
+==9982== Invalid read of size 1
+==9982==    at 0x402CF8B: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==9982==    by 0x4037EF3: string_append (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x40384F4: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037B5F: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x804F64F: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x8050CA9: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x804B7AF: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==9982==    by 0x415ADDD: clone (clone.S:130)
+==9982==  Address 0x4237210 is 0 bytes after a block of size 0 alloc'd
+==9982==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==9982==    by 0x40384B9: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x4037B5F: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==9982==    by 0x804F64F: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x8050CA9: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x804B7AF: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==9982==    by 0x4057D4B: start_thread (pthread_create.c:308)
+==9982==    by 0x415ADDD: clone (clone.S:130)
+==9982== 
+==9982== 
+==9982== HEAP SUMMARY:
+==9982==     in use at exit: 5,775 bytes in 91 blocks
+==9982==   total heap usage: 13,877 allocs, 13,786 frees, 655,843 bytes allocated
+==9982== 
+==9982== LEAK SUMMARY:
+==9982==    definitely lost: 72 bytes in 9 blocks
+==9982==    indirectly lost: 236 bytes in 15 blocks
+==9982==      possibly lost: 408 bytes in 3 blocks
+==9982==    still reachable: 5,059 bytes in 64 blocks
+==9982==         suppressed: 0 bytes in 0 blocks
+==9982== Rerun with --leak-check=full to see details of leaked memory
+==9982== 
+==9982== For counts of detected and suppressed errors, rerun with: -v
+==9982== ERROR SUMMARY: 8 errors from 2 contexts (suppressed: 0 from 0)

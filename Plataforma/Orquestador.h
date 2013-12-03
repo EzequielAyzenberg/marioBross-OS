@@ -64,5 +64,6 @@ void loggearEnvio(int sock,int msg,int cont,char data,char sym);
 void loggearProtocolo(char* accion, int protocol);
 void mensajeTrace(char*mensaje);
 void mensajeWarning(char*mensaje);
+void mensajeDebug(char*mensaje);
 
 #endif /* ORQUESTADOR_H_ */

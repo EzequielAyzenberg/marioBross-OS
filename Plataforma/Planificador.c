@@ -595,7 +595,7 @@ bool muertePersonaje(int i,global tabla){
 	tabla.cabecera->cantJugadores--;
 	if(tabla.cabecera->cantJugadores==0)printf("--ATENCION--No quedan jugadores!!\n");
 	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
-	enviarLog(tabla.cabecera->nid,tabla,8,0,' ',aux->sym);
+	enviarLog(tabla.cabecera->nid,tabla,8,0,'Z',aux->sym);
 	if(tabla.exe->player!=NULL){
 		if(aux->pid==tabla.exe->player->pid){
 			tabla.exe->player=NULL;
@@ -637,7 +637,7 @@ void matarPersonaje(char simbolo,global tabla){
 	strcat(mensaje,dato);
 	//log_info(tabla.logging.info,mensaje,"INFO");
 	sendAnswer(8,0,' ',' ',aux->pid);
-	enviarLog(aux->pid,tabla,8,0,' ',' ');
+	enviarLog(aux->pid,tabla,8,0,'Z','Z');
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	puts("\n--SLI--");

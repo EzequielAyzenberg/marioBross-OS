@@ -72,7 +72,7 @@ void *orquestador(void* infoAux){
 			puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
-		loggearEstado_Debug();
+		//loggearEstado_Debug();	ARREGLE ESO WEON!!!!
 		mensajeTrace("\t\t\t---------------------------\t\t\t");
 	}
 	cerrarLogs_Orquestador(logsOrquestador);
@@ -405,7 +405,7 @@ void loggearEstado_Debug(){
 				p = p->sgte;
 			}
 		}
-		log_debug(logsOrquestador.debug,mensaje,"DEBUG");
+		mensajeDebug(mensaje);
 	}
 
 	log_debug(logsOrquestador.debug,"Estado de la lista de Niveles:","DEBUG");
@@ -434,15 +434,15 @@ void loggearEstado_Debug(){
 	}else{
 		list_iterate(ganadores,(void*)_logGanador);
 	}
-	log_debug(logsOrquestador.debug,mensaje,"DEBUG");
+	mensajeDebug(mensaje);
 
 	strcpy(mensaje,"¿KOOPA? ");
 	if(chequearKoopa(ganadores))
 		 strcat(mensaje,"HABILITADO - Cumple con las condiciones");
 	else strcat(mensaje,"IMPOSIBLE DE EJECUTAR");
-	log_debug(logsOrquestador.debug,mensaje,"DEBUG");
+	mensajeDebug(mensaje);
 
-	log_debug(logsOrquestador.debug,"\t\t\t---------------------------\t\t\t","DEBUG");
+	mensajeDebug("\t\t\t---------------------------\t\t\t");
 }
 
 void loguearDatosIniciales(cfgOrquestador cfg){
@@ -463,7 +463,7 @@ void loguearDatosIniciales(cfgOrquestador cfg){
 	strcpy(mensaje,"Path de KOOPA: ");
 	strcat(mensaje,cfg.koopa);
 	mensajeTrace(mensaje);
-	log_trace(logsOrquestador.trace,"\t\t\t---------------------------\t\t\t","TRACE");
+	mensajeTrace("\t\t\t---------------------------\t\t\t");
 }
 
 void loggearEnvio(int sock,int msg,int cont,char data,char sym){
@@ -518,4 +518,8 @@ void mensajeTrace(char*mensaje){
 
 void mensajeWarning(char*mensaje){
 	log_warning(logsOrquestador.warning,mensaje,"WARNING");
+}
+
+void mensajeDebug(char*mensaje){
+	log_debug(logsOrquestador.debug,mensaje,"DEBUG");
 }
