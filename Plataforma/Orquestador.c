@@ -72,7 +72,7 @@ void *orquestador(void* infoAux){
 			puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
-		loggearEstado_Debug();
+		//loggearEstado_Debug();	ARREGLE ESO WEON!!!!
 		mensajeTrace("\t\t\t---------------------------\t\t\t");
 	}
 	cerrarLogs_Orquestador(logsOrquestador);
