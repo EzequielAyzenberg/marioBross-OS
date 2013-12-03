@@ -364,7 +364,7 @@ logs crearLogs_Orquestador(){
 	strcat(file,PROGRAMA);
 	strcat(file,"-Warning");
 	strcat(file,".txt");
-	logsOrquestador.warning=log_create(file,PROGRAMA,mostrarOrquestador,LOG_LEVEL_WARNING);
+	//logsOrquestador.warning=log_create(file,PROGRAMA,mostrarOrquestador,LOG_LEVEL_WARNING);
 	return logsOrquestador;
 }
 
@@ -517,7 +517,7 @@ void mensajeTrace(char*mensaje){
 }
 
 void mensajeWarning(char*mensaje){
-	log_warning(logsOrquestador.warning,mensaje,"WARNING");
+	//log_warning(logsOrquestador.warning,mensaje,"WARNING");
 }
 
 void mensajeDebug(char*mensaje){
