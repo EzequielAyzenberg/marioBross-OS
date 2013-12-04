@@ -66,4 +66,5 @@ void mensajeTrace(char*mensaje);
 void mensajeWarning(char*mensaje);
 void mensajeDebug(char*mensaje);
 
+
 #endif /* ORQUESTADOR_H_ */

@@ -523,3 +523,4 @@ void mensajeWarning(char*mensaje){
 void mensajeDebug(char*mensaje){
 	log_debug(logsOrquestador.debug,mensaje,"DEBUG");
 }
+
