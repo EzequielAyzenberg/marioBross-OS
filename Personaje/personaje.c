@@ -38,7 +38,6 @@ typedef struct personaje {
 }tpersonaje;
 
 typedef struct miniPersonaje{
-	char simbolo;
 	char *nivel;
 	t_list *planDeRecursos;
 	int orquestadorSocket;
@@ -61,14 +60,14 @@ typedef struct{
 
 int sockfd,socketEscucha,nuevo,ganado=0,
 	finalizados=0,repetir=1,repeticiones=0,
-	limboOK=0,hilosMuertos=0;
+	limboOK=0,hilosMuertos=0,modificar=1;
 tpersonaje personaje;
-char *recurso;
-t_list *lista,*listaRecursos;
+char *recurso, *nivelAux;
+t_list *lista, *listaRecursos;
 pid_t pid;
 pthread_t hilo;
-char *nivelAux;
 logs loggeo;
+t_config * cfgPersonaje;
 
 //Prototipos
 int vidasPersonaje( t_config * cfgPersonaje);
@@ -83,17 +82,14 @@ void * jugar(void*);
 int cantidadElementosArray(char **);
 int estoyMuerto(tminipersonaje*);
 int actualizarRP(t_list*,int);
-int gestionTurno(t_list*,int,int*,int*,char,int*,int*);
+int gestionTurno(t_list*,int,int*,int*,int*,int*);
 int instanciaConc(t_list*,int*);
 int movimientoConc(int,int*,int*);
 void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
-void finDeNivel(int,char);
+void finDeNivel(int);
 logs crearLogs(tminipersonaje*);
-
-t_config * cfgPersonaje;
-int modificar=1;
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
@@ -161,60 +157,44 @@ int main(int argc, char *argv[]) {
 	return 0;
 };
 
-/*
- * Avisa que termino el nivel al orquestador
+/* Avisa que termino el nivel al orquestador
  * Cierra el socket
- *
  */
-
-void finDeNivel(int sockfd,char simbolo){
+void finDeNivel(int sockfd){
 	//Antes tenia mas onda.
 	close(sockfd);
 }
 
-/*
- * Suma una vida al personaje
- *
+/* Suma una vida al personaje
  */
-
 void aumentaVida(int senial){
 	printf("Se recibio la señal: %d",senial);
 	personaje.vidas++;
 }
 
-/*
- * Resta una vida al personaje
+/* Resta una vida al personaje
  */
 void restaVida(int senial){
 	printf("Se recibio la señal: %d",senial);
 	personaje.vidas--;
 }
 
-/*
- * Retorna true si el recurso fue agarrado
- *
+/* Retorna true si el recurso fue agarrado
  */
-
 bool _recursoAgarrado(trecurso *recurso){
 	return recurso->checked;
 }
 
-/*
- * Retorna true si el recurso no fue agarrado
- *
+/* Retorna true si el recurso no fue agarrado
  */
-
 bool _recursoNoAgarrado(trecurso *recurso){
 	return !(recurso->checked);
 }
 
 
-/*
- * Gestiona las ordenes del planificador y delega a otras funciones
+/* Gestiona las ordenes del planificador y delega a otras funciones
  * cada opcion por orden
- *
  */
-
 void *jugar (void *minipersonaje){
 	answer ordenPlanificador;
 	char mensaje[256],valor[8];
@@ -230,14 +210,14 @@ void *jugar (void *minipersonaje){
 	info.nivel = (char*)malloc(sizeof(char[16]));
 	strcpy(info.nivel,infoBis->nivel);
 
-	printf("\n\n  Hola, soy el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",info.nivel,info.simbolo);
+	printf("\n\n  Hola, soy el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",info.nivel,personaje.simbolo);
 	modificar = 1;
 
 	printf("Cantidad de recursos cargados: %d\n",list_size(info.planDeRecursos));
 	printf("Nivel: %s\n",info.nivel);
 	printf("PosX e Y: %d--%d\n",info.posX,info.posY);
 	printf("Socket: %d\n",info.orquestadorSocket);
-	printf("Simbolo: %c\n",info.simbolo);
+	printf("Simbolo: %c\n",personaje.simbolo);
 	info.posX=0;
 	info.posY=0;
 	int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
@@ -309,14 +289,14 @@ void *jugar (void *minipersonaje){
 			case 7: //Gestion turno
 				printf("Gestionemos el turno\n");
 				printf("Mover en X: %d\n",*moverEnX);
-				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),info.simbolo,moverEnX,esInstancia);
+				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),moverEnX,esInstancia);
 				break;
 			case 0: //Limbo
 				printf("Se fue la plataforma, panico panico!\n");
 				strcpy(mensaje,"--Plataforma caida--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				//cierraHilos();
-				finDeNivel(info.orquestadorSocket,info.simbolo);
+				finDeNivel(info.orquestadorSocket);
 				limboOK=1;
 				return 0;
 				break;
@@ -326,16 +306,14 @@ void *jugar (void *minipersonaje){
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	finDeNivel(info.orquestadorSocket,info.simbolo);
+	finDeNivel(info.orquestadorSocket);
 	return NULL;
 };
 
 
-/*
- * Carga el personaje en el
+/* Carga el personaje en el
  * struct personaje para su uso
  * y crea los hilos para los miniPersonajes
- *
  */
 int cargaPersonaje(char *argv[]){
 	puts("\n   Esperando por el modificar = true....\n");
@@ -373,7 +351,6 @@ int cargaPersonaje(char *argv[]){
 
 	if (config_has_property(cfgPersonaje,"Simbolo")){ //Si tiene cargado el simbolo lo mete en la variable simbolo
 		personaje.simbolo=identificadorPersonaje(cfgPersonaje);
-		miniPersonaje->simbolo=personaje.simbolo;
 		printf("Identificador de personaje: %c.\n", personaje.simbolo);
 
 	} else {
@@ -457,7 +434,7 @@ int cargaPersonaje(char *argv[]){
 				printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 				strcpy(miniPersonaje->nivel,ptrAux->nivel);
-				sendHandshake(1,miniPersonaje->nivel,miniPersonaje->simbolo,(short)sockfd);
+				sendHandshake(1,miniPersonaje->nivel,personaje.simbolo,(short)sockfd);
 				recvAnswer(&conexionSaliente,sockfd);
 				printf("Conexion establecida\n");
 				if(conexionSaliente.msg==-1){
@@ -469,7 +446,7 @@ int cargaPersonaje(char *argv[]){
 				printf("Buffer de hilo cargado\n");
 				list_add(personaje.miniPersonajes,(void*)miniHilo);
 
-				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,miniPersonaje->simbolo);
+				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,personaje.simbolo);
 
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				strcpy(miniHilo->nivel,infoNivel->nivel);
@@ -483,63 +460,39 @@ int cargaPersonaje(char *argv[]){
 	return EXIT_SUCCESS;
 }
 
-/*
- * Retorna las vidas del personaje
- *
+/* Retorna las vidas del personaje
  */
-
-int vidasPersonaje( t_config * cfgPersonaje)
-{
+int vidasPersonaje( t_config * cfgPersonaje){
 	return config_get_int_value(cfgPersonaje,"Vidas");
 }
 
-/*
- * Retorna el identificador del personaje
- *
+/* Retorna el identificador del personaje
  */
-
-char identificadorPersonaje ( t_config * cfgPersonaje)
-{
+char identificadorPersonaje ( t_config * cfgPersonaje){
 	return *config_get_string_value(cfgPersonaje,"Simbolo");
-
 }
 
-/*
- * Retorna el nombre del personaje
- *
+/* Retorna el nombre del personaje
  */
-char * nombrePersonaje ( t_config * cfgPersonaje)
-{
+char * nombrePersonaje ( t_config * cfgPersonaje){
 	return config_get_string_value(cfgPersonaje,"Nombre");
 }
 
-/*
- * Retorna el orquestador en formato IP-Puerto
- *
+/* Retorna el orquestador en formato IP-Puerto
  */
-
-char * orquestador( t_config * cfgPersonaje)
-{
+char * orquestador( t_config * cfgPersonaje){
 	return config_get_string_value(cfgPersonaje,"Orquestador");
 }
 
-/*
- * Retorna los niveles en forma de array de char*
- *
+/* Retorna los niveles en forma de array de char*
  */
-
-char ** niveles( t_config * cfgPersonaje)
-{
+char ** niveles( t_config * cfgPersonaje){
 	return config_get_array_value(cfgPersonaje,"PlanDeNiveles");
 }
 
-/*
- * Retorna los recursos en forma de array de char*
- *
+/* Retorna los recursos en forma de array de char*
  */
-
-char ** recursos( t_config * cfgPersonaje, char *nivel)
-{
+char ** recursos( t_config * cfgPersonaje, char *nivel){
 	char cadenaAuxiliar[20];
 	char cadenaFinal[20];
 	strcpy(cadenaAuxiliar,"Obj[");
@@ -549,11 +502,8 @@ char ** recursos( t_config * cfgPersonaje, char *nivel)
 	return config_get_array_value(cfgPersonaje,cadenaFinal);
 }
 
-/*
- * Devuelve la cantidad de elementos en un array de char*
- *
+/* Devuelve la cantidad de elementos en un array de char*
  */
-
 int cantidadElementosArray(char **array){
 	/*int tamanioArray,tamanioElemento,i=0;
 	tamanioElemento=sizeof(array);
@@ -573,13 +523,10 @@ int cantidadElementosArray(char **array){
 	return i;
 }
 
-/*
- * Baja una vida en el padre
+/* Baja una vida en el padre
  * Retorna a la posicion 0,0
  * Reinicia sus recursos
- *
  */
-
 int estoyMuerto(tminipersonaje *info){
 	int i,sockfd;
 	trecurso *aux;
@@ -607,9 +554,9 @@ int estoyMuerto(tminipersonaje *info){
 		sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 		printf("Conectado. Avisando a los chamigos que volvi\n");
 
-		printf("\n\n  Reconectando como:\n  Nivel: %s - Simbolo: %c \n\n",info->nivel,info->simbolo);
+		printf("\n\n  Reconectando como:\n  Nivel: %s - Simbolo: %c \n\n",info->nivel,personaje.simbolo);
 
-		sendHandshake(1,info->nivel,info->simbolo,(short)sockfd);
+		sendHandshake(1,info->nivel,personaje.simbolo,(short)sockfd);
 		printf("Esperando seniales de vida\n");
 		recvAnswer(&conexionSaliente,sockfd);
 		if(conexionSaliente.msg==-1){
@@ -626,11 +573,8 @@ int estoyMuerto(tminipersonaje *info){
 	return 0;
 }
 
-/*
- * Pide la posicion del recurso siguiente
- *
+/*Pide la posicion del recurso siguiente
  */
-
 int actualizarRP(t_list*planDeRecursos,int posicion){
 	char mensaje[256],aux[8];
 	trecurso *recursoSiguiente;
@@ -657,14 +601,11 @@ int actualizarRP(t_list*planDeRecursos,int posicion){
 	return 0;
 }
 
-/*
- * Si no tiene la posicion del siguiente recurso la pide
+/* Si no tiene la posicion del siguiente recurso la pide
  * Si tiene la posicion del siguiente recurso pide movimiento
  * Si esta en el recurso pide una instancia
- *
  */
-
-int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char simbolo,int *moverEnX,int *esInstancia){
+int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *moverEnX,int *esInstancia){
 	trecurso *recursoSiguiente;
 	char mensaje[256],aux[8];
 	int tempX=0,tempY=0;
@@ -684,7 +625,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char sim
 			strcat(mensaje,aux);
 			strcat(mensaje," --");
 			log_trace(loggeo.trace,mensaje,"TRACE");
-			sendAnswer(2,0,recursoSiguiente->tipo,simbolo, sockfd);
+			sendAnswer(2,0,recursoSiguiente->tipo,personaje.simbolo, sockfd);
 			return 0;
 		}
 		if(recursoSiguiente->posX==*posX && recursoSiguiente->posY==*posY){
@@ -698,7 +639,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char sim
 			strcat(mensaje,aux);
 			strcat(mensaje," --");
 			log_trace(loggeo.trace,mensaje,"TRACE");
-			sendAnswer(2,1,recursoSiguiente->tipo,simbolo,sockfd); //Pedir instancia
+			sendAnswer(2,1,recursoSiguiente->tipo,personaje.simbolo,sockfd); //Pedir instancia
 			printf("Instancia pedida\n");
 			*esInstancia=auxiliar;
 			return 0;
@@ -741,17 +682,14 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,char sim
 		printf("Posicion X: %d\nPosicion Y: %d\n",*posX,*posY);
 		*posX=tempX;
 		*posY=tempY;
-		sendAnswer(3,(tempX*100+tempY),0,simbolo,sockfd);
+		sendAnswer(3,(tempX*100+tempY),0,personaje.simbolo,sockfd);
 		return tempX*100+tempY;
 	}
 return 0;
 }
 
-/*
- * Marca como levantado el recurso concedido
- *
+/* Marca como levantado el recurso concedido
  */
-
 int instanciaConc(t_list * planDeRecursos,int* esInstancia){
 	trecurso *aux;
 	char mensaje[256],valor[8];
@@ -770,11 +708,8 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia){
 	return 0;
 }
 
-/*
- * Modifica su posicion por la concedida
- *
+/* Modifica su posicion por la concedida
  */
-
 int movimientoConc(int posicion,int*posX,int*posY){
 	char mensaje[256],aux[8];
 	strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
@@ -789,11 +724,8 @@ int movimientoConc(int posicion,int*posX,int*posY){
 	return 0;
 }
 
-/*
- * Cierra los sockets de los hilos de miniPersonajes
- *
+/* Cierra los sockets de los hilos de miniPersonajes
  */
-
 void cierraHilos(){
 	int j;
 	thilo* aux;
@@ -825,4 +757,3 @@ logs crearLogs(tminipersonaje*raiz){
 	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
 	return paquete;
 }
-
