@@ -72,7 +72,7 @@ void *orquestador(void* infoAux){
 			puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
-		//loggearEstado_Debug();	ARREGLE ESO WEON!!!!
+		loggearEstado_Debug();
 		mensajeTrace("\t\t\t---------------------------\t\t\t");
 	}
 	cerrarLogs_Orquestador(logsOrquestador);
@@ -379,7 +379,7 @@ void loggearEstado_Debug(){
 	void _logNodoNivel(nodoNivel* nivel){
 		strcpy(mensaje," ");
 		strcat(mensaje,nivel->name);
-		strcat(mensaje," (socket/hiloID/cantJugadores) [nov(pid/sym)] :- (");
+		strcat(mensaje," (socket/hiloID/cantJugadores) :- (");
 		itoa(nivel->nid,valor,10);
 		strcat(mensaje,valor);
 		strcat(mensaje,"/");
@@ -389,29 +389,13 @@ void loggearEstado_Debug(){
 		itoa(nivel->cantJugadores,valor,10);
 		strcat(mensaje,valor);
 		strcat(mensaje,") ");
-		if( nivel->tandaActual == NULL ){
-			strcat(mensaje,"[-]");
-		}else{
-			nuevo* p = nivel->tandaActual;
-			while(p != NULL){
-				strcat(mensaje," (");
-				itoa(p->pid,valor,10);
-				strcat(mensaje,valor);
-				valor[0] = '/';
-				valor[1] = p->sym;
-				valor[2] = ')';
-				valor[3] = '\0';
-				strcat(mensaje,valor);
-				p = p->sgte;
-			}
-		}
 		mensajeDebug(mensaje);
 	}
 
-	log_debug(logsOrquestador.debug,"Estado de la lista de Niveles:","DEBUG");
+	mensajeDebug("Estado de la lista de Niveles:");
 
 	if( list_is_empty(listaNiveles) ){
-		log_debug(logsOrquestador.debug,"--NO HAY NIVELES CONECTADOS--","DEBUG");
+		mensajeDebug("--NO HAY NIVELES CONECTADOS--");
 	}else{
 		list_iterate(listaNiveles,(void*)_logNodoNivel);
 	}
