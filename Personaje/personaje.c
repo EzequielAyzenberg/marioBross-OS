@@ -226,7 +226,6 @@ void *jugar (void *minipersonaje){
 	//Recastea el parametro al tipo original
 	tminipersonaje *infoBis=(tminipersonaje*)minipersonaje;
 	tminipersonaje info= *infoBis;
-	printf("La lista es en el hilo: %d",(int)info.planDeRecursos);
 	printf("Cantidad de recursos cargados: %d\n",list_size(info.planDeRecursos));
 	printf("Nivel: %s\n",info.nivel);
 	printf("PosX e Y: %d--%d\n",info.posX,info.posY);
@@ -255,7 +254,6 @@ void *jugar (void *minipersonaje){
 	strcat(mensaje,valor);
 	strcat(mensaje,"/[-");
 	void _loggearRecursos(trecurso*recurso){
-		printf("%d",recurso->posX);
 		valor[0]=recurso->tipo;
 		valor[1]='\0';
 		strcat(mensaje,valor);
@@ -281,7 +279,7 @@ void *jugar (void *minipersonaje){
 		printf("Vidas: %d\n",personaje.vidas);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
-				strcpy(mensaje,"--Personaje muere por: Goomba"); //O por interbloqueo, cambiar
+				strcpy(mensaje,"--Personaje muere por: Goomba--"); //O por interbloqueo, cambiar
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				printf("Estoy muerto\n");
 				estoyMuerto(&info);
@@ -342,12 +340,13 @@ int cargaPersonaje(char *argv[]){
 	cfgPersonaje=config_create(argv[1]);//ACA CAMBIE LO QUE LE MANDA AL CONFIG
 	tinfo *infoNivel;
 	infoNivel=(tinfo*)malloc(sizeof(tinfo));
+	infoNivel->nivel=(char*)malloc(sizeof(char[16]));
 	miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
 	miniPersonaje->nivel=(char*)malloc(sizeof(char[16]));
 	personaje.orquestadorIP=(char*)malloc(sizeof(char[16]));
 
 	printf("Cargaremos el personaje\n");
-	if (config_has_property(cfgPersonaje,"vidas")){ //Si tiene cargadas las vidas las mete en la variable vidas
+	if (config_has_property(cfgPersonaje,"Vidas")){ //Si tiene cargadas las vidas las mete en la variable vidas
 		personaje.vidas=vidasPersonaje(cfgPersonaje);
 		printf("Vidas de personaje: %d.\n", personaje.vidas);
 	} else {
@@ -355,7 +354,7 @@ int cargaPersonaje(char *argv[]){
 		return -1;
 	}
 
-	if (config_has_property(cfgPersonaje,"nombre")){ //Si tiene cargado el nombre lo mete en la variable nombre
+	if (config_has_property(cfgPersonaje,"Nombre")){ //Si tiene cargado el nombre lo mete en la variable nombre
 		char*temporal=nombrePersonaje(cfgPersonaje);
 		strcpy(personaje.nombre,temporal);
 		free(temporal);
@@ -365,7 +364,7 @@ int cargaPersonaje(char *argv[]){
 		return -1;
 	}
 
-	if (config_has_property(cfgPersonaje,"simbolo")){ //Si tiene cargado el simbolo lo mete en la variable simbolo
+	if (config_has_property(cfgPersonaje,"Simbolo")){ //Si tiene cargado el simbolo lo mete en la variable simbolo
 		personaje.simbolo=identificadorPersonaje(cfgPersonaje);
 		miniPersonaje->simbolo=personaje.simbolo;
 		printf("Identificador de personaje: %c.\n", personaje.simbolo);
@@ -375,7 +374,7 @@ int cargaPersonaje(char *argv[]){
 		return -1;
 	}
 
-	if (config_has_property(cfgPersonaje,"orquestador")){//Si tiene cargado el orquestador lo mete en la variable orquestador
+	if (config_has_property(cfgPersonaje,"Orquestador")){//Si tiene cargado el orquestador lo mete en la variable orquestador
 		char *orquestadorAux,*aux1,*aux2;
 		orquestadorAux=orquestador(cfgPersonaje);
 		aux1=(strchr(orquestadorAux,':'))+1;
@@ -389,7 +388,7 @@ int cargaPersonaje(char *argv[]){
 		return -1;
 	}
 
-	if (config_has_property(cfgPersonaje,"planDeNiveles")){ //Si tiene el plan de niveles cargado lo mete en los nodos de niveles en la lista
+	if (config_has_property(cfgPersonaje,"PlanDeNiveles")){ //Si tiene el plan de niveles cargado lo mete en los nodos de niveles en la lista
 		char ** planNivelesPersonaje=niveles(cfgPersonaje);
 		printf("El primer nivel es %s\n",planNivelesPersonaje[0]);
 		char ** recursosNivel;
@@ -409,7 +408,13 @@ int cargaPersonaje(char *argv[]){
 				strcpy(miniPersonaje->nivel,infoNivel->nivel);
 				printf("Cargado el nivel, ahora vamos por los recursos\n");
 				recursosNivel=recursos(cfgPersonaje,infoNivel->nivel);
-				if((cantidadElementosArray(recursosNivel))==0)return -1;
+				for (j=0;j<3;j++){
+					printf("Recursos nivel: %s\n",recursosNivel[j]);
+				}
+				if((cantidadElementosArray(recursosNivel))==0){
+					printf("Archivo de configuracion incompleto, falta campo: Recursos\n");
+					return -1;
+				}
 				listaRecursos=list_create();
 				tamanioArrayRecursos=cantidadElementosArray(recursosNivel);
 				puts("Lista de recursos creada, a cargarla");
@@ -474,7 +479,7 @@ int cargaPersonaje(char *argv[]){
 
 int vidasPersonaje( t_config * cfgPersonaje)
 {
-	return config_get_int_value(cfgPersonaje,"vidas");
+	return config_get_int_value(cfgPersonaje,"Vidas");
 }
 
 /*
@@ -484,7 +489,7 @@ int vidasPersonaje( t_config * cfgPersonaje)
 
 char identificadorPersonaje ( t_config * cfgPersonaje)
 {
-	return *config_get_string_value(cfgPersonaje,"simbolo");
+	return *config_get_string_value(cfgPersonaje,"Simbolo");
 
 }
 
@@ -494,7 +499,7 @@ char identificadorPersonaje ( t_config * cfgPersonaje)
  */
 char * nombrePersonaje ( t_config * cfgPersonaje)
 {
-	return config_get_string_value(cfgPersonaje,"nombre");
+	return config_get_string_value(cfgPersonaje,"Nombre");
 }
 
 /*
@@ -504,7 +509,7 @@ char * nombrePersonaje ( t_config * cfgPersonaje)
 
 char * orquestador( t_config * cfgPersonaje)
 {
-	return config_get_string_value(cfgPersonaje,"orquestador");
+	return config_get_string_value(cfgPersonaje,"Orquestador");
 }
 
 /*
@@ -514,7 +519,7 @@ char * orquestador( t_config * cfgPersonaje)
 
 char ** niveles( t_config * cfgPersonaje)
 {
-	return config_get_array_value(cfgPersonaje,"planDeNiveles");
+	return config_get_array_value(cfgPersonaje,"PlanDeNiveles");
 }
 
 /*
@@ -526,9 +531,9 @@ char ** recursos( t_config * cfgPersonaje, char *nivel)
 {
 	char cadenaAuxiliar[20];
 	char cadenaFinal[20];
-	strcpy(cadenaAuxiliar,"obj[");
-	strcat(cadenaAuxiliar+4,nivel);
-	strcat(cadenaAuxiliar+strlen(nivel)+4,"]");
+	strcpy(cadenaAuxiliar,"Obj[");
+	strcat(cadenaAuxiliar,nivel);
+	strcat(cadenaAuxiliar,"]");
 	strcpy(cadenaFinal,cadenaAuxiliar);
 	return config_get_array_value(cfgPersonaje,cadenaFinal);
 }
@@ -539,10 +544,22 @@ char ** recursos( t_config * cfgPersonaje, char *nivel)
  */
 
 int cantidadElementosArray(char **array){
-	int tamanioArray,tamanioElemento;
+	/*int tamanioArray,tamanioElemento,i=0;
+	tamanioElemento=sizeof(array);
+	printf("tamanio elementosPOSTA: %d\n",tamanioElemento);
 	tamanioElemento=sizeof(array[0]);
+	printf("tamanio elemento: %d\n",tamanioElemento);
+	tamanioArray=strlen(*array);
+	printf("tamanio arrayPOSTA: %d\n",tamanioArray);
 	tamanioArray=strlen((char*)array);
-	return tamanioArray/tamanioElemento;
+	printf("tamanio array: %d\n",tamanioArray);
+	return tamanioArray/tamanioElemento;*/
+	int i=0;
+	while(array[i]!=NULL){
+		printf("%s\n",array[i]);
+		i++;
+	}
+	return i;
 }
 
 /*

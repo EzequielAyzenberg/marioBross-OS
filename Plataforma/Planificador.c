@@ -32,6 +32,7 @@ int asignarRecursos(global*);
 
 //int devolverRecursos(global*);
 
+void selectInterrupt(global);
 void movimiento(global*,answer);
 void dormirJugador(t_player*,t_list*);
 void instancia(global);
@@ -68,11 +69,11 @@ void *planificador (void *parametro){
 	maxfd=0;
 	logs logueo;
 	logueo=crearLogs(raiz);
-
 	global general;
 		general.algo=(struct algo*)malloc(sizeof(struct algo));
 		general.cabecera=raiz;
 		general.ready=ready;
+		general.dead=NULL;
 		general.sleeps=sleeps;
 		general.algo->remainDist=0;
 		general.algo->algo=0;
@@ -91,18 +92,15 @@ void *planificador (void *parametro){
 			aLaMierdaConTodo(general);
 			break;
 		}
-		if(general.cabecera->cantJugadores==0){
-			if(selectGRID_planificador(*(general.maxfd),general.original)>0){
-				answer temp;
-				respuesta=interrupcion(general.cabecera->nid,0,&temp,general);
-			}
-		}else loggearListas(general);
+		selectInterrupt(general);
+		loggearListas(general);
 		respuesta=asignarRecursos(&general);
 		if (respuesta==-2) break;
 	//	respuesta=devolverRecursos(&general);
 	//	if (respuesta==-2) break;
 		respuesta=atenderJugador(&general);
 		if (respuesta==-2) break;
+		selectInterrupt(general);
 		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		usleep((general.algo->retardo)*1000);
@@ -110,6 +108,65 @@ void *planificador (void *parametro){
 cerrarLogging(general);
 puts("El hilo termina ahora!!");
 return 0;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------
+
+void selectInterrupt(global tabla){
+	int i=0,respuesta,fdmax=*(tabla.maxfd);
+	char mensaje[128],mensajeError[64],numero[16],data[8];
+	answer aux;
+	fd_set readfds=*(tabla.original);
+	if(selectGRID_planificador(fdmax,&readfds)>0){
+		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax)){
+			i++;
+		}
+		log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
+		strcpy(mensaje,"Nº:I");
+		itoa(i,numero,10);
+		strcat(mensaje,"--Socket:(Esp./Recv.)-Msj:(Esp./Recv.)-(Msj/Cont/Dat/Sym)--Duenio:  --(N/");
+		strcat(mensaje,numero);
+		strcat(mensaje,")--(");
+		if (i>fdmax){
+			puts("--ERROR:No se encontro candidato para selectear!!--");
+			strcpy(mensajeError,"Nº:I");
+			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
+			log_info(tabla.logging.info,mensaje,"ERROR");
+			exit(1);
+		}else{
+			printf("%d",i);
+			respuesta=recvAnswer(&aux,i);
+			printf("--EspMsg:X");
+			strcat(mensaje,"ALL/");
+			printf("--RecvMsg:%d-Cnt:%d-Dta:%c-",(int)aux.msg,(int)aux.cont,aux.data);
+			itoa((int)aux.msg,numero,10);
+			strcat(mensaje,numero);
+			strcat(mensaje,")--(");
+			strcat(mensaje,numero);
+			itoa((int)aux.cont,numero,10);
+			strcat(mensaje,"/");
+			strcat(mensaje,numero);
+			strcat(mensaje,"/");
+			data[0]=aux.data;
+			data[1]='\0';
+			strcat(mensaje,data);
+			strcat(mensaje,"/");
+			data[0]=aux.symbol;
+			data[1]='\0';
+			strcat(mensaje,data);
+			strcat(mensaje,")--Duenio:");
+			if(i==tabla.cabecera->nid)	strcat(mensaje,tabla.cabecera->name);
+			else {
+				data[0]=buscarSimbolo(i,tabla);
+				data[1]='\0';
+				strcat(mensaje,data);
+			}
+			strcat(mensaje,".");
+			log_trace(tabla.logging.trace,mensaje,"TRACE");
+			interrupcion(i,respuesta,&aux,tabla);
+			log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
+		}
+	}
 }
 
 char buscarSimbolo(int i,global tabla){
@@ -227,7 +284,7 @@ void modificarAlgoritmo(answer temp,global general){
 		strcat(mensaje,numero);
 		strcat(mensaje,"--SIN MODIFICAR");
 	}
-	//log_info(general.logging.info,mensaje,"WARNING");
+	log_info(general.logging.info,mensaje,"WARNING");
 }
 void modificarRetardo(answer temp,global general){
 	general.algo->retardo=temp.cont;
@@ -237,7 +294,7 @@ void modificarRetardo(answer temp,global general){
 	itoa(general.algo->retardo,numero,10);
 	strcat(mensaje,numero);
 	strcat(mensaje," mSeg--");
-	//log_info(general.logging.info,mensaje,"WARNING");
+	log_info(general.logging.info,mensaje,"WARNING");
 }
 void inicializar(nodoNivel*raiz,global*general){
 	char mensaje[256],valor[16];
@@ -296,7 +353,7 @@ int leerNovedad(global*tanda){
 		strcat(mensaje,numero);
 		strcat(mensaje,"--\t --Cliente:");
 		strcat(mensaje,tanda->cabecera->name);
-		//log_info(tanda->logging.info,mensaje,"INFO");
+		log_info(tanda->logging.info,mensaje,"INFO");
 		respuesta=selectear(NULL,1,tanda->original,*(tanda->maxfd),tanda->cabecera->nid,*tanda);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
 		switch (respuesta){
 			case 1:puts("--El nivel ha dado el ok.--");
@@ -329,7 +386,7 @@ int leerNovedad(global*tanda){
 			numero[1]='\0';
 			strcat(mensaje,numero);
 			strcat(mensaje,".");
-			//log_info(tanda->logging.info,mensaje,"INFO");
+			log_info(tanda->logging.info,mensaje,"INFO");
 			break;
 			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
 			sendAnswer(-1,0,' ',' ',tanda->cabecera->tandaRaiz->pid);
@@ -342,7 +399,7 @@ int leerNovedad(global*tanda){
 			strcat(mensaje,"--Socekt Nº:");
 			strcat(mensaje,numero);
 			strcat(mensaje,".");
-			//log_info(tanda->logging.info,mensaje,"WARNING");
+			log_info(tanda->logging.info,mensaje,"WARNING");
 			break;
 			case -2:return -2;
 			break;
@@ -364,7 +421,7 @@ void reordenar(t_list*ready,int RR){
 	if (RR!=0)puts("--Planificación Round Robins => Sin Reordenar--");
 	else{
 		puts("--Planificación SRDF => Reordenando..--");
-		list_sort(ready,comparator);
+		if(!list_is_empty(ready))list_sort(ready,comparator);
 	}
 }
 void cargarAlFinal(t_player*temp,t_list*ready,int RR){
@@ -464,7 +521,7 @@ int modoDeRecuperacion(global tabla){
 	status=tabla.exe->player->pid;
 	usleep(300000);
 	log_debug(tabla.logging.debug,"Nivel reconectado.","DEBUG");
-	//log_info(tabla.logging.info,"Nivel reconectado.","INFO");
+	log_info(tabla.logging.info,"Nivel reconectado.","INFO");
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
@@ -545,7 +602,7 @@ int aLaMierdaConTodo(global tabla){
 	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
 	puts("Nos Vamos todos al carajo!");
-	//log_info(tabla.logging.info,"Nivel terminado por desconexion.","ERROR");
+	log_info(tabla.logging.info,"Nivel terminado por desconexion.","ERROR");
 	return -2;
 }
 bool muertePersonaje(int i,global tabla){
@@ -557,6 +614,13 @@ bool muertePersonaje(int i,global tabla){
 			}
 	//puts("Localizando cadaver.");
 	t_player*aux ;
+	if(tabla.dead!=NULL){
+		if(i==tabla.dead->pid){
+			aux=tabla.dead;
+			tabla.dead=NULL;
+			loggearListas(tabla);
+		}
+	}
 	aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 	if(aux==NULL) {		//puts("Buscando entre los dormidos.");
 		aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
@@ -595,14 +659,14 @@ bool muertePersonaje(int i,global tabla){
 	tabla.cabecera->cantJugadores--;
 	if(tabla.cabecera->cantJugadores==0)printf("--ATENCION--No quedan jugadores!!\n");
 	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
-	enviarLog(tabla.cabecera->nid,tabla,8,0,' ',aux->sym);
+	enviarLog(tabla.cabecera->nid,tabla,8,0,'Z',aux->sym);
 	if(tabla.exe->player!=NULL){
 		if(aux->pid==tabla.exe->player->pid){
 			tabla.exe->player=NULL;
 			chosen =true;
 		}
 	}
-	//log_info(tabla.logging.info,mensaje,"WARNING");
+	log_info(tabla.logging.info,mensaje,"WARNING");
 	close(aux->pid);
 	free(aux);
 	puts("Personaje Completamente eliminado!!");
@@ -615,9 +679,9 @@ void matarPersonaje(char simbolo,global tabla){
 		    return false;
 			}
 	t_player*aux;
-	aux=list_find(tabla.ready,(void*)_is_Personaje);
+	aux=list_remove_by_condition(tabla.ready,(void*)_is_Personaje);
 	if(aux==NULL){
-		aux=list_find(tabla.sleeps,(void*)_is_Personaje);
+		aux=list_remove_by_condition(tabla.sleeps,(void*)_is_Personaje);
 		if(aux==NULL)aux=buscarDormido(0,simbolo,tabla.sleeps);
 		if(aux==NULL){
 			if(tabla.exe->player!=NULL){
@@ -635,9 +699,10 @@ void matarPersonaje(char simbolo,global tabla){
 	dato[1]='\0';
 	dato[2]='-';
 	strcat(mensaje,dato);
-	//log_info(tabla.logging.info,mensaje,"INFO");
+	log_info(tabla.logging.info,mensaje,"INFO");
+	tabla.dead=aux;
 	sendAnswer(8,0,' ',' ',aux->pid);
-	enviarLog(aux->pid,tabla,8,0,' ',' ');
+	enviarLog(aux->pid,tabla,8,0,'Z','Z');
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	puts("\n--SLI--");
@@ -685,7 +750,7 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	numero[1]='\0';
 	strcat(mensaje,numero);
 	strcat(mensaje,"--");
-	//log_info(tabla.logging.info,mensaje,"WARNING");
+	log_info(tabla.logging.info,mensaje,"WARNING");
 	puts("--CLI--\n");
 	return status;
 }
@@ -696,7 +761,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 	fd_set readfds;
 	int status,cantidad;
 	char mensaje[128],mensajeError[64],numero[16],simbolo;
-	char data[]=".";
+	char data[2];
 	static int cantSelecteos=0;
 	do{
 		itoa(cantSelecteos,numero,10);
@@ -723,7 +788,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			strcpy(mensajeError,"Nº:");
 			strcat(mensajeError,numero);
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
-			//log_info(tabla.logging.info,mensaje,"ERROR");
+			log_info(tabla.logging.info,mensaje,"ERROR");
 			exit(1);
 		}else{
 			printf("%d",i);
@@ -747,9 +812,11 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 			strcat(mensaje,numero);
 			strcat(mensaje,"/");
 			data[0]=aux.data;
+			data[1]='\0';
 			strcat(mensaje,data);
 			strcat(mensaje,"/");
 			data[0]=aux.symbol;
+			data[1]='\0';
 			strcat(mensaje,data);
 			strcat(mensaje,")--Duenio:");
 
@@ -761,6 +828,7 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 				simbolo=buscarSimbolo(i,tabla);
 				printf("=> %c\n",simbolo);
 				data[0]=simbolo;
+				data[1]='\0';
 				strcat(mensaje,data);
 			}
 			strcat(mensaje,".");
@@ -769,12 +837,12 @@ int selectear(answer*tempo,short esperado,fd_set*originalfds,int fdmax,int sock,
 				if((respuesta==esperado)||(respuesta==-1)||(esperado==10)){
 					if (tempo!=NULL)*tempo=aux;
 					cantSelecteos++;
-					log_trace(tabla.logging.trace,"\t\t\t----------------------------\t\t\t","TRACE");
+					log_trace(tabla.logging.trace,"\t\t\t--------A--------------------\t\t\t","TRACE");
 					return respuesta;
 				}else status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0){
 					cantSelecteos++;
-					log_trace(tabla.logging.trace,"\t\t\t----------------------------\t\t\t","TRACE");
+					log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
 					break;
 				}
 			}else{
@@ -829,7 +897,7 @@ void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 
 
 	//list_add(tabla->ready,(void*)jugador);
-	//log_info(tabla->logging.info,mensaje,"INFO");
+	log_info(tabla->logging.info,mensaje,"INFO");
 	//sendAnswer(1,0,' ',' ',jugador->pid);
 
 }
@@ -853,7 +921,7 @@ int asignarRecursos(global*tabla){
 				letra[0]=jugador->sym;
 				letra[1]='\0';
 				strcat(mensaje,letra);
-				//log_info(tabla->logging.info,mensaje,"INFO");
+				log_info(tabla->logging.info,mensaje,"INFO");
 				sendAnswer(2,1,jugador->data.recsol,jugador->sym,tabla->cabecera->nid);
 				enviarLog(tabla->cabecera->nid,*tabla,2,1,jugador->data.recsol,jugador->sym);
 				puts("Entrando a selectear.");
@@ -973,7 +1041,7 @@ void instancia(global tabla){
 	numero[0]=tabla.exe->player->data.recsol;
 	strcat(mensaje,numero);
 	strcat(mensaje,"--");
-	//log_info(tabla.logging.info,mensaje,"INFO");
+	log_info(tabla.logging.info,mensaje,"INFO");
 	dormirJugador(tabla.exe->player,tabla.sleeps);
 	tabla.exe->player=NULL;
 	puts("Jugador a la espera de una instancia.");
@@ -1063,13 +1131,6 @@ logs crearLogs(nodoNivel*raiz){
 	strcat(file,"-Debug");
 	strcat(file,".txt");
 	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
-	/*strcpy(file,LOCAL_LOG);
-	strcat(file,raiz->name);
-	strcat(file,"-Warning");
-	strcat(file,".txt");
-	strcpy(program_name,"PLANIFICADOR_");
-	strcat(program_name,raiz->name);
-	paquete.warning=log_create(file,program_name,muestreo,LOG_LEVEL_WARNING);
 	strcpy(file,LOCAL_LOG);
 	strcat(file,raiz->name);
 	strcat(file,"-Info");
@@ -1077,6 +1138,13 @@ logs crearLogs(nodoNivel*raiz){
 	strcpy(program_name,"PLANIFICADOR_");
 	strcat(program_name,raiz->name);
 	paquete.info=log_create(file,program_name,muestreo,LOG_LEVEL_INFO);
+	/*strcpy(file,LOCAL_LOG);
+	strcat(file,raiz->name);
+	strcat(file,"-Warning");
+	strcat(file,".txt");
+	strcpy(program_name,"PLANIFICADOR_");
+	strcat(program_name,raiz->name);
+	paquete.warning=log_create(file,program_name,muestreo,LOG_LEVEL_WARNING);
 	strcpy(file,LOCAL_LOG);
 	strcat(file,raiz->name);
 	strcat(file,"-Error");
@@ -1198,7 +1266,7 @@ void loggearListas(global tabla){
 void cerrarLogging(global tabla){
 	log_destroy(tabla.logging.debug);
 	log_destroy(tabla.logging.trace);
-	/*log_destroy(tabla.logging.error);
 	log_destroy(tabla.logging.info);
+	/*log_destroy(tabla.logging.error);
 	log_destroy(tabla.logging.warning);*/
 }
