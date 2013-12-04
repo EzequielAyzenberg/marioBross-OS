@@ -59,8 +59,8 @@ typedef struct{
 }logs;
 
 
-int sockfd,socketEscucha,personajeCargado,nuevo,
-	ganado=0,finalizados=0,repetir=1,repeticiones=0,
+int sockfd,socketEscucha,nuevo,ganado=0,
+	finalizados=0,repetir=1,repeticiones=0,
 	limboOK=0,hilosMuertos=0;
 tpersonaje personaje;
 char *recurso;
@@ -92,7 +92,8 @@ void restaVida(int);
 void finDeNivel(int,char);
 logs crearLogs(tminipersonaje*);
 
-
+t_config * cfgPersonaje;
+int modificar=1;
 
 int main(int argc, char *argv[]) {
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
@@ -103,12 +104,12 @@ int main(int argc, char *argv[]) {
 	while(repetir==1){
 		puts("Listos para arrancar?");
 		sleep(1);
-		personajeCargado=cargaPersonaje(argv);//ACA CAMBIE LO QUE LE MANDA
-		if(personajeCargado==-1){
+		if( cargaPersonaje(argv) == -1){
 			printf("Error al cargar configuracion del personaje.\n");
 			list_destroy(personaje.miniPersonajes);
 			return 0;
 		}
+		config_destroy(cfgPersonaje);
 		while(personaje.miniPersonajes!=NULL && personaje.vidas>0){
 			if(personaje.planDeNiveles->elements_count==ganado){
 				int sockfdAux;
@@ -226,6 +227,12 @@ void *jugar (void *minipersonaje){
 	//Recastea el parametro al tipo original
 	tminipersonaje *infoBis=(tminipersonaje*)minipersonaje;
 	tminipersonaje info= *infoBis;
+	info.nivel = (char*)malloc(sizeof(char[16]));
+	strcpy(info.nivel,infoBis->nivel);
+
+	printf("\n\n  Hola, soy el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",info.nivel,info.simbolo);
+	modificar = 1;
+
 	printf("Cantidad de recursos cargados: %d\n",list_size(info.planDeRecursos));
 	printf("Nivel: %s\n",info.nivel);
 	printf("PosX e Y: %d--%d\n",info.posX,info.posY);
@@ -331,14 +338,14 @@ void *jugar (void *minipersonaje){
  *
  */
 int cargaPersonaje(char *argv[]){
+	puts("\n   Esperando por el modificar = true....\n");
 	thilo *miniHilo;
 	miniHilo=(thilo*)malloc(sizeof(thilo));
 	miniHilo->nivel=(char*)malloc(sizeof(char[16]));
 	answer conexionSaliente;
 	tminipersonaje *miniPersonaje;
-	t_config * cfgPersonaje;
-	cfgPersonaje=config_create(argv[1]);//ACA CAMBIE LO QUE LE MANDA AL CONFIG
 	tinfo *infoNivel;
+	cfgPersonaje=config_create(argv[1]);//ACA CAMBIE LO QUE LE MANDA AL CONFIG
 	infoNivel=(tinfo*)malloc(sizeof(tinfo));
 	infoNivel->nivel=(char*)malloc(sizeof(char[16]));
 	miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
@@ -403,7 +410,8 @@ int cargaPersonaje(char *argv[]){
 		lista=list_create();
 		tamanioArrayNivel=cantidadElementosArray(planNivelesPersonaje);
 		for (i=0;i<tamanioArrayNivel;i++){ //Carga en nodos los niveles
-				printf("Se carga el nivel: %s\n", *(planNivelesPersonaje+i));
+			while(modificar==0){};
+			printf("Se carga el nivel: %s\n", *(planNivelesPersonaje+i));
 				strcpy(infoNivel->nivel,*(planNivelesPersonaje+i));
 				strcpy(miniPersonaje->nivel,infoNivel->nivel);
 				printf("Cargado el nivel, ahora vamos por los recursos\n");
@@ -448,7 +456,8 @@ int cargaPersonaje(char *argv[]){
 				printf("La Ip es: %s\n",personaje.orquestadorIP);
 				printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
-				sendHandshake(1,ptrAux->nivel,miniPersonaje->simbolo,(short)sockfd);
+				strcpy(miniPersonaje->nivel,ptrAux->nivel);
+				sendHandshake(1,miniPersonaje->nivel,miniPersonaje->simbolo,(short)sockfd);
 				recvAnswer(&conexionSaliente,sockfd);
 				printf("Conexion establecida\n");
 				if(conexionSaliente.msg==-1){
@@ -459,16 +468,19 @@ int cargaPersonaje(char *argv[]){
 				miniHilo->nombre=sockfd;
 				printf("Buffer de hilo cargado\n");
 				list_add(personaje.miniPersonajes,(void*)miniHilo);
+
+				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,miniPersonaje->simbolo);
+				//sleep(10);
+
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				strcpy(miniHilo->nivel,infoNivel->nivel);
-
+				modificar = 0;
 		}
 
 	}else {
 		printf("Archivo de configuracion incompleto, falta campo: Plan de Niveles\n");
 		return -1;
 	}
-	config_destroy(cfgPersonaje);
 	return EXIT_SUCCESS;
 }
 
@@ -595,6 +607,9 @@ int estoyMuerto(tminipersonaje *info){
 		printf("Reconectando personaje \n");
 		sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 		printf("Conectado. Avisando a los chamigos que volvi\n");
+
+		printf("\n\n  Reconectando como:\n  Nivel: %s - Simbolo: %c \n\n",info->nivel,info->simbolo);
+
 		sendHandshake(1,info->nivel,info->simbolo,(short)sockfd);
 		printf("Esperando seniales de vida\n");
 		recvAnswer(&conexionSaliente,sockfd);
