@@ -470,7 +470,6 @@ int cargaPersonaje(char *argv[]){
 				list_add(personaje.miniPersonajes,(void*)miniHilo);
 
 				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,miniPersonaje->simbolo);
-				//sleep(10);
 
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				strcpy(miniHilo->nivel,infoNivel->nivel);
