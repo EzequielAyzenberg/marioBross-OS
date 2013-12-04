@@ -468,6 +468,7 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 //printf("El pj es el numero %d\n",numPj);
 
 //numPj=0;
+			int yaMovio=0;//esta varaible esta para evitar que se mueva 2 veces en el mismo turno un enemigo
 			if (*flagX==1){
 					if(myinfo->posx==posPjs[numPj].posx||(myinfo->posx<posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,1))||(myinfo->posx>posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,2)))*flagX=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
 				};
@@ -478,6 +479,26 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 					//if((*buffer).posy==posPjs[numPj].posy)flagX[i]=1;//si ya estoy alineado con el eje Y, voy a moverme en el eje X
 					}
 
+
+			if (*flagX==1){
+								if(myinfo->posy==posPjs[numPj].posy && ((myinfo->posx<posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,1))||(myinfo->posx>posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,2)))){
+									if (rand()%2==1)myinfo->posy++;
+									else myinfo->posy--;
+									yaMovio=1;
+								}
+							}
+
+
+			if (*flagX==0){
+									if(myinfo->posx==posPjs[numPj].posx && ((myinfo->posy<posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,3))||(myinfo->posy>posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,4)))){
+										if (rand()%2==1)myinfo->posx++;
+										else myinfo->posx--;
+										yaMovio=1;
+									}
+							}
+
+
+			if (!yaMovio){
 			if (*flagX==1){
 					if(myinfo->posx<posPjs[numPj].posx)myinfo->posx=myinfo->posx+1;
 
@@ -492,6 +513,7 @@ void moverEnemigos(coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadores
 
 					*flagX=1;
 				}
+			}
 			if(myinfo->posx==posPjs[numPj].posx && myinfo->posy==posPjs[numPj].posy){
 				pthread_mutex_lock( &mutexMatarPersonaje);
 				bool _is_Personaje(t_personaje* pj2){

@@ -55,20 +55,17 @@ main(int argc, char *argv[]){
 	t_list* listaEnemigos;
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
-	listaJugadoresActivos=list_create();//provisorio hasta que un proceso se encargue de crearla
-	listaJugadoresMuertos=list_create();//idem
-
-	//crearPersonaje(&listaJugadoresActivos,0,0,'V');
-	//crearPersonaje(&listaJugadoresActivos,10,10,'@');
-	//crearPersonaje(&listaJugadoresActivos,20,20,'F');
-	//crearPersonaje(&listaJugadoresActivos,40,15,'A');
-	//moverPersonaje(&listaJugadoresActivos,1,1,'@');
+	t_list* listaJugadoresBloqueados;
+	listaJugadoresActivos=list_create();
+	listaJugadoresMuertos=list_create();
+	listaJugadoresBloqueados=list_create();
 	int rows,cols;
 	cargarConfig(&config);
 	datosConexiones datosConexiones;
 	datosConexiones.config=&config;
 	datosConexiones.listaJugadoresActivos=listaJugadoresActivos;
 	datosConexiones.listaJugadoresMuertos=listaJugadoresMuertos;
+	datosConexiones.listaJugadoresBloqueados=listaJugadoresBloqueados;
 	datosConexiones.listaRecursos=config.listaCajas;
 	datosConexiones.socket=-1;
 
@@ -113,19 +110,6 @@ main(int argc, char *argv[]){
 	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
 		//nivel_gui_terminar();
 
-	/*
-	{
-		int i=0,j=0;
-		for (i=0;i<config.enemigos;i++){
-			for(j=0;j<4;j++){
-				recorridoEnemigos[i][j].posx=0;
-				recorridoEnemigos[i][j].posy=0;
-			}
-		}
-	}
-*/
-
-//controlEnemigos(&infoParaEnemigos);
 
 infoInterbloqueo infoParaInterbloqueo;
 infoParaInterbloqueo.listaRecursos=config.listaCajas;
@@ -136,10 +120,6 @@ infoParaInterbloqueo.socket=&datosConexiones.socket;
 pthread_t hiloInterbloqueo;
 pthread_create(&hiloInterbloqueo,NULL,(void*)&controlInterbloqueo,(void*)&infoParaInterbloqueo);
 handshakePlataforma(&datosConexiones);
-//while(1){
-	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);//este while esta para evitar q el main finalice mientras el hilo se ejecuta,proximamente aca va el resto de la implementacion del programa
-//}
-//hiloEnemigos=hiloGRID(&controlEnemigos,&infoParaEnemigos);
 
 /*
 free(config.algoritmo);

@@ -41,7 +41,7 @@ void escucharPlanificador(datosConexiones *info){
 	time.tv_usec = 0;
 	int socketBuffer=info->socket;
 	fd=inotify_init();//crea el inotify al comienzo de cada loop
-	watch=inotify_add_watch(fd,info->config->path,IN_MODIFY);
+	watch=inotify_add_watch(fd,info->config->path,IN_CLOSE_WRITE/*IN_MODIFY*/);
 	//puts(info->config->path);
 	FD_ZERO (&active);
 	FD_SET (fd, &active);
@@ -103,26 +103,26 @@ void escucharPlanificador(datosConexiones *info){
 		else(sendAnswer(-1,0,' ',' ',info->socket));
 	break;
 	case 2:if(bufferAnswer.cont){
-			if(otorgarRecurso(info->listaRecursos,info->listaJugadoresActivos,bufferAnswer.data,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
+			if(otorgarRecurso(info->listaRecursos,info->listaJugadoresActivos,info->listaJugadoresBloqueados,bufferAnswer.data,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
 			else (sendAnswer(-1,0,' ',' ',info->socket));
 
 			}else sendAnswer(2,chequearRecurso(info->listaRecursos,bufferAnswer.data),' ',' ',info->socket);
 	break;
 	case 5:sendAnswer(1,0,' ',' ',info->socket);
 		   while(recvAnswer(&bufferAnswer,info->socket)==2){
-			   recibirRecursos(info->listaRecursos,bufferAnswer.data);
+			   recibirRecursos(info->listaRecursos,info->listaJugadoresBloqueados,bufferAnswer.data,info->socket);
 		   }
 	break;
-	case 8:matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaRecursos,bufferAnswer.symbol);
+	case 8:matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaJugadoresBloqueados,info->listaRecursos,bufferAnswer.symbol,info->socket);
 	break;
 		}
 
 	}
 
 	if(i==fd){
-		a=1;
-		puts("TODAVIA SIRVE");
-		sleep(1);
+		//a=1;
+		//puts("TODAVIA SIRVE");
+		//sleep(1);
 		cargarConfig(&bufferConfig);
 		if(info->config->algoritmo!=bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
 			*info->config=bufferConfig;
@@ -133,6 +133,7 @@ void escucharPlanificador(datosConexiones *info){
 		}
 		if(info->config->retardo!=bufferConfig.retardo){
 			*info->config=bufferConfig;
+			sendAnswer(4,info->config->retardo,' ',' ',socketBuffer);//PREGUNTAR A CRIS SI ESTA BIEN
 			//mandar mensaje de retardo, aun no especificado
 		}
 

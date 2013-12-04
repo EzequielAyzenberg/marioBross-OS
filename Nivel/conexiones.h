@@ -14,6 +14,7 @@ typedef struct{
 	nivelConfig* config;
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
+	t_list* listaJugadoresBloqueados;
 	t_list* listaRecursos;
 	t_list* listaEnemigos;
 	short socket;
