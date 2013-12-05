@@ -241,7 +241,7 @@ int crearArchivo(const char* path,GFile* inodo){
 	int i;
 	char* pathPadre;
 	nodoLibre=0;
-	i=0;
+	
 	
 	printf("la ruta que llego es: %s\n",path);
 	
@@ -273,6 +273,7 @@ int crearArchivo(const char* path,GFile* inodo){
 	inodo[nodoLibre].m_date=(uint64_t)1381272974;
 	inodo[nodoLibre].c_date=(uint64_t)1381272974;
 	inodo[nodoLibre].file_size=0;
+	for(i=0;i<=999;i++) inodo[nodoLibre].blk_indirect[i]=0;
 	
 	return 0;
 	}
@@ -444,7 +445,7 @@ return 0;
 }
 
 
-int writeGrid(char *buf, size_t size, off_t offset,GFile* nodo){
+int writeGrid(const char *buf, size_t size, off_t offset,GFile* nodo){
 	
 	int bytesGrabados;
 	int byteRestantes;
@@ -479,6 +480,41 @@ while (bytesGrabados < size) {
 puts("");puts("");puts("");
 	return 0;//Le agregue el return con caca.
 }
+
+int32_t borrarDirectorio(const char* path,GFile* inodo)
+{
+	int numNodo=nodoByPath(path,inodo);
+	if (numNodo==FAIL) return -EEXIST;
+	
+	inodo[numNodo].state=0;
+	strcpy(inodo[numNodo].fname,"");  
+	inodo[numNodo].parent_dir_block=1025;
+	inodo[numNodo].m_date=(uint64_t)0;
+	inodo[numNodo].c_date=(uint64_t)0;
+	
+	return 0;
+	
+}
+
+int32_t borrarArchivo(const char* path,GFile* inodo,t_bitarray* bitMap)
+{
+	int numNodo=nodoByPath(path,inodo);
+	if (numNodo==FAIL) return -EEXIST;
+	
+	truncale(path,0,inodo,bitMap);
+	inodo[numNodo].state=0;
+	strcpy(inodo[numNodo].fname,"");  
+	inodo[numNodo].parent_dir_block=1025;
+	inodo[numNodo].m_date=(uint64_t)0;
+	inodo[numNodo].c_date=(uint64_t)0;
+	inodo[numNodo].file_size=0;
+	int i;
+	for(i=0;i<=999;i++) inodo[numNodo].blk_indirect[i]=0;
+	
+	return 0;
+}
+
+
 ////////////////////////////funciones de ABAJO fuera de uso por el momento  
 
 

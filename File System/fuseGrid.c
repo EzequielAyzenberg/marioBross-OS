@@ -13,9 +13,9 @@
  * Leer archivos                  HECHO
  * Crear archivos                 HECHO
  * Escribir archivos              HECHO  
- * Borrar archivos                                       
+ * Borrar archivos                HECHO                  
  * Crear directorios y dos niveles de subdirecctorios     HECHO
- * Borrar direcctorios vacíos
+ * Borrar direcctorios vacíos	  HECHO
  * */
 
 /*
@@ -23,10 +23,10 @@
  * 
  * truncar archivos           HECHO
  * modificar fecha            puesto pero sin terminar
- * getatribute                 HECHO
- * readdir                     HECHO
- * setaer bitmap	       HECHO
- * consultar un bit map        HECHO
+ * getatribute                HECHO
+ * readdir                    HECHO
+ * setaer bitmap			  HECHO
+ * consultar un bit map       HECHO
  * sincronizar esc/lec
  * /
 
@@ -328,6 +328,22 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
 	return size;
 }
 
+static int32_t theGrid_unlink(const char * path)
+{
+	
+	int32_t res = 0;
+	res = borrarArchivo(path,ptr_nodo,bitMap);
+	return res;
+}
+
+static int32_t theGrid_rmdir(const char * path)
+{
+	int32_t res = 0;
+	res = borrarDirectorio(path,ptr_nodo);
+	return res;
+
+}
+
 
 
 /*
@@ -346,6 +362,9 @@ static struct fuse_operations theGrid_oper = {
 		.truncate = theGrid_truncate,
 		.utimens  = theGrid_utimens, 
 		.write = theGrid_write,
+		.unlink = theGrid_unlink,
+		.rmdir = theGrid_rmdir 
+		
 };
 
 
