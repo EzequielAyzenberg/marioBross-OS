@@ -30,92 +30,11 @@ void left_strcat(char*destino,char*origen);
 uint8_t* posicionBloqueSegunByte(GFile* nodo,int byte);
 char* lastNameFromPath(char* path);
 
-/* funcion direccion bloque
-void* dir_bloque(int n){
-	return ptr_mmap + BLOCK_SIZE*n;	
-}
-* */
-int tamanioDelDisco(){
-	
-	puts("ingrese el tamaño del disco en bytes:");
-	return 4096;	
-}
-
-/*
-int leerHeader(archDisk){
-	GHeader* cabeza;
-	
-	//prototipo void *mmapnew(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
-	cabeza = (GHeader*) mmap(NULL, BLOQUE, PROT_READ, MAP_SHARED,archDisk,(off_t)NULL);
-	if (cabeza == MAP_FAILED) puts("fallo el mapeo pues");
-	
-	printf("que tengo en la cabeza? %s \n",cabeza->grasa);
-	printf("version: %d \n",cabeza->version);
-	printf("bloque de inicio: %d \n",cabeza->blk_bitmap);
-	printf("tamanio del bitmap en bloques %d \n",cabeza->size_bitmap);
-	
-	
-return 0;
-}
-*/
-/*
-int tablaDeNodos(int archDisk){
-	
-	//Var Locales
-	GFile* nodo;
-	ptrGBloque i;
-	char path[100];
-
-		
-	//path = string_new();
-	nodo = (GFile*) mmap(NULL, DISCO, PROT_READ, MAP_SHARED,archDisk, BLOQUE);
-	strcpy(path,"/dir1/hola.txt");
-	printf("cual es el path %s\n",path);
-	i=nodoByPath(path,nodo);
-	//i=hijoDondeEstas("dir1",0,nodo);
-	printf("%d num",i);
-	
-	printf("estado: %d \n",nodo[i].state);
-	printf("nombre: %s \n",nodo[i].fname);
-	printf("padre %d \n",nodo[i].parent_dir_block);
-	printf("tamanio %d \n",nodo[i].file_size);
-	printf("fecha modificacion %d \n",(int)nodo[i].m_date);
-	printf("fecha creacion %d \n",(int)nodo[i].c_date);
-	
-	return 0;
-}
-*/
-/*
-int bitArray(archDisk){
-	t_bitarray* bit;
-	bool ocupado;
-	int i;
-	
-
-	bit = bitarray_create(dir_block(header->blk_bitmap), 320);
-	
-	printf("tamaño del bitmap %d",bitarray_get_max_bit(bit));
-	
-		for (i=1; i<bitarray_get_max_bit(bit); i++)
-		{
-		ocupado = bitarray_test_bit(bit,i);
-		if (ocupado) printf ("%d) ocupado\n",i);
-		if (!ocupado) printf ("%d) desocupado\n",i);
-		}
-	
-	bitarray_destroy(bit);		
-		//if ((munmap( bit->bitarray,bit->size ) ) == -1) puts ("fallo el mumapi");
-	return 0;
-}
-*/
 
 int queHayAca(int numNodo,GFile* nodo,t_list* lista){
 	int i;
 	int dirPadre;
 	dirPadre=numNodo;
-	//if (strcmp(path,"/")==0) dirPadre=0;
-	//else dirPadre=nodoByPath((path,nodo);
-
 	for (i=1; i < 1023;i++)
 				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
 return 0;
@@ -194,9 +113,9 @@ while (bytesLeidos < size) {
    memcpy(buf + bytesLeidos, ptr_datos + offsetDentroDelBloque, bytesParaCopiar);
    bytesLeidos += bytesParaCopiar;
    bytePedido += bytesParaCopiar;
-   
+  puts("");puts("");puts("");
 	}
-
+puts("");puts("");puts("");
 	return 0;//Le agregue el return con caca.
 }
 
@@ -228,6 +147,7 @@ ptrGBloque* arrayIndex(GFile* nodo,int byte){
 	ptrBloque=ptrBloque+offsetDelArray;         //ahora estoy apundo a la direccion del bloque que quiero leer
 	printf("ahora estoy apundo a la direccion del bloque que quiero leer: %d \n",*ptrBloque);
 	return ptrBloque;
+	puts("");puts("");puts("");
 }
 
 
@@ -282,32 +202,21 @@ int crearDirectorio(const char* path,GFile* inodo){
 	return 0;
 	}
 	
-		
+puts("");puts("");puts("");
 }
  int howIsMyFather(char* src, char** dest){
-	
 	
 	char* lastName;
 	int tamRuta;
 	int i=0;
-	
-	
-	
 	puts("entre a how is my father");
 	printf("la ruta que entro es: %s\n",src);
-	
-	
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath(src));   
 	tamRuta= strlen(src) - strlen(lastNameFromPath(src));
 	printf("tamaño de la ruta: %d\n",tamRuta);
 	*dest=string_duplicate(string_substring_until(src,strlen(src) - (strlen(lastNameFromPath(src))+1)));
 	printf("la ruta donde lo agrego es: %s\n",*dest);
-	
-	
-	
-	
-	
-	
+	puts("");puts("");puts("");
 	return 0;
 	
 }
@@ -392,6 +301,7 @@ int asignarBloque(t_bitarray* bMap)
 		}
 	printf("que bloque le di: %d\n",i);  
 	bitarray_set_bit(bMap,i);
+	puts("");puts("");puts("");
 	return i;
 }
 
@@ -427,6 +337,7 @@ int liberarBloque(int byte,t_bitarray* bMap,GFile* nodo)
 	printf("la disponibilidad del bloque %d es: ",*pgBloque);
 	if(bitarray_test_bit(bMap,*pgBloque)) puts("desocupado");
 	else puts("ocupado");
+	puts("");puts("");puts("");
 return 0;
 }
 
@@ -449,6 +360,8 @@ int liberarIndirecos(t_bitarray* bMap,GFile* nodo,int dif)
 		ind--;
 		dif--;
 	}  
+	
+	puts("");puts("");puts("");
 return 0;
 }
 
@@ -459,7 +372,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	int byteRef;
 	ptrGBloque* pGBloque;
 	
-	
+	printf("el offset que llego es: %d\n",(int)offset);
 	//Si el archivo anteriormente era más grande que este tamaño, se pierden los datos extra. 
 	
 	//Si el archivo anteriormente era más corto, SI se extendió dentro del bloque actualmente asignado me quedo piola 
@@ -526,8 +439,45 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	
 	
 	nodo[numNodo].file_size=(uint32_t)offset;
+puts("");puts("");puts("");
+return 0;
+}
 
 
+int writeGrid(char *buf, size_t size, off_t offset,GFile* nodo){
+	
+	int bytesGrabados;
+	int byteRestantes;
+	int bytePedido;
+	int bytesParaCopiar;
+	uint8_t* ptr_datos;
+	
+	printf("soy el nodo: %s dentro de cargar buffer \n",nodo[0].fname);
+	printf("cuanto es el size: %d \n",(int)size);
+	printf("cuanto es el offset: %d \n",(int)offset);//Le agregue el casteo
+	
+	bytePedido=offset;
+	bytesGrabados=0;
+	
+while (bytesGrabados < size) {
+	puts("entre al while de memcpy del write");
+   ptr_datos = posicionBloqueSegunByte(nodo,(int) bytePedido);
+   bool esElPrimero = bytesGrabados == 0;  
+   int offsetDentroDelBloque = esElPrimero ? offset % BLOQUE : 0;
+   int bytesRestantesDentroDelBloque = BLOQUE - offsetDentroDelBloque;
+
+   int bytesParaCopiar = size - bytesGrabados;
+   if (bytesParaCopiar > bytesRestantesDentroDelBloque)
+      bytesParaCopiar = bytesRestantesDentroDelBloque;
+	
+	
+   memcpy(ptr_datos + offsetDentroDelBloque,buf + bytesGrabados,  bytesParaCopiar);
+   bytesGrabados += bytesParaCopiar;
+   bytePedido += bytesParaCopiar;
+   puts("");puts("");puts("");
+	}
+puts("");puts("");puts("");
+	return 0;//Le agregue el return con caca.
 }
 ////////////////////////////funciones de ABAJO fuera de uso por el momento  
 

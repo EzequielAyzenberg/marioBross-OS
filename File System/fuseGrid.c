@@ -224,6 +224,8 @@ static int theGrid_open(const char *path, struct fuse_file_info *fi) {
  * 		para la funcion write )
  */
 static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+	puts("entre a leer");
+	
 	size_t len;
 	(void) fi;
 	int numNodo;
@@ -242,7 +244,7 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	}
 	else size = 0;
 	
-		
+		puts("");puts("");puts("");
 	return size;
 }
 
@@ -281,9 +283,9 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
 
 
 int theGrid_truncate(const char * path, off_t offset) {
-// funcion dummy para que no se queje de "function not implemented"
 
 
+puts("pedi truncar");
 int res=truncale(path,offset,ptr_nodo,bitMap);
 
 
@@ -301,6 +303,32 @@ static int theGrid_utimens(const char *path, const struct timespec ts[2])
         return 0;
 }
 
+static int32_t theGrid_write(const char *path, const char *buf, size_t size, off_t offset,struct fuse_file_info *fi)
+{
+	puts("pedi escribir");
+	size_t len;
+	(void) fi;
+	int numNodo;
+	extern GFile* ptr_nodo;
+	numNodo=nodoByPath(path,ptr_nodo);
+	len = ptr_nodo[numNodo].file_size;
+	
+	if (numNodo==FAIL) return -ENOENT;
+
+	
+	
+	if (offset + size > len) truncale(path,offset+size,ptr_nodo,bitMap);
+		
+	writeGrid(buf,size,offset,ptr_nodo+numNodo);
+	    
+	
+	
+	
+		puts("");puts("");puts("");
+	return size;
+}
+
+
 
 /*
  * Esta es la estructura principal de FUSE con la cual nosotros le decimos a
@@ -317,6 +345,7 @@ static struct fuse_operations theGrid_oper = {
 		.create = theGrid_create,
 		.truncate = theGrid_truncate,
 		.utimens  = theGrid_utimens, 
+		.write = theGrid_write,
 };
 
 
