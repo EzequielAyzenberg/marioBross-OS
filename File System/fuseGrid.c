@@ -12,7 +12,7 @@
  * 
  * Leer archivos                  HECHO
  * Crear archivos                 HECHO
- * Escribir archivos                
+ * Escribir archivos              HECHO  
  * Borrar archivos                                       
  * Crear directorios y dos niveles de subdirecctorios     HECHO
  * Borrar direcctorios vacíos
@@ -25,7 +25,7 @@
  * modificar fecha            puesto pero sin terminar
  * getatribute                 HECHO
  * readdir                     HECHO
- * setaer bitmap			   HECHO
+ * setaer bitmap	       HECHO
  * consultar un bit map        HECHO
  * sincronizar esc/lec
  * /
