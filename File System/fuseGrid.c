@@ -21,11 +21,11 @@
 /*
  * TAREAS DERIVADAS DE LAS PRINCIPALES
  * 
- * truncar archivos           puesto pero sin terminar
+ * truncar archivos           HECHO
  * modificar fecha            puesto pero sin terminar
  * getatribute                 HECHO
  * readdir                     HECHO
- * setaer bitmap
+ * setaer bitmap			   HECHO
  * consultar un bit map        HECHO
  * sincronizar esc/lec
  * /
@@ -44,6 +44,7 @@ struct t_runtime_options {
 GFile* ptr_nodo;
 GHeader* ptr_header;
 uint8_t* ptr_mmap;
+t_bitarray* bitMap;
 /*
  * Esta Macro sirve para definir nuestros propios parametros que queremos que
  * FUSE interprete. Esta va a ser utilizada mas abajo para completar el campos
@@ -266,7 +267,7 @@ static int theGrid_mkdir(const char *path,mode_t mode)
  * 		queremos crear
  *
  * 	@RETURN
- * 		O archivo fue creado. -EEXIST archivo/directorio ya existe
+ * 		O archivo fue creado. 
  */
 
 
@@ -281,6 +282,11 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
 
 int theGrid_truncate(const char * path, off_t offset) {
 // funcion dummy para que no se queje de "function not implemented"
+
+
+int res=truncale(path,offset,ptr_nodo,bitMap);
+
+
 return 0;
 }
 
@@ -368,9 +374,11 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
+    extern t_bitarray* bitMap;
 	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
 	ptr_header = (GHeader*) dir_bloque(INICIO);
     ptr_nodo = (GFile*) dir_bloque(1); 
+    bitMap = bitarray_create((char*)dir_bloque(1), 320);
 	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
 	
 	// Esta es la funcion principal de FUSE, es la que se encarga
