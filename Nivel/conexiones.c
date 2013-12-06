@@ -103,17 +103,17 @@ void escucharPlanificador(datosConexiones *info){
 		else(sendAnswer(-1,0,' ',' ',info->socket));
 	break;
 	case 2:if(bufferAnswer.cont){
-			if(otorgarRecurso(info->listaRecursos,info->listaJugadoresActivos,info->listaJugadoresBloqueados,bufferAnswer.data,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
+		     if(otorgarRecurso(info->listaRecursos,info->listaJugadoresActivos,bufferAnswer.data,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
 			else (sendAnswer(-1,0,' ',' ',info->socket));
 
 			}else sendAnswer(2,chequearRecurso(info->listaRecursos,bufferAnswer.data),' ',' ',info->socket);
 	break;
 	case 5:sendAnswer(1,0,' ',' ',info->socket);
 		   while(recvAnswer(&bufferAnswer,info->socket)==2){
-			   recibirRecursos(info->listaRecursos,info->listaJugadoresBloqueados,bufferAnswer.data,info->socket);
+		           recibirRecursos(info->listaRecursos,bufferAnswer.data);
 		   }
 	break;
-	case 8:matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaJugadoresBloqueados,info->listaRecursos,bufferAnswer.symbol,info->socket);
+	case 8:matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaRecursos,bufferAnswer.symbol);
 	break;
 		}
 
@@ -124,7 +124,7 @@ void escucharPlanificador(datosConexiones *info){
 		//puts("TODAVIA SIRVE");
 		//sleep(1);
 		cargarConfig(&bufferConfig);
-		if(info->config->algoritmo!=bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
+		if(*info->config->algoritmo!=*bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
 			*info->config=bufferConfig;
 			if(!strcmp(info->config->algoritmo,"RR")){
 				sendAnswer(6,info->config->quantum,'5',' ',socketBuffer);
@@ -145,7 +145,7 @@ void escucharPlanificador(datosConexiones *info){
 	inotify_rm_watch(fd,watch);
 	close(fd);
 	fd=inotify_init();//crea el inotify al comienzo de cada loop
-	watch=inotify_add_watch(fd,info->config->path,IN_MODIFY);
+	watch=inotify_add_watch(fd,info->config->path,IN_CLOSE_WRITE);
 	time.tv_sec = 1;
 	time.tv_usec = 0;
 	pthread_mutex_lock(&mutexDibujar);
