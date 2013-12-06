@@ -1,91 +1,2500 @@
-==15399== Memcheck, a memory error detector
-==15399== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==15399== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==15399== Command: ./Debug/Plataforma config.cfg
-==15399== Parent PID: 15395
-==15399== 
-==15399== Thread 4:
-==15399== Syscall param select(timeout) points to uninitialised byte(s)
-==15399==    at 0x4153E01: ??? (syscall-template.S:82)
-==15399==    by 0x804F7DF: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804D49F: leerNovedad (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B74C: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x5e19e9c is on thread 4's stack
-==15399== 
-==15399== Invalid read of size 1
-==15399==    at 0x402D288: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==15399==    by 0x4037EC4: string_append (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x40384F4: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037BBD: log_info (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x804D7AE: leerNovedad (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B74C: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x423a838 is 0 bytes after a block of size 0 alloc'd
-==15399==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==15399==    by 0x40384B9: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037BBD: log_info (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x804D7AE: leerNovedad (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B74C: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399== 
-==15399== Invalid read of size 1
-==15399==    at 0x402CF8B: strcat (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==15399==    by 0x4037EF3: string_append (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x40384F4: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037BBD: log_info (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x804D7AE: leerNovedad (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B74C: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x423a838 is 0 bytes after a block of size 0 alloc'd
-==15399==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==15399==    by 0x40384B9: _string_append_with_format_list (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037F5A: string_from_vformat (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037CA2: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x4037BBD: log_info (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
-==15399==    by 0x804D7AE: leerNovedad (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B74C: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399== 
-==15399== Syscall param select(timeout) points to uninitialised byte(s)
-==15399==    at 0x4153E01: ??? (syscall-template.S:82)
-==15399==    by 0x804F7DF: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x805150F: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B6AD: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x5e19fac is on thread 4's stack
-==15399== 
-==15399== Syscall param select(timeout) points to uninitialised byte(s)
-==15399==    at 0x4153E01: ??? (syscall-template.S:82)
-==15399==    by 0x804F7DF: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x8051139: ubicacion (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x8051226: recurso (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x8051565: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B6AD: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x5e19efc is on thread 4's stack
-==15399== 
-==15399== Thread 3:
-==15399== Syscall param select(timeout) points to uninitialised byte(s)
-==15399==    at 0x4153E01: ??? (syscall-template.S:82)
-==15399==    by 0x804F7DF: selectear (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x8050CD4: movimiento (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x8051582: atenderJugador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x804B6AD: planificador (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
-==15399==    by 0x4057D4B: start_thread (pthread_create.c:308)
-==15399==    by 0x415ADDD: clone (clone.S:130)
-==15399==  Address 0x5618f4c is on thread 3's stack
-==15399== 
+==5437== Memcheck, a memory error detector
+==5437== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==5437== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==5437== Command: ./Debug/Plataforma config.cfg
+==5437== Parent PID: 5432
+==5437== 
+==5437== Thread 2:
+==5437== Invalid read of size 4
+==5437==    at 0x4039D28: _isEnableLevelInLogger (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039C52: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227f98 is 8 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x4039C83: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fa0 is 16 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x4039C89: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227f9c is 12 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40B8685: vfprintf (vfprintf.c:1655)
+==5437==    by 0x40D98FA: vsnprintf (vsnprintf.c:119)
+==5437==    by 0x205D4542: ???
+==5437==  Address 0x4228168 is 0 bytes inside a block of size 12 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AE2: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E2E00: _IO_default_xsputn (genops.c:476)
+==5437==    by 0x40B7164: vfprintf (vfprintf.c:1655)
+==5437==    by 0x40D98FA: vsnprintf (vsnprintf.c:119)
+==5437==    by 0x205D4542: ???
+==5437==  Address 0x4228168 is 0 bytes inside a block of size 12 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AE2: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E2E0E: _IO_default_xsputn (genops.c:475)
+==5437==    by 0x40B7164: vfprintf (vfprintf.c:1655)
+==5437==    by 0x40D98FA: vsnprintf (vsnprintf.c:119)
+==5437==    by 0x205D4542: ???
+==5437==  Address 0x422816a is 2 bytes inside a block of size 12 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AE2: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x4039CCA: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227f90 is 0 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x4039CD3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227f90 is 0 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5990: fputs (iofputs.c:39)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5999: fputs (iofputs.c:39)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59A3: fputs (iofputs.c:39)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59B7: fputs (iofputs.c:39)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228070 is 152 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59C1: fputs (iofputs.c:39)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40D59C4: fputs (iofputs.c:39)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59C7: fputs (iofputs.c:39)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228074 is 156 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40D59CB: fputs (iofputs.c:40)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59E1: fputs (iofputs.c:40)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228040 is 104 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40D59ED: fputs (iofputs.c:40)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D59F1: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422806c is 148 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E12AC: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1295)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E12BE: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1312)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff0 is 24 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E12C1: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1312)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E132A: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E132E: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422806c is 148 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E1F92: _IO_file_overflow@@GLIBC_2.1 (fileops.c:825)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2000: _IO_file_overflow@@GLIBC_2.1 (fileops.c:835)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2D08: _IO_doallocbuf (genops.c:416)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E2D18: _IO_doallocbuf (genops.c:418)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E2D24: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2D28: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x422806c is 148 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D4A6D: _IO_file_doallocate (filedoalloc.c:111)
+==5437==    by 0x40E2D34: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228010 is 56 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2C9A: _IO_setb (genops.c:401)
+==5437==    by 0x40D4B24: _IO_file_doallocate (filedoalloc.c:129)
+==5437==    by 0x40E2D34: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2CAA: _IO_setb (genops.c:403)
+==5437==    by 0x40D4B24: _IO_file_doallocate (filedoalloc.c:129)
+==5437==    by 0x40E2D34: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2CB1: _IO_setb (genops.c:404)
+==5437==    by 0x40D4B24: _IO_file_doallocate (filedoalloc.c:129)
+==5437==    by 0x40E2D34: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff8 is 32 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2CD0: _IO_setb (genops.c:406)
+==5437==    by 0x40D4B24: _IO_file_doallocate (filedoalloc.c:129)
+==5437==    by 0x40E2D34: _IO_doallocbuf (genops.c:419)
+==5437==    by 0x40E2127: _IO_file_overflow@@GLIBC_2.1 (fileops.c:837)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2128: _IO_file_overflow@@GLIBC_2.1 (fileops.c:838)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E212B: _IO_file_overflow@@GLIBC_2.1 (fileops.c:838)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E212D: _IO_file_overflow@@GLIBC_2.1 (fileops.c:838)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe4 is 12 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2130: _IO_file_overflow@@GLIBC_2.1 (fileops.c:838)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fdc is 4 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2133: _IO_file_overflow@@GLIBC_2.1 (fileops.c:838)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe0 is 8 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2017: _IO_file_overflow@@GLIBC_2.1 (fileops.c:856)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff8 is 32 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2022: _IO_file_overflow@@GLIBC_2.1 (fileops.c:856)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe0 is 8 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2025: _IO_file_overflow@@GLIBC_2.1 (fileops.c:860)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff0 is 24 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2028: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228040 is 104 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E202B: _IO_file_overflow@@GLIBC_2.1 (fileops.c:861)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fdc is 4 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E202E: _IO_file_overflow@@GLIBC_2.1 (fileops.c:861)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe4 is 12 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2038: _IO_file_overflow@@GLIBC_2.1 (fileops.c:858)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E203B: _IO_file_overflow@@GLIBC_2.1 (fileops.c:859)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E203E: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E20C8: _IO_file_overflow@@GLIBC_2.1 (fileops.c:869)
+==5437==    by 0x40E1342: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1333)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E134C: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1341)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff8 is 32 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E1351: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1341)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2DE0: _IO_default_xsputn (genops.c:456)
+==5437==    by 0x40E1380: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1356)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E2DE3: _IO_default_xsputn (genops.c:456)
+==5437==    by 0x40E1380: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1356)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227ff0 is 24 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E2E62: _IO_default_xsputn (genops.c:464)
+==5437==    by 0x40E1380: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1356)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5A13: fputs (libioP.h:904)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5A1B: fputs (libioP.h:905)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5A1E: fputs (libioP.h:905)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228074 is 156 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40D5A24: fputs (libioP.h:905)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5A35: fputs (libioP.h:905)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4228070 is 152 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50A6: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50AF: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50B9: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50CD: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228070 is 152 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50D7: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40D50DA: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50DD: fflush (iofflush.c:40)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228074 is 156 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40D50E1: fflush (iofflush.c:41)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50E5: fflush (iofflush.c:41)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x422806c is 148 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0EC4: _IO_file_sync@@GLIBC_2.1 (fileops.c:891)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0EC7: _IO_file_sync@@GLIBC_2.1 (fileops.c:891)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0ECE: _IO_file_sync@@GLIBC_2.1 (fileops.c:892)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228040 is 104 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0663: new_do_write (fileops.c:523)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E06E8: new_do_write (fileops.c:530)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe0 is 8 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E06EB: new_do_write (fileops.c:530)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E0689: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x422801e is 70 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0691: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x422806c is 148 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x40E07A8: _IO_file_write@@GLIBC_2.1 (fileops.c:1262)
+==5437==    by 0x40E06A5: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228014 is 60 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E07B4: _IO_file_write@@GLIBC_2.1 (fileops.c:1262)
+==5437==    by 0x40E06A5: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228010 is 56 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Warning: invalid file descriptor -1 in syscall write()
+==5437== Invalid read of size 4
+==5437==    at 0x40E07C9: _IO_file_write@@GLIBC_2.1 (fileops.c:1265)
+==5437==    by 0x40E06A5: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E07CF: _IO_file_write@@GLIBC_2.1 (fileops.c:1272)
+==5437==    by 0x40E06A5: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228028 is 80 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E07D2: _IO_file_write@@GLIBC_2.1 (fileops.c:1272)
+==5437==    by 0x40E06A5: new_do_write (fileops.c:538)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228024 is 76 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 2
+==5437==    at 0x40E06A8: new_do_write (fileops.c:539)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x422801c is 68 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E06B1: new_do_write (fileops.c:545)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228040 is 104 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E06B4: new_do_write (fileops.c:541)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227ff4 is 28 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06B9: new_do_write (fileops.c:541)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe4 is 12 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06BC: new_do_write (fileops.c:541)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fdc is 4 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06BF: new_do_write (fileops.c:541)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe0 is 8 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06C2: new_do_write (fileops.c:542)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06C5: new_do_write (fileops.c:542)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fe8 is 16 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E0758: new_do_write (fileops.c:544)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40E06CE: new_do_write (fileops.c:545)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227ff8 is 32 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40E06D1: new_do_write (fileops.c:543)
+==5437==    by 0x40E1D2D: _IO_do_write@@GLIBC_2.1 (fileops.c:511)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227ff0 is 24 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D50F7: fflush (libioP.h:904)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fd8 is 0 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5101: fflush (libioP.h:905)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228020 is 72 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D5104: fflush (libioP.h:905)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228074 is 156 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid write of size 4
+==5437==    at 0x40D510A: fflush (libioP.h:905)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228078 is 160 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x40D511B: fflush (libioP.h:905)
+==5437==    by 0x4039CE3: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4228070 is 152 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Invalid read of size 1
+==5437==    at 0x4039CE7: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x8049796: finalizarTodo (Orquestador.c:98)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227f94 is 4 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== Invalid read of size 4
+==5437==    at 0x4039C83: _log_write_in_level (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x4039B29: log_trace (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804B007: mensajeTrace (Orquestador.c:504)
+==5437==    by 0x80497B9: finalizarTodo (Orquestador.c:101)
+==5437==    by 0x8049704: orquestador (Orquestador.c:79)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437==  Address 0x4227fa0 is 16 bytes inside a block of size 20 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x4039AFA: log_destroy (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so)
+==5437==    by 0x804A4F9: cerrarLogs_Orquestador (Orquestador.c:377)
+==5437==    by 0x80496E3: orquestador (Orquestador.c:78)
+==5437==    by 0x405AD77: start_thread (pthread_create.c:311)
+==5437==    by 0x416101D: clone (clone.S:131)
+==5437== 
+==5437== 
+==5437== More than 100 errors detected.  Subsequent errors
+==5437== will still be recorded, but in less detail than before.
+==5437== Invalid write of size 4
+==5437==    at 0x40E12F9: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1321)
+==5437==    by 0x40D5A09: fputs (iofputs.c:41)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==  Address 0x4227fec is 20 bytes inside a block of size 352 free'd
+==5437==    at 0x402AC38: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5437==    by 0x40D4D1B: fclose@@GLIBC_2.1 (iofclose.c:85)
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437==    by 0x4226CDF: ???
+==5437== 
+==5437== Warning: invalid file descriptor -1 in syscall write()
+==5437== 
+==5437== HEAP SUMMARY:
+==5437==     in use at exit: 380 bytes in 20 blocks
+==5437==   total heap usage: 253 allocs, 233 frees, 10,807 bytes allocated
+==5437== 
+==5437== LEAK SUMMARY:
+==5437==    definitely lost: 16 bytes in 2 blocks
+==5437==    indirectly lost: 364 bytes in 18 blocks
+==5437==      possibly lost: 0 bytes in 0 blocks
+==5437==    still reachable: 0 bytes in 0 blocks
+==5437==         suppressed: 0 bytes in 0 blocks
+==5437== Rerun with --leak-check=full to see details of leaked memory
+==5437== 
+==5437== For counts of detected and suppressed errors, rerun with: -v
+==5437== ERROR SUMMARY: 275 errors from 101 contexts (suppressed: 0 from 0)

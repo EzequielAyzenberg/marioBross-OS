@@ -29,7 +29,7 @@ all: Personaje
 Personaje: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L"/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug" -L"/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug" -o "Personaje" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -o "Personaje" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
