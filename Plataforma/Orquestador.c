@@ -40,7 +40,7 @@ void *orquestador(void* infoAux){
 	handshake nuevoHandshake;
 	ganadores = list_create();
 	t_list *hilosPlanificadores = list_create();
-	socketOrquestador = listenGRID(cfg.puerto,cfg.ip);
+	socketOrquestador = listenGRID(cfg.puerto,NULL);
 	fd_set original_FD;
 	FD_ZERO(&original_FD);
 	FD_SET(socketOrquestador, &original_FD);

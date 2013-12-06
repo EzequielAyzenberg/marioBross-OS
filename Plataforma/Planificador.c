@@ -277,7 +277,7 @@ int selectGRID_planificador(int fdmax,fd_set*original){
 };
 /**/
 void modificarAlgoritmo(answer temp,global general){
-	printf("ModificarAlgo.I--%s\n",general.cabecera->name);
+	printf("\t\t\t\tModificarAlgo.I--%s\n",general.cabecera->name);
 	general.algo->algo=temp.cont;
 	char mensaje[128],numero[16];
 	strcpy(mensaje,"Nuevo Algoritmo--");
@@ -307,10 +307,10 @@ void modificarAlgoritmo(answer temp,global general){
 		strcat(mensaje,"--SIN MODIFICAR");
 	}
 	log_info(general.logging.info,mensaje,"WARNING");
-	printf("ModificarAlgo.F--%s\n",general.cabecera->name);
+	printf("\t\t\t\tModificarAlgo.F--%s\n",general.cabecera->name);
 }
 void modificarRetardo(answer temp,global general){
-	printf("ModificarRetardo.I--%s\n",general.cabecera->name);
+	printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
 	general.algo->retardo=temp.cont;
 	printf("El Retardo entre turnos ahora es de: %d\n\n",general.algo->retardo);
 	char mensaje[64],numero[12];
@@ -319,7 +319,7 @@ void modificarRetardo(answer temp,global general){
 	strcat(mensaje,numero);
 	strcat(mensaje," mSeg--");
 	log_info(general.logging.info,mensaje,"WARNING");
-	printf("ModificarRetardo.I--%s\n",general.cabecera->name);
+	printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
 }
 void inicializar(nodoNivel*raiz,global*general){
 	int estado;
