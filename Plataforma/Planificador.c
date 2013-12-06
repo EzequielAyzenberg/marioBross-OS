@@ -645,9 +645,8 @@ bool muertePersonaje(int i,global tabla){
 		    if(i==jugador->pid)return true;
 		    return false;
 			}
-	//puts("Localizando cadaver.");
 	t_player*aux ;
-	if(!list_is_empty(tabla.deads)){
+	/*if(!list_is_empty(tabla.deads)){
 		aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
 		if(aux==NULL){
 			printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
@@ -656,34 +655,25 @@ bool muertePersonaje(int i,global tabla){
 	}else{
 		printf("\t\t\t\tMUERTE.F--Vacia--%s\n",tabla.cabecera->name);
 		return false;
-	}
+	}*/
 
-
-	/*if(tabla.dead!=NULL){
-		if(i==tabla.dead->pid){
-			aux=tabla.dead;
-			tabla.dead=NULL;
-			loggearListas(tabla);
+	aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
+		if(aux==NULL)	{
+			printf("MUERTE.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
+			aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 		}
-	}
-	aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
-	if(aux==NULL) {		//puts("Buscando entre los dormidos.");
-		aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
-		if(aux==NULL) {puts("Ultima chance a dormido");aux=buscarDormido(i,' ',tabla.sleeps);}
-		if(aux==NULL){		//puts("Quizas se estaba ejecutando.");
+		if(aux==NULL) 	aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
+		if(aux==NULL){
 			if(tabla.exe->player==NULL){
-				puts("No se ha podido ubicar el fiambre.");
-				printf("MUERTE.F--%s\n",tabla.cabecera->name);
+				printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
 				return false;
 			}else{
 				if(tabla.exe->player->pid!=i){
-					puts("No se ha podido ubicar el fiambre.");
-					printf("MUERTE.F--%s\n",tabla.cabecera->name);
+					printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
 					return false;
 				}else aux=tabla.exe->player;
 			}
 		}
-	}*/
 	char mensaje[128],numero[16],*string;
 	strcpy(mensaje,"Personaje desconectado:");
 	string=ctos(aux->sym);
