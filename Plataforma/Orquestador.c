@@ -308,10 +308,6 @@ cfgOrquestador cargarOrquestador(char *path){
 		if (config_has_property(cfgPlataforma,"ip")){
 			registroOrquestador.ip=ipPlataforma(cfgPlataforma);
 			printf("IP: %s.\n", registroOrquestador.ip);
-			if(!strcmp(registroOrquestador.ip,"NULL")){
-				printf("Ip nula\n");
-				registroOrquestador.ip[0] = '\0';
-			};
 		}else{
 			printf("Archivo de configuracion incompleto, falta campo: ip\n");
 			exit(0);
