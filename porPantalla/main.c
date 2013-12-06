@@ -6,11 +6,12 @@
  */
 
 #include<ncurses.h>
+#include<curses.h>
 #include<unistd.h>
 
 int main(){
 	initscr();
-	printw("HolaMundo!");
+	printw("HolaMundo! Para continuar toque teclas");
 	refresh();
 	getch();
 
@@ -23,7 +24,7 @@ int main(){
 	noecho();
 	scanw("%s",pass);
 	echo();
-	printw("Usuario: %s\n",cadena);
+	printw("-------------------\nUsuario: %s\n",cadena);
 	printw("Contraseña: %s\n\n Te re cabió",pass);
 	refresh();
 	getch();
@@ -56,6 +57,72 @@ int main(){
 		usleep(100 * 1000);
 	}
 	refresh();
+	printw("Que bonitou :3 :3\n");
+	refresh();
+	getch();
+
+	for(i=0;i<150;i++){
+		refresh();
+		printw("WEON  ");
+		usleep(10 * 1000);
+
+	}
+
+	refresh();
+	getch();
+
+	erase();
+
+	printw("Probando colores...");
+	refresh();
+	sleep(2);
+	start_color(); //Esta función inicia los colores
+	//Define pares de colores que serán definidos en el programa
+	init_pair(1,COLOR_WHITE,COLOR_BLUE); //Texto | Fondo
+	init_pair(2,COLOR_BLUE,COLOR_WHITE);
+	init_pair(3,COLOR_WHITE,COLOR_BLACK);
+	bkgd(COLOR_PAIR(1)); //Aqui define el color de fondo del programa
+	attron(COLOR_PAIR(3));
+	move(2,1); //Aqui mueve el cursor a linea 2 columna 1.
+	printw("Olá mundo!!!"); //Imprimimos el texto en la posición especificada en la linea anterior.
+	attroff(COLOR_PAIR(3)); /*Esta alterando el par de colores por omisión*/
+	attron(COLOR_PAIR(2));
+	move(3,1);
+	printw("Cualquier tecla para salir"); /*Imprime el texto en la posición
+	especificada en la línea anterior */
+	attroff(COLOR_PAIR(2));
+	refresh();
+	//Actualiza la ventana
+	getch();
+
+	erase();
+
+	bkgd(COLOR_PAIR(3));
+	printw("Probando epilepsia....");
+	refresh();
+	sleep(1);
+	printw("3...");
+	refresh();
+	sleep(1);
+	printw("2...");
+	refresh();
+	sleep(1);
+	printw("1...\n");
+	refresh();
+
+	for(i=0;i<150;i++){
+		refresh();
+		bkgd(COLOR_PAIR(2));
+		usleep(10 * 1000);
+		refresh();
+		bkgd(COLOR_PAIR(3));
+		usleep(10 * 1000);
+	}
+
+	printw("STOP!!!!");
+	refresh();
+	sleep(2);
+	printw("    ...Presione alguna tecla para finalizar");
 	getch();
 
 	//sleep(3);//se detiene tres segundo
