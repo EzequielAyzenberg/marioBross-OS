@@ -55,17 +55,16 @@ main(int argc, char *argv[]){
 	t_list* listaEnemigos;
 	t_list* listaJugadoresActivos;
 	t_list* listaJugadoresMuertos;
-	t_list* listaJugadoresBloqueados;
+
 	listaJugadoresActivos=list_create();
 	listaJugadoresMuertos=list_create();
-	listaJugadoresBloqueados=list_create();
+
 	int rows,cols;
 	cargarConfig(&config);
 	datosConexiones datosConexiones;
 	datosConexiones.config=&config;
 	datosConexiones.listaJugadoresActivos=listaJugadoresActivos;
 	datosConexiones.listaJugadoresMuertos=listaJugadoresMuertos;
-	datosConexiones.listaJugadoresBloqueados=listaJugadoresBloqueados;
 	datosConexiones.listaRecursos=config.listaCajas;
 	datosConexiones.socket=-1;
 

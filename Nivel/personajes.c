@@ -11,12 +11,12 @@
 #include <commons/collections/list.h>
 #include "semaforos.h"
 #include <theGRID/general.h>
-#include <theGRID/sockets.h>
+
 
 pthread_mutex_t mutexMatarPersonaje;
 pthread_mutex_t mutexCrearPersonaje;
 
-int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,t_list* listaPersonajesBloqueados,char recurso,char pj){
+int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,char recurso,char pj){
 
 	Caja *buffer;
 	t_personaje *bufferPj;
@@ -55,7 +55,7 @@ int otorgarRecurso(t_list* listaCajas,t_list* listaPersonajes,t_list* listaPerso
 		bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
 		if(bufferPj!=NULL){
 			bufferPj->recursoEspera=recurso;
-			list_add(listaPersonajesBloqueados,bufferPj);
+
 			//printf("%c esta esperando una %c",bufferPj->id,bufferPj->recursoEspera);
 		}
 		return -1;
@@ -74,39 +74,20 @@ int chequearRecurso(t_list* listaCajas,char recurso){
 	return (buffer->posx*100+buffer->posy);
 }
 
-int recibirRecursos(t_list* listaCajas,t_list* listaPersonajesBloqueados,char recurso,short socket){
+int recibirRecursos(t_list* listaCajas,char recurso){
 	Caja *buffer;
-	t_personaje *bufferPersonaje;
+
 	bool _is_Recurso(Caja *caja){
 								if(caja->id==recurso)return true;
 								return false;
 			}
 	buffer=list_find(listaCajas,(void*)_is_Recurso);
 
-	bool _is_Recurso_En_Espera(t_personaje *personaje){
-									if(personaje->recursoEspera==recurso)return true;
-									return false;
-				}
-
-	bufferPersonaje=list_find(listaPersonajesBloqueados,(void*)_is_Recurso_En_Espera);
-	if (bufferPersonaje!=NULL){
-		bufferPersonaje->recursoEspera=' ';
-		sendAnswer(2,1,recurso,bufferPersonaje->id,socket);
-		bool _is_Personaje(t_personaje* pj){
-							if(pj->id==bufferPersonaje->id)return true;
-							return false;
-						}
-		list_remove_by_condition(listaPersonajesBloqueados,(void*)_is_Personaje);
-
-	}
-
-
-	else buffer->quantity++;
-
+	buffer->quantity++;
 	return 1;
 }
 
-void recibirRecursoPersonaje (char pj,t_list* listaCajas,t_list* listaPersonajes,t_list* listaPersonajesBloqueados,short socket){//recibe los recursos de un Pj y destruye la lista de recursos de ese pj, ya que a continuacion el pj va a morir SIEMPRE
+void recibirRecursoPersonaje (char pj,t_list* listaCajas,t_list* listaPersonajes){//recibe los recursos de un Pj y destruye la lista de recursos de ese pj, ya que a continuacion el pj va a morir SIEMPRE
 	t_personaje *bufferPj;
 	int cantRecursosPj;
 	int i=0;
@@ -117,7 +98,7 @@ void recibirRecursoPersonaje (char pj,t_list* listaCajas,t_list* listaPersonajes
 	bufferPj=list_find(listaPersonajes,(void*)_is_Personaje);
 	cantRecursosPj=list_size(bufferPj->recursos);
 	for(i=0;i<cantRecursosPj;i++){
-		recibirRecursos(listaCajas,listaPersonajesBloqueados,*((char*)(list_get(bufferPj->recursos,i))),socket);
+		recibirRecursos(listaCajas,*((char*)(list_get(bufferPj->recursos,i))));
 	}
 	list_destroy(bufferPj->recursos);
 }
@@ -190,7 +171,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 	}
 */}
 
-int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t_list* listaJugadoresBloqueados,t_list* listaCajas,char id,short socket){
+int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t_list* listaCajas,char id){
 	t_personaje *bufferPj;
 	bool _is_Personaje(t_personaje* pj2){
 							if(pj2->id==id)return true;
@@ -199,7 +180,7 @@ int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t
 		bufferPj=list_find(listaJugadoresActivos,(void*)_is_Personaje);
 		if(bufferPj!=NULL){
 			pthread_mutex_lock( &mutexMatarPersonaje);
-			recibirRecursoPersonaje(id,listaCajas,listaJugadoresActivos,listaJugadoresBloqueados,socket);
+			recibirRecursoPersonaje(id,listaCajas,listaJugadoresActivos);
 			list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje);
 			//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
 			pthread_mutex_unlock( &mutexMatarPersonaje);
