@@ -682,7 +682,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 		printf("Posicion X: %d\nPosicion Y: %d\n",*posX,*posY);
 		*posX=tempX;
 		*posY=tempY;
-		sendAnswer(3,(tempX*100+tempY),0,personaje.simbolo,sockfd);
+		sendAnswer(3,(tempX*100+tempY),'.',personaje.simbolo,sockfd);
 		return tempX*100+tempY;
 	}
 return 0;
