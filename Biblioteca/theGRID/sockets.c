@@ -55,7 +55,7 @@ int listenGRID(int port,char *ipdest){
 	if (sock==-1) terminar(2,sock);
 	socket_addr.sin_family =AF_INET;
 	socket_addr.sin_port=htons(port);
-	if(strcmp(ipdest,"NULL")==0)	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
+	if(ipdest==NULL)	socket_addr.sin_addr.s_addr=htonl(INADDR_ANY);
 	else socket_addr.sin_addr.s_addr=inet_addr(ipdest);
 	memset(&(socket_addr.sin_zero),'\0',8);
 	int yes=1;

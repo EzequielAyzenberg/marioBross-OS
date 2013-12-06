@@ -38,7 +38,9 @@ int main(int argc, char *argv[]){
 	int listener,fdmax,newfd;
 	FD_ZERO(&master);
 	FD_ZERO(&readfds);				//Se setean a 0 ambas estructuras.
-	listener=listenGRID(puerto,NULL);		//Se deja el Listener escucha
+	puts("Antes del Listen");
+	listener=listenGRID(puerto,MYIP);		//Se deja el Listener escucha
+	puts("Despues del Listen");
 	FD_SET(listener,&master);			//Se agrega al Listener a la lista maestra.
 	fdmax = listener;
 	while(1){

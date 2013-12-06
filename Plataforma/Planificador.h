@@ -45,14 +45,18 @@ typedef struct t_logs{
 	t_log*info;
 }logs;
 
+typedef struct t_set{
+	fd_set*original;
+}set;
+
 typedef struct Pglobal{
 	nodoNivel* cabecera;
 	t_list*ready;
 	t_list*sleeps;
+	t_list*deads;
 	t_exec*exe;
-	t_player*dead;
 	t_list*recur;
-	fd_set*original;
+	set*original;
 	logs logging;
 	int*maxfd;
 	struct algo*algo;
