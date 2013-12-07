@@ -1,12 +1,18 @@
 #!/bin/bash
 # -*- ENCODING: UTF-8 -*-
-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library
 make
 cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca
 make
-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Extras/Servproc
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui
 make
-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Extras/Cliproc
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma
 make
-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel
 make
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje
+make
+mkdir /home/utnso/GRIDLogs
+mkdir /home/utnso/GRIDLogs/LOGPersonaje
+mkdir /home/utnso/GIRDLogs/LOGPlataforma
+mkdir /home/utnso/GRIDLogs/LOGNivel
