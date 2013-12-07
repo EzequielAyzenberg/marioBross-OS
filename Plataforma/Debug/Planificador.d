@@ -9,7 +9,9 @@ Planificador.d: ../Planificador.c ../Planificador.h ../Plataforma.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/general.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/cadenas.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/string.h \
- /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h \
+ ../GUI/Introduccion.h \
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h
 
 ../Planificador.h:
 
@@ -36,3 +38,7 @@ Planificador.d: ../Planificador.c ../Planificador.h ../Plataforma.h \
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/string.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h:
+
+../GUI/Introduccion.h:
+
+/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h:

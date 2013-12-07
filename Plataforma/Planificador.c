@@ -63,6 +63,7 @@ void *planificador (void *parametro){
 	t_exec exec;
 	exec.player=NULL;
 	exec.rem_cuantum=0;
+	struct algo algor;
 	fd_set master;
 	set fdset;
 	fdset.original=&master;
@@ -72,7 +73,7 @@ void *planificador (void *parametro){
 	logs logueo;
 	logueo=crearLogs(raiz);
 	global general;
-		general.algo=(struct algo*)malloc(sizeof(struct algo));
+		general.algo=&algor;
 		general.cabecera=raiz;
 		general.ready=ready;
 		general.deads=deads;
@@ -85,6 +86,11 @@ void *planificador (void *parametro){
 		general.maxfd=&maxfd;
 		general.playing=false;
 		general.logging=logueo;
+	raiz->ready=ready;
+	raiz->sleeps=sleeps;
+	raiz->deads=deads;
+	raiz->exe=&exec;
+	raiz->algo=&algor;
 	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
 	puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);

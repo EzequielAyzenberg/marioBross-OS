@@ -4,13 +4,6 @@
 #include <commons/collections/list.c> //para devolver listas en queHayAca
 #include <commons/string.h>//para usar split en how
 
-#define BLOQUE 4096
-#define DISCO 10485760
-#define MAXNODO 1023
-#define FAIL -1
-#define INICIO 0
-#define BLOCK_INDIREC_SIZE 1024
-
 
 
 
@@ -192,7 +185,7 @@ int crearDirectorio(const char* path,GFile* inodo){
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	//grabo
-	inodo[nodoLibre].state=2;
+	inodo[nodoLibre].state=DIRECTORIO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
 	inodo[nodoLibre].m_date=(uint64_t)1381272974;
@@ -261,13 +254,15 @@ int crearArchivo(const char* path,GFile* inodo){
 	printf("la ruta padre es: %s\n",pathPadre);
 	nodoPadre=nodoByPath(pathPadre,inodo);
 	printf("el resultado de nodobypath es: %d\n",nodoPadre);
-	while((inodo[nodoLibre].state!=0)&&(nodoLibre<1024))nodoLibre++;
+	while((inodo[nodoLibre].state!=LIBRE)&&(nodoLibre<GFILEBYTABLE))nodoLibre++;
 	
+	//lo agrego mañana
+	if(nodoLibre==GFILEBYTABLE) return -ENOSPC;   //si es el 1024
 	
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	//grabo
-	inodo[nodoLibre].state=1;
+	inodo[nodoLibre].state=OCUPADO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
 	inodo[nodoLibre].m_date=(uint64_t)1381272974;
