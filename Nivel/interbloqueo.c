@@ -13,10 +13,11 @@
 #include "interbloqueo.h"
 #include <string.h>
 #include "semaforos.h"
+#include <commons/log.h>
 
 pthread_mutex_t mutexCrearPersonaje;
 pthread_mutex_t mutexMatarPersonaje;
-
+pthread_mutex_t	mutexLog;
 int posicionIndice(char recurso,char indice[]){
 	int i=0;
 	while(1){
@@ -175,12 +176,14 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 
 
 			}
+		char* bufferMsg=(char*)malloc(50);
 		i=0;
 		char msg[200];
 		char *itoas=malloc(1);
 		char *itoas2=malloc(1);
 		char *itoas3=malloc(1);
 		for(i=0;i<list_size(info->listaJugadores);i++){
+			/*
 			itoa(finish[i],itoas);
 			itoa(i,itoas2);
 			bufferPersonaje=list_get(info->listaJugadores,i);
@@ -192,17 +195,54 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 			strcat(msg," y esta esperando:");
 			strcat(msg,itoas3);
 			loguearInfo(msg);
+			char* bufferMsg=(char*)malloc(50);
+*/
+
 
 			if(finish[i]==0){
+
+				if (info->recovery){
 
 
 			interbloqueo=1;
 			bufferPersonaje=list_get(info->listaJugadores,i);
-			printf("matamos a %c",bufferPersonaje->id);
+			strcpy(bufferMsg,"El jugador");
+
+			strcat(bufferMsg," ha sido muerto como resolucion de interbloqueo");
+
+			bufferMsg[11]=bufferPersonaje->id;
+			//printf("matamos a %c",bufferPersonaje->id);
 			sendAnswer(8,0,' ',bufferPersonaje->id,*info->socket);
 			matarPersonaje(info->listaJugadores,info->listaJugadoresMuertos,info->listaRecursos,bufferPersonaje->id);
+
+
+			pthread_mutex_lock( &mutexLog);
+							t_log_level logDetalle=log_level_from_string("INFO");
+							t_log* logNivel=log_create("log",info->nombreNivel, 0, logDetalle);
+							log_info(logNivel,bufferMsg);
+							log_destroy(logNivel);
+			pthread_mutex_unlock( &mutexLog);
+
 			break;
+							}
+				else{
+					bufferPersonaje=list_get(info->listaJugadores,i);
+					strcpy(bufferMsg,"El jugador");
+
+					strcat(bufferMsg," esta interbloqueado");
+
+					bufferMsg[11]=bufferPersonaje->id;
+								//printf("matamos a %c",bufferPersonaje->id);
+
+					pthread_mutex_lock( &mutexLog);
+												t_log_level logDetalle=log_level_from_string("INFO");
+												t_log* logNivel=log_create("log",info->nombreNivel, 0, logDetalle);
+												log_info(logNivel,bufferMsg);
+												log_destroy(logNivel);
+					pthread_mutex_unlock( &mutexLog);
+				}
 						}
+
 
 			}
 

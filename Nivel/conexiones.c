@@ -115,6 +115,10 @@ void escucharPlanificador(datosConexiones *info){
 	break;
 	case 8:matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaRecursos,bufferAnswer.symbol);
 	break;
+	case 0:nivel_gui_terminar();
+			puts("abortamos asquerosamente");
+			exit(0);
+	break;
 		}
 
 	}
