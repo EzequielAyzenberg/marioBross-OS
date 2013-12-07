@@ -26,8 +26,8 @@ int main(int argc, char *argv[]){
 	CFG_PATH = argv[1];
 	printf("CFG_PATH: %s\n", CFG_PATH);
 	defaultRD = cargarRemainingDistance(argv[1]);
-	puts("well done");
-	//intro();			LLAVE A LA FELICIDAD!!!!!
+	//puts("well done");
+	intro();		//	LLAVE A LA FELICIDAD!!!!!
 	pthread_t id_orquest = hiloGRID(orquestador,NULL);
 
 	if(id_orquest == -1){

@@ -1,6 +1,6 @@
 INCLUDE_COMMONS=
 SO_COMMONS=
-COMMONS_NAME=Commons-Library
+COMMONS_NAME=commons-library
 
 NIVEL_SO=libnivel-gui.so
 INSTALL_DIR=/lib

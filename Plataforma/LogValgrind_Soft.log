@@ -1,2028 +1,709 @@
-==7348== Memcheck, a memory error detector
-==7348== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==7348== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==7348== Command: ./Debug/Plataforma config.cfg
-==7348== Parent PID: 7345
-==7348== 
-==7348== Thread 3:
-==7348== Invalid free() / delete / delete[] / realloc()
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x804EC70: aLaMierdaConTodo (Planificador.c:635)
-==7348==    by 0x804B791: planificador (Planificador.c:100)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x5665284 is on thread 3's stack
-==7348== 
-==7348== Thread 2:
-==7348== Invalid read of size 4
-==7348==    at 0x403C1F0: _isEnableLevelInLogger (log.c:204)
-==7348==    by 0x403C117: _log_write_in_level (log.c:173)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266f98 is 8 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x403C148: _log_write_in_level (log.c:181)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fa0 is 16 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x403C14E: _log_write_in_level (log.c:181)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266f9c is 12 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x40F7E29: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x4E6400F: ???
-==7348==  Address 0x4267168 is 0 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41264C8: _IO_default_xsputn (genops.c:480)
-==7348==    by 0x40F7E01: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x4E6400F: ???
-==7348==  Address 0x4267168 is 0 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41264D4: _IO_default_xsputn (genops.c:479)
-==7348==    by 0x40F7E01: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x4E6400F: ???
-==7348==  Address 0x426716a is 2 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x40F7E29: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x42B3F07: ???
-==7348==  Address 0x4267168 is 0 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41264C8: _IO_default_xsputn (genops.c:480)
-==7348==    by 0x40F7E01: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x42B3F07: ???
-==7348==  Address 0x4267168 is 0 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41264D4: _IO_default_xsputn (genops.c:479)
-==7348==    by 0x40F7E01: vfprintf (vfprintf.c:1630)
-==7348==    by 0x411D26A: vsnprintf (vsnprintf.c:120)
-==7348==    by 0x42B3F07: ???
-==7348==  Address 0x426716a is 2 bytes inside a block of size 12 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF7C: log_destroy (log.c:92)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x403C191: _log_write_in_level (log.c:189)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266f90 is 0 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x403C19A: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266f90 is 0 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4119130: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4119144: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x411914B: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x411915F: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267070 is 152 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4119169: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4119170: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4119173: fputs (iofputs.c:40)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x4119177: fputs (iofputs.c:41)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x411918D: fputs (iofputs.c:41)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267040 is 104 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x4119199: fputs (iofputs.c:41)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41191A0: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426706c is 148 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4124604: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1322)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x412461C: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1339)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff0 is 24 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x412461F: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1339)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x412462A: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x412462E: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426706c is 148 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4125362: _IO_file_overflow@@GLIBC_2.1 (fileops.c:851)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41253D8: _IO_file_overflow@@GLIBC_2.1 (fileops.c:861)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41263BA: _IO_doallocbuf (genops.c:420)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41263D0: _IO_doallocbuf (genops.c:422)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x41263DC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41263E0: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426706c is 148 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4118172: _IO_file_doallocate (filedoalloc.c:114)
-==7348==    by 0x41263EC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==  Address 0x4267010 is 56 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x412633A: _IO_setb (genops.c:405)
-==7348==    by 0x4118228: _IO_file_doallocate (filedoalloc.c:132)
-==7348==    by 0x41263EC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412634A: _IO_setb (genops.c:407)
-==7348==    by 0x4118228: _IO_file_doallocate (filedoalloc.c:132)
-==7348==    by 0x41263EC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4126351: _IO_setb (genops.c:408)
-==7348==    by 0x4118228: _IO_file_doallocate (filedoalloc.c:132)
-==7348==    by 0x41263EC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==  Address 0x4266ff8 is 32 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4126370: _IO_setb (genops.c:410)
-==7348==    by 0x4118228: _IO_file_doallocate (filedoalloc.c:132)
-==7348==    by 0x41263EC: _IO_doallocbuf (genops.c:423)
-==7348==    by 0x41254FF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:863)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4125500: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4125503: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4125505: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe4 is 12 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4125508: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fdc is 4 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412550B: _IO_file_overflow@@GLIBC_2.1 (fileops.c:864)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe0 is 8 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41253EF: _IO_file_overflow@@GLIBC_2.1 (fileops.c:882)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff8 is 32 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41253FA: _IO_file_overflow@@GLIBC_2.1 (fileops.c:882)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe0 is 8 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x41253FD: _IO_file_overflow@@GLIBC_2.1 (fileops.c:887)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fdc is 4 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4125403: _IO_file_overflow@@GLIBC_2.1 (fileops.c:887)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe4 is 12 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4125406: _IO_file_overflow@@GLIBC_2.1 (fileops.c:890)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267040 is 104 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4125409: _IO_file_overflow@@GLIBC_2.1 (fileops.c:884)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412540C: _IO_file_overflow@@GLIBC_2.1 (fileops.c:885)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412540F: _IO_file_overflow@@GLIBC_2.1 (fileops.c:886)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff0 is 24 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4125414: _IO_file_overflow@@GLIBC_2.1 (fileops.c:889)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41254A0: _IO_file_overflow@@GLIBC_2.1 (fileops.c:895)
-==7348==    by 0x4124642: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1371)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4124654: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1378)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff8 is 32 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4124657: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1378)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41264A0: _IO_default_xsputn (genops.c:460)
-==7348==    by 0x4124698: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1393)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41264A3: _IO_default_xsputn (genops.c:460)
-==7348==    by 0x4124698: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1393)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff0 is 24 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412652A: _IO_default_xsputn (genops.c:468)
-==7348==    by 0x4124698: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1393)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41191C0: fputs (libioP.h:984)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41191C7: fputs (libioP.h:985)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41191CA: fputs (libioP.h:985)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x41191D2: fputs (libioP.h:985)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x41191D7: fputs (libioP.h:985)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41191E8: fputs (libioP.h:985)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267070 is 152 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187C6: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187CF: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187D9: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187ED: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267070 is 152 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187F7: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x41187FA: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x41187FD: fflush (iofflush.c:42)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x4118801: fflush (iofflush.c:43)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4118805: fflush (iofflush.c:43)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426706c is 148 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4124224: _IO_file_sync@@GLIBC_2.1 (fileops.c:917)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4124227: _IO_file_sync@@GLIBC_2.1 (fileops.c:917)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x412422E: _IO_file_sync@@GLIBC_2.1 (fileops.c:918)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267040 is 104 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123A39: new_do_write (fileops.c:528)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123AD0: new_do_write (fileops.c:535)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe0 is 8 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123AD3: new_do_write (fileops.c:535)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x4123A67: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701e is 70 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123A6F: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426706c is 148 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x4123B88: _IO_file_write@@GLIBC_2.1 (fileops.c:1289)
-==7348==    by 0x4123A83: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267014 is 60 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123B94: _IO_file_write@@GLIBC_2.1 (fileops.c:1289)
-==7348==    by 0x4123A83: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267010 is 56 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Warning: invalid file descriptor -1 in syscall write()
-==7348== Invalid read of size 4
-==7348==    at 0x4123BAD: _IO_file_write@@GLIBC_2.1 (fileops.c:1292)
-==7348==    by 0x4123A83: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123BB5: _IO_file_write@@GLIBC_2.1 (fileops.c:1299)
-==7348==    by 0x4123A83: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267028 is 80 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123BB8: _IO_file_write@@GLIBC_2.1 (fileops.c:1299)
-==7348==    by 0x4123A83: new_do_write (fileops.c:543)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267024 is 76 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 2
-==7348==    at 0x4123A86: new_do_write (fileops.c:544)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x426701c is 68 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123A92: new_do_write (fileops.c:551)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267040 is 104 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123A95: new_do_write (fileops.c:547)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff4 is 28 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123A9A: new_do_write (fileops.c:547)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe4 is 12 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123A9D: new_do_write (fileops.c:547)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fdc is 4 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123AA0: new_do_write (fileops.c:547)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe0 is 8 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123AA3: new_do_write (fileops.c:548)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123AA6: new_do_write (fileops.c:548)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fe8 is 16 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123B48: new_do_write (fileops.c:550)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4123AAF: new_do_write (fileops.c:551)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff8 is 32 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4123AB2: new_do_write (fileops.c:549)
-==7348==    by 0x41250FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266ff0 is 24 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4118815: fflush (libioP.h:984)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fd8 is 0 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4118820: fflush (libioP.h:985)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267020 is 72 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== 
-==7348== More than 100 errors detected.  Subsequent errors
-==7348== will still be recorded, but in less detail than before.
-==7348== Invalid read of size 4
-==7348==    at 0x4118823: fflush (libioP.h:985)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x411882B: fflush (libioP.h:985)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267074 is 156 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x4118830: fflush (libioP.h:985)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267078 is 160 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 4
-==7348==    at 0x4118841: fflush (libioP.h:985)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4267070 is 152 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid read of size 1
-==7348==    at 0x403C1AE: _log_write_in_level (log.c:193)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BD7: finalizarTodo (Orquestador.c:98)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266f94 is 4 bytes inside a block of size 20 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x403BF94: log_destroy (log.c:94)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Invalid write of size 4
-==7348==    at 0x412476E: _IO_file_xsputn@@GLIBC_2.1 (fileops.c:1350)
-==7348==    by 0x41191B4: fputs (iofputs.c:42)
-==7348==    by 0x403CE40: txt_write_in_file (txt.c:27)
-==7348==    by 0x403C1AA: _log_write_in_level (log.c:190)
-==7348==    by 0x403BFC7: log_trace (log.c:104)
-==7348==    by 0x804B4DB: mensajeTrace (Orquestador.c:500)
-==7348==    by 0x8049BFA: finalizarTodo (Orquestador.c:101)
-==7348==    by 0x8049B45: orquestador (Orquestador.c:79)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348==  Address 0x4266fec is 20 bytes inside a block of size 352 free'd
-==7348==    at 0x402BF06: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
-==7348==    by 0x4118423: fclose@@GLIBC_2.1 (iofclose.c:88)
-==7348==    by 0x403BF89: log_destroy (log.c:93)
-==7348==    by 0x804A93A: cerrarLogs_Orquestador (Orquestador.c:373)
-==7348==    by 0x8049B24: orquestador (Orquestador.c:78)
-==7348==    by 0x405CD4B: start_thread (pthread_create.c:308)
-==7348==    by 0x41A1D3D: clone (clone.S:130)
-==7348== 
-==7348== Warning: invalid file descriptor -1 in syscall write()
-==7348== 
-==7348== HEAP SUMMARY:
-==7348==     in use at exit: 416 bytes in 25 blocks
-==7348==   total heap usage: 3,380 allocs, 3,356 frees, 155,471 bytes allocated
-==7348== 
-==7348== LEAK SUMMARY:
-==7348==    definitely lost: 44 bytes in 6 blocks
-==7348==    indirectly lost: 372 bytes in 19 blocks
-==7348==      possibly lost: 0 bytes in 0 blocks
-==7348==    still reachable: 0 bytes in 0 blocks
-==7348==         suppressed: 0 bytes in 0 blocks
-==7348== Rerun with --leak-check=full to see details of leaked memory
-==7348== 
-==7348== For counts of detected and suppressed errors, rerun with: -v
-==7348== ERROR SUMMARY: 276 errors from 106 contexts (suppressed: 0 from 0)
+==13796== Memcheck, a memory error detector
+==13796== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==13796== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==13796== Command: ./Debug/Plataforma config.cfg
+==13796== Parent PID: 13793
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x8049F05: puedeMover (Introduccion.c:151)
+==13796==    by 0x80499B4: intro (Introduccion.c:71)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x8049F2C: puedeMover (Introduccion.c:152)
+==13796==    by 0x80499B4: intro (Introduccion.c:71)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x8049F3D: puedeMover (Introduccion.c:153)
+==13796==    by 0x80499B4: intro (Introduccion.c:71)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x8049F65: puedeMover (Introduccion.c:154)
+==13796==    by 0x80499B4: intro (Introduccion.c:71)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407F9D3: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407F9DB: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407F9DF: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407F9E7: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407791C: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407792E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x4077980: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4077988: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x4077939: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407793F: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407794E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x80499CA: intro (Introduccion.c:72)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40812A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40812B4: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x40F54AB: _itoa_word (_itoa.c:195)
+==13796==    by 0x40F95EA: vfprintf (vfprintf.c:1629)
+==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
+==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
+==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x4266309: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40F54B3: _itoa_word (_itoa.c:195)
+==13796==    by 0x40F95EA: vfprintf (vfprintf.c:1629)
+==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
+==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
+==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x4266309: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40FA4BA: vfprintf (vfprintf.c:1629)
+==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
+==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
+==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x4266309: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40F8D30: vfprintf (vfprintf.c:1629)
+==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
+==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
+==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==13796==    by 0x4266309: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483833: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483833: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483833: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40812A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408A2EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408130E: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408A2EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40803CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D21: ???
+==13796==    by 0xBE004834: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408071D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D21: ???
+==13796==    by 0xBE004834: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408045D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D21: ???
+==13796==    by 0xBE004834: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D21: ???
+==13796==    by 0xBE004834: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FA5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FEF2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408020F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AAC: ???
+==13796==    by 0xBE959AFF: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AAD: ???
+==13796==    by 0xBE959AFF: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AAE: ???
+==13796==    by 0xBE959AFF: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AAF: ???
+==13796==    by 0xBE959AFF: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB0: ???
+==13796==    by 0xBE950007: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB1: ???
+==13796==    by 0xBE000807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB2: ???
+==13796==    by 0x80807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB3: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB4: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB5: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB6: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB7: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB8: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AB9: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABA: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABB: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABC: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABD: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABE: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ABF: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC0: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC1: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC2: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC3: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC4: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC5: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC6: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC7: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC8: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AC9: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACA: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACB: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACC: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACD: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACE: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959ACF: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD0: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD1: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD2: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD3: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD4: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD5: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD6: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40805C6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483933: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483933: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA2: ???
+==13796==    by 0x483933: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FCCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40807EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40807F5: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== 
+==13796== More than 100 errors detected.  Subsequent errors
+==13796== will still be recorded, but in less detail than before.
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408003C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40802DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40802FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40804DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FDDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408003C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40802DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40802FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080547: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FA5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D9B: ???
+==13796==    by 0x483933: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D9B: ???
+==13796==    by 0x483933: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Use of uninitialised value of size 4
+==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FCCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA0: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x407FD50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D9C: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40803E0: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D9C: ???
+==13796==    by 0x480046: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959AD7: ???
+==13796==    by 0x8080807: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4081392: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D21: ???
+==13796==    by 0xBE004838: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408B20D: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40766F0: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408B216: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40766F0: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408B002: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4076673: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408B00F: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x4076673: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0x8053CA4: main (Plataforma.c:30)
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x40803CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D22: ???
+==13796==    by 0x483330: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408071D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D22: ???
+==13796==    by 0x483330: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959D22: ???
+==13796==    by 0x483330: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA3: ???
+==13796==    by 0x4836353A: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA3: ???
+==13796==    by 0x4836353A: ???
+==13796== 
+==13796== Conditional jump or move depends on uninitialised value(s)
+==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==13796==    by 0xBE959DA3: ???
+==13796==    by 0x4836353A: ???
+==13796== 

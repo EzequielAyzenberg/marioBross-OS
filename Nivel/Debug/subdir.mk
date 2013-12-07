@@ -8,31 +8,37 @@ C_SRCS += \
 ../conexiones.c \
 ../enemigos.c \
 ../gui.c \
+../interbloqueo.c \
 ../nivel.c \
-../nivelconfig.c 
+../nivelconfig.c \
+../personajes.c 
 
 OBJS += \
 ./cargador.o \
 ./conexiones.o \
 ./enemigos.o \
 ./gui.o \
+./interbloqueo.o \
 ./nivel.o \
-./nivelconfig.o 
+./nivelconfig.o \
+./personajes.o 
 
 C_DEPS += \
 ./cargador.d \
 ./conexiones.d \
 ./enemigos.d \
 ./gui.d \
+./interbloqueo.d \
 ./nivel.d \
-./nivelconfig.d 
+./nivelconfig.d \
+./personajes.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ../%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui" -I"/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library" -I"/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

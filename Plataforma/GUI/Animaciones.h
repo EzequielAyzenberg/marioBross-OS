@@ -5,6 +5,7 @@
 #include <curses.h> //Incluiremos una librería a nuestro sistemas
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 //#include "Plataforma.h"
 
 #endif /* ANIMACIONES_H_ */

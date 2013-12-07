@@ -24,9 +24,11 @@ endif
 # All Target
 all: libnivel-gui.so
 
+dependents:
+	-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug && $(MAKE) all
 
 # Tool invocations
-libnivel-gui.so: $(OBJS) $(USER_OBJS)
+libnivel-gui.so: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
 	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -shared -o "libnivel-gui.so" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -40,5 +42,6 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
+/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug/libCommons-Library.so:
 
 -include ../makefile.targets

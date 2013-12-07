@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <nivel.h>
 #include <unistd.h>
+#include <time.h>
+#include <string.h>
 //#include <Plataforma.h>
 
 typedef struct par{
@@ -13,9 +15,16 @@ typedef struct par{
 	int y;
 }t_par;
 
+
+typedef struct ventana{
+	WINDOW*win;
+	t_par*lim;
+}t_window;
+
 typedef struct logo{
 	t_par*sup_izq;
 }t_logo;
+
 
 void intro(void);
 void salir(void);
