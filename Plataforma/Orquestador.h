@@ -9,6 +9,7 @@
 #define ORQUESTADOR_H_
 
 #include "Plataforma.h"
+#include "GUI/Animaciones.h"
 #include <wait.h>
 #include <signal.h>
 
