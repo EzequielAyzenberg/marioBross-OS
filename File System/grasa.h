@@ -11,11 +11,26 @@
 #include <sys/syscall.h>
 #include <xcb/xcb.h>   //libreria chota para usar los int "especiales"
 
+///////////////////DECLARACION DE CONSTANTE///////////////////
 #define GFILEBYTABLE 1024
 #define GFILEBYBLOCK 1
 #define GFILENAMELENGTH 71
 #define GHEADERBLOCKS 1
 #define BLKINDIRECT 1000
+						////mios
+#define BLOQUE 4096
+#define DISCO 10485760
+#define MAXNODO 1023
+#define FAIL -1
+#define INICIO 0
+#define BLOCK_INDIREC_SIZE 1024
+#define LIBRE 0
+#define OCUPADO 1
+#define DIRECTORIO 2
+#define CORRECCION 1    //esta constante esta pensada para hacer corresponder los inodos con los puntero 
+						//asi el inodo 0 es el raiz pero accesiblemente es el dir1 del ejemplo, fue aclarado en un mail de la catedra
+
+//////////////////FIN DE DECLARACION DE CONSTANTE/////////////
 
 typedef uint32_t ptrGBloque;
 
@@ -36,4 +51,8 @@ typedef struct grasa_file_t { // un cuarto de bloque (256 bytes)
 	uint64_t m_date;
 	ptrGBloque blk_indirect[BLKINDIRECT];
 } GFile;
+
+int nodoByPath(const char* path,GFile* nodo);
+int hijoDondeEstas(char* path,int padre,GFile* nodo);
+int tablaDeNodos(int archDisk);
 

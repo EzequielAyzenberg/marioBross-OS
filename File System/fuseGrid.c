@@ -28,8 +28,42 @@
  * setaer bitmap			  HECHO
  * consultar un bit map       HECHO
  * sincronizar esc/lec
+ * 
+ * agragar tooooooodos los flags 
+ *         
+ * 	MKDIR
+ * 		0 				      HECHO                                      
+ *		-EEXIST 		      HECHO		                                  
+ *		-ENAMETOOLONG 	    
+ *		-ENOSPC			 							
+ *		-ENOENT				
+ * CREATE
+ * 		 0 					  HECHO 
+ *  	-ENAMETOOLONG 	    
+ *		-ENOSPC			 	  HECHO						
+ *		-ENOENT				  mmm, lo esta creando porque no exite, Pero preguntar por el padre.
+ * WRITE
+ * 		Size				  HECHO
+ * 		-ENOENT  			  HECHO	
+ * 		-ENOSPC
+ *
+ * TRUNCAR
+ *       0                    HECHO	       		
+ * 		-ENOSPC			
+ * 		-ENOTDIR		
+ * 		-ENOENT		
+ * RMDIR
+ * 		0					  HECHO
+ * 		-ENOENT			
+ * 		-ENOTDIR		
+ * 		-EBUSY			
+ * 
+ * UNLIK
+ * 		0				      HECHO
+ * 		-ENOENT			
+ * 		-ENOTDIR		
+ *  
  * /
-
 
 
 /*
@@ -67,7 +101,8 @@ t_bitarray* bitMap;
  * 		stbuf - Esta esta estructura es la que debemos completar
  *
  * 	@RETURN
- * 		O archivo/directorio fue encontrado. -ENOENT archivo/directorio no encontrado
+ * 		O archivo/directorio fue encontrado. 
+ *     -ENOENT archivo/directorio no encontrado
  */
 static int theGrid_getattr(const char *path, struct stat *stbuf) {
 	
@@ -139,7 +174,8 @@ static int theGrid_getattr(const char *path, struct stat *stbuf) {
  * 		         del campo buf
  *
  * 	@RETURN
- * 		O directorio fue encontrado. -ENOENT directorio no encontrado
+ * 		O directorio fue encontrado. 
+ *      -ENOENT directorio no encontrado
  */
 static int theGrid_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi) {
 	(void) offset;
@@ -190,7 +226,8 @@ list_destroy(archivos);
  * 		fi - es una estructura que contiene la metadata del archivo indicado en el path
  *
  * 	@RETURN
- * 		O archivo fue encontrado. -EACCES archivo no es accesible
+ * 		O archivo fue encontrado. 
+ *      -EACCES archivo no es accesible
  */
 static int theGrid_open(const char *path, struct fuse_file_info *fi) {
 	int res;
@@ -248,6 +285,25 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	return size;
 }
 
+/* 
+ * @NOMBRE 
+ * 		theGrid_mkdir
+ * 
+ * @DESC
+ * 		funcion que crea una carpeta nueva
+ * 
+ * @PARAMETROS
+ * 		path - ruta que voy agregar
+ * 		mode - es el mode de carpeta que seria el: S_IFDIR | 0755; 	
+ * 
+ * @RETURN
+ * 		 0 				acierto                                            
+ * 		-EEXIST 		ya existe                                        
+ * 		-ENAMETOOLONG 	nombre execedio en nuestro caso los 72 chars    
+ *		-ENOSPC			se acabaron los inodos 							
+ *		-ENOENT			En caso de que el path no exita					
+ */
+
 
 
 static int theGrid_mkdir(const char *path,mode_t mode)
@@ -259,17 +315,23 @@ static int theGrid_mkdir(const char *path,mode_t mode)
 }
 
 
-/*
+/* 
+ * @NOMBRE 
+ * 	 	 theGrid_create
  * @DESC
- *  esta funcio se llama cuando quiero crear un archivo.
+ *  	 esta funcio se llama cuando quiero crear un archivo.
  *
  * @PARAMETROS
- * 		no tenemos precondiciones, las mismas las pone fuse, 
- *      debemos usar el path para crear el archivo en el no llega la ruta con el nombre del archivo que 
- * 		queremos crear
+ * 		 no tenemos precondiciones, las mismas las pone fuse, 
+ *       debemos usar el path para crear el archivo en el no llega la ruta con el nombre del archivo que 
+ * 		 queremos crear
  *
  * 	@RETURN
- * 		O archivo fue creado. 
+ * 		 O 				archivo fue creado. 
+ *  	-ENAMETOOLONG 	nombre execedio en nuestro caso los 72 chars    
+ *		-ENOSPC			se acabaron los inodos o los bloques							
+ *						¿hay que verificar que el path padre existe? o ¿es una obviedad?
+ * 
  */
 
 
@@ -281,6 +343,24 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
 	return res;
 }
 
+/*
+ * @NOMBRE
+ * 		theGrid_truncate
+ * 
+ * @DESCRIPCION
+ * 		agrandan o achica un archivo segun el si el offset es mayor o menor tamaño que size del 
+ *    	archivo correspondientemente. Ademas pide o devuelve los nodos necesarios
+ * 
+ * @PARAMETROS		
+ * 		path - relativo al punto de montaje
+ * 		offset - nuevo tamaño que tendra el archivo
+ * 
+ * @RETORNO
+ *		0	       		en caso de exito
+ * 		-ENOSPC			NO  hay mas lugar en memoria
+ * 		-ENOTDIR		no es un archivo
+ * 		-ENOENT			En caso de que el path no exita
+ */
 
 int theGrid_truncate(const char * path, off_t offset) {
 
@@ -303,6 +383,25 @@ static int theGrid_utimens(const char *path, const struct timespec ts[2])
         return 0;
 }
 
+/*
+ * @DESC
+ * 		 Esta función va a ser llamada cuando a la biblioteca de FUSE le llege un pedido
+ * 		 para grabar el contenido de un archivo
+ *
+ * @PARAMETROS
+ * 		 path - El path es relativo al punto de montaje y es la forma mediante la cual debemos
+ * 	     		encontrar el archivo o directorio que nos solicitan
+ * 		 buf - Este es el buffer donde llega el contenido para guardar
+ * 		 size - Nos indica cuanto tenemos que grabar
+ * 		 offset - A partir de que posicion del archivo tenemos que grabar
+ *
+ * 	@RETURN
+ * 	  	 Si se usa el parametro direct_io los valores de retorno son 0 si  elarchivo fue encontrado
+ * 		 o -ENOENT si ocurrio un error. Si el parametro direct_io no esta presente se retorna
+ * 		 la cantidad de bytes leidos o -ENOENT si ocurrio un error. 
+ * 		 -ENOSPC			NO  hay mas lugar en memoria
+ */
+ 
 static int32_t theGrid_write(const char *path, const char *buf, size_t size, off_t offset,struct fuse_file_info *fi)
 {
 	puts("pedi escribir");
@@ -328,6 +427,24 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
 	return size;
 }
 
+/*
+ *  @NOMBRE
+ *          unlink
+ * 	@DESC 
+ * 			borra archivos
+ *	@PARAMETROS
+ * 			path . ruta del directotioa a borrar
+ * 
+ *  @RETORNO
+ * 			0				borrado
+ * 			-ENOENT			path no existe
+ * 			-ENOTDIR		path  no es archivo
+ * 			 
+ *
+ *
+ */
+
+
 static int32_t theGrid_unlink(const char * path)
 {
 	
@@ -335,6 +452,23 @@ static int32_t theGrid_unlink(const char * path)
 	res = borrarArchivo(path,ptr_nodo,bitMap);
 	return res;
 }
+
+/*
+ *  @NOMBRE
+ *          rmdir
+ * 	@DESC 
+ * 			borra directorios vacios
+ *	@PARAMETROS
+ * 			path . ruta del directotioa a borrar
+ * 
+ *  @RETORNO
+ * 			0				borrado
+ * 			-ENOENT			path no existe
+ * 			-ENOTDIR		path no es directorio
+ * 			-EBUSY			tiene archivos 
+ *
+ *
+ */
 
 static int32_t theGrid_rmdir(const char * path)
 {
@@ -419,15 +553,22 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
 	//abro el archivo
 	fd = open(argv[1], O_RDWR);
     if (fd == -1) printf("error al abrir al archivo binario");
+    
+    //creo una variable capaz de soportar y mapear la info del disco
+    struct stat fdStat; 
+    fstat(fd, &fdStat); 
+    
+    //declaracion y asigancion de variables globales
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
     extern t_bitarray* bitMap;
 	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
 	ptr_header = (GHeader*) dir_bloque(INICIO);
-    ptr_nodo = (GFile*) dir_bloque(1); 
-    bitMap = bitarray_create((char*)dir_bloque(1), 320);
-	//nodos = dir_block(header->blk_bitmap + header->size_bitmap -1)
+    ptr_nodo = (GFile*) dir_bloque(GHEADERBLOCKS + ptr_header->size_bitmap-CORRECCION);
+    int bloquesEnBytes = ((fdStat.st_size/BLOQUE)/8);
+    bitMap = bitarray_create((char*)dir_bloque(GHEADERBLOCKS), bloquesEnBytes);
+	//fin de declaracion y asignacion de globales
 	
 	// Esta es la funcion principal de FUSE, es la que se encarga
 	// de realizar el montaje, comuniscarse con el kernel, delegar todo
