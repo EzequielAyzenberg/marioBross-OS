@@ -22,7 +22,6 @@
 #include "GUI/Introduccion.h"
 
 #define LOCAL_LOG "/home/utnso/GRIDLogs/LOGPlataforma/"
-bool finalizar;
 
 /* Nodos de la lista NOVEDADES */
 typedef struct tnuevo{

@@ -5,15 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../GUI/Animaciones.c \
-../GUI/Introduccion.c 
+../GUI/Introduccion.c \
+../GUI/prototipo.c 
 
 OBJS += \
 ./GUI/Animaciones.o \
-./GUI/Introduccion.o 
+./GUI/Introduccion.o \
+./GUI/prototipo.o 
 
 C_DEPS += \
 ./GUI/Animaciones.d \
-./GUI/Introduccion.d 
+./GUI/Introduccion.d \
+./GUI/prototipo.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

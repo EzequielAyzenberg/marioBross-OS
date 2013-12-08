@@ -11,7 +11,6 @@
 #include "Plataforma.h"
 #include "GUI/Animaciones.h"
 #include <wait.h>
-#include <signal.h>
 
 /* Nodos de la lista Ganadores */
 typedef struct{

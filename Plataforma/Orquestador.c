@@ -10,11 +10,6 @@
 #define PROGRAMA "ORQUESTADOR"
 #define mostrarOrquestador false
 
-void cerrarTodo(int senial){
-	finalizar=true;
-	signal(SIGINT,SIG_DFL);
-}
-
 t_list * ganadores;
 extern char * CFG_PATH;
 extern t_list *listaNiveles;
@@ -24,8 +19,6 @@ void loggearEstado_Debug();
 void cerrarLogs_Orquestador(logs tabla);
 
 void *orquestador(void* infoAux){
-	signal(SIGINT,cerrarTodo);
-	finalizar=false;
 
 	cfgOrquestador cfg = cargarOrquestador(CFG_PATH);
 	logsOrquestador = crearLogs_Orquestador();

@@ -14,6 +14,8 @@ int main(int argc, char *argv[]){
 		puts("Uso: pasar por argumento el path del .cfg");
 		return 0;
 	};
+	signal(SIGINT,cerrarTodo);
+	finalizar=false;
 
 	listaNiveles = list_create();
 

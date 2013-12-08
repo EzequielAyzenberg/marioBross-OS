@@ -1,30 +1,12 @@
 
 #include "Introduccion.h"
 
-#define TOPE_HORIZONTAL "_"
-#define TOPE_VERTICAL "|"
 #define RETARDO_MS 50
 
-void inicializarLogo(t_par*);
-int dist_Logo_X(t_par);
-int dist_Logo_Y(t_par);
-void graficar_logo(t_par*,int);
-void borrar_logo(t_par*);
-void elegirMovimiento(t_par*);
-int puedeMover(t_par*);
-int distancia(t_par,t_par);
-void moverAPunto(t_par*,t_par);
-t_par posicionObjetivo(void);
-void pintura(t_par*);
-void efecto(t_par*);
-void matrix(t_par*);
-void salir_Intro(void);
-
-
-int esHora=0;
-t_window ppal;
-char*logoSTR[6];
-
+void cerrarTodo(int senial){
+	finalizar=true;
+	signal(SIGINT,SIG_DFL);
+}
 
 void introduction(void){
 	int j,len;
@@ -49,6 +31,12 @@ void introduction(void){
 	sleep(1);
 	ppal.win=initscr();
 	//keypad(stdscr, TRUE);
+	if(finalizar){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	if (has_colors()) {
 		start_color();
 		init_pair(1,COLOR_BLACK,COLOR_WHITE);
@@ -70,13 +58,30 @@ void introduction(void){
 	int cont,color=1;
 	t_par*logo;
 	logo=(t_par*)malloc(sizeof(t_par));
-	inicializarLogo(logo);
+	if(!inicializarLogo(logo)){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	sleep(3);
+	if(finalizar){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	wrefresh(ppal.win);
 	borrar_logo(logo);
 	wmove(ppal.win,(logo->y)+6,logo->x); wprintw(ppal.win,"                                           ");
 	wrefresh(ppal.win);
-	for(cont=0;cont<400;cont++){
+	for(cont=0;cont<250;cont++){
+		if(finalizar){
+			salir_Intro();
+			signal(SIGINT,cerrarTodo);
+			finalizar=false;
+			return;
+		}
 		wrefresh(ppal.win);
 		borrar_logo(logo);
 		wrefresh(ppal.win);
@@ -84,29 +89,50 @@ void introduction(void){
 		graficar_logo(logo,color);
 		//wmove(ppal.win,2,2); wprintw(ppal.win,"Contador: %d",cont);
 		//box(ppal.win, 0, 0);
-		if(cont==100)color=3;
-		if(cont==200)color=4;
-		if(cont==300)color=5;
+		if(cont==60)color=3;
+		if(cont==120)color=4;
+		if(cont==180)color=5;
 		//box(ppal.win, 0, 0);
 		wrefresh(ppal.win);
 		usleep(RETARDO_MS*1000);
 	}
-	moverAPunto(logo,posicionObjetivo());
-	pintura(logo);
+	if(!moverAPunto(logo,posicionObjetivo())){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
+	if(!pintura(logo)){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	sleep(1);
-	efecto(logo);
+	if(!efecto(logo)){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	sleep(5);
-	matrix(logo);
+	if(!matrix(logo)){
+		salir_Intro();
+		signal(SIGINT,cerrarTodo);
+		finalizar=false;
+		return;
+	}
 	sleep(2);
 	salir_Intro();
 }
-void inicializarLogo(t_par*logo){
+int inicializarLogo(t_par*logo){
 	t_par aux;
 	int i;
 	for(i=0;i<6;i++){
 		aux.x=(ppal.lim->x/2)-21;
 		aux.y=ppal.lim->y-2;
 		while(distancia(aux,posicionObjetivo())-i){
+			if(finalizar)return 0;
 			//werase(ppal.win);
 			wrefresh(ppal.win);
 			box(ppal.win, 0, 0);
@@ -119,6 +145,7 @@ void inicializarLogo(t_par*logo){
 		usleep(50000);
 	}
 	*logo=posicionObjetivo();
+	return 1;
 }
 int dist_Logo_X(t_par pos){
 	return pos.x+42;
@@ -222,12 +249,13 @@ int distancia(t_par origen,t_par destino){
 	dist+=abs(origen.y-destino.y);
 	return dist;
 }
-void moverAPunto(t_par*logo,t_par objetivo){
+int moverAPunto(t_par*logo,t_par objetivo){
 	wrefresh(ppal.win);
 	graficar_logo(logo,2);
 	wrefresh(ppal.win);
 	int moverEnX=1;
 	while(distancia(*logo,objetivo)){
+		if(finalizar)return 0;
 		werase(ppal.win);
 		if(moverEnX){
 			if(logo->x<objetivo.x)logo->x++;
@@ -245,6 +273,7 @@ void moverAPunto(t_par*logo,t_par objetivo){
 		wrefresh(ppal.win);
 		usleep(RETARDO_MS*5000);
 	}
+	return 1;
 }
 t_par posicionObjetivo(void){
 	t_par posicion;
@@ -252,13 +281,14 @@ t_par posicionObjetivo(void){
 	posicion.y=(ppal.lim->y/2)-3;
 	return posicion;
 }
-void pintura(t_par*logo){
+int pintura(t_par*logo){
 	int i,j;
 	t_par aux;
 	aux=posicionObjetivo();
 	for(i=0;i<=ppal.lim->y;i++){
 		wrefresh(ppal.win);
 		for(j=0;j<=ppal.lim->x;j++){
+			if(finalizar)return 0;
 			if (has_colors())attron(COLOR_PAIR(8));
 			wmove(ppal.win,i,j); wprintw(ppal.win," ");
 			if (has_colors())attroff(COLOR_PAIR(8));
@@ -274,12 +304,14 @@ void pintura(t_par*logo){
 	}
 	if (has_colors())attroff(COLOR_PAIR(8));
 	bkgd(COLOR_PAIR(8));
+	return 1;
 }
-void efecto(t_par*logo){
+int efecto(t_par*logo){
 	int i;
 	t_par aux;
 	aux=posicionObjetivo();
 	for(i=0;i<51;i++){
+		if(finalizar)return 0;
 		wrefresh(ppal.win);
 		graficar_logo(&aux,9);
 		wrefresh(ppal.win);
@@ -292,8 +324,7 @@ void efecto(t_par*logo){
 		usleep(10 * 1000);
 	}
 	wrefresh(ppal.win);
-
-
+	return 1;
 }
 int randomMatrix(int seed1,int seed2,int base){
 	int*garbage1=(int*)malloc(sizeof(int));
@@ -335,11 +366,12 @@ int randomMatrix(int seed1,int seed2,int base){
 	free(garbage4);
 	return rand()%base;
 }
-void matrix(t_par*logo){
+int matrix(t_par*logo){
 	int i,x,y,ran1,ran2,ran3;
 	if (has_colors())attron(COLOR_PAIR(9));
 	for(i=0;i<1500;i++){
 		wrefresh(ppal.win);
+		if(finalizar)return 0;
 		y=(int)randomMatrix(x,y,ppal.lim->y);
 		x=(int)randomMatrix(x,y,ppal.lim->x);
 		ran1=32+randomMatrix(x,y,93);
@@ -350,11 +382,8 @@ void matrix(t_par*logo){
 		usleep(10 * 100);
 	}
 	if (has_colors())attroff(COLOR_PAIR(9));
+	return 1;
 }
-
-
-
-
 void salir_Intro(void){
 wrefresh(ppal.win);
 bkgd(COLOR_PAIR(8));

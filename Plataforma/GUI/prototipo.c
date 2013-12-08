@@ -4,7 +4,7 @@
  *  Created on: 07/12/2013
  *      Author: utnso
  */
-
+/*
 #define STATUS_ROW 5
 #include "Introduccion.h"
 
@@ -83,3 +83,4 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
 	wrefresh(koopaWin);
 	return;
 };
+*/
