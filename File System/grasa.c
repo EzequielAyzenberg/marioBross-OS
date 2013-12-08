@@ -7,6 +7,7 @@
 
 
 
+
 /*datos recopilados:
 usar funcion open(...)    hecho
 usar funcion mmap         hecho     
@@ -115,7 +116,7 @@ puts("");puts("");puts("");
 
 int blkInd_by_cantBlk(int bloquesDatos)
 {
-	return bloquesDatos/1024;  	 //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
+	return bloquesDatos%BLOCK_INDIREC_SIZE? bloquesDatos/BLOCK_INDIREC_SIZE+1:bloquesDatos/BLOCK_INDIREC_SIZE;  	 //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
 
 }
 
@@ -164,7 +165,11 @@ int crearDirectorio(const char* path,GFile* inodo){
 	nodoLibre=0;
 	i=0;
 	
+	puts("entre a crear directorio");
 	printf("la ruta que llego es: %s\n",path);
+	
+	if(strlen(lastNameFromPath((char*)path))>(GFILENAMELENGTH+1)) return -ENAMETOOLONG;
+	puts("pase la prueba del nombre");
 	
 	numNodo=nodoByPath(path,inodo);
 	
@@ -178,12 +183,17 @@ int crearDirectorio(const char* path,GFile* inodo){
 	howIsMyFather((char*)path,&pathPadre);
 	printf("la ruta padre es: %s\n",pathPadre);
 	nodoPadre=nodoByPath(pathPadre,inodo);
+	if (nodoPadre==FAIL) return -ENOENT;
+	puts("pase la prueba de si existe el direcctorio");
 	printf("el resultado de nodobypath es: %d\n",nodoPadre);
-	while((inodo[nodoLibre].state!=0)&&(nodoLibre<1024))nodoLibre++;
+	while((inodo[nodoLibre].state!=0)&&(nodoLibre<GFILEBYTABLE))nodoLibre++;
 	
-	
+	if (nodoLibre==GFILEBYTABLE) return -ENOSPC;
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
+	
+	
+	
 	//grabo
 	inodo[nodoLibre].state=DIRECTORIO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
@@ -238,8 +248,12 @@ int crearArchivo(const char* path,GFile* inodo){
 	
 	printf("la ruta que llego es: %s\n",path);
 	
-	numNodo=nodoByPath(path,inodo);
+	if(strlen(lastNameFromPath((char*)path))>(GFILENAMELENGTH+1)) return -ENAMETOOLONG;
+	puts("pase la prueba del nombre");
 	
+	
+	numNodo=nodoByPath(path,inodo);
+		
 	printf("el resultado de nodobypath es: %d\n",numNodo);
 	if (numNodo!=FAIL) 
 	{
@@ -254,13 +268,16 @@ int crearArchivo(const char* path,GFile* inodo){
 	printf("la ruta padre es: %s\n",pathPadre);
 	nodoPadre=nodoByPath(pathPadre,inodo);
 	printf("el resultado de nodobypath es: %d\n",nodoPadre);
+	if (nodoPadre==FAIL) return -ENOENT;
+	puts("pase la prueba da la ruta valida");
 	while((inodo[nodoLibre].state!=LIBRE)&&(nodoLibre<GFILEBYTABLE))nodoLibre++;
 	
-	//lo agrego mañana
+	
 	if(nodoLibre==GFILEBYTABLE) return -ENOSPC;   //si es el 1024
 	
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
+	
 	//grabo
 	inodo[nodoLibre].state=OCUPADO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
@@ -420,12 +437,12 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 				puts("estoy achicando\n");
 				int difBloquesIndirectos = difEntreIndirectos(bloquesDatosActuales,bloquesDatosOffset); //HECHO
 				printf("la diferencia entre indirectos es: %d\n", difBloquesIndirectos);
-				byteRef = offset+BLOQUE;                                            //(offset%BLOQUE==0) ?  offset+1 : offset + (BLOQUE-offset%BLOQUE) + 1;  
+				byteRef = nodo[numNodo].file_size;         //aaa, que pasa si es un solo bloque   //(offset%BLOQUE==0) ?  offset+1 : offset + (BLOQUE-offset%BLOQUE) + 1;  
 				while(bloquesDatosActuales > bloquesDatosOffset)                
 				{
 				 puts("estoy en while de achicar");	
 				 liberarBloque(byteRef,bMap,nodo+numNodo);   //HECHO
-				 byteRef=+BLOQUE;
+				 byteRef=-BLOQUE;
 				 bloquesDatosActuales--;
 				}
 				if (difBloquesIndirectos) liberarIndirecos(bMap,nodo+numNodo,difBloquesIndirectos);   //HECHO
@@ -494,6 +511,8 @@ int32_t borrarDirectorio(const char* path,GFile* inodo)
 int32_t borrarArchivo(const char* path,GFile* inodo,t_bitarray* bitMap)
 {
 	int numNodo=nodoByPath(path,inodo);
+	
+	
 	if (numNodo==FAIL) return -EEXIST;
 	
 	truncale(path,0,inodo,bitMap);

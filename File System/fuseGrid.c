@@ -34,14 +34,14 @@
  * 	MKDIR
  * 		0 				      HECHO                                      
  *		-EEXIST 		      HECHO		                                  
- *		-ENAMETOOLONG 	    
- *		-ENOSPC			 							
- *		-ENOENT				
+ *		-ENAMETOOLONG 	      HECHO
+ *		-ENOSPC			 	  HECHO						
+ *		-ENOENT				  HECHO
  * CREATE
  * 		 0 					  HECHO 
- *  	-ENAMETOOLONG 	    
+ *  	-ENAMETOOLONG 	      HECHO
  *		-ENOSPC			 	  HECHO						
- *		-ENOENT				  mmm, lo esta creando porque no exite, Pero preguntar por el padre.
+ *		-ENOENT				  HECHO
  * WRITE
  * 		Size				  HECHO
  * 		-ENOENT  			  HECHO	
@@ -356,10 +356,10 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
  * 		offset - nuevo tamaño que tendra el archivo
  * 
  * @RETORNO
- *		0	       		en caso de exito
+ *		0	       		exito
  * 		-ENOSPC			NO  hay mas lugar en memoria
  * 		-ENOTDIR		no es un archivo
- * 		-ENOENT			En caso de que el path no exita
+ * 		-ENOENT			path no existe
  */
 
 int theGrid_truncate(const char * path, off_t offset) {
