@@ -1,709 +1,1632 @@
-==13796== Memcheck, a memory error detector
-==13796== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==13796== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==13796== Command: ./Debug/Plataforma config.cfg
-==13796== Parent PID: 13793
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x8049F05: puedeMover (Introduccion.c:151)
-==13796==    by 0x80499B4: intro (Introduccion.c:71)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x8049F2C: puedeMover (Introduccion.c:152)
-==13796==    by 0x80499B4: intro (Introduccion.c:71)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x8049F3D: puedeMover (Introduccion.c:153)
-==13796==    by 0x80499B4: intro (Introduccion.c:71)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x8049F65: puedeMover (Introduccion.c:154)
-==13796==    by 0x80499B4: intro (Introduccion.c:71)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407F9D3: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407F9DB: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407F9DF: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407F9E7: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407791C: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407792E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x4077980: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4077988: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x4077939: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407793F: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407794E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4078C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4082CCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x80499CA: intro (Introduccion.c:72)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40812A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40812B4: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x40F54AB: _itoa_word (_itoa.c:195)
-==13796==    by 0x40F95EA: vfprintf (vfprintf.c:1629)
-==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
-==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
-==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x4266309: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40F54B3: _itoa_word (_itoa.c:195)
-==13796==    by 0x40F95EA: vfprintf (vfprintf.c:1629)
-==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
-==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
-==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x4266309: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40FA4BA: vfprintf (vfprintf.c:1629)
-==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
-==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
-==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x4266309: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40F8D30: vfprintf (vfprintf.c:1629)
-==13796==    by 0x41B5548: __vsprintf_chk (vsprintf_chk.c:86)
-==13796==    by 0x41B545E: __sprintf_chk (sprintf_chk.c:33)
-==13796==    by 0x409FFCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x40A0E3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
-==13796==    by 0x4266309: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483833: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483833: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483833: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40812A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408A2EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408130E: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408A2EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40803CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D21: ???
-==13796==    by 0xBE004834: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408071D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D21: ???
-==13796==    by 0xBE004834: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408045D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D21: ???
-==13796==    by 0xBE004834: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D21: ???
-==13796==    by 0xBE004834: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FA5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FEF2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408020F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AAC: ???
-==13796==    by 0xBE959AFF: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AAD: ???
-==13796==    by 0xBE959AFF: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AAE: ???
-==13796==    by 0xBE959AFF: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AAF: ???
-==13796==    by 0xBE959AFF: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB0: ???
-==13796==    by 0xBE950007: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB1: ???
-==13796==    by 0xBE000807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB2: ???
-==13796==    by 0x80807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB3: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB4: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB5: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB6: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB7: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB8: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AB9: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABA: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABB: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABC: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABD: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABE: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ABF: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC0: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC1: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC2: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC3: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC4: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC5: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC6: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC7: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC8: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AC9: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACA: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACB: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACC: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACD: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACE: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959ACF: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD0: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD1: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD2: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD3: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD4: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD5: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD6: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40805C6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483933: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483933: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA2: ???
-==13796==    by 0x483933: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FCCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40807DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40807EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40807F5: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== 
-==13796== More than 100 errors detected.  Subsequent errors
-==13796== will still be recorded, but in less detail than before.
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408003C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40802DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40802FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40804C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40804DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FAB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FDDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408003C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40802DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40802FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408052A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080547: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FA5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D9B: ???
-==13796==    by 0x483933: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FB43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D9B: ???
-==13796==    by 0x483933: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FBB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FC33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Use of uninitialised value of size 4
-==13796==    at 0x407FC6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FCCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA0: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x407FD50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408070F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D9C: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40803E0: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D9C: ???
-==13796==    by 0x480046: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959AD7: ???
-==13796==    by 0x8080807: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4081392: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BB6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D21: ???
-==13796==    by 0xBE004838: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408B20D: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40766F0: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408B216: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40766F0: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408B002: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4076673: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408B00F: _nc_scrolln (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x4076673: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x408BE21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x40831D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0x8053CA4: main (Plataforma.c:30)
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x40803CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D22: ???
-==13796==    by 0x483330: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408071D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D22: ???
-==13796==    by 0x483330: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959D22: ???
-==13796==    by 0x483330: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408072B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA3: ???
-==13796==    by 0x4836353A: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x408073F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA3: ???
-==13796==    by 0x4836353A: ???
-==13796== 
-==13796== Conditional jump or move depends on uninitialised value(s)
-==13796==    at 0x4080772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
-==13796==    by 0xBE959DA3: ???
-==13796==    by 0x4836353A: ???
-==13796== 
+==23009== Memcheck, a memory error detector
+==23009== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==23009== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==23009== Command: ./Debug/Plataforma config.cfg
+==23009== Parent PID: 23006
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42299D3: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42299DB: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42299DF: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42299E7: wmove (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x402D28B: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==23009==    by 0x4222C57: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x402D297: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==23009==    by 0x4222C57: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4222C19: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424D44F: _nc_unctrl (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424D4F6: unctrl (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x4221742: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x424D4A8: _nc_unctrl (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424D4F6: unctrl (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x4221742: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42218DC: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422191C: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x42219D5: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422193F: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422194E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221924: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422192E: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4221980: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221988: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422198F: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D058: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D073: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422D0AB: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422D0AE: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0B1: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x422D0B3: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0A9: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0BE: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0C6: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0CD: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422D0D7: wnoutrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1C8: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4220FD5: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42210DC: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42210E2: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422113F: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4231864: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235A64: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4235A9D: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233F68: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42340F3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234450: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234486: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x423483E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233396: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x423483E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B2A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235B6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B392: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235B6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Syscall param write(buf) points to uninitialised byte(s)
+==23009==    at 0x4150443: __write_nocancel (syscall-template.S:82)
+==23009==    by 0x40E2BA4: _IO_file_write@@GLIBC_2.1 (fileops.c:1289)
+==23009==    by 0x40E2A83: new_do_write (fileops.c:543)
+==23009==    by 0x40E40FD: _IO_do_write@@GLIBC_2.1 (fileops.c:516)
+==23009==    by 0x40E32D1: _IO_file_sync@@GLIBC_2.1 (fileops.c:918)
+==23009==    by 0x40D7811: fflush (iofflush.c:43)
+==23009==    by 0x424AFC5: _nc_flush (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x423584A: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==  Address 0x42684e1 is 17 bytes inside a block of size 2,800 alloc'd
+==23009==    at 0x402CB7A: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==23009==    by 0x424C900: _nc_set_buffer (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x422E36D: _nc_setupscreen (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422B74E: newterm (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422822B: initscr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221092: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422109A: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42210EB: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42210A3: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42340CC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234615: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423463A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221A25: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221A2B: _nc_waddch_nosync (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222C2C: waddnstr (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422CCCE: vwprintw (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42343CC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42342A6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423440C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42346D6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AF6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42342B7: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233396: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233396: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AF6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334CD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x423483E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221088: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42210D5: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4221112: _nc_hash_map (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42205AF: _nc_scroll_optimize (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235E21: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x40B44AB: _itoa_word (_itoa.c:195)
+==23009==    by 0x40B85EA: vfprintf (vfprintf.c:1629)
+==23009==    by 0x4174548: __vsprintf_chk (vsprintf_chk.c:86)
+==23009==    by 0x417445E: __sprintf_chk (sprintf_chk.c:33)
+==23009==    by 0x4249FCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424AE3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x8: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x40B44B3: _itoa_word (_itoa.c:195)
+==23009==    by 0x40B85EA: vfprintf (vfprintf.c:1629)
+==23009==    by 0x4174548: __vsprintf_chk (vsprintf_chk.c:86)
+==23009==    by 0x417445E: __sprintf_chk (sprintf_chk.c:33)
+==23009==    by 0x4249FCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424AE3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x8: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x40B94BA: vfprintf (vfprintf.c:1629)
+==23009==    by 0x4174548: __vsprintf_chk (vsprintf_chk.c:86)
+==23009==    by 0x417445E: __sprintf_chk (sprintf_chk.c:33)
+==23009==    by 0x4249FCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424AE3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x8: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x40B7D30: vfprintf (vfprintf.c:1629)
+==23009==    by 0x4174548: __vsprintf_chk (vsprintf_chk.c:86)
+==23009==    by 0x417445E: __sprintf_chk (sprintf_chk.c:33)
+==23009==    by 0x4249FCB: ??? (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x424AE3F: tparm (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x8: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A71D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD2: ???
+==23009==    by 0x48353A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD2: ???
+==23009==    by 0x48353A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229A5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229AB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229DDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229AB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229DDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A71D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4835353A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4835353A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334CD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AF6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42340AD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234050: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234067: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42344ED: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334CD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A71D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4834313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4834313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B2B4: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235B6F: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A72B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D53: ???
+==23009==    by 0x4838313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A73F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D53: ???
+==23009==    by 0x4838313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D53: ???
+==23009==    by 0x4838313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229BB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229C6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229CCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229CFE: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== 
+==23009== More than 100 errors detected.  Subsequent errors
+==23009== will still be recorded, but in less detail than before.
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x402D297: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==23009==    by 0x424C9F1: _nc_safe_strcat (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x422A074: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A7EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A7F5: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229BB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229C6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229CCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A03C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A4DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229AB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229DDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229BB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229C6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229CCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A03C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A547: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229A5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4B: ???
+==23009==    by 0x4838313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4B: ???
+==23009==    by 0x4838313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229BB1: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C1E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229C33: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229C6B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229CCD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229CFE: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D50: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3E0: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B178: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B17C: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B16E: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x48380046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B2A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42342EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B30E: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42342EB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4832333A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD2: ???
+==23009==    by 0x483733: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x402D28B: strlen (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==23009==    by 0x424C9F1: _nc_safe_strcat (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0x422A074: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3E0: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x48340046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B178: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x48340046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B17C: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x48340046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x424B16E: tputs (in /lib/i386-linux-gnu/libtinfo.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x48340046: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B2A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AD8: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B30E: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AD8: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD1: ???
+==23009==    by 0xBE004832: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A71D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD1: ???
+==23009==    by 0xBE004832: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A45D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD1: ???
+==23009==    by 0xBE004832: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD1: ???
+==23009==    by 0xBE004832: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229EF2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A20F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A5C: ???
+==23009==    by 0xBE903AAF: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A5D: ???
+==23009==    by 0xBE903AAF: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A5E: ???
+==23009==    by 0xBE903AAF: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A5F: ???
+==23009==    by 0xBE9039FF: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A60: ???
+==23009==    by 0xBE900007: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A61: ???
+==23009==    by 0xBE000807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A62: ???
+==23009==    by 0x80807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A63: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A64: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A65: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A66: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A67: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A68: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A69: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6A: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6B: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6C: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6D: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6E: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A6F: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A70: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A71: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A72: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A73: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A74: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A75: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A76: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903A77: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A5C6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42340C4: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD2: ???
+==23009==    by 0x48363A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A45D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD2: ???
+==23009==    by 0x48363A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4234404: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233046: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234504: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A72B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D52: ???
+==23009==    by 0x48383A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229CFE: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D15: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229CFE: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229D3C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A72B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D51: ???
+==23009==    by 0x48004836: ???
+==23009== 
+==23009== Use of uninitialised value of size 4
+==23009==    at 0x4229C8B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A03C: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2DF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A2FA: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A45D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4832383A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD3: ???
+==23009==    by 0x4832383A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A73F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D52: ???
+==23009==    by 0x48393A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D52: ???
+==23009==    by 0x48393A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229A5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CCB: ???
+==23009==    by 0x48373A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229AB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD0: ???
+==23009==    by 0x480063: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B06: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD0: ???
+==23009==    by 0x480063: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229B43: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD0: ???
+==23009==    by 0x480063: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229EF2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD4: ???
+==23009==    by 0x375B1B63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A20F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A70F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903CD4: ???
+==23009==    by 0x375B1B63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229E0B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A26D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A292: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A52A: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4231802: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235A64: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B7A: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229E0B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A26D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A292: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A7DD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229E0B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A26D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A292: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A4C2: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229A5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x4830: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229AB3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A8AC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229DDD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A8AC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D50: ???
+==23009==    by 0x63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229E0B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A8AC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A26D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A8AC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4C: ???
+==23009==    by 0x63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A292: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422A8AC: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D4D: ???
+==23009==    by 0x63: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4222F4F: wbkgd (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x804ADEA: salir_Intro (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422169A: _nc_render (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4222F68: wbkgd (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x804ADEA: salir_Intro (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233DFF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E2B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233396: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E2B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334CD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E2B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334E3: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E2B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233DFF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42344ED: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x423330E: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E80: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233396: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E80: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234307: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x42334CD: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4233E80: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x42344ED: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233DFF: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4234AF6: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235ABB: doupdate (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x422D1D7: wrefresh (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A72B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D83: ???
+==23009==    by 0x4831333A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A73F: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D83: ???
+==23009==    by 0x4831333A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A772: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903D83: ???
+==23009==    by 0x4831333A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B2A6: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422B30E: mvcur (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235F69: _nc_screen_wrap (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A3CB: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903DC2: ???
+==23009==    by 0x48313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A71D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903DC2: ???
+==23009==    by 0x48313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A45D: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903DC2: ???
+==23009==    by 0x48313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A782: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903DC2: ???
+==23009==    by 0x48313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B4C: ???
+==23009==    by 0xBE903B9F: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B4D: ???
+==23009==    by 0xBE903B9F: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B4E: ???
+==23009==    by 0xBE903B9F: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B4F: ???
+==23009==    by 0xBE903AFF: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B50: ???
+==23009==    by 0xBE900007: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B51: ???
+==23009==    by 0xBE000807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B52: ???
+==23009==    by 0x80807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B53: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B54: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B55: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B56: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B57: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B58: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B59: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5A: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5B: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5C: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5D: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5E: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B5F: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B60: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B61: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B62: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B63: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B64: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B65: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B66: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B67: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B68: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x422A232: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903B69: ???
+==23009==    by 0x8080807: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4229A5B: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0xBE903DBC: ???
+==23009==    by 0x48313A: ???
+==23009== 
+==23009== Conditional jump or move depends on uninitialised value(s)
+==23009==    at 0x4233046: ??? (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x4235F78: _nc_screen_wrap (in /lib/i386-linux-gnu/libncurses.so.5.9)
+==23009==    by 0x8049B8B: introduction (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009==    by 0x804AEA4: main (in /home/utnso/GITHUB/tp-2013-2c-the-grid/Plataforma/Debug/Plataforma)
+==23009== 

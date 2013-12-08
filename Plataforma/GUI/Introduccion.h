@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
-//#include <Plataforma.h>
 
 typedef struct par{
 	int x;
@@ -26,7 +25,7 @@ typedef struct logo{
 }t_logo;
 
 
-void intro(void);
+void introduction(void);
 void salir(void);
 
 

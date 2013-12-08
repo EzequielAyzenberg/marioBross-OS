@@ -1,22 +1,4 @@
-INCLUDE_COMMONS=
-SO_COMMONS=
-COMMONS_NAME=Commons-Library
-
-NIVEL_SO=libnivel-gui.so
-INSTALL_DIR=/lib
+all: compile
 
 compile:
-	gcc -shared -fPIC nivel.c -I$(INCLUDE_COMMONS) -L$(SO_COMMONS) -o $(NIVEL_SO) -l$(COMMONS_NAME)
-
-install: compile
-	cp -u $(NIVEL_SO) $(INSTALL_DIR)
-
-uninstall:
-	rm -f $(INSTALL_DIR)/$(NIVEL_SO)	
-	
-clean:
-	rm -f $(NIVEL_SO)
-
-# PHONY targets son los que no producen un archivo llamado como el target
-# Se los marca para evitar confusion si se crea un archivo llamado asi
-.PHONY: compile install uninstall clean
+	gcc -o Debug/libnivel-gui.so nivel.c tad_items.c -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lCommons-Library -lcurses -shared

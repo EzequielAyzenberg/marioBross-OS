@@ -116,6 +116,10 @@ infoParaInterbloqueo.listaJugadores=listaJugadoresActivos;
 infoParaInterbloqueo.listaJugadoresMuertos=listaJugadoresMuertos;
 infoParaInterbloqueo.tiempoEspera=config.intervaloDeadLock;
 infoParaInterbloqueo.socket=&datosConexiones.socket;
+infoParaInterbloqueo.recovery=config.recovery;
+infoParaInterbloqueo.nombreNivel=(char*)malloc(strlen(config.nombre)+1);
+strcpy(infoParaInterbloqueo.nombreNivel,config.nombre);
+
 pthread_t hiloInterbloqueo;
 pthread_create(&hiloInterbloqueo,NULL,(void*)&controlInterbloqueo,(void*)&infoParaInterbloqueo);
 handshakePlataforma(&datosConexiones);
