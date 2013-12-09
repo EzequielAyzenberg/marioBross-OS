@@ -25,6 +25,9 @@
 #include <wait.h>
 
 //General---------------------------------------------
+
+t_list *listaNiveles;
+
 /* Nodos de la lista NOVEDADES */
 typedef struct tnuevo{
 	int pid;

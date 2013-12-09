@@ -1,0 +1,7 @@
+d41d8cd98f00b204e9800998ecf8427e  dump.txt
+f7324fc1c7fbb30d09cb4e22cd0e4e06  texto.txt
+d41d8cd98f00b204e9800998ecf8427e  secreto.txt
+1c0b6c06b5c4761dc58a972803a68d2f  raro.txt
+d41d8cd98f00b204e9800998ecf8427e  lctmab.txt
+e1c06d85ae7b8b032bef47e42e4c08f9  recursive.txt
+6bf95a48f366bdf8af3a198c7b723c77  algo.txt

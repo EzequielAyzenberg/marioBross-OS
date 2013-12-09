@@ -14,6 +14,7 @@
 t_list * ganadores;
 extern char * CFG_PATH;
 extern t_list *listaNiveles;
+extern bool mpantalla;
 logs logsOrquestador;
 logs crearLogs_Orquestador();
 void loggearEstado_Debug();
@@ -25,10 +26,10 @@ void *orquestador(void* infoAux){
 	logsOrquestador = crearLogs_Orquestador();
 
 	loguearDatosIniciales(cfg);
-	printf("--ORQUESTADOR-- IP: %s.\n", cfg.ip);
-	printf("--ORQUESTADOR-- Puerto: %d.\n", cfg.puerto);
-	printf("--ORQUESTADOR-- Path de koopa: %s.\n", cfg.koopa);
-	printf("--ORQUESTADOR-- Path del script: %s.\n", cfg.script);
+	if(!mpantalla)printf("--ORQUESTADOR-- IP: %s.\n", cfg.ip);
+	if(!mpantalla)printf("--ORQUESTADOR-- Puerto: %d.\n", cfg.puerto);
+	if(!mpantalla)printf("--ORQUESTADOR-- Path de koopa: %s.\n", cfg.koopa);
+	if(!mpantalla)printf("--ORQUESTADOR-- Path del script: %s.\n", cfg.script);
 
 	int socketOrquestador, socketIngresante;
 	handshake nuevoHandshake;
@@ -44,7 +45,7 @@ void *orquestador(void* infoAux){
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
-			socketIngresante = acceptGRID(socketOrquestador);
+			socketIngresante = acceptGRID(socketOrquestador,mpantalla);
 			int protocol = recvHandshake(&nuevoHandshake,socketIngresante);
 			loggearRecepcion(nuevoHandshake, socketIngresante);
 			switch (protocol){
@@ -63,7 +64,7 @@ void *orquestador(void* infoAux){
 			 default: loggearProtocolo("DESCONOCIDO, cerrar socket",protocol);
 			 	 close(socketIngresante); break;
 			}
-			puts("--ORQUESTADOR-- Escuchando de vuelta...");
+			if(!mpantalla)puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
 		loggearEstado_Debug();
@@ -78,7 +79,7 @@ void borrarTodoNivel(void*temp){
 	nodoNivel*nivel;
 	nivel=(nodoNivel*)temp;
 	nuevo*aux;
-	puts("Borrando el nodo");
+	if(!mpantalla)puts("Borrando el nodo");
 	while(nivel->tandaActual==NULL){
 		aux=nivel->tandaActual;
 		nivel->tandaActual=nivel->tandaActual->sgte;
@@ -90,10 +91,10 @@ void borrarTodoNivel(void*temp){
 
 void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
     mensajeTrace("Matando hilos planificadores");
-    puts("Matando hilos planificadores");
+    if(!mpantalla)puts("Matando hilos planificadores");
 	matarHilos(planificadores);
 	mensajeTrace("Limpiando las listas");
-	puts("Limpiando las listas");
+	if(!mpantalla)puts("Limpiando las listas");
 	list_clean(planificadores);
 	list_clean(ganadores);
 	list_iterate(listaNiveles,borrarTodoNivel);
@@ -238,7 +239,7 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	jugadorGanador *ganador= (jugadorGanador*)malloc(sizeof(jugadorGanador));
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
-	puts("--ORQUESTADOR-- Jugador Ganador Recibido.");
+	if(!mpantalla)puts("--ORQUESTADOR-- Jugador Ganador Recibido.");
 };
 
 bool _hay_jugadores(nodoNivel *nivel) {
@@ -271,7 +272,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	}
 	if(child_pid == 0){ //koopa
 		mensajeWarning("Ejecutando koopa...");
-	    puts("Ejecutando Koopa...");
+		if(!mpantalla)puts("Ejecutando Koopa...");
 
 		execlp(koopa, "koopa", "/home/utnso/temp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
@@ -293,33 +294,33 @@ cfgOrquestador cargarOrquestador(char *path){
 
 		if (config_has_property(cfgPlataforma,"puerto")){
 			registroOrquestador.puerto=puertoPlataforma(cfgPlataforma);
-			printf("Puerto: %d.\n", registroOrquestador.puerto);
+			if(!mpantalla)printf("Puerto: %d.\n", registroOrquestador.puerto);
 		}else{
-			printf("Archivo de configuracion incompleto, falta campo: puerto\n");
+			if(!mpantalla)printf("Archivo de configuracion incompleto, falta campo: puerto\n");
 			exit(0);
 		}
 
 		if (config_has_property(cfgPlataforma,"ip")){
 			registroOrquestador.ip=ipPlataforma(cfgPlataforma);
-			printf("IP: %s.\n", registroOrquestador.ip);
+			if(!mpantalla)printf("IP: %s.\n", registroOrquestador.ip);
 		}else{
-			printf("Archivo de configuracion incompleto, falta campo: ip\n");
+			if(!mpantalla)printf("Archivo de configuracion incompleto, falta campo: ip\n");
 			exit(0);
 		}
 
 		if (config_has_property(cfgPlataforma,"koopa")){
 			registroOrquestador.koopa=pathKoopaPlataforma(cfgPlataforma);
-			printf("Path de koopa: %s.\n", registroOrquestador.koopa);
+			if(!mpantalla)printf("Path de koopa: %s.\n", registroOrquestador.koopa);
 		}else{
-			printf("Archivo de configuracion incompleto, falta campo: koopa\n");
+			if(!mpantalla)printf("Archivo de configuracion incompleto, falta campo: koopa\n");
 			exit(0);
 		}
 
 		if (config_has_property(cfgPlataforma,"script")){
 			registroOrquestador.script=pathScriptPlataforma(cfgPlataforma);
-			printf("Path del script: %s.\n", registroOrquestador.script);
+			if(!mpantalla)printf("Path del script: %s.\n", registroOrquestador.script);
 		}else{
-			printf("Archivo de configuracion incompleto, falta campo: script\n");
+			if(!mpantalla)printf("Archivo de configuracion incompleto, falta campo: script\n");
 			exit(0);
 		}
 

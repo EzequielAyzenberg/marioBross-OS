@@ -321,7 +321,7 @@ int efecto(t_par*logo){
 		usleep(10 * 1000);
 		graficar_logo(&aux,11);
 		wrefresh(ppal.win);
-		usleep(10 * 1000);
+		usleep(10 * 100);
 	}
 	wrefresh(ppal.win);
 	return 1;
@@ -369,7 +369,7 @@ int randomMatrix(int seed1,int seed2,int base){
 int matrix(t_par*logo){
 	int i,x,y,ran1,ran2,ran3;
 	if (has_colors())attron(COLOR_PAIR(9));
-	for(i=0;i<1500;i++){
+	for(i=0;i<1000;i++){
 		wrefresh(ppal.win);
 		if(finalizar)return 0;
 		y=(int)randomMatrix(x,y,ppal.lim->y);
@@ -379,17 +379,28 @@ int matrix(t_par*logo){
 		ran3=42+randomMatrix(x,y,53);
 		wmove(ppal.win,y,x); wprintw(ppal.win,"%c%c %c",(char)ran1,(char)ran2,(char)ran3);
 		wrefresh(ppal.win);
-		usleep(10 * 100);
+		usleep(100 * 100);
 	}
 	if (has_colors())attroff(COLOR_PAIR(9));
 	return 1;
 }
 void salir_Intro(void){
-wrefresh(ppal.win);
-bkgd(COLOR_PAIR(8));
-wrefresh(ppal.win);
-endwin(); /*Siempre que finalizamos un programa con una biblioteca curses, debemos ejecutar este comando.*/
-//exit(0);
+	wrefresh(ppal.win);
+	bkgd(COLOR_PAIR(8));
+	wrefresh(ppal.win);
+	int i,j;
+	for(i=0;i<=ppal.lim->y;i++){
+		wrefresh(ppal.win);
+		for(j=0;j<=ppal.lim->x;j++){
+			if (has_colors())attron(COLOR_PAIR(8));
+			wmove(ppal.win,i,j); wprintw(ppal.win," ");
+			if (has_colors())attroff(COLOR_PAIR(8));
+		}
+		wrefresh(ppal.win);
+		//usleep(4000*RETARDO_MS);
+	}
+	bkgd(COLOR_PAIR(8));
+endwin();
 }
 
 

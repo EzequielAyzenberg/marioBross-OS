@@ -52,7 +52,7 @@ typedef struct typeAns answer;
 
 /* Simple...Le pasas el Listener y te devuelve
  * un nuevo socket conectado.
- */int acceptGRID(int);
+ */int acceptGRID(int,int);
 
 /* Le pasas los datos del Handshake más el
  * socket destino en formato short (castearlo).

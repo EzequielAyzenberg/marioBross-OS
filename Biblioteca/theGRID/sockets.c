@@ -64,10 +64,10 @@ int listenGRID(int port,char *ipdest){
 	if (estado==-1)terminar(4,sock);
 	estado=bind(sock, (struct sockaddr *)&socket_addr, sizeof(struct sockaddr));
 	if (estado==-1)terminar(4,sock);
-	puts("--AUX--Puerto asignado correctamente.");
+	//puts("--AUX--Puerto asignado correctamente.");
 	estado=listen(sock,10);
 	if (estado==-1)terminar(5,sock);
-	puts("--AUX--Escuchando...");
+	//puts("--AUX--Escuchando...");
 	return sock;
 }
 
@@ -85,7 +85,7 @@ int selectGRID(int maxfd,fd_set *dirfdRead){
 return estado;
 }
 
-int acceptGRID(int sockescucha){
+int acceptGRID(int sockescucha,int denegado){
 
 	//Simple...Le pasas el Listener y te devuelve un nuevo socket conectado.
 
@@ -100,7 +100,7 @@ int acceptGRID(int sockescucha){
 	dir=getpeername(nuevo,(struct sockaddr *)&their_addr,(unsigned int *)&addrlen);
 	if (dir==-1)terminar(3,nuevo);
 	strcpy(direccion,inet_ntoa(their_addr.sin_addr));
-	printf("--AUX--Conexion establecida con IP Nº: %s en el socket Nº: %d\n\n",direccion,nuevo);
+	if(!denegado)printf("--AUX--Conexion establecida con IP Nº: %s en el socket Nº: %d\n\n",direccion,nuevo);
 	return nuevo;
 }
 

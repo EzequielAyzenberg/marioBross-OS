@@ -51,9 +51,11 @@ void loggearListas(global);
 void cerrarLogging(global);
 
 extern int defaultRD;
+extern bool mpantalla;
+extern bool mtexto;
 //-----------------------------------------------------------------------------------------------------------------------
 void *planificador (void *parametro){
-	puts("\nHola mundo!!--Yo planifico.");
+	if(!mpantalla)puts("\nHola mundo!!--Yo planifico.");
 	nodoNivel*raiz=(nodoNivel*)parametro;
 	t_list *stack,*ready,*sleeps,*deads;
 	stack=list_create();
@@ -91,8 +93,8 @@ void *planificador (void *parametro){
 	raiz->deads=deads;
 	raiz->exe=&exec;
 	raiz->algo=&algor;
-	printf("Nuestro Nivel Se llama: %s\n",raiz->name);
-	puts("\nEnviando Saludos al nivel..");
+	if(!mpantalla)printf("Nuestro Nivel Se llama: %s\n",raiz->name);
+	if(!mpantalla)puts("\nEnviando Saludos al nivel..");
 	inicializar(raiz,&general);
 	short respuesta;
 	while (1){
@@ -116,13 +118,13 @@ void *planificador (void *parametro){
 		usleep((general.algo->retardo)*1000);
 	}
 cerrarLogging(general);
-puts("El hilo termina ahora!!");
+if(!mpantalla)puts("El hilo termina ahora!!");
 return 0;
 }
 //-----------------------------------------------------------------------------------------------------------------------
 /**/
 int selectInterrupt(global tabla){
-	printf("INTERRUPCION.I--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("INTERRUPCION.I--%s\n",tabla.cabecera->name);
 	int i=0,respuesta,status=1,fdmax=*(tabla.maxfd);
 	char mensaje[128],mensajeError[64],numero[16],data[8];
 	answer aux;
@@ -141,16 +143,16 @@ int selectInterrupt(global tabla){
 		strcat(mensaje,numero);
 		strcat(mensaje,")--(");
 		if (i>fdmax){
-			puts("--ERROR:No se encontro candidato para selectear!!--");
+			if(mtexto)puts("--ERROR:No se encontro candidato para selectear!!--");
 			strcpy(mensajeError,"Nº:I");
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
 			log_info(tabla.logging.info,mensaje,"ERROR");
 			exit(1);
 		}else{
 			//printf("%d",i);
-			printf("INTERRUPCION.MID.I--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("INTERRUPCION.MID.I--%s\n",tabla.cabecera->name);
 			respuesta=recvAnswer(&aux,i);
-			printf("INTERRUPCION.MID.F--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("INTERRUPCION.MID.F--%s\n",tabla.cabecera->name);
 			//printf("--EspMsg:X");
 			strcat(mensaje,"ALL/");
 			//printf("--RecvMsg:%d-Cnt:%d-Dta:%c-",(int)aux.msg,(int)aux.cont,aux.data);
@@ -184,7 +186,7 @@ int selectInterrupt(global tabla){
 			log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
 		}
 	}
-	printf("INTERRUPCION.F--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("INTERRUPCION.F--%s\n",tabla.cabecera->name);
 	}while(muerto);
 	return status;
 }
@@ -203,24 +205,24 @@ char buscarSimbolo(int i,global tabla){
 				if(jugador==NULL){
 					if(tabla.exe->player!=NULL)jugador=tabla.exe->player;
 					else {
-						puts("NO SE ENCONTRO A NADIE");
-						printf("Sym:X--%s\n",tabla.cabecera->name);
+						if(mtexto)puts("NO SE ENCONTRO A NADIE");
+						if(mtexto)printf("Sym:X--%s\n",tabla.cabecera->name);
 						return 'X';
 					}
 				}
 			}
 		}
 		if(jugador==NULL){
-			puts("NO SE ENCONTRO A NADIE");
-			printf("Sym:X--%s\n",tabla.cabecera->name);
+			if(mtexto)puts("NO SE ENCONTRO A NADIE");
+			if(mtexto)printf("Sym:X--%s\n",tabla.cabecera->name);
 			return 'X';
 		}
-		printf("Sym:%c--%s\n",jugador->sym,tabla.cabecera->name);
+		if(mtexto)printf("Sym:%c--%s\n",jugador->sym,tabla.cabecera->name);
 		return jugador->sym;
 	}
 /**/
 void enviarLog(int sock,global tabla,int msg,int cont,char data,char sym){
-	printf("EnviarLog.I--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("EnviarLog.I--%s\n",tabla.cabecera->name);
 	char mensaje[256],valor[16];
 	strcpy(mensaje,"Nº:S--Destino:(Sock/Sym)-Contenido(Msj/Cont/Dat/Sym)--Duenio:  --(");
 	itoa(sock,valor,10);
@@ -246,10 +248,10 @@ void enviarLog(int sock,global tabla,int msg,int cont,char data,char sym){
 	strcat(mensaje,valor);
 	strcat(mensaje,")--Duenio:Plani");
 	log_trace(tabla.logging.trace,mensaje,"TRACE");
-	printf("\t\tEnviarLog.F--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("\t\tEnviarLog.F--%s\n",tabla.cabecera->name);
 }
 void recibirLog(global tabla,int sock,answer temp){
-	printf("RecibirLog.I--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("RecibirLog.I--%s\n",tabla.cabecera->name);
 	char mensaje[256],valor[16];
 	strcpy(mensaje,"Nº:R--Socket:(Esp./Recv.)-Msj:(Esp./Recv.)-(Msj/Cont/Dat/Sym)--Duenio:  --(");
 	itoa(sock,valor,10);
@@ -278,7 +280,7 @@ void recibirLog(global tabla,int sock,answer temp){
 		strcat(mensaje,valor);
 	}
 	log_trace(tabla.logging.trace,mensaje,"TRACE");
-	printf("\t\tRecibirLog.F--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("\t\tRecibirLog.F--%s\n",tabla.cabecera->name);
 }
 /**/
 int selectGRID_planificador(int fdmax,fd_set*original){
@@ -289,24 +291,24 @@ int selectGRID_planificador(int fdmax,fd_set*original){
 };
 /**/
 void modificarAlgoritmo(answer temp,global general){
-	printf("\t\t\t\tModificarAlgo.I--%s\n",general.cabecera->name);
+	if(!mpantalla)printf("\t\t\t\tModificarAlgo.I--%s\n",general.cabecera->name);
 	general.algo->algo=temp.cont;
 	char mensaje[128],numero[16];
 	strcpy(mensaje,"Nuevo Algoritmo--");
 	if(general.algo->algo==0){
 		strcat(mensaje,"SRDF--");
-		puts("Se ha elegido usar el Algoritmo SRDF.");
+		if(!mpantalla)puts("Se ha elegido usar el Algoritmo SRDF.");
 	}
 	else {
 		strcat(mensaje,"RR-Q=");
 		itoa(general.algo->algo,numero,10);
 		strcat(mensaje,numero);
 		strcat(mensaje,"--");
-		printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
+		if(!mpantalla)printf("Se ha elegido usar el Algoritmo Round Robins Q==%d\n",general.algo->algo);
 	}
 	if(defaultRD == -1){
 		general.algo->remainDist=(temp.data-'0')*10;
-		printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
+		if(!mpantalla)printf("El Remaining Distance ahora es de: %d\n\n",general.algo->remainDist);
 		strcat(mensaje,"\t--Remaining Distance: ");
 		itoa(general.algo->remainDist,numero,10);
 		strcat(mensaje,numero);
@@ -319,19 +321,19 @@ void modificarAlgoritmo(answer temp,global general){
 		strcat(mensaje,"--SIN MODIFICAR");
 	}
 	log_info(general.logging.info,mensaje,"WARNING");
-	printf("\t\t\t\tModificarAlgo.F--%s\n",general.cabecera->name);
+	if(!mpantalla)printf("\t\t\t\tModificarAlgo.F--%s\n",general.cabecera->name);
 }
 void modificarRetardo(answer temp,global general){
-	printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
+	if(!mpantalla)printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
 	general.algo->retardo=temp.cont;
-	printf("El Retardo entre turnos ahora es de: %d\n\n",general.algo->retardo);
+	if(!mpantalla)printf("El Retardo entre turnos ahora es de: %d\n\n",general.algo->retardo);
 	char mensaje[64],numero[12];
 	strcpy(mensaje,"Nuevo retardo entre turnos: ");
 	itoa(general.algo->retardo,numero,10);
 	strcat(mensaje,numero);
 	strcat(mensaje," mSeg--");
 	log_info(general.logging.info,mensaje,"WARNING");
-	printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
+	if(!mpantalla)printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
 }
 void inicializar(nodoNivel*raiz,global*general){
 	int estado;
@@ -339,7 +341,7 @@ void inicializar(nodoNivel*raiz,global*general){
 	FD_SET(raiz->nid,general->original->original);
 	if(raiz->nid>*(general->maxfd))*(general->maxfd)=raiz->nid;
 	do{
-	puts("\nPidiendo algoritmo.");
+		if(!mpantalla)puts("\nPidiendo algoritmo.");
 	sendAnswer(6,0,' ',' ',(short)raiz->nid);
 	enviarLog(raiz->nid,*general,6,0,' ',' ');
 	estado=recvAnswer(&tempo,(short)raiz->nid);
@@ -348,7 +350,7 @@ void inicializar(nodoNivel*raiz,global*general){
 	}while(estado!=6);
 	modificarAlgoritmo(tempo,*general);
 	do{
-	puts("\nPidiendo retardo entre turnos.");
+		if(!mpantalla)puts("\nPidiendo retardo entre turnos.");
 	sendAnswer(4,0,' ',' ',(short)raiz->nid);
 	enviarLog(raiz->nid,*general,4,0,' ',' ');
 	estado=recvAnswer(&tempo,(short)raiz->nid);
@@ -373,13 +375,13 @@ void crearStruct(nodoNivel*raiz,t_player*temp,int RD){
 	temp->t_stack=list_create();
 }
 int leerNovedad(global*tanda){
-	printf("NOVEDAD.I--%s\n",tanda->cabecera->name);
+	if(mtexto)printf("NOVEDAD.I--%s\n",tanda->cabecera->name);
 	if (tanda->cabecera->tandaRaiz->pid==0)return 0;
 	else{
 		int respuesta;
 		t_player*temp;
-		puts("Se ha conectado un jugador!!");
-		puts("Avisandole al nivel..");
+		if(!mpantalla)puts("Se ha conectado un jugador!!");
+		if(!mpantalla)puts("Avisandole al nivel..");
 		sendAnswer(7,0,' ',tanda->cabecera->tandaRaiz->sym,(short)tanda->cabecera->nid);	//Le aviso al nivel que hay un nuevo jugador.
 		enviarLog(tanda->cabecera->nid,*tanda,7,0,' ',tanda->cabecera->tandaRaiz->sym);
 		char mensaje[128],numero[16];
@@ -391,12 +393,12 @@ int leerNovedad(global*tanda){
 		strcat(mensaje,"--\t --Cliente:");
 		strcat(mensaje,tanda->cabecera->name);
 		log_info(tanda->logging.info,mensaje,"INFO");
-		printf("NOVEDAD.MID.A.I--%s\n",tanda->cabecera->name);
+		if(mtexto)printf("NOVEDAD.MID.A.I--%s\n",tanda->cabecera->name);
 		respuesta=selectear(NULL,1,tanda->cabecera->nid,*tanda);	//Selecteo hasta que el nivel me responda 1 (-1 Siempre es una opcion de respuesta).
-		printf("NOVEDAD.MID.A.F--%s\n",tanda->cabecera->name);
+		if(mtexto)printf("NOVEDAD.MID.A.F--%s\n",tanda->cabecera->name);
 		switch (respuesta){
-			case 1:puts("--El nivel ha dado el ok.--");
-			puts("Cargando jugador a la base de datos..");
+			case 1:if(!mpantalla){puts("--El nivel ha dado el ok.--");
+			puts("Cargando jugador a la base de datos..");}
 			temp=malloc(sizeof(t_player));
 			crearStruct(tanda->cabecera,temp,tanda->algo->remainDist);
 			cargarAlFinal(temp,tanda->ready,tanda->algo->algo); //Carga al final y reordena si es necesario.
@@ -405,7 +407,7 @@ int leerNovedad(global*tanda){
 			if(temp->pid>*(tanda->maxfd))*(tanda->maxfd)=temp->pid;
 			tanda->cabecera->cantJugadores++;		//Si el nivel da el ok, entonces aumento la cantidad de jugadores activos.
 			sendAnswer(1,0,' ',' ',temp->pid);
-			puts("\nLa lista hasta ahora a quedado asi:");
+			if(!mpantalla){puts("\nLa lista hasta ahora a quedado asi:");
 			int i=0;
 			void _each_Personaje(void*jug){
 				t_player* jugador;
@@ -415,7 +417,7 @@ int leerNovedad(global*tanda){
 				i++;
 			}
 			list_iterate(tanda->ready,_each_Personaje);		//Muestra por pantalla como esta la lista.
-			puts("");
+			puts("");}
 			char mensaje[64],numero[16];
 			itoa(temp->pid,numero,10);
 			strcpy(mensaje,"Nuevo Jugador--Socket Nº:");
@@ -427,7 +429,7 @@ int leerNovedad(global*tanda){
 			strcat(mensaje,".");
 			log_info(tanda->logging.info,mensaje,"INFO");
 			break;
-			case -1:puts("--ERROR: El nivel comenta que hubo un error.--");
+			case -1:if(!mpantalla)puts("--ERROR: El nivel comenta que hubo un error.--");
 			sendAnswer(-1,0,' ',' ',tanda->cabecera->tandaRaiz->pid);
 			borrarNodo(tanda->cabecera);
 			strcpy(mensaje,"Jugador rechazado:");
@@ -446,7 +448,7 @@ int leerNovedad(global*tanda){
 			break;
 		}
 	}
-	printf("\t\tNOVEDAD.F--%s\n",tanda->cabecera->name);
+	if(mtexto)printf("\t\tNOVEDAD.F--%s\n",tanda->cabecera->name);
 	return 1;
 }
 /**/
@@ -458,9 +460,9 @@ bool comparator(void*anterior, void*actual){
 	else return false;
 }
 void reordenar(t_list*ready,int RR){
-	if (RR!=0)puts("--Planificación Round Robins => Sin Reordenar--");
+	if (RR!=0){if(mtexto)puts("--Planificación Round Robins => Sin Reordenar--");}
 	else{
-		puts("--Planificación SRDF => Reordenando..--");
+		if(mtexto)puts("--Planificación SRDF => Reordenando..--");
 		if(!list_is_empty(ready))list_sort(ready,comparator);
 	}
 }
@@ -476,40 +478,40 @@ t_player* buscarDormido(int sock,char sym,t_list* sleeps){
 		i=list_size(sleeps)-1;
 		while(i>=0){
 				aux=list_remove(sleeps,i);
-				if(sock==aux->pid&&sym==' '){puts("LO ENCONTRAMOS!!");return aux;}
-				else if(sym==aux->sym&&sock==0){puts("LO ENCONTRAMOS!!");return aux;}
+				if(sock==aux->pid&&sym==' '){if(mtexto)puts("LO ENCONTRAMOS!!");return aux;}
+				else if(sym==aux->sym&&sock==0){if(mtexto)puts("LO ENCONTRAMOS!!");return aux;}
 					else list_add(sleeps,(void*)aux);
 				i--;
 			}
-		if(i==-1)puts("Ni aun aca lo encontramos!!");
+		if(i==-1){if(mtexto)puts("Ni aun aca lo encontramos!!");}
 	//}
 	return NULL;
 }
 /**/
 int modoDeRecuperacion(global tabla){
 	int status;
-	puts("El nivel se ha caido, limpiando registros..");
+	if(!mpantalla)puts("El nivel se ha caido, limpiando registros..");
 	log_debug(tabla.logging.debug,"Nivel desconectado, aguardando reconexion.","DEBUG");
 	loggearListas(tabla);
 	FD_CLR(tabla.cabecera->nid,tabla.original->original);
 	tabla.cabecera->nid=0;
 	list_clean(tabla.recur);
-	puts("Esperando por la reconexion.");
+	if(!mpantalla)puts("Esperando por la reconexion.");
 	int i,cont=0;
 	do{
 		for(i=0;i<5;i++){
 			sleep(1);
 			if(finalizar){
-				puts("Abortando intento de reconexion.");
+				if(!mpantalla)puts("Abortando intento de reconexion.");
 				aLaMierdaConTodo(tabla);
 				return -2;
 			}
 		}
-		puts("Intentando establecer conexion.");
+		if(!mpantalla)puts("Intentando establecer conexion.");
 		if(cont==5 || finalizar){
-			puts("Abortando intento de reconexion.");
+			if(!mpantalla)puts("Abortando intento de reconexion.");
 			aLaMierdaConTodo(tabla);
-			printf("RECUPERACION.F--%s\n",tabla.cabecera->name);
+			if(!mpantalla)printf("RECUPERACION.F--%s\n",tabla.cabecera->name);
 			return -2;
 		}
 		cont++;
@@ -542,43 +544,43 @@ int modoDeRecuperacion(global tabla){
 		if(!list_is_empty(jugador->t_stack))list_iterate(jugador->t_stack,_Pedir_El_Recurso);
 
 	}
-	printf("RECUPERACION.I--%s\n",tabla.cabecera->name);
-	puts("El nivel se ha reconectado, reestableciendo la informacion..");
+	if(!mpantalla)printf("RECUPERACION.I--%s\n",tabla.cabecera->name);
+	if(!mpantalla)puts("El nivel se ha reconectado, reestableciendo la informacion..");
 	log_trace(tabla.logging.trace,"\t\t\t--RECONEXION--\t\t\t","TRACE");
 	inicializar(tabla.cabecera,&tabla);
 	if(!list_is_empty(tabla.ready)){
-		puts("Cargando Personajes Activos..");
+		if(!mpantalla)puts("Cargando Personajes Activos..");
 		list_iterate(tabla.ready,_Reestablecer_Recursos);
 	}
 	if(!list_is_empty(tabla.sleeps)){
-		puts("Cargando Personajes Dormidos..");
+		if(!mpantalla)puts("Cargando Personajes Dormidos..");
 		list_iterate(tabla.sleeps,_Reestablecer_Recursos);
 	}
 	if(tabla.exe->player!=NULL){
-		puts("Cargando jugador en Ejecucion..");
+		if(!mpantalla)puts("Cargando jugador en Ejecucion..");
 		_Reestablecer_Recursos((void*)tabla.exe->player);
 	}
-	puts("Esta todo listo para seguir con la ejecucion!");
+	if(!mpantalla)puts("Esta todo listo para seguir con la ejecucion!");
 	if(tabla.exe->player==NULL)return 1;
 	status=tabla.exe->player->pid;
 	usleep(300000);
 	log_debug(tabla.logging.debug,"Nivel reconectado.","DEBUG");
 	log_info(tabla.logging.info,"Nivel reconectado.","INFO");
-	printf("RECUPERACION.F--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("RECUPERACION.F--%s\n",tabla.cabecera->name);
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
-	printf("CIERRE.I--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("CIERRE.I--%s\n",tabla.cabecera->name);
 	t_player*temp;
 	t_stack*tempstack;
 	nuevo*aux;
 
-	puts("Eliminando jugadores activos.");
+	if(!mpantalla)puts("Eliminando jugadores activos.");
 	while(!list_is_empty(tabla.ready)){
 		usleep(200000);
 		temp=(t_player*)list_remove(tabla.ready,0);
 		while (!list_is_empty(temp->t_stack)){
-			puts("Recurso eliminado.");
+			if(!mpantalla)	puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(temp->t_stack,0);
 			free(tempstack);
 		}
@@ -591,11 +593,11 @@ int aLaMierdaConTodo(global tabla){
 	free(tabla.ready);
 
 	usleep(200000);
-	puts("Eliminando jugadores dormidos.");
+	if(!mpantalla)puts("Eliminando jugadores dormidos.");
 	while(!list_is_empty(tabla.sleeps)){
 		temp=(t_player*)list_remove(tabla.sleeps,0);
 		while (!list_is_empty(temp->t_stack)){
-			puts("Recurso eliminado.");
+			if(!mpantalla)puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(temp->t_stack,0);
 			free(tempstack);
 		}
@@ -608,13 +610,13 @@ int aLaMierdaConTodo(global tabla){
 	free(tabla.sleeps);
 
 	usleep(200000);
-	puts("Eliminando jugador en ejecucion.");
+	if(!mpantalla)puts("Eliminando jugador en ejecucion.");
 	if(tabla.exe->player!=NULL){
 		sendAnswer(0,0,' ',' ',tabla.exe->player->pid);
 		enviarLog(tabla.exe->player->pid,tabla,0,0,' ',' ');
 		close(tabla.exe->player->pid);
 		while (!list_is_empty(tabla.exe->player->t_stack)){
-			puts("Recurso eliminado.");
+			if(!mpantalla)puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(tabla.exe->player->t_stack,0);
 			free(tempstack);
 		}
@@ -622,7 +624,7 @@ int aLaMierdaConTodo(global tabla){
 		free(tabla.exe->player);
 	}
 	usleep(200000);
-	puts("Eliminando jugadores nuevos.");
+	if(!mpantalla)puts("Eliminando jugadores nuevos.");
 	while(tabla.cabecera->tandaRaiz!=NULL){
 		aux=tabla.cabecera->tandaRaiz;
 		tabla.cabecera->tandaRaiz=tabla.cabecera->tandaRaiz->sgte;
@@ -632,7 +634,7 @@ int aLaMierdaConTodo(global tabla){
 	}
 
 	usleep(200000);
-	puts("Eliminando recursos.");
+	if(!mpantalla)puts("Eliminando recursos.");
 	while (!list_is_empty(tabla.recur)){
 		tempstack=(t_stack*)list_remove(tabla.recur,0);
 		free(tempstack);
@@ -645,13 +647,13 @@ int aLaMierdaConTodo(global tabla){
 	usleep(400000);
 	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
-	puts("Nos Vamos todos al carajo!");
+	if(!mpantalla)puts("Nos Vamos todos al carajo!");
 	log_info(tabla.logging.info,"Nivel terminado por desconexion.","ERROR");
-	printf("CIERRE.F--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("CIERRE.F--%s\n",tabla.cabecera->name);
 	return -2;
 }
 bool muertePersonaje(int i,global tabla){
-	printf("MUERTE.I--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("MUERTE.I--%s\n",tabla.cabecera->name);
 	bool chosen=false;
 	bool _is_PID(t_player*jugador) {
 		    if(i==jugador->pid)return true;
@@ -661,18 +663,18 @@ bool muertePersonaje(int i,global tabla){
 
 	aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
 		if(aux==NULL)	{
-			printf("MUERTE.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("MUERTE.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
 			aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 		}
 		if(aux==NULL) 	aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
 		if(aux==NULL) 	aux=buscarDormido(i,' ',tabla.sleeps);
 		if(aux==NULL){
 			if(tabla.exe->player==NULL){
-				printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
+				if(mtexto)printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
 				return false;
 			}else{
 				if(tabla.exe->player->pid!=i){
-					printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
+					if(mtexto)printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
 					return false;
 				}else aux=tabla.exe->player;
 			}
@@ -697,7 +699,7 @@ bool muertePersonaje(int i,global tabla){
 		//list_add(tabla.recur, (void*)tempstack);
 	}
 	tabla.cabecera->cantJugadores--;
-	if(tabla.cabecera->cantJugadores==0)printf("--ATENCION--No quedan jugadores!!\n");
+	if(tabla.cabecera->cantJugadores==0){if(!mpantalla)printf("--ATENCION--No quedan jugadores!!\n");}
 	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
 	enviarLog(tabla.cabecera->nid,tabla,8,0,'Z',aux->sym);
 	if(tabla.exe->player!=NULL){
@@ -708,7 +710,7 @@ bool muertePersonaje(int i,global tabla){
 	}
 	log_info(tabla.logging.info,mensaje,"WARNING");
 	//puts("Personaje Completamente eliminado!!");
-	printf("\t\tMUERTE.F--%d--%s\n",aux->pid,tabla.cabecera->name);
+	if(!mpantalla)printf("\t\tMUERTE.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	FD_CLR(aux->pid,tabla.original->original);
 	close(aux->pid);
 	free(aux);
@@ -718,7 +720,7 @@ bool muertePersonaje(int i,global tabla){
 void matarPersonaje(answer auxiliar,global tabla){
 	char simbolo;
 	simbolo=auxiliar.symbol;
-	printf("MATAR.I--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("MATAR.I--%s\n",tabla.cabecera->name);
 	bool _is_Personaje(t_player*jugador) {
 		    if(jugador->sym==simbolo)return true;
 		    return false;
@@ -733,8 +735,8 @@ void matarPersonaje(answer auxiliar,global tabla){
 				aux=tabla.exe->player;
 				tabla.exe->player=NULL;
 			}else{
-				puts("\t\t\t\tNO ENCONTRADO!!!");
-				printf("\t\tMATAR.F--%s\n",tabla.cabecera->name);
+				if(mtexto)puts("\t\t\t\tNO ENCONTRADO!!!");
+				if(!mpantalla)printf("\t\tMATAR.F--%s\n",tabla.cabecera->name);
 				return;
 			}
 		}
@@ -750,17 +752,17 @@ void matarPersonaje(answer auxiliar,global tabla){
 	list_add(tabla.deads,(void*)aux);
 	sendAnswer(8,auxiliar.cont,' ',' ',aux->pid);
 	enviarLog(aux->pid,tabla,8,0,'Z','Z');
-	printf("\t\tMATAR.F--%d--%s\n",aux->pid,tabla.cabecera->name);
+	if(!mpantalla)printf("\t\tMATAR.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	loggearListas(tabla);
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
-	puts("\n--SLI--");
+	if(!mpantalla)puts("\n--SLI--");
 	int status=-1;
 	char mensaje[128],numero[8];
 	strcpy(mensaje,"Interrupcion generada por ");
 	if(i==tabla.cabecera->nid){
 		strcat(mensaje,tabla.cabecera->name);
-		puts("La interrupcion no se puede enmascarar, atendiendo..");
+		if(!mpantalla)puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
 		case 0:status=modoDeRecuperacion(tabla);
 		break;
@@ -773,14 +775,14 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		case 8:matarPersonaje(*aux,tabla);
 		status=-4;
 		break;
-		default:puts("Ni la interrupcion se puede atender!!");
+		default:if(mtexto)puts("Ni la interrupcion se puede atender!!");
 		break;
 		}
 	}else{
 		strcat(mensaje,"Pers.Nº:");
 		itoa(i,numero,10);
 		strcat(mensaje,numero);
-		if(respuesta!=0)puts("Pescado Enmascarado");
+		if(respuesta!=0){if(mtexto)puts("Pescado Enmascarado");}
 		else{
 			if(muertePersonaje(i,tabla))status=0;
 			else status=-5;
@@ -802,12 +804,12 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	strcat(mensaje,numero);
 	strcat(mensaje,"--");
 	log_info(tabla.logging.info,mensaje,"WARNING");
-	puts("--CLI--\n");
+	if(!mpantalla)puts("--CLI--\n");
 	return status;
 }
 /**/
 int selectear(answer*tempo,short esperado,int sock,global tabla){
-	printf("\t\tSELECTEAR.I--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("\t\tSELECTEAR.I--%s\n",tabla.cabecera->name);
 	answer aux;
 	short respuesta;
 	fd_set readfds;
@@ -827,19 +829,19 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 		strcat(mensaje,"--Socket:(Esp./Recv.)-Msj:(Esp./Recv.)-(Msj/Cont/Dat/Sym)--Duenio:  --(");
 		strcat(mensaje,numero);
 		strcat(mensaje,"/");
-		printf("\t\tSELECTEAR.MID.A.I--%s\n",tabla.cabecera->name);
+		if(mtexto)printf("\t\tSELECTEAR.MID.A.I--%s\n",tabla.cabecera->name);
 		cantidad=selectGRID(fdmax,&readfds);
 		int i=0;
 		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax))	{
 			i++;
 			if(cantidad>1&&i==sock)i++;
 		}
-		printf("\t\tSELECTEAR.MID.A.F--%s\n",tabla.cabecera->name);
+		if(mtexto)printf("\t\tSELECTEAR.MID.A.F--%s\n",tabla.cabecera->name);
 		itoa(i,numero,10);
 		strcat(mensaje,numero);
 		strcat(mensaje,")--(");
 		if (i>fdmax){
-			puts("--ERROR:No se encontro candidato para selectear!!--");
+			if(mtexto)puts("--ERROR:No se encontro candidato para selectear!!--");
 			itoa(cantSelecteos,numero,10);
 			strcpy(mensajeError,"Nº:");
 			strcat(mensajeError,numero);
@@ -848,9 +850,9 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 			exit(1);
 		}else{
 			//printf("%d",i);
-			printf("\t\tSELECTEAR.MID.B.I--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("\t\tSELECTEAR.MID.B.I--%s\n",tabla.cabecera->name);
 			respuesta=recvAnswer(&aux,i);
-			printf("\t\tSELECTEAR.MID.B.F--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("\t\tSELECTEAR.MID.B.F--%s\n",tabla.cabecera->name);
 			if (esperado==10){
 				//printf("--EspMsg:X");
 				strcat(mensaje,"ALL/");
@@ -896,7 +898,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 					if (tempo!=NULL)*tempo=aux;
 					cantSelecteos++;
 					log_trace(tabla.logging.trace,"\t\t\t--------A--------------------\t\t\t","TRACE");
-					printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
+					if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 					return respuesta;
 				}else status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0){
@@ -926,7 +928,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 							}
 						}
 					}
-				printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
+					if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 				return -3;
 				}
 			}
@@ -934,7 +936,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 
 		}
 	}while(1);
-	printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 	return status;
 }
 /**/
@@ -963,7 +965,7 @@ void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 
 }
 int asignarRecursos(global*tabla){
-	printf("ASIGNAR.I--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("ASIGNAR.I--%s\n",tabla->cabecera->name);
 	short respuesta;
 	answer temp;
 	int status=1;
@@ -1027,7 +1029,7 @@ int asignarRecursos(global*tabla){
 
 
 	//list_iterate(tabla->sleeps,(void*)intentarAsignar);
-	printf("ASIGNAR.F--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("ASIGNAR.F--%s\n",tabla->cabecera->name);
 	if(status==-2)return -2;
 	return 0;
 }
@@ -1073,7 +1075,7 @@ int asignarRecursos(global*tabla){
 }*/
 /**/
 void movimiento(global*tabla,answer aux){
-	printf("MOVIMIENTO.I--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("MOVIMIENTO.I--%s\n",tabla->cabecera->name);
 	tabla->playing=true;
 	sendAnswer(3,aux.cont,' ',aux.symbol,tabla->cabecera->nid);
 	enviarLog(tabla->cabecera->nid,*tabla,3,aux.cont,' ',aux.symbol);
@@ -1087,7 +1089,7 @@ void movimiento(global*tabla,answer aux){
 			if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
 			else tabla->exe->rem_cuantum--;
 		}
-	}printf("\t\tMOVIMIENTO.F--%s\n",tabla->cabecera->name);
+	}if(mtexto)printf("\t\tMOVIMIENTO.F--%s\n",tabla->cabecera->name);
 }
 void dormirJugador(t_player*jugador,t_list*dormidos){
 	list_add(dormidos,(void*)jugador);
@@ -1108,7 +1110,7 @@ void instancia(global tabla){
 	log_info(tabla.logging.info,mensaje,"INFO");
 	dormirJugador(tabla.exe->player,tabla.sleeps);
 	tabla.exe->player=NULL;
-	puts("Jugador a la espera de una instancia.");
+	if(!mpantalla)puts("Jugador a la espera de una instancia.");
 }
 int calcularDistancia(int inicial,int final){
 	int x,y;
@@ -1137,7 +1139,7 @@ void cargarAExec(global*tabla){
 	tabla->exe->rem_cuantum=tabla->algo->algo;
 }
 bool concederTurno(global*tabla){
-	printf("CONCEDER.I--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("CONCEDER.I--%s\n",tabla->cabecera->name);
 	if(tabla->exe->player!=NULL){
 		if(tabla->exe->rem_cuantum==-1){
 			cargarAlFinal(tabla->exe->player,tabla->ready,tabla->algo->algo);
@@ -1146,49 +1148,49 @@ bool concederTurno(global*tabla){
 	}
 	if (tabla->exe->player==NULL){
 		if(!list_is_empty(tabla->ready)){
-			printf("CONCEDER.CARGAR.I--%s\n",tabla->cabecera->name);
+			if(mtexto)printf("CONCEDER.CARGAR.I--%s\n",tabla->cabecera->name);
 			cargarAExec(tabla);
-			printf("CONCEDER.CARGAR.F--%s\n",tabla->cabecera->name);
+			if(mtexto)printf("CONCEDER.CARGAR.F--%s\n",tabla->cabecera->name);
 		}else {
-			printf("\t\tCONCEDER.F--X--%s\n",tabla->cabecera->name);
+			if(mtexto)	printf("\t\tCONCEDER.F--X--%s\n",tabla->cabecera->name);
 			return false;
 		}
 	}else{
-		printf("CONCEDER.SIGA.I--%s\n",tabla->cabecera->name);
+		if(mtexto)printf("CONCEDER.SIGA.I--%s\n",tabla->cabecera->name);
 		if(tabla->exe->rem_cuantum==0&&tabla->algo->algo!=0)tabla->exe->rem_cuantum=tabla->algo->algo;
 		if(tabla->exe->rem_cuantum!=0&&tabla->algo->algo==0)tabla->exe->rem_cuantum=tabla->algo->algo;
-		printf("CONCEDER.SIGA.F--%s\n",tabla->cabecera->name);
+		if(mtexto)printf("CONCEDER.SIGA.F--%s\n",tabla->cabecera->name);
 	}
 	sendAnswer(7,0,'.','.',(short)tabla->exe->player->pid);
 	enviarLog(tabla->exe->player->pid,*tabla,7,0,' ',' ');
-	printf("\t\tCONCEDER.F--%d--%s\n",tabla->exe->player->pid,tabla->cabecera->name);
+	if(mtexto)printf("\t\tCONCEDER.F--%d--%s\n",tabla->exe->player->pid,tabla->cabecera->name);
 	return true;
 }
 int atenderJugador(global*tabla){
-	printf("TURNO.I--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("TURNO.I--%s\n",tabla->cabecera->name);
 	int respuesta,sock,cont=0;
 	answer back;
 	do{
 		cont++;
 		if(!concederTurno(tabla)){
-			printf("\t\tTURNO.F--%s\n",tabla->cabecera->name);
+			if(mtexto)printf("\t\tTURNO.F--%s\n",tabla->cabecera->name);
 			return 0;
 		}
 		if(cont==5){
-			puts("ESTO NO ESTA RESULTANDO!!");
+			if(mtexto)puts("ESTO NO ESTA RESULTANDO!!");
 			exit(1);
 		}
 	}while(tabla->exe->player==NULL);
 	sock=tabla->exe->player->pid;
-	printf("\t\tTURNO.MID.I--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("\t\tTURNO.MID.I--%s\n",tabla->cabecera->name);
 	respuesta=selectear(&back,10,sock,*tabla);
-	printf("\t\tTURNO.MID.F--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("\t\tTURNO.MID.F--%s\n",tabla->cabecera->name);
 	switch(respuesta){
 	case -2:
 		return -2;
 		break;
 	case 0:
-		puts("Se murio el que estaba jugando, fin de turno.");
+		if(!mpantalla)puts("Se murio el que estaba jugando, fin de turno.");
 		break;
 	case 2:
 		recurso(tabla,back);
@@ -1197,7 +1199,7 @@ int atenderJugador(global*tabla){
 		movimiento(tabla,back);
 		break;
 	}
-	printf("\t\tTURNO.F--%s\n",tabla->cabecera->name);
+	if(mtexto)printf("\t\tTURNO.F--%s\n",tabla->cabecera->name);
 	return 0;
 }
 /**/
