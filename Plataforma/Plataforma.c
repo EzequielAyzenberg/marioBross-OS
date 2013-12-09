@@ -1,6 +1,7 @@
 //SOY EL PADRE DE TODO LO QUE PASA AQUI!!!
 
-#include"Orquestador.h"
+//#include"Orquestador.h"
+#include "Plataforma.h"
 
 #define MAX 64
 #define PROGRAMA "PLATAFORMA"

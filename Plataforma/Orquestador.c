@@ -6,9 +6,10 @@
  */
 
 #include"Orquestador.h"
-#include"Planificador.h"
+//#include"Planificador.h"
 #define PROGRAMA "ORQUESTADOR"
 #define mostrarOrquestador false
+
 
 t_list * ganadores;
 extern char * CFG_PATH;

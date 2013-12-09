@@ -1,6 +1,6 @@
-Planificador.d: ../Planificador.c ../Planificador.h ../Headers.h \
+Pantalla.d: ../Pantalla.c ../Pantalla.h ../Headers.h \
  ../GUI/Introduccion.h \
- /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h ../Pantalla.h \
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/list.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/node.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/config.h \
@@ -13,15 +13,13 @@ Planificador.d: ../Planificador.c ../Planificador.h ../Headers.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/string.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h
 
-../Planificador.h:
+../Pantalla.h:
 
 ../Headers.h:
 
 ../GUI/Introduccion.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h:
-
-../Pantalla.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/list.h:
 

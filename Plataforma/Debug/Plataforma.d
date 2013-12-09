@@ -1,4 +1,6 @@
-Plataforma.d: ../Plataforma.c ../Orquestador.h ../Plataforma.h \
+Plataforma.d: ../Plataforma.c ../Plataforma.h ../Headers.h \
+ ../GUI/Introduccion.h \
+ /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h ../Pantalla.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/list.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/node.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/config.h \
@@ -10,13 +12,17 @@ Plataforma.d: ../Plataforma.c ../Orquestador.h ../Plataforma.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/cadenas.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/string.h \
  /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h \
- ../GUI/Introduccion.h \
- /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h \
- ../GUI/Animaciones.h
-
-../Orquestador.h:
+ ../Orquestador.h ../Planificador.h
 
 ../Plataforma.h:
+
+../Headers.h:
+
+../GUI/Introduccion.h:
+
+/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h:
+
+../Pantalla.h:
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/commons/collections/list.h:
 
@@ -40,8 +46,6 @@ Plataforma.d: ../Plataforma.c ../Orquestador.h ../Plataforma.h \
 
 /home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/theGRID/logger.h:
 
-../GUI/Introduccion.h:
+../Orquestador.h:
 
-/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/nivel.h:
-
-../GUI/Animaciones.h:
+../Planificador.h:

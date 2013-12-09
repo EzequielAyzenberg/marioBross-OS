@@ -1,7 +1,7 @@
 #ifndef INTODUCCION_H_
 #define INTODUCCION_H_
 
-#include <curses.h> //Incluiremos una librería a nuestro sistemas
+#include <curses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <nivel.h>

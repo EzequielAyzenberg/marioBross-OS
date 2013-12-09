@@ -8,27 +8,10 @@
 #ifndef ORQUESTADOR_H_
 #define ORQUESTADOR_H_
 
-#include "Plataforma.h"
-#include "GUI/Animaciones.h"
-#include <wait.h>
+//#include "Plataforma.h"
+#include "Headers.h"
+#include"Planificador.h"
 
-/* Nodos de la lista Ganadores */
-typedef struct{
-	char personaje;
-}jugadorGanador;
-
-/* Nodos de la lista de planificadores */
-typedef struct{
-	pthread_t idHilo;
-}nodoPlanificador;
-
- /* Registro del archivo cfg del orquestador
-  */typedef struct{
-	 char * ip;
-	 char * koopa;
-	 char * script;
-	 int puerto;
- }cfgOrquestador;
 
 void cerrarTodo(int);
 void borrarTodoNivel(void*);
