@@ -126,7 +126,10 @@ int selectInterrupt(global tabla){
 	int i=0,respuesta,status=1,fdmax=*(tabla.maxfd);
 	char mensaje[128],mensajeError[64],numero[16],data[8];
 	answer aux;
-	fd_set readfds=*(tabla.original->original);
+	fd_set readfds;
+	bool muerto=false;
+	do{
+	readfds=*(tabla.original->original);
 	if(selectGRID_planificador(fdmax,&readfds)>0){
 		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax)){
 			i++;
@@ -176,10 +179,13 @@ int selectInterrupt(global tabla){
 			strcat(mensaje,".");
 			log_trace(tabla.logging.trace,mensaje,"TRACE");
 			status=interrupcion(i,respuesta,&aux,tabla);
+			if(status==-4)muerto=true;
+			if(status==0||status==-5)muerto=false;
 			log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
 		}
 	}
 	printf("INTERRUPCION.F--%s\n",tabla.cabecera->name);
+	}while(muerto);
 	return status;
 }
 /**/
@@ -652,16 +658,6 @@ bool muertePersonaje(int i,global tabla){
 		    return false;
 			}
 	t_player*aux ;
-	/*if(!list_is_empty(tabla.deads)){
-		aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
-		if(aux==NULL){
-			printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
-			return false;
-		}
-	}else{
-		printf("\t\t\t\tMUERTE.F--Vacia--%s\n",tabla.cabecera->name);
-		return false;
-	}*/
 
 	aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
 		if(aux==NULL)	{
@@ -669,6 +665,7 @@ bool muertePersonaje(int i,global tabla){
 			aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 		}
 		if(aux==NULL) 	aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
+		if(aux==NULL) 	aux=buscarDormido(i,' ',tabla.sleeps);
 		if(aux==NULL){
 			if(tabla.exe->player==NULL){
 				printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
@@ -715,6 +712,7 @@ bool muertePersonaje(int i,global tabla){
 	FD_CLR(aux->pid,tabla.original->original);
 	close(aux->pid);
 	free(aux);
+	loggearListas(tabla);
 	return chosen;
 }/**/
 void matarPersonaje(answer auxiliar,global tabla){
@@ -753,6 +751,7 @@ void matarPersonaje(answer auxiliar,global tabla){
 	sendAnswer(8,auxiliar.cont,' ',' ',aux->pid);
 	enviarLog(aux->pid,tabla,8,0,'Z','Z');
 	printf("\t\tMATAR.F--%d--%s\n",aux->pid,tabla.cabecera->name);
+	loggearListas(tabla);
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	puts("\n--SLI--");
@@ -772,6 +771,7 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		case 6:modificarAlgoritmo(*aux,tabla);
 		break;
 		case 8:matarPersonaje(*aux,tabla);
+		status=-4;
 		break;
 		default:puts("Ni la interrupcion se puede atender!!");
 		break;
@@ -783,6 +783,7 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		if(respuesta!=0)puts("Pescado Enmascarado");
 		else{
 			if(muertePersonaje(i,tabla))status=0;
+			else status=-5;
 		}
 	}
 	strcat(mensaje,"\t\t--msg:");
@@ -826,12 +827,14 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 		strcat(mensaje,"--Socket:(Esp./Recv.)-Msj:(Esp./Recv.)-(Msj/Cont/Dat/Sym)--Duenio:  --(");
 		strcat(mensaje,numero);
 		strcat(mensaje,"/");
+		printf("\t\tSELECTEAR.MID.A.I--%s\n",tabla.cabecera->name);
 		cantidad=selectGRID(fdmax,&readfds);
 		int i=0;
 		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax))	{
 			i++;
 			if(cantidad>1&&i==sock)i++;
 		}
+		printf("\t\tSELECTEAR.MID.A.F--%s\n",tabla.cabecera->name);
 		itoa(i,numero,10);
 		strcat(mensaje,numero);
 		strcat(mensaje,")--(");
@@ -845,7 +848,9 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 			exit(1);
 		}else{
 			//printf("%d",i);
+			printf("\t\tSELECTEAR.MID.B.I--%s\n",tabla.cabecera->name);
 			respuesta=recvAnswer(&aux,i);
+			printf("\t\tSELECTEAR.MID.B.F--%s\n",tabla.cabecera->name);
 			if (esperado==10){
 				//printf("--EspMsg:X");
 				strcat(mensaje,"ALL/");
@@ -1214,11 +1219,10 @@ logs crearLogs(nodoNivel*raiz){
 	strcat(file,".txt");
 	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
 	strcpy(file,LOCAL_LOG);
+	strcat(file,"Plani_");
 	strcat(file,raiz->name);
 	strcat(file,"-Info");
 	strcat(file,".txt");
-	strcpy(program_name,"PLANIFICADOR_");
-	strcat(program_name,raiz->name);
 	paquete.info=log_create(file,program_name,muestreo,LOG_LEVEL_INFO);
 	/*strcpy(file,LOCAL_LOG);
 	strcat(file,raiz->name);
