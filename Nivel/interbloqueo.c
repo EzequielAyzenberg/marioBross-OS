@@ -213,7 +213,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 			bufferMsg[11]=bufferPersonaje->id;
 			//printf("matamos a %c",bufferPersonaje->id);
 			sendAnswer(8,0,' ',bufferPersonaje->id,*info->socket);
-			matarPersonaje(info->listaJugadores,info->listaJugadoresMuertos,info->listaRecursos,bufferPersonaje->id);
+			//matarPersonaje(info->listaJugadores,info->listaJugadoresMuertos,info->listaRecursos,bufferPersonaje->id);
 
 
 			pthread_mutex_lock( &mutexLog);
@@ -222,7 +222,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 							log_info(logNivel,bufferMsg);
 							log_destroy(logNivel);
 			pthread_mutex_unlock( &mutexLog);
-
+			//printf("Que mierda pasa");
 			break;
 							}
 				else{

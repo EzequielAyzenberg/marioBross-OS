@@ -172,6 +172,7 @@ int crearPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){//IMPLEMEN
 */}
 
 int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t_list* listaCajas,char id){
+	pthread_mutex_lock( &mutexMatarPersonaje);
 	t_personaje *bufferPj;
 	bool _is_Personaje(t_personaje* pj2){
 							if(pj2->id==id)return true;
@@ -179,14 +180,17 @@ int matarPersonaje(t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,t
 						}
 		bufferPj=list_find(listaJugadoresActivos,(void*)_is_Personaje);
 		if(bufferPj!=NULL){
-			pthread_mutex_lock( &mutexMatarPersonaje);
+
 			recibirRecursoPersonaje(id,listaCajas,listaJugadoresActivos);
 			list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje);
 			//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
 			pthread_mutex_unlock( &mutexMatarPersonaje);
 			return 1;
 		}
-		else return -1;
+		else {
+			pthread_mutex_unlock( &mutexMatarPersonaje);
+			return -1;
+		}
 }
 
 int moverPersonaje(t_list* listaJugadoresActivos,int x,int y,char id){
