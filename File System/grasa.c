@@ -24,13 +24,27 @@ void left_strcat(char*destino,char*origen);
 uint8_t* posicionBloqueSegunByte(GFile* nodo,int byte);
 char* lastNameFromPath(char* path);
 
+int nroBlkInd_by_Size(int size)
+{
+	return size/(GFILEBYTABLE*BLOQUE);
+}
+
+bool isEmpty(int nodoPadre, GFile* nodo)
+{
+int i=0;	
+
+ while((nodoPadre != nodo[i].parent_dir_block)&&(i<GFILEBYTABLE)) i++;
+ 
+if (i==GFILEBYTABLE) return VERDAD;
+else return FALSO;
+}
 
 int queHayAca(int numNodo,GFile* nodo,t_list* lista){
 	int i;
 	int dirPadre;
 	dirPadre=numNodo;
 	for (i=1; i < 1023;i++)
-				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=0)) list_add(lista, nodo[i].fname);
+				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=LIBRE)) list_add(lista, nodo[i].fname);
 return 0;
 }
 
@@ -321,13 +335,19 @@ int asignarBloque(t_bitarray* bMap)
 /* 
  * @Nombre: asignarIndirecto
  * @Precondicion: nodo donde va a ser cargado el array de 1024 bloque de datos
- * @posCondicion: puntero de tipo ptrGBloque a la primer posicion de array de datos
+ * @posCondicion: puntero de tipo ptrGBloque a la primer posicion de array de datos 
+ *                o null si no hay mas bloques
  */
 
-ptrGBloque* asignarIndirecto(t_bitarray* bMap,GFile* archivo,int bloqueDatos)
+ptrGBloque* asignarIndirecto(t_bitarray* bMap,GFile* archivo,int refIndirecto)
 {
-	archivo->blk_indirect[blkInd_by_cantBlk(bloqueDatos)]=asignarBloque(bMap);
-	return (ptrGBloque*) dir_bloque(archivo->blk_indirect[blkInd_by_cantBlk(bloqueDatos)]);
+	puts("estoy en asignarbloque");
+	int res = asignarBloque(bMap);
+	printf("El res es: %d\n",res);
+	archivo->blk_indirect[refIndirecto]=res;	
+	return (ptrGBloque*) dir_bloque(archivo->blk_indirect[refIndirecto]);
+		
+		
 }
 
 /*
@@ -361,16 +381,17 @@ return 0;
 
 int liberarIndirecos(t_bitarray* bMap,GFile* nodo,int dif)
 {
-	int ind = blkInd_by_cantBlk(bloquesBySize(nodo->file_size));
+	puts("entre a liberar indirectos");
+	int nroIndRef = nroBlkInd_by_Size(nodo->file_size);
 	int i;
 	while(dif)
 	{
-		printf("que bloque voy a liberar: %d\n", nodo->blk_indirect[ind]);
-		bitarray_clean_bit(bMap,nodo->blk_indirect[ind]);
-		printf("la disponibilidad del bloque %d es: ",nodo->blk_indirect[ind]);
-		if(bitarray_test_bit(bMap,nodo->blk_indirect[ind])) puts("desocupado");
+		printf("que bloque voy a liberar: %d\n", nodo->blk_indirect[nroIndRef]);
+		bitarray_clean_bit(bMap,nodo->blk_indirect[nroIndRef]);
+		printf("la disponibilidad del bloque %d es: ",nodo->blk_indirect[nroIndRef]);
+		if(bitarray_test_bit(bMap,nodo->blk_indirect[nroIndRef])) puts("desocupado");
 		else puts("ocupado"); 
-		ind--;
+		nroIndRef=-BLOQUE*GFILEBYTABLE;
 		dif--;
 	}  
 	
@@ -378,6 +399,27 @@ int liberarIndirecos(t_bitarray* bMap,GFile* nodo,int dif)
 return 0;
 }
 
+int bloqueLibresRestantes(t_bitarray* bMap)
+{
+	int i=0;
+	int cant=0;
+	bool ocupado;
+	
+		while(bitarray_get_max_bit(bMap)>i)
+		{
+			i++;
+			ocupado = bitarray_test_bit(bMap,i);
+			if (!ocupado) cant++;
+		}
+	return cant;
+}
+
+bool noMeAlcansanLosBloques(int actuales,int offset,int bRestantes)
+{
+	if((offset-actuales+difEntreIndirectos(actuales,offset))>bRestantes) return VERDAD;
+	else return FALSO;
+		
+}
 
 int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 {
@@ -385,6 +427,8 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	int byteRef;
 	ptrGBloque* pGBloque;
 	
+	
+	if(numNodo==FAIL)return -ENOENT;
 	printf("el offset que llego es: %d\n",(int)offset);
 	//Si el archivo anteriormente era más grande que este tamaño, se pierden los datos extra. 
 	
@@ -392,6 +436,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	//											 SI se extendió al proximo bloque me fijo cuantos bloques SI es el proximo bloque estas dentro de los 1024
 	//		
 	//																								  SI esta en proximo inodo, pido otro bloque de 1024.				 
+	if(nodo[numNodo].state!=OCUPADO) return -ENOTDIR;
 	printf("el archivo que vamos a truncar es: %s\n",nodo[numNodo].fname);
 	int bloquesDatosActuales = bloquesBySize(nodo[numNodo].file_size);  //HECHO
 	printf("los  bloquesDatosActuales son: %d\n",bloquesDatosActuales);
@@ -399,36 +444,49 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	printf("los bloquesDatosOffset son: %d\n",bloquesDatosOffset);
 	printf("El file size es: %d\n",nodo[numNodo].file_size);
 	
+	puts("me alcansan los bloques"); 
+	
+	int indirecRef=(nodo[numNodo].file_size ? nroBlkInd_by_Size(nodo[numNodo].file_size)+1 : 0);
+	printf("ultimo indice de 1000 puntero es: %d\n",indirecRef);
 	//if (nodo[numNodo].file_size==0 && offset<BLOQUE) {pGBloque=iniciarNodo(bMap,nodo+numNodo),*pGBloque=asignarBloque(bMap);} 
+	
 	
 	if (bloquesDatosActuales < bloquesDatosOffset)   //se agranda informo el nuevo size del archivo.
 	{
-	  puts("entoy agrandando\n");
-	 if(nodo[numNodo].file_size) 
-	 {
-		 pGBloque = arrayIndex(nodo+numNodo,nodo[numNodo].file_size);
-		 printf("el pGBloque apuanta antes del ++ a: %p\n",pGBloque);
-		 printf("el ultimo pGBloque de este archivo es: %d\n",*pGBloque);
-		 pGBloque++;
-		 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
-	 }	
+		    if(noMeAlcansanLosBloques(bloquesDatosActuales,bloquesDatosOffset,bloqueLibresRestantes(bMap))) return -ENOSPC;	
+	  	    puts("entoy agrandando\n");
+		    if(nodo[numNodo].file_size) 
+		    {
+				 pGBloque = arrayIndex(nodo+numNodo,nodo[numNodo].file_size);
+				 printf("el pGBloque apuanta antes del ++ a: %p\n",pGBloque);
+				 printf("el ultimo pGBloque de este archivo es: %d\n",*pGBloque);
+				 pGBloque++;
+				 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
+		    }	
 	//else pGBloque=iniciarNodo(bMap,nodo+numNodo);  //si es 0 y offset es mayor a un bloque pasa por aca
 	    //pongo esto afuera y soluciono? si lo saco entra a while y el if de verdadero
 	 
-	  	while(bloquesDatosActuales < bloquesDatosOffset)
-	  	{
-			//que pasa si entra con 0, si tiene uno cargado LA CAGA.
-			 printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[blkInd_by_cantBlk(bloquesDatosActuales)]);    
-			 if(!bloquesDatosActuales%BLOCK_INDIREC_SIZE) {pGBloque = asignarIndirecto(bMap,nodo+numNodo,bloquesDatosActuales); puts("entre al if de asignar otro bloque indirecto");}  
-			 printf("ultimo indirecto despues de chequear: %d\n",nodo[numNodo].blk_indirect[blkInd_by_cantBlk(bloquesDatosActuales)]);
-			 *pGBloque=asignarBloque(bMap);   
-			 printf("el resultado de pGBloque es: %d\n",*pGBloque);
-			 bloquesDatosActuales++;
-			 //printf("anterior indirecto despues de chequear: %d",nodo->blk_indirect[blkInd_by_cantBlk(bloquesDatosActuales));
-			 pGBloque++;
-			 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
+			while(bloquesDatosActuales < bloquesDatosOffset)
+			{
+				//que pasa si entra con 0, si tiene uno cargado LA CAGA.
+				 
+				 printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);    //no me dice el actual bñk por wmpieza de 0
+				 if(!bloquesDatosActuales%BLOCK_INDIREC_SIZE) 
+				   {
+					 
+					 pGBloque = asignarIndirecto(bMap,nodo+numNodo,indirecRef); 
+					 puts("entre al if de asignar otro bloque indirecto");
+					 indirecRef++;
+				   }  
+				 printf("ultimo indirecto despues de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);
+				 *pGBloque=asignarBloque(bMap);   
+				 printf("el resultado de pGBloque es: %d\n",*pGBloque);
+				 bloquesDatosActuales++;
+				 //printf("anterior indirecto despues de chequear: %d",nodo->blk_indirect[blkInd_by_cantBlk(bloquesDatosActuales));
+				 pGBloque++;
+				 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
+			}
 		}
-	}
 	
 	else{
 			puts("entre achicar\n");
@@ -493,12 +551,25 @@ puts("");puts("");puts("");
 	return 0;//Le agregue el return con caca.
 }
 
+/*
+ * @descripcion: borra direcctorios vacios
+ * @precondicion: recibe una ruta y el puntero a la primer posicion de la tabla de inodos
+ * @poscondicion: directotio borrado o informa porque no se pudo borrar 
+ * 
+ */
+
 int32_t borrarDirectorio(const char* path,GFile* inodo)
 {
+	char* pathPadre;
+	
 	int numNodo=nodoByPath(path,inodo);
 	if (numNodo==FAIL) return -EEXIST;
+	if(!isEmpty(numNodo, inodo+numNodo)) return -EBUSY;
+	if (inodo[numNodo].state!=DIRECTORIO) return -ENOTDIR;
+	howIsMyFather((char*)path,&pathPadre);
+	if (nodoByPath(pathPadre,inodo)==FAIL) return -ENOENT; 
 	
-	inodo[numNodo].state=0;
+	inodo[numNodo].state=LIBRE;
 	strcpy(inodo[numNodo].fname,"");  
 	inodo[numNodo].parent_dir_block=1025;
 	inodo[numNodo].m_date=(uint64_t)0;
@@ -508,15 +579,20 @@ int32_t borrarDirectorio(const char* path,GFile* inodo)
 	
 }
 
+
+
 int32_t borrarArchivo(const char* path,GFile* inodo,t_bitarray* bitMap)
 {
+	char* pathPadre;
 	int numNodo=nodoByPath(path,inodo);
-	
-	
+		
 	if (numNodo==FAIL) return -EEXIST;
+	if(inodo[numNodo].state!=OCUPADO) return -ENOTDIR;
+	howIsMyFather((char*)path,&pathPadre);
+	if (nodoByPath(pathPadre,inodo)==FAIL) return -ENOENT; 
 	
-	truncale(path,0,inodo,bitMap);
-	inodo[numNodo].state=0;
+	if(inodo[numNodo].file_size)truncale(path,0,inodo,bitMap);
+	inodo[numNodo].state=LIBRE;
 	strcpy(inodo[numNodo].fname,"");  
 	inodo[numNodo].parent_dir_block=1025;
 	inodo[numNodo].m_date=(uint64_t)0;
