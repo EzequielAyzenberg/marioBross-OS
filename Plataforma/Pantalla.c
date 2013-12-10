@@ -8,6 +8,7 @@ WINDOW* nuevoPanel(int posY);
 void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin);
 void _pantallaNivel(nodoNivel*);
 
+//WINDOW* ppal;
 extern bool mpantalla;
 extern t_list *listaNiveles;
 int resultado;
@@ -103,19 +104,20 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
 };
 
 void _pantallaNivel(nodoNivel*nivel){
-	static int i=0;
-	WINDOW*win=nuevoPanel(STATUS_ROW+(PLANI_ROW*i));
+	static int i=0, result1,result2;
+	result1=cols/3;
+	result2=cols/2;
+	WINDOW*win=nuevoPanel(STATUS_ROW+(PLANI_ROW*i++));
 	attron(COLOR_PAIR(50));
-	wrefresh(ppal.win);
-	mvwprintw(win,1,resultado*0,"  --NOMBRE:%s--",nivel->name);
-	if (nivel->algo->algo==0)mvwprintw(win,0,resultado*1,"\t --ALGO:SRDF--");
+	wrefresh(win);
+	mvwprintw(win,1,(result1*0)+1,"\t  --NOMBRE:%s--",nivel->name);
+	if (nivel->algo->algo==0)mvwprintw(win,1,result1*1,"\t\t\t\t --ALGORITMO:SRDF--");
 	else{
-		mvwprintw(win,1,resultado*1," --ALGO:RR--");
-		mvwprintw(win,1,resultado*2,"  --CUANTUM:%d--",nivel->algo->algo);
+		mvwprintw(win,1,result1*1," --ALGORITMO:RR--");
+		mvwprintw(win,1,result1*2,"  --CUANTUM:%d--",nivel->algo->algo);
 	}
-	mvwprintw(win,1,resultado*4,"--REM.DIST:%d--",nivel->algo->remainDist);
-	mvwprintw(win,1,resultado*4,"--RETARDO:%d--",nivel->algo->retardo);
-	wrefresh(ppal.win);
-
-	if (i==(list_size(listaNiveles)-1))i=0;
+	mvwprintw(win,2,result2*0+1,"\t\t--REM.DIST:%d--",nivel->algo->remainDist);
+	mvwprintw(win,2,result2*1,"   --RETARDO:%d--",nivel->algo->retardo);
+	wrefresh(win);
+	if (i>=(list_size(listaNiveles)))i=0;
 }

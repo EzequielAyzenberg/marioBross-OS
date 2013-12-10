@@ -636,14 +636,16 @@ int aLaMierdaConTodo(global tabla){
 	usleep(200000);
 	if(!mpantalla)puts("Eliminando recursos.");
 	while (!list_is_empty(tabla.recur)){
+		printf("ESTOY DENTRO!!\n");
 		tempstack=(t_stack*)list_remove(tabla.recur,0);
 		free(tempstack);
 	}
+	//printf("Desde aqui.\n");
 	free(tabla.recur);
-	free(tabla.algo);
 	sendAnswer(0,0,' ',' ',tabla.cabecera->nid);
 	enviarLog(tabla.cabecera->nid,tabla,0,0,' ',' ');
 	close(tabla.cabecera->nid);
+	tabla.cabecera->nid=-1;
 	usleep(400000);
 	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
