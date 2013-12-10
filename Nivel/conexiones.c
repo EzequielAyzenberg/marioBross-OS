@@ -15,16 +15,28 @@
 #include <signal.h>
 #include "personajes.h"
 #include <string.h>
+#include "enemigos.h"
+#include <commons/log.h>
 answer bufferAnswer;
 //int a=0;
 pthread_mutex_t mutexDibujar;
+pthread_mutex_t mutexLog;
 /*void controlador(int signal){
 	int a=1;
 
 
 }*/
-
+int comprobarSuperposicionEnemigos(int x,int y,t_list* listaEnemigos){
+	coordenadas *bufferEnemigo;
+	int i=0;
+	for(i=0;i<list_size(listaEnemigos);i++){
+		bufferEnemigo=list_get(listaEnemigos,i);
+		if(x==bufferEnemigo->posx && y==bufferEnemigo->posy)return 1;
+	}
+return 0;
+}
 void escucharPlanificador(datosConexiones *info){
+	char* bufferMsg=(char*)malloc(50);
 	int a=0;
 	nivelConfig bufferConfig;
 	bufferConfig.path=(char*)malloc(strlen(info->config->path)+1);
@@ -99,7 +111,27 @@ void escucharPlanificador(datosConexiones *info){
 	case 7:if(crearPersonaje(info->listaJugadoresActivos,0,0,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
 		else (sendAnswer(-1,0,' ',' ',info->socket));
 	break;
-	case 3:if(moverPersonaje(info->listaJugadoresActivos,bufferAnswer.cont/100,bufferAnswer.cont%100,bufferAnswer.symbol)==1)sendAnswer(1,0,' ',' ',info->socket);
+	case 3:if(moverPersonaje(info->listaJugadoresActivos,bufferAnswer.cont/100,bufferAnswer.cont%100,bufferAnswer.symbol)==1){sendAnswer(1,0,' ',' ',info->socket);
+		if (comprobarSuperposicionEnemigos(bufferAnswer.cont/100,bufferAnswer.cont%100,info->listaEnemigos)){
+			strcpy(bufferMsg,"El jugador");
+			strcat(bufferMsg,"   ha sido pisado por un goomba");
+			bufferMsg[11]=bufferAnswer.symbol;
+			char *nombreLog;
+			nombreLog=(char*)malloc(40);
+			strcpy(nombreLog,info->config->nombre);
+			strcat(nombreLog,"Log");
+			pthread_mutex_lock( &mutexLog);
+			t_log_level logDetalle=log_level_from_string("INFO");
+			t_log* logNivel=log_create(nombreLog,info->config->nombre, 0, logDetalle);
+			log_info(logNivel,bufferMsg);
+			log_destroy(logNivel);
+			pthread_mutex_unlock( &mutexLog);
+			free (nombreLog);
+			matarPersonaje(info->listaJugadoresActivos,info->listaJugadoresMuertos,info->listaRecursos,bufferAnswer.symbol);
+			sendAnswer(8,0,' ',bufferAnswer.symbol,info->socket);
+			}
+
+		}
 		else(sendAnswer(-1,0,' ',' ',info->socket));
 	break;
 	case 2:if(bufferAnswer.cont){

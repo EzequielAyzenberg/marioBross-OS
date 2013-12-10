@@ -527,7 +527,7 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 
 				strcpy(bufferMsg,"El jugador");
 
-				strcat(bufferMsg," ha sido pisado por un goomba");
+				strcat(bufferMsg,"   ha sido pisado por un goomba");
 
 				bufferMsg[11]=posPjs[numPj].id;
 
@@ -545,16 +545,19 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 
 
 
-
+				char *nombreLog;
+				nombreLog=(char*)malloc(40);
+				strcpy(nombreLog,nombreNivel);
+				strcat(nombreLog,"Log");
 				pthread_mutex_lock( &mutexLog);
 				t_log_level logDetalle=log_level_from_string("INFO");
-				t_log* logNivel=log_create("log",nombreNivel, 0, logDetalle);
+				t_log* logNivel=log_create(nombreLog,nombreNivel, 0, logDetalle);
 				log_info(logNivel,bufferMsg);
 				log_destroy(logNivel);
 				pthread_mutex_unlock( &mutexLog);
 
 				free(bufferMsg);
-
+				free (nombreLog);
 				bool _is_Personaje(t_personaje* pj){
 					if(pj->id==posPjs[numPj].id)return true;
 					return false;
