@@ -14,6 +14,6 @@ cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje
 make
 mkdir /home/utnso/GRIDLogs
 mkdir /home/utnso/GRIDLogs/LOGPersonaje
-mkdir /home/utnso/GIRDLogs/LOGPlataforma
+mkdir /home/utnso/GRIDLogs/LOGPlataforma
 mkdir /home/utnso/GRIDLogs/LOGNivel
 mkdir /home/utnso/temp
