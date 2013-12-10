@@ -21,6 +21,7 @@
 #define BLOQUE 4096
 #define DISCO 10485760
 #define MAXNODO 1023
+#define MAX_BLOQUES_DATOS 1024000     //son 1000 indirectos cada uno tiene 1024 ---> 1024*1000
 #define FAIL -1
 #define INICIO 0
 #define BLOCK_INDIREC_SIZE 1024
@@ -29,7 +30,8 @@
 #define DIRECTORIO 2
 #define CORRECCION 1    //esta constante esta pensada para hacer corresponder los inodos con los puntero 
 						//asi el inodo 0 es el raiz pero accesiblemente es el dir1 del ejemplo, fue aclarado en un mail de la catedra
-
+#define FALSO 0
+#define VERDAD 1
 //////////////////FIN DE DECLARACION DE CONSTANTE/////////////
 
 typedef uint32_t ptrGBloque;

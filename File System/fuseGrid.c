@@ -45,24 +45,24 @@
  * WRITE
  * 		Size				  HECHO
  * 		-ENOENT  			  HECHO	
- * 		-ENOSPC
+ * 		-ENOSPC				  HECHO
  *
  * TRUNCAR
  *       0                    HECHO	       		
- * 		-ENOSPC			
- * 		-ENOTDIR		
- * 		-ENOENT		
+ * 		-ENOSPC				  HECHO
+ * 		-ENOTDIR		      HECHO
+ * 		-ENOENT		          HECHO
  * RMDIR
  * 		0					  HECHO
- * 		-ENOENT			
- * 		-ENOTDIR		
- * 		-EBUSY			
+ * 		-EEXIST				  HECHO
+ * 		-ENOTDIR		  	  HECHO
+ * 		-EBUSY				  HECHO
  * 
  * UNLIK
  * 		0				      HECHO
- * 		-ENOENT			
- * 		-ENOTDIR		
- *  
+ * 		-ENOENT				  HECHO
+ * 		-ENOTDIR			  HECHO
+ *  	-EEXIST				  HECHO
  * /
 
 
@@ -362,14 +362,12 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
  * 		-ENOENT			path no existe
  */
 
-int theGrid_truncate(const char * path, off_t offset) {
-
-
+int theGrid_truncate(const char * path, off_t offset) 
+{
 puts("pedi truncar");
-int res=truncale(path,offset,ptr_nodo,bitMap);
-
-
-return 0;
+int res=0;
+res=truncale(path,offset,ptr_nodo,bitMap);
+return res;
 }
 
 static int theGrid_utimens(const char *path, const struct timespec ts[2])
@@ -408,18 +406,19 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
 	size_t len;
 	(void) fi;
 	int numNodo;
+	int res;
 	extern GFile* ptr_nodo;
 	numNodo=nodoByPath(path,ptr_nodo);
 	len = ptr_nodo[numNodo].file_size;
 	
 	if (numNodo==FAIL) return -ENOENT;
-
+	if (bloquesBySize(offset + size) > MAX_BLOQUES_DATOS) return -ENOSPC; 
 	
 	
-	if (offset + size > len) truncale(path,offset+size,ptr_nodo,bitMap);
+	if (offset + size > len) res=truncale(path,offset+size,ptr_nodo,bitMap);
 		
-	writeGrid(buf,size,offset,ptr_nodo+numNodo);
-	    
+	if ((res != -ENOSPC) && (res!= -ENOTDIR)) writeGrid(buf,size,offset,ptr_nodo+numNodo);
+	else return -ENOSPC;    
 	
 	
 	
