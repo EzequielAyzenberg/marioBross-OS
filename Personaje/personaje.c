@@ -60,7 +60,7 @@ typedef struct{
 
 int sockfd,socketEscucha,nuevo,ganado=0,
 	finalizados=0,repetir=1,repeticiones=0,
-	limboOK=0,hilosMuertos=0,modificar=1;
+	limboOK=0,hilosMuertos=0,modificar=1,interrupcion=0;
 tpersonaje personaje;
 char *recurso, *nivelAux;
 t_list *lista, *listaRecursos;
@@ -146,14 +146,24 @@ int main(int argc, char *argv[]) {
 					  	  printf("\nPerdimos :(\n");
 					  	  esWeon=false;
 					  	  break;
-				default:  puts("\n  NO SEA WEON Y PONGA BIEN 'S' o 'N'\n");
+				case 's': repeticiones++;
+						  hilosMuertos = 0;
+						  printf("\nEste es tu reintento numero: %d\n",repeticiones);
+						  esWeon=false;
+						  break;
+				case 'n': repetir=0;
+					  	  printf("\nPerdimos :(\n");
+					  	  esWeon=false;
+					  	  break;
+				default:  puts("\nOpcion incorrecta.\n");
 						  break;
 				}
 			}
-		}else puts("El personaje se perdió en el limbo X$");
+		}else puts("El personaje se perdió en el limbo");
 	}
 	cierraHilos();
 	list_destroy(personaje.miniPersonajes);
+	log_destroy(loggeo.debug);
 	return 0;
 };
 
@@ -169,6 +179,7 @@ void finDeNivel(int sockfd){
  */
 void aumentaVida(int senial){
 	printf("Se recibio la señal: %d",senial);
+	interrupcion=1;
 	personaje.vidas++;
 }
 
@@ -176,6 +187,7 @@ void aumentaVida(int senial){
  */
 void restaVida(int senial){
 	printf("Se recibio la señal: %d",senial);
+	interrupcion=1;
 	personaje.vidas--;
 }
 
@@ -266,7 +278,9 @@ void *jugar (void *minipersonaje){
 		printf("Vidas: %d\n",personaje.vidas);
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
-				strcpy(mensaje,"--Personaje muere por: Goomba--"); //O por interbloqueo, cambiar
+				if(ordenPlanificador.cont==0){
+					strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
+				} else strcpy(mensaje,"--Personaje muere por: Goomba--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				printf("Estoy muerto\n");
 				estoyMuerto(&info);
@@ -281,10 +295,12 @@ void *jugar (void *minipersonaje){
 					instanciaConc(info.planDeRecursos,esInstancia);
 				}
 				else movimientoConc(posicionNueva,&(info.posX),&(info.posY));
+				interrupcion=0;
 				break;
 			case 2: //Actualizar RP
 				printf("Actualiza RP\n");
 				actualizarRP(info.planDeRecursos,ordenPlanificador.cont);
+				interrupcion=0;
 				break;
 			case 7: //Gestion turno
 				printf("Gestionemos el turno\n");
@@ -577,7 +593,8 @@ int estoyMuerto(tminipersonaje *info){
  */
 int actualizarRP(t_list*planDeRecursos,int posicion){
 	char mensaje[256],aux[8];
-	trecurso *recursoSiguiente;
+	if(interrupcion==0){
+		trecurso *recursoSiguiente;
 		int posX,posY;
 		recursoSiguiente=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
 		posX=posicion/100;
@@ -598,6 +615,7 @@ int actualizarRP(t_list*planDeRecursos,int posicion){
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
 		log_trace(loggeo.trace,mensaje,"TRACE");
+	}
 	return 0;
 }
 
@@ -691,36 +709,40 @@ return 0;
 /* Marca como levantado el recurso concedido
  */
 int instanciaConc(t_list * planDeRecursos,int* esInstancia){
-	trecurso *aux;
-	char mensaje[256],valor[8];
-	aux=(trecurso*)malloc(sizeof(trecurso));
-	aux=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
-	printf("El recurso agarrado fue: %c\n",aux->tipo);
-	aux->checked=true;
-	strcpy(mensaje,"--Accion - Tomando instancia de recurso: ");
-	valor[0]=aux->tipo;
-	valor[1]='\0';
-	strcat(mensaje,valor);
-	strcat(mensaje," --");
-	log_trace(loggeo.trace,mensaje,"TRACE");
-	printf("Checked: %d\n",aux->checked);
-	*esInstancia=0;
+	if(interrupcion==0){
+		trecurso *aux;
+		char mensaje[256],valor[8];
+		aux=(trecurso*)malloc(sizeof(trecurso));
+		aux=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
+		printf("El recurso agarrado fue: %c\n",aux->tipo);
+		aux->checked=true;
+		strcpy(mensaje,"--Accion - Tomando instancia de recurso: ");
+		valor[0]=aux->tipo;
+		valor[1]='\0';
+		strcat(mensaje,valor);
+		strcat(mensaje," --");
+		log_trace(loggeo.trace,mensaje,"TRACE");
+		printf("Checked: %d\n",aux->checked);
+		*esInstancia=0;
+	}
 	return 0;
 }
 
 /* Modifica su posicion por la concedida
  */
 int movimientoConc(int posicion,int*posX,int*posY){
-	char mensaje[256],aux[8];
-	strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
-	*posX=posicion/100;
-	*posY=posicion-(*posX*100);
-	itoa(*posX,aux,10);
-	strcat(mensaje,aux);
-	strcat(mensaje,",");
-	itoa(*posY,aux,10);
-	strcat(mensaje,aux);
-	strcat(mensaje,") --");
+	if(interrupcion==0){
+		char mensaje[256],aux[8];
+		strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
+		*posX=posicion/100;
+		*posY=posicion-(*posX*100);
+		itoa(*posX,aux,10);
+		strcat(mensaje,aux);
+		strcat(mensaje,",");
+		itoa(*posY,aux,10);
+		strcat(mensaje,aux);
+		strcat(mensaje,") --");
+	}
 	return 0;
 }
 
@@ -748,12 +770,13 @@ logs crearLogs(tminipersonaje*raiz){
 	strcpy(program_name,"PERSONAJE_");
 	strcat(program_name,raiz->nivel);
 	paquete.trace=log_create(file,program_name,muestreo,LOG_LEVEL_TRACE);
-	strcpy(file,LOCAL_LOG);
+/*	strcpy(file,LOCAL_LOG);
 	strcat(file,personaje.nombre);
 	strcat(file,"-");
 	strcat(file,raiz->nivel);
 	strcat(file,"-Debug");
 	strcat(file,".txt");
-	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);
+	paquete.debug=log_create(file,program_name,muestreo,LOG_LEVEL_DEBUG);*/
 	return paquete;
 }
+
