@@ -19,6 +19,7 @@ int resultado;
 
 void *pantalla(void*parametro){
 	nivel_gui_get_term_size(&rows,&cols);
+	cols--;
 	resultado=cols/5;
 	if(cols<80 || rows<24){
 		printf("\n--La terminal debe ser minimo de 80x24\n\n");
@@ -54,7 +55,7 @@ void *pantalla(void*parametro){
 
 
 
-		sleep(1);
+		usleep(100000);
 	}
 
 
@@ -108,16 +109,77 @@ void _pantallaNivel(nodoNivel*nivel){
 	result1=cols/3;
 	result2=cols/2;
 	WINDOW*win=nuevoPanel(STATUS_ROW+(PLANI_ROW*i++));
-	attron(COLOR_PAIR(50));
+	wattron(win,COLOR_PAIR(50));
 	wrefresh(win);
-	mvwprintw(win,1,(result1*0)+1,"\t  --NOMBRE:%s--",nivel->name);
+	mvwprintw(win,1,(result1*0)+1,"\t\t\t--NOMBRE:%s--",nivel->name);
 	if (nivel->algo->algo==0)mvwprintw(win,1,result1*1,"\t\t\t\t --ALGORITMO:SRDF--");
 	else{
-		mvwprintw(win,1,result1*1," --ALGORITMO:RR--");
-		mvwprintw(win,1,result1*2,"  --CUANTUM:%d--",nivel->algo->algo);
+		mvwprintw(win,1,result1*1,"\t\t --ALGORITMO:RR--");
+		mvwprintw(win,1,result1*2,"\t\t--CUANTUM:%d--",nivel->algo->algo);
 	}
-	mvwprintw(win,2,result2*0+1,"\t\t--REM.DIST:%d--",nivel->algo->remainDist);
+	mvwprintw(win,2,result2*0+1,"\t\t  --REM.DIST:%d--",nivel->algo->remainDist);
 	mvwprintw(win,2,result2*1,"   --RETARDO:%d--",nivel->algo->retardo);
 	wrefresh(win);
+	//attroff(COLOR_PAIR(50));
+
+
+	void _imprimirPJ(t_player*personaje){
+		char recursos[16];
+		strcpy(recursos,"[-");
+		void _imprimirREC(t_stack*recurso){
+			char stack[3];
+			stack[0]=recurso->recurso;
+			stack[1]='\0';
+			strcat(recursos,stack);
+			strcat(recursos,"-");
+		}
+		if(!list_is_empty(personaje->t_stack))list_iterate(personaje->t_stack,(void*)_imprimirREC);
+		strcat(recursos,"]");
+		wprintw(win,"-(%c/%c/%s)-",personaje->sym,personaje->data.recsol,recursos);
+	}
+	wrefresh(win);
+	mvwprintw(win,3,2,"\t\t\t  LISTAS -(Sym/Rec.Sol/[-Rec.Obt.])-:");
+	wattron(win,COLOR_PAIR(52));
+	mvwprintw(win,5,2,"\t\t\t  Listos: -");
+	if(!list_is_empty(nivel->ready))list_iterate(nivel->ready,(void*)_imprimirPJ);
+	wprintw(win,"-");
+	wattron(win,COLOR_PAIR(53));
+	mvwprintw(win,6,2,"\t\t\t  Dormidos: -");
+	if(!list_is_empty(nivel->sleeps))list_iterate(nivel->sleeps,(void*)_imprimirPJ);
+	wprintw(win,"-");
+	wattron(win,COLOR_PAIR(51));
+	mvwprintw(win,7,2,"\t\t\t  Muertos: -");
+	if(!list_is_empty(nivel->deads))list_iterate(nivel->deads,(void*)_imprimirPJ);
+	wprintw(win,"-");
+	wattron(win,COLOR_PAIR(54));
+	mvwprintw(win,8,2,"\t\t\t  EJECUCION: -");
+	if(nivel->exe->player!=NULL)_imprimirPJ(nivel->exe->player);
+	wprintw(win,"-");
+	wattroff(win,COLOR_PAIR(54));
+	wrefresh(win);
+
+
+
+
 	if (i>=(list_size(listaNiveles)))i=0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
