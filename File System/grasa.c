@@ -271,9 +271,13 @@ int crearArchivo(const char* path,GFile* inodo){
 	printf("el resultado de nodobypath es: %d\n",numNodo);
 	if (numNodo!=FAIL) 
 	{
+		if(inodo[numNodo].state==OCUPADO)
+		{
 		puts("entonces el archivo existe\n");
 		inodo[nodoLibre].m_date=1381272974;
 		return 0;
+	    }
+	    else return -ENOTDIR;
 	}
 	
 	else {
@@ -446,7 +450,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	
 	puts("me alcansan los bloques"); 
 	
-	int indirecRef=(nodo[numNodo].file_size ? nroBlkInd_by_Size(nodo[numNodo].file_size)+1 : 0);
+	int indirecRef= ((nodo[numNodo].file_size) ? nroBlkInd_by_Size(nodo[numNodo].file_size)+1 : 0);
 	printf("ultimo indice de 1000 puntero es: %d\n",indirecRef);
 	//if (nodo[numNodo].file_size==0 && offset<BLOQUE) {pGBloque=iniciarNodo(bMap,nodo+numNodo),*pGBloque=asignarBloque(bMap);} 
 	
@@ -469,9 +473,12 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 			while(bloquesDatosActuales < bloquesDatosOffset)
 			{
 				//que pasa si entra con 0, si tiene uno cargado LA CAGA.
+				 printf("el bloque actuales son: %d\n",bloquesDatosActuales);
+				 printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%3);
+				 
 				 
 				 printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);    //no me dice el actual bñk por wmpieza de 0
-				 if(!bloquesDatosActuales%BLOCK_INDIREC_SIZE) 
+				 if(!(bloquesDatosActuales%BLOCK_INDIREC_SIZE)) 
 				   {
 					 
 					 pGBloque = asignarIndirecto(bMap,nodo+numNodo,indirecRef); 
