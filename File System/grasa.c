@@ -74,7 +74,7 @@ int nodoByPath(const char* path,GFile* nodo){
 		while(numNodo<=MAXNODO){
 			if(string_equals_ignore_case(nombreHijo[numHijo],(char*)nodo[numNodo].fname)) acierto++; //Le agregue el casteo
 			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
-			if (acierto==2) {numPadre=numNodo; encontrado=1;}
+			if (acierto==2 && !encontrado) {numPadre=numNodo; encontrado=1;}
 			acierto=0;
 			numNodo++;
 		
