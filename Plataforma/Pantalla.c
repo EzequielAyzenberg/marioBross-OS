@@ -19,7 +19,6 @@ int resultado;
 
 void *pantalla(void*parametro){
 	nivel_gui_get_term_size(&rows,&cols);
-	cols--;
 	resultado=cols/5;
 	if(cols<80 || rows<24){
 		printf("\n--La terminal debe ser minimo de 80x24\n\n");
@@ -34,6 +33,8 @@ void *pantalla(void*parametro){
 	init_pair(53,COLOR_YELLOW,COLOR_BLACK);
 	init_pair(54,COLOR_RED,COLOR_BLACK);
 	init_pair(55,COLOR_CYAN,COLOR_BLACK);
+	init_pair(56,COLOR_BLACK,COLOR_WHITE);
+	init_pair(57,COLOR_RED,COLOR_RED);
 	refresh();
 	clear();
 	attron(COLOR_PAIR(51));
@@ -55,14 +56,8 @@ void *pantalla(void*parametro){
 
 
 
-		usleep(100000);
+	usleep(100000);
 	}
-
-
-
-
-
-
 	refresh();
 	getch();
 
@@ -73,8 +68,8 @@ void *pantalla(void*parametro){
 WINDOW* nuevoPanel(int posY){
 	refresh();
 	WINDOW*win=(WINDOW*)malloc(sizeof(WINDOW));
-	win=newwin(PLANI_ROW,cols,posY,0);
-	wbkgd(win,COLOR_PAIR(51));
+	win=newwin(PLANI_ROW,cols-3,posY,0);
+	wbkgd(win,COLOR_PAIR(51)|A_BOLD);
 	box(win, 0, 0);
 	mvwprintw(win,0,1,"Planificador");
 	wrefresh(win);
@@ -105,21 +100,31 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
 };
 
 void _pantallaNivel(nodoNivel*nivel){
-	static int i=0, result1,result2;
-	result1=cols/3;
-	result2=cols/2;
-	WINDOW*win=nuevoPanel(STATUS_ROW+(PLANI_ROW*i++));
-	wattron(win,COLOR_PAIR(50));
-	wrefresh(win);
-	mvwprintw(win,1,(result1*0)+1,"\t\t\t--NOMBRE:%s--",nivel->name);
-	if (nivel->algo->algo==0)mvwprintw(win,1,result1*1,"\t\t\t\t --ALGORITMO:SRDF--");
-	else{
-		mvwprintw(win,1,result1*1,"\t\t --ALGORITMO:RR--");
-		mvwprintw(win,1,result1*2,"\t\t--CUANTUM:%d--",nivel->algo->algo);
+	static int i=0,j,division;
+	division=cols/5;
+	WINDOW*wind=nuevoPanel(STATUS_ROW+(PLANI_ROW*i));
+	wattron(wind,COLOR_PAIR(50));
+	wrefresh(wind);
+	mvwprintw(wind,2,division,"-NOMBRE:%s-",nivel->name);
+	mvwprintw(wind,3,division,"-RETARDO:%d-",nivel->algo->retardo);
+	for(j=division;j<cols-16;j++)mvwprintw(wind,5,j,"-");
+	WINDOW*swin=(WINDOW*)malloc(sizeof(WINDOW));
+	swin=newwin(4,19,STATUS_ROW+(PLANI_ROW*i++)+1,cols-35);
+	wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
+	wattron(swin,COLOR_PAIR(53));
+	box(swin, 0, 0);
+	wattroff(swin,COLOR_PAIR(53));
+	wrefresh(swin);
+	if (nivel->algo->algo==0){
+		mvwprintw(swin,1,1,"-ALGORITMO: SRDF-");
+		mvwprintw(swin,2,1," --REM.DIST:%d--",nivel->algo->remainDist);
 	}
-	mvwprintw(win,2,result2*0+1,"\t\t  --REM.DIST:%d--",nivel->algo->remainDist);
-	mvwprintw(win,2,result2*1,"   --RETARDO:%d--",nivel->algo->retardo);
-	wrefresh(win);
+	else{
+		mvwprintw(swin,1,1," -ALGORITMO: RR-");
+		mvwprintw(swin,2,1,"  --QUANTUM:%d--",nivel->algo->algo);
+	}
+	wrefresh(swin);
+	wrefresh(wind);
 	//attroff(COLOR_PAIR(50));
 
 
@@ -135,39 +140,62 @@ void _pantallaNivel(nodoNivel*nivel){
 		}
 		if(!list_is_empty(personaje->t_stack))list_iterate(personaje->t_stack,(void*)_imprimirREC);
 		strcat(recursos,"]");
-		wprintw(win,"-(%c/%c/%s)-",personaje->sym,personaje->data.recsol,recursos);
+		wprintw(wind,"-(%c/%c/%s)-",personaje->sym,personaje->data.recsol,recursos);
 	}
-	wrefresh(win);
-	mvwprintw(win,3,2,"\t\t\t  LISTAS -(Sym/Rec.Sol/[-Rec.Obt.])-:");
-	wattron(win,COLOR_PAIR(52));
-	mvwprintw(win,5,2,"\t\t\t  Listos: -");
+	wrefresh(wind);
+	mvwprintw(wind,7,division,"LISTAS     -(Sym/Rec.Sol/[-Rec.Obt.])-:");
+	wattron(wind,COLOR_PAIR(52));
+	mvwprintw(wind,9,division,"Listos:    -");
 	if(!list_is_empty(nivel->ready))list_iterate(nivel->ready,(void*)_imprimirPJ);
-	wprintw(win,"-");
-	wattron(win,COLOR_PAIR(53));
-	mvwprintw(win,6,2,"\t\t\t  Dormidos: -");
+	else wprintw(wind,"-SIN NADIE EN LA LISTA-");
+	wprintw(wind,"-");
+	wattron(wind,COLOR_PAIR(53));
+	mvwprintw(wind,10,division,"Dormidos:  -");
 	if(!list_is_empty(nivel->sleeps))list_iterate(nivel->sleeps,(void*)_imprimirPJ);
-	wprintw(win,"-");
-	wattron(win,COLOR_PAIR(51));
-	mvwprintw(win,7,2,"\t\t\t  Muertos: -");
+	else wprintw(wind,"-SIN NADIE EN LA LISTA-");
+	wprintw(wind,"-");
+	wattron(wind,COLOR_PAIR(51));
+	mvwprintw(wind,11,division,"Muertos:   -");
 	if(!list_is_empty(nivel->deads))list_iterate(nivel->deads,(void*)_imprimirPJ);
-	wprintw(win,"-");
-	wattron(win,COLOR_PAIR(54));
-	mvwprintw(win,8,2,"\t\t\t  EJECUCION: -");
+	else wprintw(wind,"-SIN NADIE EN LA LISTA-");
+	wprintw(wind,"-");
+	wattron(wind,COLOR_PAIR(54));
+	mvwprintw(wind,12,division,"EJECUCION: -");
 	if(nivel->exe->player!=NULL)_imprimirPJ(nivel->exe->player);
-	wprintw(win,"-");
-	wattroff(win,COLOR_PAIR(54));
-	wrefresh(win);
-
-
+	else wprintw(wind,"-SIN NADIE EN EJECUCION-");
+	wprintw(wind,"-");
+	wattroff(wind,COLOR_PAIR(54));
+	wrefresh(wind);
 
 
 	if (i>=(list_size(listaNiveles)))i=0;
 }
 
 
+void interrupcionPlani(WINDOW*wind){
+	wattron(wind,COLOR_PAIR(57));
+	mvwprintw(wind,3,9,"_");
+	mvwprintw(wind,4,8,"/_\\");
+	mvwprintw(wind,5,7,"// \\\\");
+	mvwprintw(wind,6,6,"//   \\\\");
+	mvwprintw(wind,7,5,"//     \\\\");
+	mvwprintw(wind,8,4,"//       \\\\");
+	mvwprintw(wind,9,3,"//=========\\\\");
+	wattron(wind,COLOR_PAIR(57));
+
+}
 
 
+/*
 
+              _
+			 /_\
+			// \\
+		   // | \\
+		  //  |  \\
+		 //   *   \\
+        //=========\\
+*/
 
 
 

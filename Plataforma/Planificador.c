@@ -760,6 +760,7 @@ int matarPersonaje(answer auxiliar,global tabla){
 	loggearListas(tabla);
 	return chosen;
 }
+
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	if(!mpantalla)puts("\n--SLI--");
 	int status=-1;
@@ -907,8 +908,14 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 						log_trace(tabla.logging.trace,"\t\t\t--------A--------------------\t\t\t","TRACE");
 						if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 						return respuesta;
-					}else continue;
-					}else status=interrupcion(i,respuesta,&aux,tabla);
+					}else if(respuesta!=3){
+						if (tempo!=NULL)*tempo=aux;
+						cantSelecteos++;
+						log_trace(tabla.logging.trace,"\t\t\t--------C--------------------\t\t\t","TRACE");
+						if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
+						return respuesta;
+					}
+				}else status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0){
 					cantSelecteos++;
 					log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
