@@ -12,9 +12,9 @@ pthread_t hiloGRID(void*(*funcion)(void*),void*parametro){
 		un puntero void) junto con su argumento casteado como (void*).
 		Te devuelve un la id del hilo que creaste.
 	*/
-
+	int i;
 	pthread_t idHilo;
-	if(pthread_create(&idHilo,NULL,funcion,parametro)==0)puts("Hilo creado correctamente.");
+	if(pthread_create(&idHilo,NULL,funcion,parametro)==0)i++/*puts("Hilo creado correctamente.")*/;
 	else puts("Hubo un problema en la creacion del hilo.");
 	return idHilo;
 }

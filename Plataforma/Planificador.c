@@ -22,7 +22,7 @@ t_player* buscarDormido(int,char,t_list*);
 int modoDeRecuperacion(global);
 int aLaMierdaConTodo(global);
 bool muertePersonaje(int, global);
-void matarPersonaje(answer,global);
+int matarPersonaje(answer,global);
 int interrupcion(int,short,answer*,global);
 char buscarSimbolo(int,global);
 int selectear(answer*,short,int,global);
@@ -181,7 +181,7 @@ int selectInterrupt(global tabla){
 			strcat(mensaje,".");
 			log_trace(tabla.logging.trace,mensaje,"TRACE");
 			status=interrupcion(i,respuesta,&aux,tabla);
-			if(status==-4)muerto=true;
+			if((status==-4)||(status==-7))muerto=true;
 			if(status==0||status==-5)muerto=false;
 			log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
 		}
@@ -570,17 +570,17 @@ int modoDeRecuperacion(global tabla){
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
-	if(!mpantalla)printf("CIERRE.I--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("CIERRE.I--%s\n",tabla.cabecera->name);
 	t_player*temp;
 	t_stack*tempstack;
 	nuevo*aux;
 
-	if(!mpantalla)puts("Eliminando jugadores activos.");
+	if(mtexto)puts("Eliminando jugadores activos.");
 	while(!list_is_empty(tabla.ready)){
 		usleep(200000);
 		temp=(t_player*)list_remove(tabla.ready,0);
 		while (!list_is_empty(temp->t_stack)){
-			if(!mpantalla)	puts("Recurso eliminado.");
+			if(mtexto)	puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(temp->t_stack,0);
 			free(tempstack);
 		}
@@ -593,11 +593,11 @@ int aLaMierdaConTodo(global tabla){
 	free(tabla.ready);
 
 	usleep(200000);
-	if(!mpantalla)puts("Eliminando jugadores dormidos.");
+	if(mtexto)puts("Eliminando jugadores dormidos.");
 	while(!list_is_empty(tabla.sleeps)){
 		temp=(t_player*)list_remove(tabla.sleeps,0);
 		while (!list_is_empty(temp->t_stack)){
-			if(!mpantalla)puts("Recurso eliminado.");
+			if(mtexto)puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(temp->t_stack,0);
 			free(tempstack);
 		}
@@ -610,13 +610,13 @@ int aLaMierdaConTodo(global tabla){
 	free(tabla.sleeps);
 
 	usleep(200000);
-	if(!mpantalla)puts("Eliminando jugador en ejecucion.");
+	if(mtexto)puts("Eliminando jugador en ejecucion.");
 	if(tabla.exe->player!=NULL){
 		sendAnswer(0,0,' ',' ',tabla.exe->player->pid);
 		enviarLog(tabla.exe->player->pid,tabla,0,0,' ',' ');
 		close(tabla.exe->player->pid);
 		while (!list_is_empty(tabla.exe->player->t_stack)){
-			if(!mpantalla)puts("Recurso eliminado.");
+			if(mtexto)puts("Recurso eliminado.");
 			tempstack=(t_stack*)list_remove(tabla.exe->player->t_stack,0);
 			free(tempstack);
 		}
@@ -624,7 +624,7 @@ int aLaMierdaConTodo(global tabla){
 		free(tabla.exe->player);
 	}
 	usleep(200000);
-	if(!mpantalla)puts("Eliminando jugadores nuevos.");
+	if(mtexto)puts("Eliminando jugadores nuevos.");
 	while(tabla.cabecera->tandaRaiz!=NULL){
 		aux=tabla.cabecera->tandaRaiz;
 		tabla.cabecera->tandaRaiz=tabla.cabecera->tandaRaiz->sgte;
@@ -634,26 +634,28 @@ int aLaMierdaConTodo(global tabla){
 	}
 
 	usleep(200000);
-	if(!mpantalla)puts("Eliminando recursos.");
+	if(mtexto)puts("Eliminando recursos.");
 	while (!list_is_empty(tabla.recur)){
+		printf("ESTOY DENTRO!!\n");
 		tempstack=(t_stack*)list_remove(tabla.recur,0);
 		free(tempstack);
 	}
+	//printf("Desde aqui.\n");
 	free(tabla.recur);
-	free(tabla.algo);
 	sendAnswer(0,0,' ',' ',tabla.cabecera->nid);
 	enviarLog(tabla.cabecera->nid,tabla,0,0,' ',' ');
 	close(tabla.cabecera->nid);
+	tabla.cabecera->nid=-1;
 	usleep(400000);
 	//printf("Mi ID-Hilo es: %d",(int)tabla.cabecera->idHilo);
 	//pthread_cancel(tabla.cabecera->idHilo);
-	if(!mpantalla)puts("Nos Vamos todos al carajo!");
+	if(mtexto)puts("Nos Vamos todos al carajo!");
 	log_info(tabla.logging.info,"Nivel terminado por desconexion.","ERROR");
-	if(!mpantalla)printf("CIERRE.F--%s\n",tabla.cabecera->name);
+	if(mtexto)printf("CIERRE.F--%s\n",tabla.cabecera->name);
 	return -2;
 }
 bool muertePersonaje(int i,global tabla){
-	if(!mpantalla)printf("MUERTE.I--%s\n",tabla.cabecera->name);
+	if(!mpantalla)printf("DESCONEXION.I--%s\n",tabla.cabecera->name);
 	bool chosen=false;
 	bool _is_PID(t_player*jugador) {
 		    if(i==jugador->pid)return true;
@@ -663,18 +665,18 @@ bool muertePersonaje(int i,global tabla){
 
 	aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
 		if(aux==NULL)	{
-			if(mtexto)printf("MUERTE.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("DESCONEXION.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
 			aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 		}
 		if(aux==NULL) 	aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
 		if(aux==NULL) 	aux=buscarDormido(i,' ',tabla.sleeps);
 		if(aux==NULL){
 			if(tabla.exe->player==NULL){
-				if(mtexto)printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
+				if(mtexto)printf("\t\t\t\tDESCONEXION.F--No_Estaba--%s\n",tabla.cabecera->name);
 				return false;
 			}else{
 				if(tabla.exe->player->pid!=i){
-					if(mtexto)printf("\t\t\t\tMUERTE.F--No_Estaba--%s\n",tabla.cabecera->name);
+					if(mtexto)printf("\t\t\t\tDESCONEXION.F--No_Estaba--%s\n",tabla.cabecera->name);
 					return false;
 				}else aux=tabla.exe->player;
 			}
@@ -710,15 +712,16 @@ bool muertePersonaje(int i,global tabla){
 	}
 	log_info(tabla.logging.info,mensaje,"WARNING");
 	//puts("Personaje Completamente eliminado!!");
-	if(!mpantalla)printf("\t\tMUERTE.F--%d--%s\n",aux->pid,tabla.cabecera->name);
+	if(!mpantalla)printf("\t\tDESCONEXION.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	FD_CLR(aux->pid,tabla.original->original);
 	close(aux->pid);
 	free(aux);
 	loggearListas(tabla);
 	return chosen;
 }/**/
-void matarPersonaje(answer auxiliar,global tabla){
+int matarPersonaje(answer auxiliar,global tabla){
 	char simbolo;
+	int chosen=0;
 	simbolo=auxiliar.symbol;
 	if(!mpantalla)printf("MATAR.I--%s\n",tabla.cabecera->name);
 	bool _is_Personaje(t_player*jugador) {
@@ -733,11 +736,12 @@ void matarPersonaje(answer auxiliar,global tabla){
 		if(aux==NULL){
 			if(tabla.exe->player!=NULL){
 				aux=tabla.exe->player;
+				chosen=1;
 				tabla.exe->player=NULL;
 			}else{
 				if(mtexto)puts("\t\t\t\tNO ENCONTRADO!!!");
 				if(!mpantalla)printf("\t\tMATAR.F--%s\n",tabla.cabecera->name);
-				return;
+				return 0;
 			}
 		}
 	}
@@ -754,6 +758,7 @@ void matarPersonaje(answer auxiliar,global tabla){
 	enviarLog(aux->pid,tabla,8,0,'Z','Z');
 	if(!mpantalla)printf("\t\tMATAR.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	loggearListas(tabla);
+	return chosen;
 }
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	if(!mpantalla)puts("\n--SLI--");
@@ -772,8 +777,8 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		break;
 		case 6:modificarAlgoritmo(*aux,tabla);
 		break;
-		case 8:matarPersonaje(*aux,tabla);
-		status=-4;
+		case 8:if(matarPersonaje(*aux,tabla))status=-4;
+		else status=-7;
 		break;
 		default:if(mtexto)puts("Ni la interrupcion se puede atender!!");
 		break;
@@ -817,6 +822,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 	char mensaje[128],mensajeError[64],numero[16],simbolo;
 	char data[2];
 	static int cantSelecteos=0;
+	bool ignorar=false;
 	do{
 		fd_set original=*(tabla.original->original);
 		fdmax=*(tabla.maxfd);
@@ -895,12 +901,14 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 			log_trace(tabla.logging.trace,mensaje,"TRACE");
 			if (i==sock&&respuesta!=0){
 				if((respuesta==esperado)||(respuesta==-1)||(esperado==10)){
-					if (tempo!=NULL)*tempo=aux;
-					cantSelecteos++;
-					log_trace(tabla.logging.trace,"\t\t\t--------A--------------------\t\t\t","TRACE");
-					if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
-					return respuesta;
-				}else status=interrupcion(i,respuesta,&aux,tabla);
+					if(!ignorar){
+						if (tempo!=NULL)*tempo=aux;
+						cantSelecteos++;
+						log_trace(tabla.logging.trace,"\t\t\t--------A--------------------\t\t\t","TRACE");
+						if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
+						return respuesta;
+					}else continue;
+					}else status=interrupcion(i,respuesta,&aux,tabla);
 				if (status==0){
 					cantSelecteos++;
 					log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
@@ -908,7 +916,11 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 				}
 			}else{
 				status=interrupcion(i,respuesta,&aux,tabla);
-				if (status==0&&i==sock)break;
+				if(tabla.exe->player!=NULL){if(status==-5&&sock==tabla.exe->player->pid)ignorar=true;}
+				if(status==0&&i==sock){
+					if(ignorar) log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
+					break;
+				}
 				if(status>0&&i==sock){
 					answer temp;
 					if(tabla.playing){

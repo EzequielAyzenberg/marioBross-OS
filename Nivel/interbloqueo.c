@@ -176,6 +176,10 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 
 
 			}
+		char *nombreLog;
+		nombreLog=(char*)malloc(40);
+		strcpy(nombreLog,info->nombreNivel);
+		strcat(nombreLog,"Log");
 		char* bufferMsg=(char*)malloc(50);
 		i=0;
 		char msg[200];
@@ -218,7 +222,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 
 			pthread_mutex_lock( &mutexLog);
 							t_log_level logDetalle=log_level_from_string("INFO");
-							t_log* logNivel=log_create("log",info->nombreNivel, 0, logDetalle);
+							t_log* logNivel=log_create(nombreLog,info->nombreNivel, 0, logDetalle);
 							log_info(logNivel,bufferMsg);
 							log_destroy(logNivel);
 			pthread_mutex_unlock( &mutexLog);
@@ -236,7 +240,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 
 					pthread_mutex_lock( &mutexLog);
 												t_log_level logDetalle=log_level_from_string("INFO");
-												t_log* logNivel=log_create("log",info->nombreNivel, 0, logDetalle);
+												t_log* logNivel=log_create(nombreLog,info->nombreNivel, 0, logDetalle);
 												log_info(logNivel,bufferMsg);
 												log_destroy(logNivel);
 					pthread_mutex_unlock( &mutexLog);
@@ -246,7 +250,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 
 			}
 
-
+		free (nombreLog);
 		pthread_mutex_unlock(&mutexCrearPersonaje);
 		pthread_mutex_unlock(&mutexMatarPersonaje);
 }

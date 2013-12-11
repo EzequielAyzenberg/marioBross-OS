@@ -34,6 +34,12 @@
 
 	for(i=0;i<cantCajas;i++){
 		buffer=list_get(config.listaCajas,i);
+		if(buffer->posx>*cols||buffer->posy>*rows){
+			nivel_gui_terminar();
+			puts("No se pueden dibujar las cajas ya que salen fuera de los limites del nivel");
+			exit(1);
+
+		}
 		CrearCaja(&items,(*buffer).id,(*buffer).posx,(*buffer).posy,(*buffer).quantity);
 	}
 

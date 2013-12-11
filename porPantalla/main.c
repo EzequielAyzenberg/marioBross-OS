@@ -9,12 +9,38 @@
 #include<curses.h>
 #include<unistd.h>
 
+void barrerFrase(char*);
+
 int main(){
 	initscr();
 	printw("HolaMundo! Para continuar toque teclas");
 	refresh();
 	getch();
 
+	int i;
+	int start_col=3;
+	WINDOW *items, *swin;
+	items=newwin(10,19,1,start_col);
+	wbkgd(items,COLOR_PAIR(2));
+	box(items,0,0);
+	swin=subwin(items,1,17,2,start_col+1);
+	box(swin,0,0);
+	wprintw(items,"Item");
+	wbkgd(swin,COLOR_PAIR(1));
+	wrefresh(items);
+
+	refresh();
+		getch();
+	erase();
+
+	refresh();
+
+
+	barrerFrase("Hola mundo como estas CTM");
+	barrerFrase("Hola mundo como estas CTM");
+	barrerFrase("Hola mundo como estas CTM");
+
+	getch();
 	erase();
 
 	char cadena[128], pass[12];
@@ -32,7 +58,7 @@ int main(){
 	erase();
 
 	/*dibujar_cuadro.c*/
-	int i;char c;
+	char c;
 	initscr();
 	c=95;//caracter ascci horizontal
 	for(i=1;i<=20;i++){
@@ -128,4 +154,17 @@ int main(){
 	//sleep(3);//se detiene tres segundo
 	endwin();
 	return 0;
+}
+
+void barrerFrase(char* frase){
+	int i = 0;
+	while(frase[i] != '\0'){
+		refresh();
+		printw("%c",frase[i]);
+		usleep(10 * 1000);
+		i++;
+	};
+	printw("\n");
+	refresh();
+	return;
 }

@@ -16,9 +16,10 @@ extern char * CFG_PATH;
 extern t_list *listaNiveles;
 extern bool mpantalla;
 logs logsOrquestador;
-logs crearLogs_Orquestador();
-void loggearEstado_Debug();
+logs crearLogs_Orquestador(void);
+void loggearEstado_Debug(void);
 void cerrarLogs_Orquestador(logs tabla);
+void nivelesCaidos(void);
 
 void *orquestador(void* infoAux){
 
@@ -41,7 +42,7 @@ void *orquestador(void* infoAux){
 	FD_SET(socketOrquestador, &original_FD);
 
 	while(!finalizar){
-		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 5)){
+		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 2)){
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
@@ -67,6 +68,7 @@ void *orquestador(void* infoAux){
 			if(!mpantalla)puts("--ORQUESTADOR-- Escuchando de vuelta...");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
+		if(list_is_empty(listaNiveles))nivelesCaidos();
 		loggearEstado_Debug();
 		mensajeTrace("\t\t\t---------------------------\t\t\t");
 	}
@@ -85,7 +87,6 @@ void borrarTodoNivel(void*temp){
 		nivel->tandaActual=nivel->tandaActual->sgte;
 		free(aux);
 	}
-	free(nivel->tandaRaiz);
 	free(nivel);
 }
 
@@ -103,6 +104,19 @@ void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
 	list_destroy(ganadores);
 	list_destroy(listaNiveles);
 	pthread_exit(NULL);
+}
+
+bool _caido(nodoNivel*aux){
+	if (aux->nid==-1)return true;
+	return false;
+}
+
+void nivelesCaidos(void){		//AVERIGUAR POR QUE NO FUNCIONA!!!  DEBERIA ELIMINAR LOS NIVELES CAIDOS, QUE TIENEN -1
+	nodoNivel*aux=list_remove_by_condition(listaNiveles,(void*)_caido);
+	if(aux!=NULL){
+		puts("Borrando un nodo!");
+		borrarTodoNivel((void*)aux);
+	}
 }
 
 void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list *ganadores, char * koopa, char * script){
