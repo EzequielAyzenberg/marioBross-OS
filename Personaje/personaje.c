@@ -22,6 +22,7 @@
 typedef struct hilos{
 	int nombre;
 	char *nivel;
+	pthread_t hilo;
 }thilo;
 
 typedef struct info{
@@ -61,7 +62,8 @@ typedef struct{
 
 int sockfd,socketEscucha,nuevo,ganado=0,ch,
 	finalizados=0,repetir=1,repeticiones=0,
-	limboOK=0,hilosMuertos=0,modificar=1,interrupcion=0;
+	limboOK=0,hilosMuertos=0,modificar=1,interrupcion=0,
+	superMuerte=0,cerrado=0;
 tpersonaje personaje;
 char *recurso, *nivelAux;
 t_list *lista, *listaRecursos;
@@ -98,6 +100,7 @@ int main(int argc, char *argv[]) {
 	signal(SIGTERM,restaVida);
 
 	while(repetir==1){
+		superMuerte=0;
 		puts("Listos para arrancar?");
 		sleep(1);
 		if( cargaPersonaje(argv) == -1){
@@ -123,22 +126,26 @@ int main(int argc, char *argv[]) {
 				//QUIZAS DEBERIA ESPERAR A VER COMO SALIO KOOPA.
 				exit(0);
 			}
-			if(limboOK==1){
-				repetir=0;
-				break;
+			if(limboOK){
+				exit(1);
 			}
 
 			//if (ch == KEY_UP) aumentaVida(KEY_UP);
 			//else if (ch == KEY_DOWN) restaVida(KEY_DOWN);
 		}
 
-		while(personaje.planDeNiveles->elements_count > hilosMuertos && limboOK==0);
-		{/* No hacer nada hasta que los hilos terminen */}
-
+		while(personaje.planDeNiveles->elements_count > hilosMuertos && limboOK==0){
+			if(personaje.vidas<=0){
+				superMuerte=1;
+				cierraHilos();
+				cerrado=1;
+				break;
+			}
+		}
 		if(limboOK==0){
 			char intentarlo[4];
 			list_clean(personaje.miniPersonajes);
-			sleep(2);
+			//sleep(1);
 			bool esWeon=true;
 			while(esWeon){
 				printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
@@ -169,7 +176,7 @@ int main(int argc, char *argv[]) {
 		}else puts("El personaje se perdió en el limbo");
 	}
 	cierraHilos();
-	list_destroy(personaje.miniPersonajes);
+	//list_destroy(personaje.miniPersonajes);
 	//log_destroy(loggeo.trace);
 	//endwin();
 	return 0;
@@ -194,9 +201,14 @@ void aumentaVida(int senial){
 /* Resta una vida al personaje
  */
 void restaVida(int senial){
+	logs loggeo;
+	char mensaje[128];
 	printf("Se recibio la señal: %d",senial);
 	interrupcion=1;
 	personaje.vidas--;
+	strcpy(mensaje,"--Personaje muere por: Senial --");
+	log_trace(loggeo.trace,mensaje,"TRACE");
+
 }
 
 /* Retorna true si el recurso fue agarrado
@@ -242,7 +254,7 @@ void *jugar (void *minipersonaje){
 	//printf("Simbolo: %c\n",personaje.simbolo);
 	info.posX=0;
 	info.posY=0;
-	int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
+	//int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
 	/*char *temp2;
 		for (j=0;j<tamanioArrayRecursos;j++){
 	  	temp2=(char*)list_get(info.planDeRecursos,j);
@@ -275,21 +287,38 @@ void *jugar (void *minipersonaje){
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
 
 		if(personaje.vidas<=0){
-			strcpy(mensaje,"--Personaje muere por: Senial --");
-			log_trace(loggeo.trace,mensaje,"TRACE");
+			puts("La muerte");
 			hilosMuertos ++;
-			suicidarme(infoBis);
+			close(info.orquestadorSocket);
+			pthread_exit(NULL);
+			break;
+			//suicidarme(infoBis);
+		}
+		if(cerrado){
+			hilosMuertos ++;
+			close(info.orquestadorSocket);
+			pthread_exit(NULL);
+			break;
+		}
+
+		if(superMuerte){
+			puts("Estoy super muerto");
+			hilosMuertos ++;
+			close(info.orquestadorSocket);
+			pthread_exit(NULL);
+			break;
 		}
 
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
 		printf("Vidas: %d\n",personaje.vidas);
 
+
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
 				if(ordenPlanificador.cont==0){
-					strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
-				} else strcpy(mensaje,"--Personaje muere por: Goomba--");
+					strcpy(mensaje,"--Personaje muere por: Goomba--");
+				} else strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				printf("Estoy muerto\n");
 				estoyMuerto(&info,esInstancia);
@@ -317,7 +346,7 @@ void *jugar (void *minipersonaje){
 				strcpy(mensaje,"--Plataforma caida--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				limboOK=1;
-				suicidarme(infoBis);
+				//suicidarme(infoBis);
 				break;
 		}
 		printf("\n");
@@ -326,20 +355,19 @@ void *jugar (void *minipersonaje){
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	suicidarme(infoBis);
+	//suicidarme(infoBis);
 	return NULL;
 };
 
 void suicidarme(tminipersonaje *infoBis){
 	list_destroy(infoBis->planDeRecursos);
 	close(infoBis->orquestadorSocket);
-	free(infoBis);
 	pthread_exit(NULL);
 }
 
 /* Carga el personaje en el
  * struct personaje para su uso
- * y crea los hilos para los miniPersonajes
+ * y crea los hilos para los
  */
 int cargaPersonaje(char *argv[]){
 	thilo *miniHilo;
@@ -367,7 +395,7 @@ int cargaPersonaje(char *argv[]){
 	if (config_has_property(cfgPersonaje,"Nombre")){ //Si tiene cargado el nombre lo mete en la variable nombre
 		char*temporal=nombrePersonaje(cfgPersonaje);
 		strcpy(personaje.nombre,temporal);
-		free(temporal);
+		//free(temporal);
 		printf("Nombre de personaje: %s /// ", personaje.nombre);
 	} else {
 		printf("Archivo de configuracion incompleto, falta campo: Nombre\n");
@@ -455,8 +483,10 @@ int cargaPersonaje(char *argv[]){
 				//printf("La Ip es: %s\n",personaje.orquestadorIP);
 				//printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
+				//printf("El socket es %d",sockfd);
 				strcpy(miniPersonaje->nivel,ptrAux->nivel);
 				sendHandshake(1,miniPersonaje->nivel,personaje.simbolo,(short)sockfd);
+				//puts("Mande un handshake contandote quien soy");
 				recvAnswer(&conexionSaliente,sockfd);
 				printf("Conexion establecida\n");
 				if(conexionSaliente.msg==-1){
@@ -469,8 +499,9 @@ int cargaPersonaje(char *argv[]){
 				list_add(personaje.miniPersonajes,(void*)miniHilo);
 
 				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,personaje.simbolo);
-				sleep(6);
+				//sleep(6);
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
+				miniHilo->hilo=hilo;
 				strcpy(miniHilo->nivel,infoNivel->nivel);
 				modificar = 0;
 		}
@@ -589,10 +620,12 @@ int estoyMuerto(tminipersonaje *info,int *esInstancia){
 		printf("Volvimos al juego, yeah\n");
 		info->orquestadorSocket=sockfd;
 	}else{
-		printf("No hay mas vidas, limpiando lista de mini personajes\n");
+		printf("No hay mas vidas\n");
+		superMuerte=1;
 		//list_clean(personaje.miniPersonajes);
-		//repetir=1;
-		suicidarme(info);
+		repetir=1;
+
+		//suicidarme(info);
 	}
 	return 0;
 }
@@ -639,10 +672,6 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 	//printf("Puntero: %p\n",(void*)recursoSiguiente);
 	if((list_any_satisfy(planDeRecursos,(void*)_recursoNoAgarrado))==true){
 		recursoSiguiente=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
-		//printf("Se crea el buffer de recurso\n");
-		//printf("Puntero: %p\n",(void*)recursoSiguiente);
-		//printf("Tipo: %c\n",recursoSiguiente->tipo);
-		//printf("Checked: %d\n",recursoSiguiente->checked);
 		if(recursoSiguiente->posX==-1 || recursoSiguiente->posY==-1){ //Pedir pos Recurso
 			printf("Pidiendo posicion recurso\n");
 			strcpy(mensaje,"--Accion - Pidiendo posicion de recurso: ");
@@ -651,6 +680,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 			strcat(mensaje,aux);
 			strcat(mensaje," --");
 			log_trace(loggeo.trace,mensaje,"TRACE");
+			if(recursoSiguiente->tipo != '^')
 			sendAnswer(2,0,recursoSiguiente->tipo,personaje.simbolo, sockfd);
 			return 0;
 		}
@@ -745,7 +775,8 @@ int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
 		strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
 		*posX=posicion/100;
 		*posY=posicion-(*posX*100);
-		printf("Moviendonos hacia: (%d,%d) Busquemos el Recurso!!!\n",*posX,*posY);
+		printf("Soy %c\n",personaje.simbolo);
+		printf("Moviendonos hacia: (%d,%d)\n",*posX,*posY);
 		itoa(*posX,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,",");
@@ -758,14 +789,15 @@ int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
 }
 
 /* Cierra los sockets de los hilos de miniPersonajes
+ * y los hilos
  */
 void cierraHilos(){
 	int j;
 	thilo* aux;
-	for (j = 0; j < personaje.miniPersonajes->elements_count; j++) {
+	/*for (j = 0; j < personaje.miniPersonajes->elements_count; j++) {
 		aux=(thilo*)list_get(personaje.miniPersonajes,j);
 		close(aux->nombre);
-	}
+	}*/
 }
 
 logs crearLogs(tminipersonaje*raiz){

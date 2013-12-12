@@ -269,7 +269,7 @@ bool chequearKoopa(){
 
 int _matar_hilo(nodoPlanificador *planificador){
 	//pthread_cancel( planificador->idHilo );
-	pthread_join(planificador->idHilo,NULL);
+	pthread_cancel(planificador->idHilo);
 	return 1;
 };
 
@@ -288,7 +288,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 		mensajeWarning("Ejecutando koopa...");
 		if(!mpantalla)puts("Ejecutando Koopa...");
 
-		execlp(koopa, "koopa", "/home/utnso/temp",script, (char *)0);
+		execlp(koopa, "koopa","/home/utnso/tmp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	    perror("execl() failure!\n");
 	    mensajeWarning("exect fallido");
