@@ -242,7 +242,7 @@ void *jugar (void *minipersonaje){
 	//printf("Simbolo: %c\n",personaje.simbolo);
 	info.posX=0;
 	info.posY=0;
-	int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
+	//int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
 	/*char *temp2;
 		for (j=0;j<tamanioArrayRecursos;j++){
 	  	temp2=(char*)list_get(info.planDeRecursos,j);
@@ -447,11 +447,11 @@ int cargaPersonaje(char *argv[]){
 				if(i==0) personaje.planDeNiveles=lista;
 				ptrAux=list_get(lista,contador);
 				//printf("Nivel cargado: %s\n",ptrAux->nivel);
-				char *temp2;
+				/*char *temp2;
 				for (j=0;j<tamanioArrayRecursos;j++){
 				  	temp2=(char*)list_get(miniPersonaje->planDeRecursos,j);
 				   	//printf("Recurso cargado: %c\n",*temp2);
-				}
+				}*/
 				//printf("La Ip es: %s\n",personaje.orquestadorIP);
 				//printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);

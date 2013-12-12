@@ -927,7 +927,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 				}
 			}else{
 				status=interrupcion(i,respuesta,&aux,tabla);
-				if(tabla.exe->player!=NULL){if(status==-5&&sock==tabla.exe->player->pid)ignorar=true;}
+				if(tabla.exe->player!=NULL){if(status==-4&&sock==tabla.exe->player->pid)ignorar=true;}
 				if(status==0&&i==sock){
 					if(ignorar) log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
 					break;
