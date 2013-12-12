@@ -79,7 +79,7 @@ char ** recursos( t_config * cfgPersonaje, char *nivel);
 int cargaPersonaje(char *argv[]);
 void * jugar(void*);
 int cantidadElementosArray(char **);
-int estoyMuerto(tminipersonaje*);
+int estoyMuerto(tminipersonaje*,int*);
 int actualizarRP(t_list*,int,logs);
 int gestionTurno(t_list*,int,int*,int*,int*,int*,logs);
 int instanciaConc(t_list*,int*,logs);
@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 	}
 	cierraHilos();
 	list_destroy(personaje.miniPersonajes);
-	//log_destroy(loggeo.debug);
+	//log_destroy(loggeo.trace);
 	return 0;
 };
 
@@ -268,7 +268,7 @@ void *jugar (void *minipersonaje){
 			log_trace(loggeo.trace,mensaje,"TRACE");
 			printf("Estoy muerto\n");
 			personaje.vidas++;
-			estoyMuerto(&info);
+			estoyMuerto(&info,esInstancia);
 			hilosMuertos ++;
 			return 0;
 		}
@@ -283,7 +283,7 @@ void *jugar (void *minipersonaje){
 				} else strcpy(mensaje,"--Personaje muere por: Goomba--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				printf("Estoy muerto\n");
-				estoyMuerto(&info);
+				estoyMuerto(&info,esInstancia);
 				if(personaje.vidas<=0){
 					hilosMuertos ++;
 					return 0;
@@ -543,8 +543,8 @@ int cantidadElementosArray(char **array){
  * Retorna a la posicion 0,0
  * Reinicia sus recursos
  */
-int estoyMuerto(tminipersonaje *info){
-	int i,sockfd;
+int estoyMuerto(tminipersonaje *info,int *esInstancia){
+	int i,sockfd,auxiliar=0;
 	trecurso *aux;
 	answer conexionSaliente;
 	aux=(trecurso*)malloc(sizeof(trecurso));
@@ -553,6 +553,7 @@ int estoyMuerto(tminipersonaje *info){
 	printf("Vidas restantes: %d\n",personaje.vidas);
 	info->posX=0;
 	info->posY=0;
+	*esInstancia=auxiliar;
 	printf("Reseteada la posicion del personaje\n");
 	for(i=0;(info->planDeRecursos->elements_count)>i;i++){
 		printf("Levantando el recurso %d\n",i);
@@ -591,7 +592,7 @@ int estoyMuerto(tminipersonaje *info){
 
 /*Pide la posicion del recurso siguiente
  */
-int actualizarRP(t_list*planDeRecursos,int posicion, logs loggeo){
+int actualizarRP(t_list*planDeRecursos,int posicion,logs loggeo){
 	char mensaje[256],aux[8];
 	if(interrupcion==0){
 		trecurso *recursoSiguiente;
@@ -623,7 +624,7 @@ int actualizarRP(t_list*planDeRecursos,int posicion, logs loggeo){
  * Si tiene la posicion del siguiente recurso pide movimiento
  * Si esta en el recurso pide una instancia
  */
-int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *moverEnX,int *esInstancia, logs loggeo){
+int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *moverEnX,int *esInstancia,logs loggeo){
 	trecurso *recursoSiguiente;
 	char mensaje[256],aux[8];
 	int tempX=0,tempY=0;
@@ -708,7 +709,7 @@ return 0;
 
 /* Marca como levantado el recurso concedido
  */
-int instanciaConc(t_list * planDeRecursos,int* esInstancia, logs loggeo){
+int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
 	if(interrupcion==0){
 		trecurso *aux;
 		char mensaje[256],valor[8];
@@ -730,7 +731,8 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia, logs loggeo){
 
 /* Modifica su posicion por la concedida
  */
-int movimientoConc(int posicion,int*posX,int*posY, logs loggeo){
+
+int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
 	if(interrupcion==0){
 		char mensaje[256],aux[8];
 		strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
@@ -742,6 +744,7 @@ int movimientoConc(int posicion,int*posX,int*posY, logs loggeo){
 		itoa(*posY,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
+		log_trace(loggeo.trace,mensaje,"TRACE");
 	}
 	return 0;
 }
