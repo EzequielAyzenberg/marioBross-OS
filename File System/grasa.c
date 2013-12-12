@@ -24,6 +24,8 @@ void left_strcat(char*destino,char*origen);
 uint8_t* posicionBloqueSegunByte(GFile* nodo,int byte);
 char* lastNameFromPath(char* path);
 
+pthread_mutex_t mutexBitMap=PTHREAD_MUTEX_INITIALIZER;
+
 int nroBlkInd_by_Size(int size)
 {
 	return size/(GFILEBYTABLE*BLOQUE);
@@ -321,7 +323,9 @@ int bloquesBySize(int size)
 }
 
 int asignarBloque(t_bitarray* bMap)
-{	int i=0;
+{	
+	pthread_mutex_lock( &mutexBitMap);
+	int i=0;
 	bool ocupado;
 	
 		while(bitarray_get_max_bit(bMap)>i)
@@ -334,6 +338,7 @@ int asignarBloque(t_bitarray* bMap)
 		}
 	printf("que bloque le di: %d\n",i);  
 	bitarray_set_bit(bMap,i);
+	pthread_mutex_unlock( &mutexBitMap);
 	puts("");puts("");puts("");
 	return i;
 }

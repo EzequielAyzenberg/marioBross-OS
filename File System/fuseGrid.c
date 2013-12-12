@@ -75,6 +75,13 @@ struct t_runtime_options {
 	char* welcome_msg;
 } runtime_options;
 
+pthread_mutex_t mutexTruncar=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexEscribir=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexLeer=PTHREAD_MUTEX_INITIALIZER;
+
+
+
+
 GFile* ptr_nodo;
 GHeader* ptr_header;
 uint8_t* ptr_mmap;
@@ -276,9 +283,9 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 	
 	if (offset<len) { 
 		if (offset + size > len) size = len - offset;
-		
+	//	pthread_mutex_lock( &mutexLeer);
 	     readGrid(buf,size,offset,ptr_nodo+numNodo);
-	    
+	 //   pthread_mutex_unlock( &mutexLeer);
 	}
 	else size = 0;
 	
@@ -340,7 +347,9 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
 {
 	int res = 0;
 	puts("entre a create");
+	
 	res=crearArchivo(path,ptr_nodo);
+	
 	return res;
 }
 
@@ -415,10 +424,17 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
 	if (numNodo==FAIL) return -ENOENT;
 	if (bloquesBySize(offset + size) > MAX_BLOQUES_DATOS) return -ENOSPC; 
 	
-	
+	//pthread_mutex_lock( &mutexTruncar);
 	if (offset + size > len) res=truncale(path,offset+size,ptr_nodo,bitMap);
+	//pthread_mutex_unlock( &mutexTruncar);	
 		
-	if ((res != -ENOSPC) && (res!= -ENOTDIR)) writeGrid(buf,size,offset,ptr_nodo+numNodo);
+		
+	if ((res != -ENOSPC) && (res!= -ENOTDIR))
+	{ 
+	
+	writeGrid(buf,size,offset,ptr_nodo+numNodo);
+	
+	}
 	else return -ENOSPC;    
 	
 	
