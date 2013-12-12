@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <ncurses.h>
 
 #define LOCAL_LOG "/home/utnso/GRIDLogs/LOGPersonaje/"
 #define muestreo false
@@ -58,7 +59,7 @@ typedef struct{
 }logs;
 
 
-int sockfd,socketEscucha,nuevo,ganado=0,
+int sockfd,socketEscucha,nuevo,ganado=0,ch,
 	finalizados=0,repetir=1,repeticiones=0,
 	limboOK=0,hilosMuertos=0,modificar=1,interrupcion=0;
 tpersonaje personaje;
@@ -87,7 +88,7 @@ int movimientoConc(int,int*,int*,logs);
 void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
-void finDeNivel(int);
+void suicidarme(tminipersonaje *infoBis);
 logs crearLogs(tminipersonaje*);
 
 int main(int argc, char *argv[]) {
@@ -105,6 +106,10 @@ int main(int argc, char *argv[]) {
 			return 0;
 		}
 		config_destroy(cfgPersonaje);
+
+		//initscr();
+		//keypad(stdscr, TRUE);   // for KEY_UP, KEY_DOWN
+
 		while(personaje.miniPersonajes!=NULL && personaje.vidas>0){
 			if(personaje.planDeNiveles->elements_count==ganado){
 				int sockfdAux;
@@ -122,6 +127,9 @@ int main(int argc, char *argv[]) {
 				repetir=0;
 				break;
 			}
+
+			//if (ch == KEY_UP) aumentaVida(KEY_UP);
+			//else if (ch == KEY_DOWN) restaVida(KEY_DOWN);
 		}
 
 		while(personaje.planDeNiveles->elements_count > hilosMuertos && limboOK==0);
@@ -163,6 +171,7 @@ int main(int argc, char *argv[]) {
 	cierraHilos();
 	list_destroy(personaje.miniPersonajes);
 	//log_destroy(loggeo.trace);
+	//endwin();
 	return 0;
 };
 
@@ -216,6 +225,7 @@ void *jugar (void *minipersonaje){
 	*esInstancia=0;
 	posicionNueva=0;
 	*moverEnX=1;
+
 	//Recastea el parametro al tipo original
 	tminipersonaje *infoBis=(tminipersonaje*)minipersonaje;
 	tminipersonaje info= *infoBis;
@@ -225,22 +235,22 @@ void *jugar (void *minipersonaje){
 	printf("\n\n  Hola, soy el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",info.nivel,personaje.simbolo);
 	modificar = 1;
 
-	printf("Cantidad de recursos cargados: %d\n",list_size(info.planDeRecursos));
-	printf("Nivel: %s\n",info.nivel);
-	printf("PosX e Y: %d--%d\n",info.posX,info.posY);
+	//printf("Cantidad de recursos cargados: %d\n",list_size(info.planDeRecursos));
+	//printf("Nivel: %s\n",info.nivel);
+	//printf("PosX e Y: %d--%d\n",info.posX,info.posY);
 	printf("Socket: %d\n",info.orquestadorSocket);
-	printf("Simbolo: %c\n",personaje.simbolo);
+	//printf("Simbolo: %c\n",personaje.simbolo);
 	info.posX=0;
 	info.posY=0;
 	int j,tamanioArrayRecursos=list_size(infoBis->planDeRecursos);
-	char *temp2;
+	/*char *temp2;
 		for (j=0;j<tamanioArrayRecursos;j++){
 	  	temp2=(char*)list_get(info.planDeRecursos,j);
 	   	printf("Recurso en hilo: %c\n",*temp2);
-	}
+	}*/
 	extern tpersonaje personaje;
 	loggeo=crearLogs(&info);
-	printf("Creamos el log correspondiente al miniPersonaje\n");
+	printf("Creamos el log correspondiente al miniPersonaje\n\n");
 	log_trace(loggeo.trace,"\t\t\t---------------------------\t\t\t","TRACE");
 	strcpy(mensaje,"--Socket:(Env.)-Config:-(Nivel/Sym/[-Recursos-])--(");
 	itoa(info.orquestadorSocket,valor,10);
@@ -263,19 +273,18 @@ void *jugar (void *minipersonaje){
 	strcat(mensaje,"])");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
+
 		if(personaje.vidas<=0){
 			strcpy(mensaje,"--Personaje muere por: Senial --");
 			log_trace(loggeo.trace,mensaje,"TRACE");
-			printf("Estoy muerto\n");
-			personaje.vidas++;
-			estoyMuerto(&info,esInstancia);
 			hilosMuertos ++;
-			return 0;
+			suicidarme(infoBis);
 		}
 
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
 		printf("Vidas: %d\n",personaje.vidas);
+
 		switch(ordenPlanificador.msg){
 			case 8: //Estoy muerto
 				if(ordenPlanificador.cont==0){
@@ -284,13 +293,9 @@ void *jugar (void *minipersonaje){
 				log_trace(loggeo.trace,mensaje,"TRACE");
 				printf("Estoy muerto\n");
 				estoyMuerto(&info,esInstancia);
-				if(personaje.vidas<=0){
-					hilosMuertos ++;
-					return 0;
-				}
 				break;
 			case 1: //Instancia o movimiento concedido
-				printf("Es instancia?: %d\n",*esInstancia);
+				//printf("Es instancia?: %d\n",*esInstancia);
 				if(*esInstancia==1){
 					instanciaConc(info.planDeRecursos,esInstancia,loggeo);
 				}
@@ -303,36 +308,40 @@ void *jugar (void *minipersonaje){
 				interrupcion=0;
 				break;
 			case 7: //Gestion turno
-				printf("Gestionemos el turno\n");
-				printf("Mover en X: %d\n",*moverEnX);
+				//printf("Gestionemos el turno\n");
+				//printf("Mover en X: %d\n",*moverEnX);
 				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),moverEnX,esInstancia,loggeo);
 				break;
 			case 0: //Limbo
 				printf("Se fue la plataforma, panico panico!\n");
 				strcpy(mensaje,"--Plataforma caida--");
 				log_trace(loggeo.trace,mensaje,"TRACE");
-				//cierraHilos();
-				finDeNivel(info.orquestadorSocket);
 				limboOK=1;
-				return 0;
+				suicidarme(infoBis);
 				break;
 		}
+		printf("\n");
 	}
 	printf("Ganamos bitches\n");
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	finDeNivel(info.orquestadorSocket);
+	suicidarme(infoBis);
 	return NULL;
 };
 
+void suicidarme(tminipersonaje *infoBis){
+	list_destroy(infoBis->planDeRecursos);
+	close(infoBis->orquestadorSocket);
+	free(infoBis);
+	pthread_exit(NULL);
+}
 
 /* Carga el personaje en el
  * struct personaje para su uso
  * y crea los hilos para los miniPersonajes
  */
 int cargaPersonaje(char *argv[]){
-	puts("\n   Esperando por el modificar = true....\n");
 	thilo *miniHilo;
 	miniHilo=(thilo*)malloc(sizeof(thilo));
 	miniHilo->nivel=(char*)malloc(sizeof(char[16]));
@@ -346,7 +355,7 @@ int cargaPersonaje(char *argv[]){
 	miniPersonaje->nivel=(char*)malloc(sizeof(char[16]));
 	personaje.orquestadorIP=(char*)malloc(sizeof(char[16]));
 
-	printf("Cargaremos el personaje\n");
+	//printf("Cargaremos el personaje\n");
 	if (config_has_property(cfgPersonaje,"Vidas")){ //Si tiene cargadas las vidas las mete en la variable vidas
 		personaje.vidas=vidasPersonaje(cfgPersonaje);
 		printf("Vidas de personaje: %d.\n", personaje.vidas);
@@ -359,7 +368,7 @@ int cargaPersonaje(char *argv[]){
 		char*temporal=nombrePersonaje(cfgPersonaje);
 		strcpy(personaje.nombre,temporal);
 		free(temporal);
-		printf("Nombre de personaje: %s.\n", personaje.nombre);
+		printf("Nombre de personaje: %s /// ", personaje.nombre);
 	} else {
 		printf("Archivo de configuracion incompleto, falta campo: Nombre\n");
 		return -1;
@@ -367,7 +376,7 @@ int cargaPersonaje(char *argv[]){
 
 	if (config_has_property(cfgPersonaje,"Simbolo")){ //Si tiene cargado el simbolo lo mete en la variable simbolo
 		personaje.simbolo=identificadorPersonaje(cfgPersonaje);
-		printf("Identificador de personaje: %c.\n", personaje.simbolo);
+		printf("Identificador: %c\n", personaje.simbolo);
 
 	} else {
 		printf("Archivo de configuracion incompleto, falta campo: Simbolo\n");
@@ -382,7 +391,7 @@ int cargaPersonaje(char *argv[]){
 		aux2=(char*)string_substring_until((char*)orquestadorAux,monto);
 		personaje.orquestadorPort=atoi(aux1);
 		strcpy(personaje.orquestadorIP,aux2);
-		printf("El orquestador esta en la IP: %s y el puerto: %i.\n", personaje.orquestadorIP,personaje.orquestadorPort);
+		printf("OrquestadorIP: %s /// Puerto: %i\n", personaje.orquestadorIP,personaje.orquestadorPort);
 	} else{
 		printf("Archivo de configuracion incompleto, falta campo: Orquestador\n");
 		return -1;
@@ -390,7 +399,7 @@ int cargaPersonaje(char *argv[]){
 
 	if (config_has_property(cfgPersonaje,"PlanDeNiveles")){ //Si tiene el plan de niveles cargado lo mete en los nodos de niveles en la lista
 		char ** planNivelesPersonaje=niveles(cfgPersonaje);
-		printf("El primer nivel es %s\n",planNivelesPersonaje[0]);
+		//printf("El primer nivel es %s\n",planNivelesPersonaje[0]);
 		char ** recursosNivel;
 		int i,j,tamanioArrayNivel,contador,tamanioArrayRecursos,tamanioBuffer;
 		personaje.planDeNiveles=(t_list*)malloc(sizeof(t_list));
@@ -403,22 +412,19 @@ int cargaPersonaje(char *argv[]){
 		lista=list_create();
 		tamanioArrayNivel=cantidadElementosArray(planNivelesPersonaje);
 		for (i=0;i<tamanioArrayNivel;i++){ //Carga en nodos los niveles
-			while(modificar==0){};
-			printf("Se carga el nivel: %s\n", *(planNivelesPersonaje+i));
+			while(modificar==0);
+			printf("\nSe carga el nivel: %s /// Recursos: ", *(planNivelesPersonaje+i));
 				strcpy(infoNivel->nivel,*(planNivelesPersonaje+i));
 				strcpy(miniPersonaje->nivel,infoNivel->nivel);
-				printf("Cargado el nivel, ahora vamos por los recursos\n");
 				recursosNivel=recursos(cfgPersonaje,infoNivel->nivel);
-				for (j=0;j<3;j++){
-					printf("Recursos nivel: %s\n",recursosNivel[j]);
-				}
 				if((cantidadElementosArray(recursosNivel))==0){
 					printf("Archivo de configuracion incompleto, falta campo: Recursos\n");
 					return -1;
 				}
 				listaRecursos=list_create();
 				tamanioArrayRecursos=cantidadElementosArray(recursosNivel);
-				puts("Lista de recursos creada, a cargarla");
+				printf("\n");
+				//puts("Lista de recursos creada, a cargarla");
 				for (j=0;j<tamanioArrayRecursos;j++){		//CARGA LOS RECURSOS DE UN NIVEL
 				     trecurso*temp;
 				     trecurso*temp2;
@@ -435,19 +441,19 @@ int cargaPersonaje(char *argv[]){
 				     temp->checked=false;
 				     list_add(listaRecursos,(void*)temp);
 				     if (j==0) miniPersonaje->planDeRecursos=listaRecursos;
-				     printf("Cargando recurso: %c\n",temp->tipo);
+				     //printf("Cargando recurso: %c\n",temp->tipo);
 				    }
 				contador=list_add(lista,(void*)infoNivel);
 				if(i==0) personaje.planDeNiveles=lista;
 				ptrAux=list_get(lista,contador);
-				printf("Nivel cargado: %s\n",ptrAux->nivel);
+				//printf("Nivel cargado: %s\n",ptrAux->nivel);
 				char *temp2;
 				for (j=0;j<tamanioArrayRecursos;j++){
 				  	temp2=(char*)list_get(miniPersonaje->planDeRecursos,j);
-				   	printf("Recurso cargado: %c\n",*temp2);
+				   	//printf("Recurso cargado: %c\n",*temp2);
 				}
-				printf("La Ip es: %s\n",personaje.orquestadorIP);
-				printf("El puerto es: %d\n",personaje.orquestadorPort);
+				//printf("La Ip es: %s\n",personaje.orquestadorIP);
+				//printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
 				strcpy(miniPersonaje->nivel,ptrAux->nivel);
 				sendHandshake(1,miniPersonaje->nivel,personaje.simbolo,(short)sockfd);
@@ -459,11 +465,11 @@ int cargaPersonaje(char *argv[]){
 				}
 				miniPersonaje->orquestadorSocket=sockfd;
 				miniHilo->nombre=sockfd;
-				printf("Buffer de hilo cargado\n");
+				//printf("Buffer de hilo cargado\n");
 				list_add(personaje.miniPersonajes,(void*)miniHilo);
 
 				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,personaje.simbolo);
-
+				sleep(6);
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				strcpy(miniHilo->nivel,infoNivel->nivel);
 				modificar = 0;
@@ -586,6 +592,7 @@ int estoyMuerto(tminipersonaje *info,int *esInstancia){
 		printf("No hay mas vidas, limpiando lista de mini personajes\n");
 		//list_clean(personaje.miniPersonajes);
 		//repetir=1;
+		suicidarme(info);
 	}
 	return 0;
 }
@@ -629,7 +636,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 	char mensaje[256],aux[8];
 	int tempX=0,tempY=0;
 	recursoSiguiente=(trecurso*)malloc(sizeof(trecurso));
-	printf("Puntero: %p\n",(void*)recursoSiguiente);
+	//printf("Puntero: %p\n",(void*)recursoSiguiente);
 	if((list_any_satisfy(planDeRecursos,(void*)_recursoNoAgarrado))==true){
 		recursoSiguiente=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
 		//printf("Se crea el buffer de recurso\n");
@@ -649,8 +656,8 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 		}
 		if(recursoSiguiente->posX==*posX && recursoSiguiente->posY==*posY){
 			int auxiliar=1;
-			printf("Pidiendo instancia\n");
-			printf("Puntero: %p\n",(void*)recursoSiguiente);
+			//printf("Pidiendo instancia\n");
+			//printf("Puntero: %p\n",(void*)recursoSiguiente);
 			printf("Pidiendo instancia del recurso %c\n",recursoSiguiente->tipo);
 			strcpy(mensaje,"--Accion - Pidiendo instancia de recurso: ");
 			aux[0]=recursoSiguiente->tipo;
@@ -659,7 +666,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 			strcat(mensaje," --");
 			log_trace(loggeo.trace,mensaje,"TRACE");
 			sendAnswer(2,1,recursoSiguiente->tipo,personaje.simbolo,sockfd); //Pedir instancia
-			printf("Instancia pedida\n");
+			//printf("Instancia pedida\n");
 			*esInstancia=auxiliar;
 			return 0;
 		}
@@ -697,8 +704,8 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
 		log_trace(loggeo.trace,mensaje,"TRACE");
-		printf("Nueva posicion X: %d\nNueva posicion Y: %d\n",tempX,tempY);
-		printf("Posicion X: %d\nPosicion Y: %d\n",*posX,*posY);
+		//printf("Nueva posicion X: %d\nNueva posicion Y: %d\n",tempX,tempY);
+		//printf("Posicion X: %d\nPosicion Y: %d\n",*posX,*posY);
 		*posX=tempX;
 		*posY=tempY;
 		sendAnswer(3,(tempX*100+tempY),'.',personaje.simbolo,sockfd);
@@ -715,7 +722,7 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
 		char mensaje[256],valor[8];
 		aux=(trecurso*)malloc(sizeof(trecurso));
 		aux=(trecurso*)list_find(planDeRecursos,(void*)_recursoNoAgarrado);
-		printf("El recurso agarrado fue: %c\n",aux->tipo);
+		printf("El recurso agarrado fue: %c --CHECKED--\n",aux->tipo);
 		aux->checked=true;
 		strcpy(mensaje,"--Accion - Tomando instancia de recurso: ");
 		valor[0]=aux->tipo;
@@ -723,7 +730,7 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
 		strcat(mensaje,valor);
 		strcat(mensaje," --");
 		log_trace(loggeo.trace,mensaje,"TRACE");
-		printf("Checked: %d\n",aux->checked);
+		//printf("Checked: %d\n",aux->checked);
 		*esInstancia=0;
 	}
 	return 0;
@@ -738,6 +745,7 @@ int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
 		strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
 		*posX=posicion/100;
 		*posY=posicion-(*posX*100);
+		printf("Moviendonos hacia: (%d,%d) Busquemos el Recurso!!!\n",*posX,*posY);
 		itoa(*posX,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,",");
