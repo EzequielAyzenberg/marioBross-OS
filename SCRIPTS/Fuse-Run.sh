@@ -1,1 +1,1 @@
-./../File\ System/fuse ../File\ System/disco.bin ../../../tmp/
+./../File\ System/fuse ../../../disco/disco.bin ../../../tmp/
