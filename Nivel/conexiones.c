@@ -36,6 +36,7 @@ int comprobarSuperposicionEnemigos(int x,int y,t_list* listaEnemigos){
 return 0;
 }
 void escucharPlanificador(datosConexiones *info){
+	char *bufferRemainingDistance=(char*)malloc(5);
 	char* bufferMsg=(char*)malloc(50);
 	int a=0;
 	nivelConfig bufferConfig;
@@ -160,11 +161,12 @@ void escucharPlanificador(datosConexiones *info){
 		//puts("TODAVIA SIRVE");
 		//sleep(1);
 		cargarConfig(&bufferConfig);
-		if(*info->config->algoritmo!=*bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum){
+		if(*info->config->algoritmo!=*bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum||info->config->remainingDistance!=bufferConfig.remainingDistance){
 			*info->config=bufferConfig;
+			itoa(info->config->remainingDistance,bufferRemainingDistance,2);
 			if(!strcmp(info->config->algoritmo,"RR")){
-				sendAnswer(6,info->config->quantum,'5',' ',socketBuffer);
-				}else sendAnswer(6,0,'9',' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
+				sendAnswer(6,info->config->quantum,bufferRemainingDistance[0],' ',socketBuffer);
+				}else sendAnswer(6,0,bufferRemainingDistance[0],' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
 
 		}
 		if(info->config->retardo!=bufferConfig.retardo){
@@ -172,7 +174,9 @@ void escucharPlanificador(datosConexiones *info){
 			sendAnswer(4,info->config->retardo,' ',' ',socketBuffer);//PREGUNTAR A CRIS SI ESTA BIEN
 			//mandar mensaje de retardo, aun no especificado
 		}
-
+		if(info->config->sleepEnemigos!=bufferConfig.sleepEnemigos){
+			*info->config=bufferConfig;
+		}
 		//puts("modificaron el archivo");
 	}
 
