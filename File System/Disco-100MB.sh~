@@ -1,0 +1,1 @@
+# dd if=/dev/urandom of=disco.bin bs=1024 count=102400

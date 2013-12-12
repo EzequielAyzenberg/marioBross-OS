@@ -570,6 +570,10 @@ int modoDeRecuperacion(global tabla){
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
+	return -2;
+}
+
+int aLaMierdaConTodo2(global tabla){
 	if(mtexto)printf("CIERRE.I--%s\n",tabla.cabecera->name);
 	t_player*temp;
 	t_stack*tempstack;
