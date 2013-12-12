@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 	if (!textMode) main_goToAnimation();
 
 	main_cleanPaths();
-	return EXIT_SUCCESS;
+	return !win;
 }
 
 void main_setPaths(char** argv) {

@@ -1,13 +1,10 @@
 #include "magic.h"
 
 void magic_executeScript(char* tmpDirectory, char* mountPoint, char* scriptPath) {
-	char command[MAX_PATH];
-	sprintf(command, "sh %s", scriptPath);
-
 	chdir(tmpDirectory);
-	system(command);
+	system(scriptPath);
 	chdir(mountPoint);
-	system(command);
+	system(scriptPath);
 }
 
 void magic_generateTree(char* path, char* pathToDump) {
