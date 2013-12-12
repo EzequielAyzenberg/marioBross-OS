@@ -115,9 +115,10 @@ static int theGrid_getattr(const char *path, struct stat *stbuf) {
 	extern GFile* ptr_nodo;
 	int numNodo;
 	
-
+    printf("entre a getattr con el path: %s\n",path);
     
 	 numNodo=nodoByPath(path,ptr_nodo);
+	printf("res nodobypath: %d\n",numNodo);
 	
 	if (strcmp(path, "/") == 0) {
 			stbuf->st_mode = S_IFDIR | 0755;
@@ -562,7 +563,8 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;
     extern t_bitarray* bitMap;
-	ptr_mmap =(uint8_t*) mmap(NULL, DISCO, PROT_READ|PROT_WRITE, MAP_SHARED,fd,NULL);
+    
+	ptr_mmap =(uint8_t*) mmap(NULL, fdStat.st_size, PROT_READ|PROT_WRITE, MAP_SHARED,fd,(off_t)NULL);
 	ptr_header = (GHeader*) dir_bloque(INICIO);
     ptr_nodo = (GFile*) dir_bloque(GHEADERBLOCKS + ptr_header->size_bitmap-CORRECCION);
     int bloquesEnBytes = ((fdStat.st_size/BLOQUE)/8);
