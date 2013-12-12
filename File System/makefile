@@ -1,8 +1,8 @@
+#!/bin/bash
 all: compile
 
-compile: 
-
-gcc -o fuse fuseGrid.c -DFUSE_USE_VERSION=27 -D_FILE_OFFSET_BITS=64 -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lCommons-Library -lpthread -lfuse 
+compile:
+		gcc -o fuse fuseGrid.c -DFUSE_USE_VERSION=27 -D_FILE_OFFSET_BITS=64 -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lcommons -lpthread -lfuse 
 
 
 #    gcc -o nivel nivel.c cargador.c gui.c enemigos.c -I/home/utnso/workspace/commons/ -L/home/utnso/workspace/commons/Debug -lcommons -I/home/utnso/workspace/so-nivel-gui-library/nivel-gui -L/home/utnso/workspace/so-nivel-gui-library/nivel-gui/Debug -lnivel-gui -lncurses -I/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID -L/home/utnso/GitMario/tp-2013-2c-the-grid/Biblioteca/theGRID/Debug -ltheGrid
@@ -12,5 +12,9 @@ gcc -o fuse fuseGrid.c -DFUSE_USE_VERSION=27 -D_FILE_OFFSET_BITS=64 -I/home/utns
 	
 #	gcc -o grasa grasa.c -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lcommons 
 
+#  EL EXPORT LD_LIBRARY_PATH=$LD_LIBRARY_PATH~/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug
 
 
+#  gcc -o grasa2 pruebaGrasa.c -I/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -lcommons 
+
+#export LD_LIBRARY_PATH=:/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug

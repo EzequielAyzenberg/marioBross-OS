@@ -146,7 +146,9 @@ ptrGBloque* arrayIndex(GFile* nodo,int byte){
 	
 	
 	numeroBloqueDato = byte/BLOQUE; //desde cual bloque de datos voy a leer
-	numeroBloqueIndirecto = numeroBloqueDato/1024;  //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
+	if(byte<4096) numeroBloqueIndirecto = 0;
+	else numeroBloqueIndirecto=numeroBloqueDato/1024;  //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
+	
 	offsetDelArray = numeroBloqueDato%1024;
 	dirBloqueArray=nodo->blk_indirect[numeroBloqueIndirecto]; //tengo la direcion del bloque de array con puntero a bloques de datos
 	printf("tengo la direcion del bloque de array con puntero a bloques de datos: %d \n",dirBloqueArray);
@@ -326,7 +328,7 @@ int asignarBloque(t_bitarray* bMap)
 		{
 			i++;
 			ocupado = bitarray_test_bit(bMap,i);
-			if (ocupado) printf ("%d) ocupado\n",i);
+			//if (ocupado) printf ("%d) ocupado\n",i);
 			if (!ocupado) break;
 			
 		}
@@ -450,7 +452,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	
 	puts("me alcansan los bloques"); 
 	
-	int indirecRef= ((nodo[numNodo].file_size) ? nroBlkInd_by_Size(nodo[numNodo].file_size)+1 : 0);
+	int indirecRef= ((nodo[numNodo].file_size) ? nroBlkInd_by_Size(nodo[numNodo].file_size)+1 : 0);   //aca HAY ALGO
 	printf("ultimo indice de 1000 puntero es: %d\n",indirecRef);
 	//if (nodo[numNodo].file_size==0 && offset<BLOQUE) {pGBloque=iniciarNodo(bMap,nodo+numNodo),*pGBloque=asignarBloque(bMap);} 
 	
@@ -464,7 +466,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 				 pGBloque = arrayIndex(nodo+numNodo,nodo[numNodo].file_size);
 				 printf("el pGBloque apuanta antes del ++ a: %p\n",pGBloque);
 				 printf("el ultimo pGBloque de este archivo es: %d\n",*pGBloque);
-				 pGBloque++;
+				 //pGBloque++;
 				 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
 		    }	
 	//else pGBloque=iniciarNodo(bMap,nodo+numNodo);  //si es 0 y offset es mayor a un bloque pasa por aca
@@ -474,7 +476,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 			{
 				//que pasa si entra con 0, si tiene uno cargado LA CAGA.
 				 printf("el bloque actuales son: %d\n",bloquesDatosActuales);
-				 printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%3);
+				 printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%BLOCK_INDIREC_SIZE);
 				 
 				 
 				 printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);    //no me dice el actual bñk por wmpieza de 0
@@ -484,6 +486,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 					 pGBloque = asignarIndirecto(bMap,nodo+numNodo,indirecRef); 
 					 puts("entre al if de asignar otro bloque indirecto");
 					 indirecRef++;
+					 puts("");puts("");
 				   }  
 				 printf("ultimo indirecto despues de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);
 				 *pGBloque=asignarBloque(bMap);   
@@ -555,7 +558,7 @@ while (bytesGrabados < size) {
    puts("");puts("");puts("");
 	}
 puts("");puts("");puts("");
-	return 0;//Le agregue el return con caca.
+	return bytesGrabados;//Le agregue el return con caca.
 }
 
 /*
