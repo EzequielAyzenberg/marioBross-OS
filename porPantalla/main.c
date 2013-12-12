@@ -12,6 +12,23 @@
 void barrerFrase(char*);
 
 int main(){
+
+	int ch1;
+	//keypad(stdscr, TRUE);   // for KEY_UP, KEY_DOWN
+	getch();
+    while ((ch1 = getch()) != EOF && ch1 != 'q')
+    {
+        if (ch1 == KEY_UP)
+        {
+            printf("WE");
+        }
+        else if (ch1 == KEY_DOWN)
+        {
+            printf("ON");
+        }
+    }
+
+
 	initscr();
 	printw("HolaMundo! Para continuar toque teclas");
 	refresh();
@@ -30,11 +47,25 @@ int main(){
 	wrefresh(items);
 
 	refresh();
-		getch();
+	getch();
 	erase();
 
-	refresh();
+		keypad(stdscr, TRUE);   // for KEY_UP, KEY_DOWN
+	    int ch;
+	    while ((ch = getch()) != EOF && ch != 'q')
+	    {
+	        if (ch == KEY_UP)
+	        {
+	            printw("WE");
+	        }
+	        else if (ch == KEY_DOWN)
+	        {
+	            printw("ON");
+	        }
+	    }
 
+	getch();
+	refresh();
 
 	barrerFrase("Hola mundo como estas CTM");
 	barrerFrase("Hola mundo como estas CTM");
