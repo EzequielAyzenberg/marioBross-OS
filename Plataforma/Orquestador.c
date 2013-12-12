@@ -269,7 +269,7 @@ bool chequearKoopa(){
 
 int _matar_hilo(nodoPlanificador *planificador){
 	//pthread_cancel( planificador->idHilo );
-	pthread_join(planificador->idHilo,NULL);
+	pthread_cancel(planificador->idHilo);
 	return 1;
 };
 
