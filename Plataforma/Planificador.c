@@ -111,8 +111,8 @@ void *planificador (void *parametro){
 	//	if (respuesta==-2) break;
 		respuesta=atenderJugador(&general);
 		if (respuesta==-2) break;
-		respuesta=selectInterrupt(general);
-		if (respuesta==-2) break;
+		//respuesta=selectInterrupt(general);
+		//if (respuesta==-2) break;
 		respuesta=leerNovedad(&general);	//Si hay una novedad, responde un 1, sino un 0 y se sigue con otra cosa.
 		if (respuesta==-2) break;
 		usleep((general.algo->retardo)*1000);
@@ -129,8 +129,8 @@ int selectInterrupt(global tabla){
 	char mensaje[128],mensajeError[64],numero[16],data[8];
 	answer aux;
 	fd_set readfds;
-	bool muerto=false;
-	do{
+	//bool muerto=false;
+	//do{
 	readfds=*(tabla.original->original);
 	if(selectGRID_planificador(fdmax,&readfds)>0){
 		while ((!FD_ISSET(i,&readfds))&&(i<=fdmax)){
@@ -147,6 +147,7 @@ int selectInterrupt(global tabla){
 			strcpy(mensajeError,"Nº:I");
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
 			log_info(tabla.logging.info,mensaje,"ERROR");
+			puts("AYUUUUUDA");
 			exit(1);
 		}else{
 			//printf("%d",i);
@@ -181,13 +182,13 @@ int selectInterrupt(global tabla){
 			strcat(mensaje,".");
 			log_trace(tabla.logging.trace,mensaje,"TRACE");
 			status=interrupcion(i,respuesta,&aux,tabla);
-			if((status==-4)||(status==-7))muerto=true;
-			if(status==0||status==-5)muerto=false;
+			//if((status==-4)||(status==-7))muerto=true;
+			//if(status==0||status==-5)muerto=false;
 			log_trace(tabla.logging.trace,"\t\t\t------INTERRUPT------\t\t\t","TRACE");
 		}
 	}
 	if(mtexto)printf("INTERRUPCION.F--%s\n",tabla.cabecera->name);
-	}while(muerto);
+	//}while(muerto);
 	return status;
 }
 /**/
@@ -285,7 +286,7 @@ void recibirLog(global tabla,int sock,answer temp){
 /**/
 int selectGRID_planificador(int fdmax,fd_set*original){
 	struct timeval intervalo;
-	intervalo.tv_usec = 100000;
+	intervalo.tv_usec = 10;
 	intervalo.tv_sec = 0;
 	return select(fdmax +1,original,NULL,NULL,&intervalo);
 };
@@ -376,7 +377,9 @@ void crearStruct(nodoNivel*raiz,t_player*temp,int RD){
 }
 int leerNovedad(global*tanda){
 	if(mtexto)printf("NOVEDAD.I--%s\n",tanda->cabecera->name);
-	if (tanda->cabecera->tandaRaiz->pid==0)return 0;
+	if (tanda->cabecera->tandaRaiz->pid==0){
+		return 0;
+	}
 	else{
 		int respuesta;
 		t_player*temp;
@@ -570,6 +573,8 @@ int modoDeRecuperacion(global tabla){
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
+	puts("NO VAMOS A LA MIEEERDA!!!");
+	exit(1);
 	return -2;
 }
 
@@ -762,6 +767,11 @@ int matarPersonaje(answer auxiliar,global tabla){
 	enviarLog(aux->pid,tabla,8,0,'Z','Z');
 	if(!mpantalla)printf("\t\tMATAR.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	loggearListas(tabla);
+	answer temporal;
+	do{
+		recvAnswer(&temporal,aux->pid);
+	}while(temporal.msg!=0);
+	muertePersonaje(aux->pid,tabla);
 	return chosen;
 }
 
@@ -774,7 +784,8 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		strcat(mensaje,tabla.cabecera->name);
 		if(!mpantalla)puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
-		case 0:status=modoDeRecuperacion(tabla);
+		case 0:puts("SE HA CAIDO EL NIVEL!!");
+			exit(1);//status=modoDeRecuperacion(tabla);
 		break;
 		//case 2:asignarRecurso(tabla,aux);//CREARLA FUNCION!!!
 		//break;
@@ -858,6 +869,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 			strcat(mensajeError,numero);
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
 			log_info(tabla.logging.info,mensaje,"ERROR");
+			puts("AYUUUUDA2");
 			exit(1);
 		}else{
 			//printf("%d",i);
@@ -926,9 +938,20 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 					break;
 				}
 			}else{
+				//t_player *ejecution=NULL;
+				//if(tabla.exe->player!=NULL)ejecution=tabla.exe->player;
 				status=interrupcion(i,respuesta,&aux,tabla);
-				if(tabla.exe->player!=NULL){if(status==-4&&sock==tabla.exe->player->pid)ignorar=true;}
-				if(status==0&&i==sock){
+				if(status==-4){
+					puts("VOY POR ACA!");
+					break;
+				}
+				if(status==0){
+					log_trace(tabla.logging.trace,"\t\t\t--------M--------------------\t\t\t","TRACE");
+					break;
+				}
+				//if(i==tabla.cabecera->nid&&respuesta==8&&aux.symbol==ejecution->sym)break;
+				//if(ejecution!=NULL){if(status==-4&&sock==ejecution->pid)ignorar=true;}
+				if(status==-5&&i==sock){
 					if(ignorar) log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
 					break;
 				}
@@ -959,6 +982,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 
 		}
 	}while(1);
+	log_trace(tabla.logging.trace,"\t\t\t--------S--------------------\t\t\t","TRACE");
 	if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 	return status;
 }
