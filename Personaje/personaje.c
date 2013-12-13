@@ -91,7 +91,7 @@ void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
 void cerrarBien();
-void suicidarme(tminipersonaje *infoBis);
+void suicidarme(tminipersonaje);
 logs crearLogs(tminipersonaje*);
 
 pthread_mutex_t mutexMuerte =PTHREAD_MUTEX_INITIALIZER;
@@ -401,13 +401,13 @@ if(ordenPlanificador.msg!=8) pthread_mutex_unlock( &mutexMuerte);
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	suicidarme(infoBis);
+	suicidarme(info);
 	return NULL;
 };
 
-void suicidarme(tminipersonaje *infoBis){
+void suicidarme(tminipersonaje info){
 	//list_destroy(infoBis->planDeRecursos);
-	close(infoBis->orquestadorSocket);
+	close(info.orquestadorSocket);
 	//pthread_exit(NULL);
 }
 
