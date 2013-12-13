@@ -1,6 +1,5 @@
-
 #define STATUS_ROW 7
-#define PLANI_ROW 25
+#define PLANI_ROW 20
 #include "Pantalla.h"
 
 int rows,cols;
@@ -9,18 +8,48 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin);
 void _pantallaNivel(nodoNivel*);
 bool _sePuedeDibujar(nodoNivel *nivel);
 void interrupcionPlani(WINDOW*);
-void dibujarBarra(void);
-void *scroller(void);
+void dibujarBarra(int);
+void dibujarScroll();
+void * scroller(void*);
 
 //WINDOW* ppal;
 extern bool mpantalla;
 extern t_list *listaNiveles;
 int resultado;
+WINDOW*wind,*swin,*scrollWin,*barraWin;
 
-void *scroller(void){
+void dibujarScroll(){
+	refresh();
+	scrollWin=(WINDOW*)malloc(sizeof(WINDOW));
+	barraWin=(WINDOW*)malloc(sizeof(WINDOW));
+	scrollWin=newwin(PLANI_ROW+2,1,STATUS_ROW-1,cols -2);
+	wbkgd(scrollWin,COLOR_PAIR(51)|A_BOLD);
+	wrefresh(scrollWin);
+	return;
+}
+
+void dibujarBarra(int indice){
+
+	dibujarScroll();
+
+	int alto,posY,posX;
+	alto = PLANI_ROW/list_size(listaNiveles);
+	posY=STATUS_ROW+indice*alto;
+	posX=cols-2;
+	refresh();
+	//barraWin=subwin(scrollWin,alto,1,posY,0);
+	barraWin=newwin(alto,1,posY,posX);
+	wbkgd(barraWin,COLOR_PAIR(56));
+	wrefresh(barraWin);
+	refresh();
+	return;
+}
+
+void * scroller(void *name){
 	keypad(stdscr, TRUE);
 
 	while(listaNiveles->elements_count<2);
+	dibujarBarra(0);
 	int ch, actual=0;
 	nodoNivel*nodoActual;
 	nodoActual = list_get(listaNiveles,actual);
@@ -39,19 +68,19 @@ void *scroller(void){
 	        	nodoActual = list_get(listaNiveles,actual);
 	        	nodoActual->dibujar = true;
 	        }
+	    	dibujarBarra(actual);
 	    }
 	return NULL;
 }
 
-WINDOW*wind,*swin;
-
 void *pantalla(void*parametro){
 	nivel_gui_get_term_size(&rows,&cols);
 	resultado=cols/5;
+	pthread_t hiloScroll;
 	if(cols<80 || rows<24){
 		printf("\n--La terminal debe ser minimo de 80x24\n\n");
 		mpantalla=false;
-		exit(1);
+		return 0;
 	}
 	initscr();
 	start_color();
@@ -76,22 +105,22 @@ void *pantalla(void*parametro){
 	attron(COLOR_PAIR(55));
 	mvprintw(0,resultado*4,"--GANADORES--");
 	attroff(COLOR_PAIR(55));
-	refresh();
-	attron(COLOR_PAIR(55));
-	mvprintw(2,2,"FILAS:%d-COLUMNAS:%d",rows,cols);
-	refresh();
-	sleep(5);
+
 	WINDOW *statusWin=NULL,*koopaWin=NULL;
 	swin=(WINDOW*)malloc(sizeof(WINDOW));
 	nuevoStatus(statusWin,koopaWin);
 	bool first=true;
+
 	while(mpantalla == true){
+		//list_iterate(listaNiveles,(void*)_pantallaNivel);
 		nodoNivel* nivel=NULL;
-		refresh();
+		int indice=0;
 		if(!list_is_empty(listaNiveles)){
 			if(first){
 				wrefresh(wind);
+				mvwprintw(wind,20,3,"PRIMERO");
 				wind=nuevoPanel(STATUS_ROW);
+				mvwprintw(wind,20,3,"SEGUNDO");
 				swin=newwin(4,19,STATUS_ROW+1,cols-35);
 				wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
 				wattron(swin,COLOR_PAIR(53));
@@ -101,15 +130,18 @@ void *pantalla(void*parametro){
 				first=false;
 				nivel=list_get(listaNiveles,0);
 				nivel->dibujar = true;
+				hiloScroll = hiloGRID(scroller,NULL);
 			}
+
 			nivel = list_find(listaNiveles,(void*)_sePuedeDibujar);
 			_pantallaNivel(nivel);
 		}
 	usleep(100000);
 	}
 	refresh();
+	endwin();
 
-	erase();
+	pthread_cancel(hiloScroll);
 	return NULL;
 }
 
@@ -216,12 +248,6 @@ void _pantallaNivel(nodoNivel*nivel){
 
 	if (i>=(list_size(listaNiveles)))i=0;
 }
- void dibujarBarra(void){
-
- }
-
-
-
 
 void interrupcionPlani(WINDOW*wind){
 	wrefresh(wind);
@@ -253,6 +279,7 @@ void interrupcionPlani(WINDOW*wind){
 		 //=======\\
 
 */
+
 
 
 
