@@ -94,7 +94,7 @@ void borrarTodoNivel(void*temp){
 void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
     mensajeTrace("Matando hilos planificadores");
     if(!mpantalla)puts("Matando hilos planificadores");
-	matarHilos(planificadores);
+
 	mensajeTrace("Limpiando las listas");
 	if(!mpantalla)puts("Limpiando las listas");
 	list_clean(planificadores);
@@ -282,6 +282,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	int status; bool modoTexto;
 	pid_t child_pid;
 	mpantalla = false;
+	matarHilos(hilosPlanificadores);
 	if((child_pid = fork()) < 0 ){
 		perror("fork failure");
 	    exit(1);
