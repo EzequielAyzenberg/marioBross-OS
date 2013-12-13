@@ -278,7 +278,7 @@ void matarHilos(t_list* hilosPlanificadores){
 };
 
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
-	int status;
+	int status; bool modoTexto;
 	pid_t child_pid;
 	mpantalla = false;
 	matarHilos(hilosPlanificadores);
@@ -291,6 +291,9 @@ while((pantallaTerminada == false) && (mtexto == false));
 		mensajeWarning("Ejecutando koopa...");
 		if(!mpantalla)puts("Ejecutando Koopa...");
 		mpantalla = false;
+		if(mtexto)
+		execlp(koopa, "koopa","/home/utnso/tmp",script,"--text",(char *)0);
+		else
 		execlp(koopa, "koopa","/home/utnso/tmp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	    perror("execl() failure!\n");

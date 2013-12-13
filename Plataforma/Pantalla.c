@@ -26,7 +26,7 @@ void pantallaKoopa(char*mensaje){
 	box(koopaWin, 0, 0);
 	mvwprintw(koopaWin,0,1,"KoopaBar");
 	int posX=cols/4-(strlen(mensaje)/2);
-	int posY=STATUS_ROW/2;
+	int posY=STATUS_ROW/2-1;
 	mvwprintw(koopaWin,posY,posX,mensaje);
 	wrefresh(koopaWin);
 	return;
