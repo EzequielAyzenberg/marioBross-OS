@@ -457,11 +457,11 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 
 			int yaMovio=0;//esta varaible esta para evitar que se mueva 2 veces en el mismo turno un enemigo
 			if (*flagX==1){
-					if(myinfo->posx==posPjs[numPj].posx||(myinfo->posx<posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,1))||(myinfo->posx>posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,2)))*flagX=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
+					if((posPjs[numPj].posy==0 && myinfo->posx==1)||(myinfo->posx==posPjs[numPj].posx)||(myinfo->posx<posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,1))||(myinfo->posx>posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,2)))*flagX=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
 				};
 
 			if (*flagX==0){
-					if(myinfo->posy==posPjs[numPj].posy||(myinfo->posy<posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,3))||(myinfo->posy>posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,4)))*flagX=1;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
+					if((posPjs[numPj].posx==0 && myinfo->posy==1)||(myinfo->posy==posPjs[numPj].posy)||(myinfo->posy<posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,3))||(myinfo->posy>posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,4)))*flagX=1;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
 
 					}
 
