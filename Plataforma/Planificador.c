@@ -23,6 +23,7 @@ int modoDeRecuperacion(global);
 int aLaMierdaConTodo(global);
 bool muertePersonaje(int, global);
 int matarPersonaje(answer,global);
+//void caidaDeNivel(global);
 int interrupcion(int,short,answer*,global);
 char buscarSimbolo(int,global);
 int selectear(answer*,short,int,global);
@@ -500,7 +501,7 @@ t_player* buscarDormido(int sock,char sym,t_list* sleeps){
 }
 /**/
 int modoDeRecuperacion(global tabla){
-	int status;
+	//int status;
 	if(!mpantalla)puts("El nivel se ha caido, limpiando registros..");
 	log_debug(tabla.logging.debug,"Nivel desconectado, aguardando reconexion.","DEBUG");
 	loggearListas(tabla);
@@ -570,21 +571,23 @@ int modoDeRecuperacion(global tabla){
 	if(tabla.exe->player!=NULL){
 		if(!mpantalla)puts("Cargando jugador en Ejecucion..");
 		_Reestablecer_Recursos((void*)tabla.exe->player);
+		if(tabla.playing)sendAnswer(1,0,' ',' ',tabla.exe->player->pid);//AGREGADO
 	}
 	if(!mpantalla)puts("Esta todo listo para seguir con la ejecucion!");
-	if(tabla.exe->player==NULL)return 1;
-	status=tabla.exe->player->pid;
+	//if(tabla.exe->player==NULL)return 1;
+	//status=tabla.exe->player->pid;
 	usleep(300000);
 	log_debug(tabla.logging.debug,"Nivel reconectado.","DEBUG");
 	log_info(tabla.logging.info,"Nivel reconectado.","INFO");
 	if(!mpantalla)printf("RECUPERACION.F--%s\n",tabla.cabecera->name);
-	return status;
+	//return status;
+	return -10;
 }
 int aLaMierdaConTodo(global tabla){
 	if(!mpantalla)puts("NO VAMOS A LA MIEEERDA!!!");
 	aniadirInterrupcion(5,tabla);
 	sleep(1);
-	exit(1);
+	//exit(1);
 	return -2;
 }
 
@@ -786,6 +789,15 @@ int matarPersonaje(answer auxiliar,global tabla){
 	aniadirInterrupcion(4,tabla);
 	return chosen;
 }
+/*
+void caidaDeNivel(global tabla){
+	list_destroy(tabla.ready);
+	list_destroy(tabla.sleeps);
+	list_destroy(tabla.deads);
+	list_destroy(tabla.inters);
+
+}*/
+
 
 int interrupcion(int i,short respuesta,answer* aux,global tabla){
 	if(!mpantalla)puts("\n--SLI--");
@@ -797,7 +809,9 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		if(!mpantalla)puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
 		case 0:if(!mpantalla)puts("SE HA CAIDO EL NIVEL!!");
-			exit(1);//status=modoDeRecuperacion(tabla);
+			//caidaDeNivel(tabla);
+			//exit(1);
+			status=modoDeRecuperacion(tabla);
 		break;
 		//case 2:asignarRecurso(tabla,aux);//CREARLA FUNCION!!!
 		//break;
@@ -965,9 +979,10 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 					if(ignorar) log_trace(tabla.logging.trace,"\t\t\t--------B--------------------\t\t\t","TRACE");
 					break;
 				}
+				if(status==-10)return -3;
 				if(status>0&&i==sock){
-					answer temp;
-					if(tabla.playing){
+					//answer temp;
+					/*if(tabla.playing){
 						if(tabla.exe->player->data.recsol!=' '){
 							sendAnswer(2,0,tabla.exe->player->data.recsol,tabla.exe->player->sym,tabla.cabecera->nid);
 							enviarLog(tabla.cabecera->nid,tabla,2,0,tabla.exe->player->data.recsol,tabla.exe->player->sym);
@@ -983,7 +998,7 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 								enviarLog(tabla.exe->player->pid,tabla,1,0,' ',' ');
 							}
 						}
-					}
+					}*/
 					if(mtexto)printf("\t\tSELECTEAR.F--%s\n",tabla.cabecera->name);
 				return -3;
 				}
@@ -1138,15 +1153,20 @@ void movimiento(global*tabla,answer aux){
 	enviarLog(tabla->cabecera->nid,*tabla,3,aux.cont,' ',aux.symbol);
 	tabla->exe->player->data.pos=aux.cont;
 	tabla->exe->player->data.dist--;
-	if(selectear(&aux,1,tabla->cabecera->nid,*tabla)==-3)return;
+
 	if (tabla->exe->player!=NULL){
-	sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
-		tabla->playing=false;
+		sendAnswer(1,0,' ',' ',tabla->exe->player->pid);
 		if(tabla->exe->rem_cuantum!=0){
 			if(tabla->exe->rem_cuantum==1)tabla->exe->rem_cuantum=-1;
 			else tabla->exe->rem_cuantum--;
 		}
-	}if(mtexto)printf("\t\tMOVIMIENTO.F--%s\n",tabla->cabecera->name);
+	}
+	if(selectear(&aux,1,tabla->cabecera->nid,*tabla)==-3){
+		tabla->playing=false;
+		return;
+	}
+	tabla->playing=false;
+	if(mtexto)printf("\t\tMOVIMIENTO.F--%s\n",tabla->cabecera->name);
 }
 void dormirJugador(t_player*jugador,t_list*dormidos){
 	list_add(dormidos,(void*)jugador);
@@ -1180,10 +1200,14 @@ void ubicacion(answer aux,global tabla){
 	tabla.playing=true;
 	sendAnswer(2,0,aux.data,aux.symbol,tabla.cabecera->nid);
 	enviarLog(tabla.cabecera->nid,tabla,2,0,aux.data,aux.symbol);
-	if(selectear(&aux,2,tabla.cabecera->nid,tabla)==-3)return;
+	tabla.playing=false;
+	if(selectear(&aux,2,tabla.cabecera->nid,tabla)==-3){
+		tabla.playing=false;
+		return;
+	}
 	if (tabla.exe->player!=NULL){
 		sendAnswer(2,aux.cont,aux.symbol,' ',tabla.exe->player->pid);
-		tabla.playing=false;
+	//	tabla.playing=false;
 		tabla.exe->player->data.dist=calcularDistancia(tabla.exe->player->data.pos,aux.cont);
 	}
 }/**/

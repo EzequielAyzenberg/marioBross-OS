@@ -142,6 +142,10 @@ void *pantalla(void*parametro){
 			}
 
 			nivel = list_find(listaNiveles,(void*)_sePuedeDibujar);
+			if((nivel==NULL)&&(!list_is_empty(listaNiveles))){
+				nivel=list_get(listaNiveles,0);
+				nivel->dibujar=true;
+			}
 			_pantallaNivel(nivel);
 		}
 		usleep(500000);
