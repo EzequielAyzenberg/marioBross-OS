@@ -15,6 +15,7 @@ t_list * ganadores;
 extern char * CFG_PATH;
 extern t_list *listaNiveles;
 extern bool mpantalla;
+extern bool mtexto;
 logs logsOrquestador;
 logs crearLogs_Orquestador(void);
 void loggearEstado_Debug(void);
@@ -290,6 +291,9 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 		mensajeWarning("Ejecutando koopa...");
 		if(!mpantalla)puts("Ejecutando Koopa...");
 		mpantalla = false;
+		if(mtexto)
+		execlp(koopa, "koopa","/home/utnso/tmp",script,"--text",(char *)0);
+		else
 		execlp(koopa, "koopa","/home/utnso/tmp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	    perror("execl() failure!\n");
