@@ -168,8 +168,8 @@ void cargarCajas(t_config config,t_list** listaCajas,int* valCar){
 	char caja[8];
 	char** arrayCaja;
 	char* aux;
-	aux=(char*)malloc(25);
-	arrayCaja=(char**)malloc(25);
+	aux=(char*)malloc(75);
+	arrayCaja=(char**)malloc(50);
 	Caja cajaBuffer;              //En esta caja se van a volcar los valores de cada caja sacados directamente del archivo de config.
 	*listaCajas=list_create();//LINEA DEL PANICO
 	while(flag){
@@ -191,7 +191,7 @@ void cargarCajas(t_config config,t_list** listaCajas,int* valCar){
 			cajaBuffer.posx=atoi(arrayCaja[3]);
 			cajaBuffer.posy=atoi(arrayCaja[4]);
 			Caja* cajaTemp;  //Esta caja es creada para asignarle memoria con malloc, y asi podes guardar esa direccion de memoria en la lista
-			cajaTemp=(Caja*)malloc(25);
+			cajaTemp=(Caja*)malloc((sizeof (Caja)));
 			*cajaTemp=cajaBuffer;
 			list_add(*listaCajas,cajaTemp);//despues para obtener los datos, se deben guardar en un puntero ya que devuelve un void*
 			(*valCar)++;
@@ -289,7 +289,6 @@ void cargarConfig(nivelConfig* configNivel){
 	verificarCargados(*config,valCar);//compara cuantas keys se cargaron y cuantas tiene el archivo, si difieren,aborta
 
 	*configNivel=configTemp; //paso final, carga los datos en configNivel antes de regresar al main program
-//	puts("todo bien cargador");
 	config_destroy(config);
 
 
