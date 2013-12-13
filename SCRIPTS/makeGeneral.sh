@@ -12,3 +12,5 @@ cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel
 make
 cd /home/utnso/GITHUB/tp-2013-2c-the-grid/Personaje
 make
+cd /home/utnso/GITHUB/tp-2013-2c-the-grid/File\ System
+make
