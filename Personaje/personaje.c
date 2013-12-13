@@ -90,7 +90,7 @@ int movimientoConc(int,int*,int*,logs);
 void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
-void suicidarme(tminipersonaje *infoBis);
+void suicidarme(tminipersonaje);
 logs crearLogs(tminipersonaje*);
 
 int main(int argc, char *argv[]) {
@@ -355,13 +355,13 @@ void *jugar (void *minipersonaje){
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	suicidarme(infoBis);
+	suicidarme(info);
 	return NULL;
 };
 
-void suicidarme(tminipersonaje *infoBis){
+void suicidarme(tminipersonaje info){
 	//list_destroy(infoBis->planDeRecursos);
-	close(infoBis->orquestadorSocket);
+	close(info.orquestadorSocket);
 	//pthread_exit(NULL);
 }
 
