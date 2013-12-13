@@ -90,14 +90,21 @@ int movimientoConc(int,int*,int*,logs);
 void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
+void cerrarBien();
 void suicidarme(tminipersonaje *infoBis);
 logs crearLogs(tminipersonaje*);
 
+pthread_mutex_t mutexMuerte =PTHREAD_MUTEX_INITIALIZER;
+
 int main(int argc, char *argv[]) {
+	logs loggeo;
+	char mensaje[128];
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
+	char auxiliarMensaje[4];
 
 	signal(SIGUSR1,aumentaVida);
 	signal(SIGTERM,restaVida);
+	//signal(SIGINT,cerrarBien);
 
 	while(repetir==1){
 		superMuerte=0;
@@ -122,6 +129,11 @@ int main(int argc, char *argv[]) {
 				printf("Avisando a plataforma que soy un groso\n");
 				sendHandshake(2,"",personaje.simbolo,(short)sockfdAux);
 				printf("Ahora si, koopa, dame a la princesa\n");
+				itoa(repeticiones,auxiliarMensaje,10);
+				strcpy(mensaje,"El personaje gano con ");
+				strcat(mensaje,auxiliarMensaje);
+				strcat(mensaje," reintentos.");
+				log_trace(loggeo.trace,mensaje,"TRACE");
 				//list_destroy(personaje.miniPersonajes);
 				//QUIZAS DEBERIA ESPERAR A VER COMO SALIO KOOPA.
 				exit(0);
@@ -133,7 +145,7 @@ int main(int argc, char *argv[]) {
 			//if (ch == KEY_UP) aumentaVida(KEY_UP);
 			//else if (ch == KEY_DOWN) restaVida(KEY_DOWN);
 		}
-
+		/*
 		while(personaje.planDeNiveles->elements_count > hilosMuertos && limboOK==0){
 			if(personaje.vidas<=0){
 				superMuerte=1;
@@ -142,13 +154,15 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 		}
+		 */
 		if(limboOK==0){
+			cierraHilos();
 			char intentarlo[4];
 			list_clean(personaje.miniPersonajes);
 			//sleep(1);
 			bool esWeon=true;
 			while(esWeon){
-				printf("Se han agotado todas las vidas, desea reintentarlo?: S/N: ");
+				printf("Se han agotado todas las vidas. Ha reintentado %d veces, desea reintentarlo?: S/N: ",repeticiones);
 				leecad(intentarlo,1);
 				switch(intentarlo[0]){
 				case 'S': repeticiones++;
@@ -158,6 +172,8 @@ int main(int argc, char *argv[]) {
 						  break;
 				case 'N': repetir=0;
 					  	  printf("\nPerdimos :(\n");
+					  	  strcpy(mensaje,"--El personaje pierde--");
+					  	  log_trace(loggeo.trace,mensaje,"TRACE");
 					  	  esWeon=false;
 					  	  break;
 				case 's': repeticiones++;
@@ -167,6 +183,8 @@ int main(int argc, char *argv[]) {
 						  break;
 				case 'n': repetir=0;
 					  	  printf("\nPerdimos :(\n");
+					  	  strcpy(mensaje,"--El personaje pierde--");
+					  	  log_trace(loggeo.trace,mensaje,"TRACE");
 					  	  esWeon=false;
 					  	  break;
 				default:  puts("\nOpcion incorrecta.\n");
@@ -175,7 +193,7 @@ int main(int argc, char *argv[]) {
 			}
 		}else puts("El personaje se perdió en el limbo");
 	}
-	cierraHilos();
+	
 	//list_destroy(personaje.miniPersonajes);
 	//log_destroy(loggeo.trace);
 	//endwin();
@@ -193,10 +211,18 @@ void finDeNivel(int sockfd){
 /* Suma una vida al personaje
  */
 void aumentaVida(int senial){
+	logs loggeo;
+	char mensaje[128];
 	printf("Se recibio la señal: %d",senial);
 	interrupcion=1;
 	personaje.vidas++;
+	strcpy(mensaje,"--El personaje recibio una vida por senial--");
+	log_trace(loggeo.trace,mensaje,"TRACE");
 }
+void cerraBien(){
+	puts("Personaje cerrado correctamente");
+}
+
 
 /* Resta una vida al personaje
  */
@@ -231,7 +257,7 @@ void *jugar (void *minipersonaje){
 	logs loggeo;
 	answer ordenPlanificador;
 	char mensaje[256],valor[8];
-	int *esInstancia,*moverEnX,posicionNueva;
+	int *esInstancia,*moverEnX,posicionNueva,desbloquear=0;
 	moverEnX=(int*)malloc(sizeof(int));
 	esInstancia=(int*)malloc(sizeof(int));
 	*esInstancia=0;
@@ -285,20 +311,26 @@ void *jugar (void *minipersonaje){
 	strcat(mensaje,"])");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
-
+		if(desbloquear){
+			desbloquear=0;
+			pthread_mutex_unlock( &mutexMuerte); 
+		}
 		if(personaje.vidas<=0){
-			puts("La muerte");
+			strcpy(mensaje,"--No quedan mas vidas--");
+			log_trace(loggeo.trace,mensaje,"TRACE");
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
 			pthread_exit(NULL);
-			break;
+			return NULL;
 			//suicidarme(infoBis);
 		}
+
+		/*
 		if(cerrado){
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
 			pthread_exit(NULL);
-			break;
+			return NULL;
 		}
 
 		if(superMuerte){
@@ -306,10 +338,20 @@ void *jugar (void *minipersonaje){
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
 			pthread_exit(NULL);
-			break;
+			return NULL;
 		}
-
+		*/
+pthread_mutex_lock( &mutexMuerte);
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
+		if(personaje.vidas<=0){
+			hilosMuertos ++;
+			close(info.orquestadorSocket);
+			pthread_mutex_unlock(&mutexMuerte);
+			pthread_exit(NULL);
+			return NULL;
+			//suicidarme(infoBis);
+		}
+if(ordenPlanificador.msg!=8) pthread_mutex_unlock( &mutexMuerte);
 		printf("Orden del planificador: %d\n",ordenPlanificador.msg);
 		printf("Vidas: %d\n",personaje.vidas);
 
@@ -318,10 +360,14 @@ void *jugar (void *minipersonaje){
 			case 8: //Estoy muerto
 				if(ordenPlanificador.cont==0){
 					strcpy(mensaje,"--Personaje muere por: Goomba--");
-				} else strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
+					printf("Personaje muere por: Goomba");
+				} else {
+					strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
+					printf("Personaje muere por: Interbloqueo");
+				}
 				log_trace(loggeo.trace,mensaje,"TRACE");
-				printf("Estoy muerto\n");
 				estoyMuerto(&info,esInstancia);
+				desbloquear=1;
 				break;
 			case 1: //Instancia o movimiento concedido
 				//printf("Es instancia?: %d\n",*esInstancia);
@@ -480,13 +526,13 @@ int cargaPersonaje(char *argv[]){
 				  	temp2=(char*)list_get(miniPersonaje->planDeRecursos,j);
 				   	//printf("Recurso cargado: %c\n",*temp2);
 				}*/
-				//printf("La Ip es: %s\n",personaje.orquestadorIP);
-				//printf("El puerto es: %d\n",personaje.orquestadorPort);
+				printf("La Ip es: %s\n",personaje.orquestadorIP);
+				printf("El puerto es: %d\n",personaje.orquestadorPort);
 				sockfd=connectGRID(personaje.orquestadorPort,personaje.orquestadorIP);
-				//printf("El socket es %d",sockfd);
+				printf("El socket es %d\n",sockfd);
 				strcpy(miniPersonaje->nivel,ptrAux->nivel);
 				sendHandshake(1,miniPersonaje->nivel,personaje.simbolo,(short)sockfd);
-				//puts("Mande un handshake contandote quien soy");
+				puts("Mande un handshake contandote quien soy");
 				recvAnswer(&conexionSaliente,sockfd);
 				printf("Conexion establecida\n");
 				if(conexionSaliente.msg==-1){
