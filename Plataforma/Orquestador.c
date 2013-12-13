@@ -14,7 +14,7 @@
 t_list * ganadores;
 extern char * CFG_PATH;
 extern t_list *listaNiveles;
-extern bool mpantalla;
+extern bool mpantalla, mtexto, pantallaTerminada;
 logs logsOrquestador;
 logs crearLogs_Orquestador(void);
 void loggearEstado_Debug(void);
@@ -91,9 +91,7 @@ void borrarTodoNivel(void*temp){
 }
 
 void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
-    mensajeTrace("Matando hilos planificadores");
-    if(!mpantalla)puts("Matando hilos planificadores");
-
+	/*
 	mensajeTrace("Limpiando las listas");
 	if(!mpantalla)puts("Limpiando las listas");
 	list_clean(planificadores);
@@ -103,7 +101,8 @@ void finalizarTodo(t_list*ganadores,t_list*planificadores,int sock){
 	list_destroy(planificadores);
 	list_destroy(ganadores);
 	list_destroy(listaNiveles);
-	pthread_exit(NULL);
+	pthread_exit(NULL);*/
+	return;
 }
 
 bool _caido(nodoNivel*aux){
@@ -125,10 +124,10 @@ void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list
 	int cont;
 	mensajeWarning("Esperando jugadores entrantes...");
 	for(cont = 5; cont >= 0; cont--){
-		strcpy(mensaje,"*Se ejecutara Koopa en: ");
+		strcpy(mensaje,"KOOPA: ");
 		itoa(cont,valor,10);
 		strcat(mensaje,valor);
-		mensajeWarning(mensaje);
+		pantallaKoopa(mensaje);
 		if(!chequearKoopa()){
 			loguearInfo("***Se recibio un jugador. Koopa interrumpido");
 			return;
@@ -137,6 +136,7 @@ void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list
 			continue;
 		else{
 			mensajeWarning("**Se recibio una conexion. Koopa retenido");
+			settearPantallaKoopa();
 			return;
 		};
 	};
@@ -269,7 +269,7 @@ bool chequearKoopa(){
 
 int _matar_hilo(nodoPlanificador *planificador){
 	//pthread_cancel( planificador->idHilo );
-	pthread_cancel(planificador->idHilo);
+	pthread_join(planificador->idHilo,NULL);
 	return 1;
 };
 
@@ -282,6 +282,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	pid_t child_pid;
 	mpantalla = false;
 	matarHilos(hilosPlanificadores);
+while((pantallaTerminada == false) && (mtexto == false));
 	if((child_pid = fork()) < 0 ){
 		perror("fork failure");
 	    exit(1);
@@ -299,6 +300,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	    wait(&status);
 	    mensajeWarning("Proceso Koopa finalizado");
 	}
+	endwin();
 	finalizar=true;
 	return;
 };

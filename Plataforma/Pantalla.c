@@ -4,7 +4,7 @@
 
 int rows,cols;
 WINDOW* nuevoPanel(int posY);
-void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin);
+void nuevoStatus();
 void _pantallaNivel(nodoNivel*);
 bool _sePuedeDibujar(nodoNivel*);
 void interrupcionPlani(nodoNivel*);
@@ -13,11 +13,37 @@ void dibujarScroll();
 void * scroller(void*);
 
 //WINDOW* ppal;
-extern bool mpantalla;
+extern bool mpantalla, pantallaTerminada;
 extern t_list *listaNiveles;
 extern pthread_mutex_t mutexInterr;
 int resultado;
-WINDOW*wind,*swin,*scrollWin,*barraWin;
+WINDOW*scrollWin,*barraWin,
+*statusWin=NULL,*koopaWin=NULL;
+
+void pantallaKoopa(char*mensaje){
+	refresh();
+	wbkgd(koopaWin,COLOR_PAIR(58)|A_BOLD);
+	box(koopaWin, 0, 0);
+	mvwprintw(koopaWin,0,1,"KoopaBar");
+	int posX=cols/4-(strlen(mensaje)/2);
+	int posY=STATUS_ROW/2;
+	mvwprintw(koopaWin,posY,posX,mensaje);
+	wrefresh(koopaWin);
+	return;
+}
+
+void settearPantallaKoopa(){
+	div_t tercera = div(cols,2);
+	int ancho,alto = STATUS_ROW -2,posY = 1,posX;
+	ancho = tercera.quot + tercera.rem;
+	posX = tercera.quot;
+	koopaWin = newwin(alto,ancho,posY,posX);
+	wbkgd(koopaWin,COLOR_PAIR(50));
+	box(koopaWin, 0, 0);
+	mvwprintw(koopaWin,0,1,"KoopaBar");
+	wrefresh(koopaWin);
+	return;
+}
 
 void dibujarScroll(){
 	refresh();
@@ -96,6 +122,7 @@ void *pantalla(void*parametro){
 	init_pair(55,COLOR_CYAN,COLOR_BLACK);
 	init_pair(56,COLOR_BLACK,COLOR_WHITE);
 	init_pair(57,COLOR_RED,COLOR_RED);
+	init_pair(58,COLOR_WHITE,COLOR_RED);
 	refresh();
 	clear();
 	attron(COLOR_PAIR(51));
@@ -110,10 +137,10 @@ void *pantalla(void*parametro){
 	mvprintw(0,resultado*4,"--GANADORES--");
 	attroff(COLOR_PAIR(55));
 	refresh();
-	WINDOW *statusWin=NULL,*koopaWin=NULL;
 	swin=(WINDOW*)malloc(sizeof(WINDOW));
 	salert=(WINDOW*)malloc(sizeof(WINDOW));
-	nuevoStatus(statusWin,koopaWin);
+	nuevoStatus();
+	settearPantallaKoopa();
 	bool first=true;
 
 	while(mpantalla == true){
@@ -153,8 +180,8 @@ void *pantalla(void*parametro){
 	}
 	refresh();
 	endwin();
-
 	pthread_cancel(hiloScroll);
+	pantallaTerminada = true;
 	return NULL;
 }
 
@@ -173,7 +200,7 @@ WINDOW* nuevoPanel(int posY){
 	return win;
 };
 
-void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
+void nuevoStatus(){
 	refresh();
 	div_t tercera = div(cols,2);
 	int ancho = tercera.quot;
@@ -185,14 +212,6 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
 	box(statusWin, 0, 0);
 	mvwprintw(statusWin,0,1,"StatusBar");
 	wrefresh(statusWin);
-
-	ancho = tercera.quot + tercera.rem;
-	posX = tercera.quot;
-	koopaWin = newwin(alto,ancho,posY,posX);
-	wbkgd(koopaWin,COLOR_PAIR(50));
-	box(koopaWin, 0, 0);
-	mvwprintw(koopaWin,0,1,"KoopaBar");
-	wrefresh(koopaWin);
 	return;
 };
 

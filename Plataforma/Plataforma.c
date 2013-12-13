@@ -9,6 +9,7 @@
 int defaultRD;
 bool mpantalla=false;
 bool mtexto=false;
+bool pantallaTerminada=false;
 char * CFG_PATH;
 
 int main(int argc, char *argv[]){
