@@ -1,13 +1,15 @@
 
 #define STATUS_ROW 7
-#define PLANI_ROW 15
+#define PLANI_ROW 20
 #include "Pantalla.h"
 
 int rows,cols;
 WINDOW* nuevoPanel(int posY);
 void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin);
-void _pantallaNivel(nodoNivel*);
+void _pantallaNivel(nodoNivel*,WINDOW*,WINDOW*);
 void interrupcionPlani(WINDOW*);
+void dibujarBarra(void);
+
 
 //WINDOW* ppal;
 extern bool mpantalla;
@@ -51,12 +53,39 @@ void *pantalla(void*parametro){
 	attroff(COLOR_PAIR(55));
 
 	WINDOW *statusWin=NULL,*koopaWin=NULL;
+	WINDOW*wind,*swin=(WINDOW*)malloc(sizeof(WINDOW));;
 	nuevoStatus(statusWin,koopaWin);
+	bool first=true;
+
 	while(1){
-		list_iterate(listaNiveles,(void*)_pantallaNivel);
-
-
-
+		//list_iterate(listaNiveles,(void*)_pantallaNivel);
+		nodoNivel* nivel=NULL;
+		int indice=0;
+		if(!list_is_empty(listaNiveles)){
+			if(first){
+				wrefresh(wind);
+				mvwprintw(wind,20,3,"PRIMERO");
+				wind=nuevoPanel(STATUS_ROW);
+				mvwprintw(wind,20,3,"SEGUNDO");
+				swin=newwin(4,19,STATUS_ROW+1,cols-35);
+				wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
+				wattron(swin,COLOR_PAIR(53));
+				box(swin, 0, 0);
+				wattroff(wind,COLOR_PAIR(53));
+				wrefresh(wind);
+				first=false;
+			}
+			do{
+				wrefresh(wind);
+				mvwprintw(wind,20,3,"TERCERO");
+				nivel=(nodoNivel*)list_get(listaNiveles,indice);
+				mvwprintw(wind,20,3,"CUARTO ");
+				indice++;
+				wrefresh(wind);
+			}while((!(nivel->dibujar))||list_size(listaNiveles)>=indice);
+			if(nivel!=NULL)_pantallaNivel(nivel,wind,swin);
+			dibujarBarra();
+		}
 	usleep(100000);
 	}
 	refresh();
@@ -100,22 +129,14 @@ void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin){
 	return;
 };
 
-void _pantallaNivel(nodoNivel*nivel){
+void _pantallaNivel(nodoNivel*nivel,WINDOW*wind,WINDOW*swin){
 	static int i=0,j,division;
 	division=cols/5;
-	WINDOW*wind=nuevoPanel(STATUS_ROW+(PLANI_ROW*i));
 	wattron(wind,COLOR_PAIR(50));
 	wrefresh(wind);
 	mvwprintw(wind,2,division,"-NOMBRE:%s-",nivel->name);
 	mvwprintw(wind,3,division,"-RETARDO:%d-",nivel->algo->retardo);
 	for(j=division;j<cols-16;j++)mvwprintw(wind,5,j,"-");
-	WINDOW*swin=(WINDOW*)malloc(sizeof(WINDOW));
-	swin=newwin(4,19,STATUS_ROW+(PLANI_ROW*i++)+1,cols-35);
-	wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
-	wattron(swin,COLOR_PAIR(53));
-	box(swin, 0, 0);
-	wattroff(swin,COLOR_PAIR(53));
-	wrefresh(swin);
 	if (nivel->algo->algo==0){
 		mvwprintw(swin,1,1,"-ALGORITMO: SRDF-");
 		mvwprintw(swin,2,1," --REM.DIST:%d--",nivel->algo->remainDist);
@@ -172,25 +193,28 @@ void _pantallaNivel(nodoNivel*nivel){
 
 	if (i>=(list_size(listaNiveles)))i=0;
 }
+ void dibujarBarra(void){
+
+ }
+
+
 
 
 void interrupcionPlani(WINDOW*wind){
 	wrefresh(wind);
 	wattron(wind,COLOR_PAIR(54)|A_BOLD);
 	mvwprintw(wind,3,9,"_");
-	mvwprintw(wind,4,8,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"_");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
-	mvwprintw(wind,5,7,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"/ \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
-	mvwprintw(wind,6,6,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"/   \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
-	mvwprintw(wind,7,5,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"/     \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
-	mvwprintw(wind,8,4,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"/       \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
-	mvwprintw(wind,9,3,"/");wattron(wind,COLOR_PAIR(57)|A_BOLD);wprintw(wind,"/=========\\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
+	mvwprintw(wind,4,8,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"_");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
+	mvwprintw(wind,5,7,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"/ \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
+	mvwprintw(wind,6,6,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"/   \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
+	mvwprintw(wind,7,5,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"/     \\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
+	mvwprintw(wind,8,4,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"/=======\\");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
 	wattron(wind,COLOR_PAIR(56)|A_BOLD);
-	mvwprintw(wind,6,9," ");
+	mvwprintw(wind,5,9,"|");
 	mvwprintw(wind,6,8," | ");
-	mvwprintw(wind,7,7,"  |  ");
-	mvwprintw(wind,8,6,"   *   ");
+	mvwprintw(wind,7,7,"  *  ");
 	wattron(wind,COLOR_PAIR(54)|A_BOLD);
-	mvwprintw(wind,11,3,"INTERRUPCION");
+	mvwprintw(wind,10,3,"INTERRUPCION");
 	wattroff(wind,COLOR_PAIR(54)|A_BOLD);
 	wrefresh(wind);
 }
@@ -202,9 +226,9 @@ void interrupcionPlani(WINDOW*wind){
 			 /_\
 			// \\
 		   // | \\
-		  //  |  \\
-		 //   *   \\
-        //=========\\
+		  //  *  \\
+		 //=======\\
+
 */
 
 

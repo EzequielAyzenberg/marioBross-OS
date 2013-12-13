@@ -76,6 +76,7 @@ typedef struct tnodoNivel{
 	t_list*deads;
 	t_exec*exe;
 	struct algo*algo;
+	bool dibujar;
 }nodoNivel;
 //----------------------------------------------------
 
