@@ -95,7 +95,6 @@ main(int argc, char *argv[]){
 		infoParaEnemigosBuffer->myinfo=(coordenadas*)malloc(sizeof(coordenadas));
 		infoParaEnemigosBuffer->myinfo->posx=0;
 		infoParaEnemigosBuffer->myinfo->posy=0;
-		//printf("mi memoria:%d\n",(int)infoParaEnemigosBuffer->myinfo);
 		infoParaEnemigosBuffer->myinfo->idGoomba=0;
 		pthread_create(&hiloEnemigos,NULL,(void*)&controlEnemigos,(void*)infoParaEnemigosBuffer);
 		infoParaEnemigosBuffer->myinfo->idGoomba=hiloEnemigos;
@@ -104,11 +103,8 @@ main(int argc, char *argv[]){
 		i++;
 	}
 
-	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-	coordenadas recorridoEnemigos[config.enemigos][4];
-	//actualizarNivel(config.listaCajas,listaEnemigos,listaJugadoresActivos,config.nombre);
-		//nivel_gui_terminar();
 
+	coordenadas recorridoEnemigos[config.enemigos][4];
 
 infoInterbloqueo infoParaInterbloqueo;
 infoParaInterbloqueo.listaRecursos=config.listaCajas;
@@ -124,15 +120,6 @@ pthread_t hiloInterbloqueo;
 pthread_create(&hiloInterbloqueo,NULL,(void*)&controlInterbloqueo,(void*)&infoParaInterbloqueo);
 handshakePlataforma(&datosConexiones);
 
-/*
-free(config.algoritmo);
-free(config.nombre);
-free(config.orquestador);
-list_destroy(config.listaCajas);
-list_destroy(listaJugadoresActivos);
-list_destroy(listaJugadoresMuertos);
-list_destroy(listaEnemigos);
-*/
 	return 0;
 }
 
