@@ -144,7 +144,7 @@ void *pantalla(void*parametro){
 			nivel = list_find(listaNiveles,(void*)_sePuedeDibujar);
 			_pantallaNivel(nivel);
 		}
-		sleep(2);
+		usleep(500000);
 //	usleep(200000);
 	}
 	refresh();
