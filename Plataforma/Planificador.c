@@ -55,6 +55,7 @@ void aniadirInterrupcion(int,global);
 extern int defaultRD;
 extern bool mpantalla;
 extern bool mtexto;
+extern pthread_mutex_t mutexInterr;
 //-----------------------------------------------------------------------------------------------------------------------
 void *planificador (void *parametro){
 	if(!mpantalla)puts("\nHola mundo!!--Yo planifico.");
@@ -152,7 +153,6 @@ int selectInterrupt(global tabla){
 			strcpy(mensajeError,"Nº:I");
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
 			log_info(tabla.logging.info,mensaje,"ERROR");
-			puts("AYUUUUUDA");
 			exit(1);
 		}else{
 			//printf("%d",i);
@@ -328,6 +328,7 @@ void modificarAlgoritmo(answer temp,global general){
 	}
 	log_info(general.logging.info,mensaje,"WARNING");
 	if(!mpantalla)printf("\t\t\t\tModificarAlgo.F--%s\n",general.cabecera->name);
+
 	aniadirInterrupcion(1,general);
 }
 void modificarRetardo(answer temp,global general){
@@ -580,7 +581,7 @@ int modoDeRecuperacion(global tabla){
 	return status;
 }
 int aLaMierdaConTodo(global tabla){
-	puts("NO VAMOS A LA MIEEERDA!!!");
+	if(!mpantalla)puts("NO VAMOS A LA MIEEERDA!!!");
 	aniadirInterrupcion(5,tabla);
 	sleep(1);
 	exit(1);
@@ -795,7 +796,7 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		strcat(mensaje,tabla.cabecera->name);
 		if(!mpantalla)puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
-		case 0:puts("SE HA CAIDO EL NIVEL!!");
+		case 0:if(!mpantalla)puts("SE HA CAIDO EL NIVEL!!");
 			exit(1);//status=modoDeRecuperacion(tabla);
 		break;
 		//case 2:asignarRecurso(tabla,aux);//CREARLA FUNCION!!!
@@ -880,7 +881,6 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 			strcat(mensajeError,numero);
 			strcat(mensajeError,"-ERROR:No se encontro candidato para selectear!!");
 			log_info(tabla.logging.info,mensaje,"ERROR");
-			puts("AYUUUUDA2");
 			exit(1);
 		}else{
 			//printf("%d",i);
@@ -953,7 +953,6 @@ int selectear(answer*tempo,short esperado,int sock,global tabla){
 				//if(tabla.exe->player!=NULL)ejecution=tabla.exe->player;
 				status=interrupcion(i,respuesta,&aux,tabla);
 				if(status==-4){
-					puts("VOY POR ACA!");
 					break;
 				}
 				if(status==0){
@@ -1453,5 +1452,7 @@ void cerrarLogging(global tabla){
 void aniadirInterrupcion(int interr,global tabla){
 	int *aux=(int*)malloc(sizeof(int));
 	*aux=interr;
+	pthread_mutex_lock( &mutexInterr);
 	list_add(tabla.inters,(void*)aux);
+	pthread_mutex_unlock( &mutexInterr);
 }

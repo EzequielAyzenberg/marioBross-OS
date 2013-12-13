@@ -26,6 +26,8 @@
 
 //General---------------------------------------------
 
+pthread_mutex_t mutexInterr;
+
 t_list *listaNiveles;
 
 /* Nodos de la lista NOVEDADES */

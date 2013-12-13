@@ -1,4 +1,3 @@
-
 #define STATUS_ROW 7
 #define PLANI_ROW 22
 #include "Pantalla.h"
@@ -7,20 +6,51 @@ int rows,cols;
 WINDOW* nuevoPanel(int posY);
 void nuevoStatus(WINDOW* statusWin, WINDOW* koopaWin);
 void _pantallaNivel(nodoNivel*);
-bool _sePuedeDibujar(nodoNivel *nivel);
-void interrupcionPlani(WINDOW*);
-void dibujarBarra(void);
-void *scroller(void);
+bool _sePuedeDibujar(nodoNivel*);
+void interrupcionPlani(nodoNivel*);
+void dibujarBarra(int);
+void dibujarScroll();
+void * scroller(void*);
 
 //WINDOW* ppal;
 extern bool mpantalla;
 extern t_list *listaNiveles;
+extern pthread_mutex_t mutexInterr;
 int resultado;
+WINDOW*wind,*swin,*scrollWin,*barraWin;
 
-void *scroller(void){
+void dibujarScroll(){
+	refresh();
+	scrollWin=(WINDOW*)malloc(sizeof(WINDOW));
+	barraWin=(WINDOW*)malloc(sizeof(WINDOW));
+	scrollWin=newwin(PLANI_ROW+2,1,STATUS_ROW-1,cols -2);
+	wbkgd(scrollWin,COLOR_PAIR(51)|A_BOLD);
+	wrefresh(scrollWin);
+	return;
+}
+
+void dibujarBarra(int indice){
+
+	dibujarScroll();
+
+	int alto,posY,posX;
+	alto = PLANI_ROW/list_size(listaNiveles);
+	posY=STATUS_ROW+indice*alto;
+	posX=cols-2;
+	refresh();
+	//barraWin=subwin(scrollWin,alto,1,posY,0);
+	barraWin=newwin(alto,1,posY,posX);
+	wbkgd(barraWin,COLOR_PAIR(56));
+	wrefresh(barraWin);
+	refresh();
+	return;
+}
+
+void * scroller(void *name){
 	keypad(stdscr, TRUE);
 
 	while(listaNiveles->elements_count<2);
+	dibujarBarra(0);
 	int ch, actual=0;
 	nodoNivel*nodoActual;
 	nodoActual = list_get(listaNiveles,actual);
@@ -39,19 +69,22 @@ void *scroller(void){
 	        	nodoActual = list_get(listaNiveles,actual);
 	        	nodoActual->dibujar = true;
 	        }
+	    	dibujarBarra(actual);
 	    }
 	return NULL;
 }
+
 
 WINDOW*wind,*swin,*salert;
 
 void *pantalla(void*parametro){
 	nivel_gui_get_term_size(&rows,&cols);
 	resultado=cols/5;
+	pthread_t hiloScroll;
 	if(cols<80 || rows<24){
 		printf("\n--La terminal debe ser minimo de 80x24\n\n");
 		mpantalla=false;
-		exit(1);
+		return 0;
 	}
 	initscr();
 	start_color();
@@ -82,9 +115,10 @@ void *pantalla(void*parametro){
 	salert=(WINDOW*)malloc(sizeof(WINDOW));
 	nuevoStatus(statusWin,koopaWin);
 	bool first=true;
+
 	while(mpantalla == true){
+		//list_iterate(listaNiveles,(void*)_pantallaNivel);
 		nodoNivel* nivel=NULL;
-		refresh();
 		if(!list_is_empty(listaNiveles)){
 			if(first){
 				wrefresh(wind);
@@ -104,7 +138,9 @@ void *pantalla(void*parametro){
 				first=false;
 				nivel=list_get(listaNiveles,0);
 				nivel->dibujar = true;
+				hiloScroll = hiloGRID(scroller,NULL);
 			}
+
 			nivel = list_find(listaNiveles,(void*)_sePuedeDibujar);
 			_pantallaNivel(nivel);
 		}
@@ -112,8 +148,9 @@ void *pantalla(void*parametro){
 //	usleep(200000);
 	}
 	refresh();
+	endwin();
 
-	erase();
+	pthread_cancel(hiloScroll);
 	return NULL;
 }
 
@@ -215,22 +252,19 @@ void _pantallaNivel(nodoNivel*nivel){
 	wprintw(wind,"-");
 	wattroff(wind,COLOR_PAIR(54));
 	wrefresh(wind);
-
-	interrupcionPlani(wind);
+	if(!list_is_empty(nivel->inters)) interrupcionPlani(nivel);
 
 	if (i>=(list_size(listaNiveles)))i=0;
 }
- void dibujarBarra(void){
 
- }
-
-
-
-
-void interrupcionPlani(WINDOW*wind){
+void interrupcionPlani(nodoNivel*nivel){
 	int i,j,k,tercera=cols/3;
 	int lim=(tercera*2)-13;
-	for(i=0;i<3;i++){
+	int *aux;
+	wrefresh(wind);
+	for (j=lim;j<(lim+12);j++)mvwprintw(wind,18,j," ");
+	wrefresh(wind);
+	for(i=0;i<5;i++){
 		wrefresh(wind);
 		wattron(wind,COLOR_PAIR(54)|A_BOLD);
 		mvwprintw(wind,15,tercera+3,"/");wattron(wind,COLOR_PAIR(57));wprintw(wind,"_");wattron(wind,COLOR_PAIR(54));wprintw(wind,"\\");
@@ -244,11 +278,24 @@ void interrupcionPlani(WINDOW*wind){
 		mvwprintw(wind,18,tercera+2,"  *  ");
 		wattron(wind,COLOR_PAIR(54)|A_BOLD);
 		mvwprintw(wind,16,(tercera*2)-13,"INTERRUPCION");
-
 		wattron(wind,COLOR_PAIR(53)|A_BLINK);
-		mvwprintw(wind,18,lim,"DESCONEXION");
+		pthread_mutex_lock( &mutexInterr);
+		if(!list_is_empty(nivel->inters))aux=(int*)list_remove(nivel->inters,0);
+		pthread_mutex_unlock( &mutexInterr);
+		switch(*aux){
+			case 1: mvwprintw(wind,18,lim," ALGORITMO");
+			break;
+			case 2: mvwprintw(wind,18,lim,"  RETARDO");
+			break;
+			case 3: mvwprintw(wind,18,lim,"DESCONEXION");
+			break;
+			case 4: mvwprintw(wind,18,lim,"   MUERTE");
+			break;
+			case 5: mvwprintw(wind,18,lim," EXPLOSION");
+			break;
+		}
 		wattroff(wind,COLOR_PAIR(53)|A_BLINK);
-
+		//free(aux);
 		wattroff(wind,COLOR_PAIR(54)|A_BOLD);
 		wrefresh(wind);
 		usleep(100000);
@@ -269,6 +316,7 @@ void interrupcionPlani(WINDOW*wind){
 	for (j=lim;j<(lim+12);j++)mvwprintw(wind,18,j," ");
 	wrefresh(wind);
 }
+
 
 
 
