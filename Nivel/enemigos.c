@@ -17,7 +17,7 @@
 #include <theGRID/general.h>
 #include "semaforos.h"
 
-pthread_mutex_t mutexDibujar;
+//pthread_mutex_t mutexDibujar;
 pthread_mutex_t mutexMatarPersonaje;
 pthread_mutex_t mutexLog;
 
@@ -359,26 +359,21 @@ void jugadoresFocuseables(t_list* listaJugadoresActivos,t_list* listaJugadoresFo
 	t_personaje* buffer;
 
 	for(i=0;i<cantJugadoresActivos;i++){
-		//buffer=(personaje*)malloc(sizeof(t_personaje));
 		buffer=(t_personaje*)list_get(listaJugadoresActivos,i);
 		if(!(buffer->posx==0&&buffer->posy==0)){
 			j=0;
 			for(j=0;j<cantCajas;j++){
 				if(buffer->posx*100+buffer->posy==coorCajas[j])flag=1;
-				//printf("iteracion N:%d\n",cantCajas);
 			}
 		}else flag=1;
 
 	if(flag==0)list_add(listaJugadoresFocuseables,buffer);
 	flag=0;
-	//else free(buffer);
 	}
 
 }
 
 void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_list* listaJugadoresActivos,t_list* listaJugadoresMuertos,coordenadas recorridoEnemigos[4],int rows, int cols,short *socketPlataforma,int* flagX){
-	//t_log_level logDetalle=log_level_from_string("INFO");
-	//t_log* logNivel=log_create("log","nivel1", 0, logDetalle);
 	t_list* listaJugadoresFocuseables;
 	listaJugadoresFocuseables=list_create();
 	int i=0;
@@ -426,11 +421,6 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 			recorridoEnemigos[k].posy=0;
 
 
-			//actualizarNivel(listaCajas,*listaEnemigos,listaJugadoresActivos,"nivel245");
-
-
-
-
 
 	}else{
 		for(j=0;j<4;j++){
@@ -457,7 +447,6 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 			j=0;
 			for (j=0;j<cantPjActivos;j++){
 				dist=calcularDistancia(*myinfo,posPjs[j]);//"dist" recibe el cuadrado de la distancia, para evitar el uso de sqrt
-				//printf("%d\n",dist);
 
 				if (dist<distMIN){
 					distMIN=dist;
@@ -465,9 +454,7 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 					numPj=j;
 				}
 			}
-//printf("El pj es el numero %d\n",numPj);
 
-//numPj=0;
 			int yaMovio=0;//esta varaible esta para evitar que se mueva 2 veces en el mismo turno un enemigo
 			if (*flagX==1){
 					if(myinfo->posx==posPjs[numPj].posx||(myinfo->posx<posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,1))||(myinfo->posx>posPjs[numPj].posx && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,2)))*flagX=0;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
@@ -476,7 +463,6 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 			if (*flagX==0){
 					if(myinfo->posy==posPjs[numPj].posy||(myinfo->posy<posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,3))||(myinfo->posy>posPjs[numPj].posy && chequearSuperposicionCajas(*myinfo,cantCajas,coorCajas,4)))*flagX=1;//si ya estoy alineado con el eje X, voy a moverme en el eje Y
 
-					//if((*buffer).posy==posPjs[numPj].posy)flagX[i]=1;//si ya estoy alineado con el eje Y, voy a moverme en el eje X
 					}
 
 
@@ -522,7 +508,6 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 										}
 
 				if((list_find(listaJugadoresFocuseables,(void*)_is_Personaje))!=NULL){
-				//printf("El jugador %c ha sido pisado por un goomba",posPjs[numPj].id);
 				char* bufferMsg=(char*)malloc(50);
 
 				strcpy(bufferMsg,"El jugador");
@@ -530,20 +515,6 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 				strcat(bufferMsg,"   ha sido pisado por un goomba");
 
 				bufferMsg[11]=posPjs[numPj].id;
-
-				/*
-				pthread_mutex_lock( &mutexLog);
-				loguearInfo(bufferMsg);
-
-				pthread_mutex_unlock( &mutexLog);
-*/
-
-
-
-
-
-
-
 
 				char *nombreLog;
 				nombreLog=(char*)malloc(40);
@@ -566,26 +537,21 @@ void moverEnemigos(char* nombreNivel,coordenadas* myinfo,t_list* listaCajas,t_li
 				recibirRecursoPersonaje(posPjs[numPj].id,listaCajas,listaJugadoresActivos);
 				free(list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));
 
-				//list_add(listaJugadoresMuertos,list_remove_by_condition(listaJugadoresActivos,(void*) _is_Personaje));//CUIDADO CUANDO DOS ENEMIGOS MATAN A LA VEZ AL MISMO SEGMENTATION FAULT PONER SEMAFORO
 				sendAnswer(8,0,' ',posPjs[numPj].id,*socketPlataforma);
-				//printf("%d",*socketPlataforma);
 				pthread_mutex_unlock( &mutexMatarPersonaje);
 
 				}
 				else pthread_mutex_unlock( &mutexMatarPersonaje);
 			}
-			//focusear(i,buffer,posPjs[numPj]);//Search and destroy
 
 
 	}
 	list_destroy(listaJugadoresFocuseables);
 
-	//log_destroy(logNivel);
 }
 
 
 void controlEnemigos(infoEnemigosThread* info){
-//printf("mi direccion de memoria es %d\n",(int)info->myinfo);
 
 int flagX=0;
 
@@ -598,15 +564,12 @@ coordenadas recorridoEnemigos [4];
 				recorridoEnemigos[j].posy=0;
 			}
 
-//printf("Estoy en hilo %d\n",(int)info->myinfo->idGoomba);
 	crearEnemigos(*info,(*info).rows,(*info).cols);
 	pthread_mutex_lock( &mutexDibujar);
-	//printf("%d\n",info->myinfo->posx);
-	//printf("%d\n",info->myinfo->posy);
+
 	actualizarNivel(*info->listaCajas,*info->listaEnemigos,*info->listaJugadoresActivos,info->nombreNivel);
 	pthread_mutex_unlock( &mutexDibujar);
-	//actualizarNivel(*(*info).listaCajas,*(*info).listaEnemigos,*(*info).listaJugadoresActivos,(*info).nombreNivel);
-	//printf("%d\n",list_size(info->listaEnemigos));
+
 	while(1){
 
 

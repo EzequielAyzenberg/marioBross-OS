@@ -280,6 +280,7 @@ void matarHilos(t_list* hilosPlanificadores){
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	int status;
 	pid_t child_pid;
+	mpantalla = false;
 	if((child_pid = fork()) < 0 ){
 		perror("fork failure");
 	    exit(1);
@@ -287,7 +288,7 @@ void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	if(child_pid == 0){ //koopa
 		mensajeWarning("Ejecutando koopa...");
 		if(!mpantalla)puts("Ejecutando Koopa...");
-
+		mpantalla = false;
 		execlp(koopa, "koopa","/home/utnso/tmp",script, (char *)0);
 	//si se ejecuta esto es pórque hubo un problema con el exec
 	    perror("execl() failure!\n");

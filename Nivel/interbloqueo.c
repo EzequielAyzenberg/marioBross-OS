@@ -180,7 +180,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 		nombreLog=(char*)malloc(40);
 		strcpy(nombreLog,info->nombreNivel);
 		strcat(nombreLog,"Log");
-		char* bufferMsg=(char*)malloc(50);
+		char* bufferMsg=(char*)malloc(80);
 		i=0;
 		char msg[200];
 		char *itoas=malloc(1);

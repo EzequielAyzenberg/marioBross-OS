@@ -17,15 +17,12 @@
 #include <string.h>
 #include "enemigos.h"
 #include <commons/log.h>
+#include "semaforos.h"
 answer bufferAnswer;
-//int a=0;
-pthread_mutex_t mutexDibujar;
+
+//pthread_mutex_t mutexDibujar;
 pthread_mutex_t mutexLog;
-/*void controlador(int signal){
-	int a=1;
 
-
-}*/
 int comprobarSuperposicionEnemigos(int x,int y,t_list* listaEnemigos){
 	coordenadas *bufferEnemigo;
 	int i=0;
@@ -82,7 +79,7 @@ void escucharPlanificador(datosConexiones *info){
 			}
 			exit(0);
 	}
-	//signal(SIGINT,&controlador);
+
 	FD_ZERO (&active);
 	FD_SET (fd, &active);
 	FD_SET (info->socket, &active);
@@ -90,16 +87,10 @@ void escucharPlanificador(datosConexiones *info){
 	readfds=active;
 	time.tv_sec = 1;
 	time.tv_usec = 0;
-	//fd=inotify_init();//crea el inotify al comienzo de cada loop
-	//watch=inotify_add_watch(fd,"/home/utnso/GITHUB/tp-2013-2c-the-grid/Nivel/nivel1.cfg",IN_MODIFY);
 
 	if(info->socket>fd)socketMAX=info->socket;
 	else socketMAX=fd;
 
-	//FD_ZERO (&readfds);
-	//FD_SET (fd, &readfds);
-	//FD_SET (info.socket, &readfds);
-	//puts("selecteando");
 	select(socketMAX+1,&readfds,NULL,NULL,&time);
 	i=0;
 	while ((!FD_ISSET(i,&readfds))&&(i<=socketMAX+1)) i++;
@@ -157,9 +148,6 @@ void escucharPlanificador(datosConexiones *info){
 	}
 
 	if(i==fd){
-		//a=1;
-		//puts("TODAVIA SIRVE");
-		//sleep(1);
 		cargarConfig(&bufferConfig);
 		if(*info->config->algoritmo!=*bufferConfig.algoritmo||info->config->quantum!=bufferConfig.quantum||info->config->remainingDistance!=bufferConfig.remainingDistance){
 			*info->config=bufferConfig;
@@ -172,12 +160,10 @@ void escucharPlanificador(datosConexiones *info){
 		if(info->config->retardo!=bufferConfig.retardo){
 			*info->config=bufferConfig;
 			sendAnswer(4,info->config->retardo,' ',' ',socketBuffer);//PREGUNTAR A CRIS SI ESTA BIEN
-			//mandar mensaje de retardo, aun no especificado
 		}
 		if(info->config->sleepEnemigos!=bufferConfig.sleepEnemigos){
 			*info->config=bufferConfig;
 		}
-		//puts("modificaron el archivo");
 	}
 
 
@@ -198,9 +184,7 @@ void escucharPlanificador(datosConexiones *info){
 }
 
 void handshakePlataforma(datosConexiones *info){
-	//char* puertoAux,ip,buffer;
 
-	//printf ("puerto %s",info.config->orquestador);
 	char* buffer;
 	buffer=(char*)malloc(strlen(info->config->orquestador)+1);
 	char* puertoAux;
@@ -211,15 +195,12 @@ void handshakePlataforma(datosConexiones *info){
 	strcpy(buffer,info->config->orquestador);
 	strcpy(ip,*string_split(buffer,":"));
 	strcpy(puertoAux,string_substring_from(buffer,strlen(ip)+1));
-	//puts(ip);
 	puerto=atoi(puertoAux);
-	//printf("%d\n",puerto);
 	int socketPlataforma = connectGRID(puerto,ip);
 	short socketBuffer=(short)socketPlataforma; //te odio Cristian, que necesidad habia? no podias simplemente recibir un int?? ¬¬
 
 	sendHandshake(0,info->config->nombre,' ',socketBuffer);
 	recvAnswer(&bufferAnswer,socketBuffer);
-//	printf("La plataforma quiere un %d\n",bufferAnswer.msg);
 	if(bufferAnswer.msg==-1){
 		puts("Nivel repetido");
 		sleep(1);
@@ -229,14 +210,12 @@ void handshakePlataforma(datosConexiones *info){
 		exit(1);
 		}
 	if(bufferAnswer.msg==6){
-		//puts("La plataforma ha solitica el tipo de algoritomo, informando...");
 		if(!strcmp(info->config->algoritmo,"RR")){
 			sendAnswer(6,info->config->quantum,'5',' ',socketBuffer);
 			}else sendAnswer(6,0,'9',' ',socketBuffer);//el argumento 3, el Remind distance esta harcodeado, CODIFICAR BIEN
 
 		}
 	answer temp;
-	//HARCODEADO!!!
 	recvAnswer(&temp,socketBuffer);
 	sendAnswer(4,info->config->retardo,' ',' ',socketBuffer);
 
