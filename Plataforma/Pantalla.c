@@ -82,7 +82,7 @@ void *pantalla(void*parametro){
 				mvwprintw(wind,20,3,"CUARTO ");
 				indice++;
 				wrefresh(wind);
-			}while((!(nivel->dibujar))||list_size(listaNiveles)>=indice);
+			}while((!(nivel->dibujar))||(indice<list_size(listaNiveles)));
 			if(nivel!=NULL)_pantallaNivel(nivel,wind,swin);
 			dibujarBarra();
 		}
