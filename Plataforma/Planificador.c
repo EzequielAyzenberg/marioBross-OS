@@ -50,6 +50,8 @@ void loggearExec(global);
 void loggearListas(global);
 void cerrarLogging(global);
 
+void aniadirInterrupcion(int,global);
+
 extern int defaultRD;
 extern bool mpantalla;
 extern bool mtexto;
@@ -57,11 +59,12 @@ extern bool mtexto;
 void *planificador (void *parametro){
 	if(!mpantalla)puts("\nHola mundo!!--Yo planifico.");
 	nodoNivel*raiz=(nodoNivel*)parametro;
-	t_list *stack,*ready,*sleeps,*deads;
+	t_list *stack,*ready,*sleeps,*deads,*inters;
 	stack=list_create();
 	ready=list_create();
 	sleeps=list_create();
 	deads=list_create();
+	inters=list_create();
 	t_exec exec;
 	exec.player=NULL;
 	exec.rem_cuantum=0;
@@ -80,6 +83,7 @@ void *planificador (void *parametro){
 		general.ready=ready;
 		general.deads=deads;
 		general.sleeps=sleeps;
+		general.inters=inters;
 		general.algo->remainDist=0;
 		general.algo->algo=0;
 		general.exe=&exec;
@@ -91,6 +95,7 @@ void *planificador (void *parametro){
 	raiz->ready=ready;
 	raiz->sleeps=sleeps;
 	raiz->deads=deads;
+	raiz->inters=inters;
 	raiz->exe=&exec;
 	raiz->algo=&algor;
 	if(!mpantalla)printf("Nuestro Nivel Se llama: %s\n",raiz->name);
@@ -323,6 +328,7 @@ void modificarAlgoritmo(answer temp,global general){
 	}
 	log_info(general.logging.info,mensaje,"WARNING");
 	if(!mpantalla)printf("\t\t\t\tModificarAlgo.F--%s\n",general.cabecera->name);
+	aniadirInterrupcion(1,general);
 }
 void modificarRetardo(answer temp,global general){
 	if(!mpantalla)printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
@@ -335,6 +341,7 @@ void modificarRetardo(answer temp,global general){
 	strcat(mensaje," mSeg--");
 	log_info(general.logging.info,mensaje,"WARNING");
 	if(!mpantalla)printf("\t\t\t\tModificarRetardo.I--%s\n",general.cabecera->name);
+	aniadirInterrupcion(2,general);
 }
 void inicializar(nodoNivel*raiz,global*general){
 	int estado;
@@ -574,6 +581,8 @@ int modoDeRecuperacion(global tabla){
 }
 int aLaMierdaConTodo(global tabla){
 	puts("NO VAMOS A LA MIEEERDA!!!");
+	aniadirInterrupcion(5,tabla);
+	sleep(1);
 	exit(1);
 	return -2;
 }
@@ -726,6 +735,7 @@ bool muertePersonaje(int i,global tabla){
 	close(aux->pid);
 	free(aux);
 	loggearListas(tabla);
+	aniadirInterrupcion(3,tabla);
 	return chosen;
 }/**/
 int matarPersonaje(answer auxiliar,global tabla){
@@ -772,6 +782,7 @@ int matarPersonaje(answer auxiliar,global tabla){
 		recvAnswer(&temporal,aux->pid);
 	}while(temporal.msg!=0);
 	muertePersonaje(aux->pid,tabla);
+	aniadirInterrupcion(4,tabla);
 	return chosen;
 }
 
@@ -1438,6 +1449,9 @@ void cerrarLogging(global tabla){
 	log_destroy(tabla.logging.debug);
 	log_destroy(tabla.logging.trace);
 	log_destroy(tabla.logging.info);
-	/*log_destroy(tabla.logging.error);
-	log_destroy(tabla.logging.warning);*/
+}
+void aniadirInterrupcion(int interr,global tabla){
+	int *aux=(int*)malloc(sizeof(int));
+	*aux=interr;
+	list_add(tabla.inters,(void*)aux);
 }

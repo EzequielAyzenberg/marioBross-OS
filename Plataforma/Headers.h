@@ -74,6 +74,7 @@ typedef struct tnodoNivel{
 	t_list*ready;
 	t_list*sleeps;
 	t_list*deads;
+	t_list*inters;
 	t_exec*exe;
 	struct algo*algo;
 	bool dibujar;
@@ -97,6 +98,7 @@ typedef struct Pglobal{
 	t_list*ready;
 	t_list*sleeps;
 	t_list*deads;
+	t_list*inters;
 	t_exec*exe;
 	t_list*recur;
 	set*original;
