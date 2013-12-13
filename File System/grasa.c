@@ -45,7 +45,7 @@ int queHayAca(int numNodo,GFile* nodo,t_list* lista){
 	int i;
 	int dirPadre;
 	dirPadre=numNodo;
-	for (i=1; i < 1023;i++)
+	for (i=1; i <= 1024;i++)
 				if ((dirPadre == nodo[i].parent_dir_block)&&(nodo[i].state!=LIBRE)) list_add(lista, nodo[i].fname);
 return 0;
 }
@@ -73,7 +73,7 @@ int nodoByPath(const char* path,GFile* nodo){
 	while (nombreHijo[numHijo]!=NULL){
 		numNodo=1;	
 		encontrado = 0;
-		while(numNodo<=MAXNODO){
+		while(numNodo<=(MAXNODO+2)){
 			if(string_equals_ignore_case(nombreHijo[numHijo],(char*)nodo[numNodo].fname)) acierto++; //Le agregue el casteo
 			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
 			if (acierto==2 && !encontrado) {numPadre=numNodo; encontrado=1;}
@@ -204,9 +204,10 @@ int crearDirectorio(const char* path,GFile* inodo){
 	if (nodoPadre==FAIL) return -ENOENT;
 	puts("pase la prueba de si existe el direcctorio");
 	printf("el resultado de nodobypath es: %d\n",nodoPadre);
-	while((inodo[nodoLibre].state!=0)&&(nodoLibre<GFILEBYTABLE))nodoLibre++;
 	
-	if (nodoLibre==GFILEBYTABLE) return -ENOSPC;
+	while((inodo[nodoLibre].state!=0)&&(nodoLibre<=GFILEBYTABLE))nodoLibre++;
+	if (nodoLibre>GFILEBYTABLE) return -ENOSPC;
+	
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	
@@ -261,7 +262,7 @@ int crearArchivo(const char* path,GFile* inodo){
 	int nodoLibre;
 	int i;
 	char* pathPadre;
-	nodoLibre=0;
+	nodoLibre=1;
 	
 	
 	printf("la ruta que llego es: %s\n",path);
@@ -292,10 +293,10 @@ int crearArchivo(const char* path,GFile* inodo){
 	printf("el resultado de nodobypath es: %d\n",nodoPadre);
 	if (nodoPadre==FAIL) return -ENOENT;
 	puts("pase la prueba da la ruta valida");
-	while((inodo[nodoLibre].state!=LIBRE)&&(nodoLibre<GFILEBYTABLE))nodoLibre++;
+	while((inodo[nodoLibre].state!=LIBRE)&&(nodoLibre<=(GFILEBYTABLE)))nodoLibre++; //es el 1026
 	
 	
-	if(nodoLibre==GFILEBYTABLE) return -ENOSPC;   //si es el 1024
+	if(nodoLibre>(GFILEBYTABLE)) return -ENOSPC;   //si es el 1026
 	
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
@@ -586,7 +587,7 @@ int32_t borrarDirectorio(const char* path,GFile* inodo)
 	
 	inodo[numNodo].state=LIBRE;
 	strcpy(inodo[numNodo].fname,"");  
-	inodo[numNodo].parent_dir_block=1025;
+	inodo[numNodo].parent_dir_block=-1;
 	inodo[numNodo].m_date=(uint64_t)0;
 	inodo[numNodo].c_date=(uint64_t)0;
 	
@@ -609,7 +610,7 @@ int32_t borrarArchivo(const char* path,GFile* inodo,t_bitarray* bitMap)
 	if(inodo[numNodo].file_size)truncale(path,0,inodo,bitMap);
 	inodo[numNodo].state=LIBRE;
 	strcpy(inodo[numNodo].fname,"");  
-	inodo[numNodo].parent_dir_block=1025;
+	inodo[numNodo].parent_dir_block=-1;
 	inodo[numNodo].m_date=(uint64_t)0;
 	inodo[numNodo].c_date=(uint64_t)0;
 	inodo[numNodo].file_size=0;
