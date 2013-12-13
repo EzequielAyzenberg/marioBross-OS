@@ -2,6 +2,7 @@
 
 #define muestreo false
 
+void cerrarMINivel(global);
 void enviarLog(int,global,int,int,char,char);
 void recibirLog(global,int,answer);
 int selectGRID_planificador(int,fd_set*);
@@ -57,6 +58,7 @@ extern int defaultRD;
 extern bool mpantalla;
 extern bool mtexto;
 extern pthread_mutex_t mutexInterr;
+extern t_list*listaNiveles;
 //-----------------------------------------------------------------------------------------------------------------------
 void *planificador (void *parametro){
 	if(!mpantalla)puts("\nHola mundo!!--Yo planifico.");
@@ -126,10 +128,19 @@ void *planificador (void *parametro){
 	}
 cerrarLogging(general);
 if(!mpantalla)puts("El hilo termina ahora!!");
+cerrarMINivel(general);
 return 0;
 }
 //-----------------------------------------------------------------------------------------------------------------------
 /**/
+void cerrarMINivel(global tabla){
+	bool _soyNID(nodoNivel*nivel){
+		if(nivel->nid==tabla.cabecera->nid) return true;
+		return false;
+	}
+	list_remove_by_condition(listaNiveles,(void*)_soyNID);
+}
+
 int selectInterrupt(global tabla){
 	if(mtexto)printf("INTERRUPCION.I--%s\n",tabla.cabecera->name);
 	int i=0,respuesta,status=1,fdmax=*(tabla.maxfd);
@@ -585,6 +596,7 @@ int modoDeRecuperacion(global tabla){
 }
 int aLaMierdaConTodo(global tabla){
 	if(!mpantalla)puts("NO VAMOS A LA MIEEERDA!!!");
+
 	aniadirInterrupcion(5,tabla);
 	sleep(1);
 	//exit(1);

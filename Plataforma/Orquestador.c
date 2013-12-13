@@ -278,7 +278,7 @@ void matarHilos(t_list* hilosPlanificadores){
 };
 
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
-	int status; bool modoTexto;
+	int status;
 	pid_t child_pid;
 	mpantalla = false;
 	matarHilos(hilosPlanificadores);
