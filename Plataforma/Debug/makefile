@@ -25,9 +25,11 @@ endif
 # All Target
 all: Plataforma
 
+dependents:
+	-cd /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/Debug && $(MAKE) clean all
 
 # Tool invocations
-Plataforma: $(OBJS) $(USER_OBJS)
+Plataforma: $(OBJS) $(USER_OBJS) /home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/Debug/libnivel-gui.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
 	gcc -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Commons-Library/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/Biblioteca/Debug -L/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/Debug -o "Plataforma" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -41,5 +43,6 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
+/home/utnso/GITHUB/tp-2013-2c-the-grid/nivel-gui/Debug/libnivel-gui.so:
 
 -include ../makefile.targets
