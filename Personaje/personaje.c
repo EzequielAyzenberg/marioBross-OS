@@ -355,14 +355,14 @@ void *jugar (void *minipersonaje){
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(loggeo.trace,mensaje,"TRACE");
 	ganado++;
-	//suicidarme(infoBis);
+	suicidarme(infoBis);
 	return NULL;
 };
 
 void suicidarme(tminipersonaje *infoBis){
-	list_destroy(infoBis->planDeRecursos);
+	//list_destroy(infoBis->planDeRecursos);
 	close(infoBis->orquestadorSocket);
-	pthread_exit(NULL);
+	//pthread_exit(NULL);
 }
 
 /* Carga el personaje en el
