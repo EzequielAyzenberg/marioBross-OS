@@ -14,7 +14,7 @@
 t_list * ganadores;
 extern char * CFG_PATH;
 extern t_list *listaNiveles;
-extern bool mpantalla, mtexto, pantallaTerminada;
+extern bool mpantalla, mtexto, mnormal, pantallaTerminada;
 logs logsOrquestador;
 logs crearLogs_Orquestador(void);
 void loggearEstado_Debug(void);
@@ -66,7 +66,7 @@ void *orquestador(void* infoAux){
 			 	 close(socketIngresante); break;
 			}
 			if(!mpantalla)puts("--ORQUESTADOR-- Escuchando de vuelta...");
-			else pantallaStatus("Escuchando");
+			//else pantallaStatus("Escuchando");
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 		}
 		if(list_is_empty(listaNiveles))nivelesCaidos();
@@ -131,17 +131,21 @@ void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list
 		pantallaKoopa(mensaje);
 		if(!chequearKoopa()){
 			loguearInfo("***Se recibio un jugador. Koopa interrumpido");
-			if(mpantalla) pantallaStatus("Se recibio un jugador");
+			if(mpantalla){
+				//pantallaStatus("Se recibio un jugador");
+				settearPantallaKoopa();
+			}
 			return;
 		};
 		if(selectGRID_orquestador(fdmax,original,2) == 0)
 			continue;
 		else{
 			mensajeWarning("**Se recibio una conexion. Koopa retenido");
-			if(mpantalla) pantallaStatus("Se recibio una conexion");
+			//if(mpantalla) pantallaStatus("Se recibio una conexion");
 			settearPantallaKoopa();
 			return;
 		};
+		if(finalizar) return;
 	};
 	activarKoopa(hilosPlanificadores, koopa, script);
 	return;
@@ -167,11 +171,11 @@ void reconectarNivel(nodoNivel *nodo,int nid){
 		strcpy(mensaje,"*Nivel reconectado: ");
 		strcat(mensaje,nodo->name);
 		mensajeTrace(mensaje);
-		if(mpantalla) pantallaStatus(mensaje);
+		//if(mpantalla) pantallaStatus(mensaje);
 		return;
 	};
 	mensajeTrace("*Nivel invasor rechazado");
-	if(mpantalla) pantallaStatus("Nivel invasor rechazado");
+	//if(mpantalla) pantallaStatus("Nivel invasor rechazado");
 	responderError(nid);
 	return;
 };
@@ -201,7 +205,7 @@ void agregarNivel(handshake handshakeNivel,int socketNivel, t_list* hilosPlanifi
 	strcpy(mensaje,"*Nivel conectado: ");
 	strcat(mensaje,handshakeNivel.name);
 	mensajeTrace(mensaje);
-	if(mpantalla) pantallaStatus(mensaje);
+	//if(mpantalla) pantallaStatus(mensaje);
 	nodoNivel *nivel = (nodoNivel*)malloc(sizeof (nodoNivel));
 	crearTanda(&(tandaActual));
 	strcpy(nivel->name,handshakeNivel.name);
@@ -245,7 +249,7 @@ void clienteNuevo(handshake handshakeJugador,int socketJugador){
 	if( aux == NULL){
 		responderError(socketJugador);
 		mensajeTrace("*Jugador rechazado por nivel inexistenete. Cerrar socket");
-		if(mpantalla) pantallaStatus("Jugador ent. rechazado");
+		//if(mpantalla) pantallaStatus("Jugador ent. rechazado");
 		loggearEnvio(socketJugador,-1,0,' ',' ');
 		close(socketJugador);
 		return;
@@ -261,7 +265,7 @@ void clienteViejo(handshake handshakeJugador, t_list *ganadores){
 	ganador->personaje = handshakeJugador.symbol;
 	list_add(ganadores,ganador);
 	if(!mpantalla)puts("--ORQUESTADOR-- Jugador Ganador Recibido.");
-	else pantallaStatus("Jugador Ganador Recibido");
+	//else pantallaStatus("Jugador Ganador Recibido");
 };
 
 bool _hay_jugadores(nodoNivel *nivel) {
@@ -288,10 +292,12 @@ void matarHilos(t_list* hilosPlanificadores){
 void activarKoopa(t_list* hilosPlanificadores, char * koopa, char * script){
 	int status;
 	pid_t child_pid;
+	if(mnormal)hiloGRID(pantalla,NULL);
 	mpantalla = false;
 	finalizar = true;
 	matarHilos(hilosPlanificadores);
-while((pantallaTerminada == false) && (mtexto == false));
+while((pantallaTerminada == false) && (mtexto == false) && (mnormal == false));
+	if(mnormal)initscr();
 	if((child_pid = fork()) < 0 ){
 		perror("fork failure");
 	    exit(1);
@@ -309,10 +315,14 @@ while((pantallaTerminada == false) && (mtexto == false));
 	    mensajeWarning("exect fallido");
 	    _exit(1);
 	}else{ //Orquestador
-	    wait(&status);
+		wait(&status);
 	    mensajeWarning("Proceso Koopa finalizado");
 	}
 	endwin();
+	switch(status){
+	   case 1: printf("Ganamoooos!!!\n"); break;
+	   default: printf("Perdimos :(\n");
+	}
 	return;
 };
 
