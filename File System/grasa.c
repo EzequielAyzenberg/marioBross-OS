@@ -171,7 +171,7 @@ int crearDirectorio(const char* path,GFile* inodo){
 	
 	
 	numNodo=nodoByPath(path,inodo);
-	
+	printf("unnodo: %d",numNodo);
 	if (numNodo!=FAIL) return -EEXIST;
 	
 	
@@ -204,6 +204,7 @@ int crearDirectorio(const char* path,GFile* inodo){
 	
 
 }
+
  int howIsMyFather(char* src, char** dest){
 	
 	char* lastName;
@@ -249,7 +250,7 @@ int crearArchivo(const char* path,GFile* inodo){
 	
 	
 	numNodo=nodoByPath(path,inodo);
-		
+		printf("unnodo: %d",numNodo);
 	printf("el resultado de nodobypath es: %d\n",numNodo);
 	if (numNodo!=FAIL) 
 	{
@@ -378,16 +379,20 @@ return 0;
 
 int liberarIndirecos(t_bitarray* bMap,GFile* nodo,int dif)
 {
+	int nroIndRef;
 	puts("entre a liberar indirectos");
-	int nroIndRef = nroBlkInd_by_Size(nodo->file_size);
+	if (nodo->file_size<(BLOCK_INDIREC_SIZE *BLOQUE)) nroIndRef=0;
+	 else nroIndRef= nroBlkInd_by_Size(nodo->file_size);
+	 
+	if (nodo->file_size==(BLOCK_INDIREC_SIZE *BLOQUE)) nroIndRef--;
+	printf("indice ref que libero liberar: %d\n", nroIndRef);
 	int i;
 	while(dif)
 	{
+		printf("dif: %d\n", dif);
 		printf("que bloque voy a liberar: %d\n", nodo->blk_indirect[nroIndRef]);
 		bitarray_clean_bit(bMap,nodo->blk_indirect[nroIndRef]);
-		printf("la disponibilidad del bloque %d es: ",nodo->blk_indirect[nroIndRef]);
-		if(bitarray_test_bit(bMap,nodo->blk_indirect[nroIndRef])) puts("desocupado");
-		else puts("ocupado"); 
+		printf("la disponibilidad del bloque %d es\n: ",nodo->blk_indirect[nroIndRef]);
 		nroIndRef--;
 		dif--;
 	}  
@@ -455,10 +460,10 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 		    if(nodo[numNodo].file_size) 
 		    {
 				 pGBloque = arrayIndex(nodo+numNodo,nodo[numNodo].file_size);
-				 printf("el pGBloque apuanta antes del ++ a: %p\n",pGBloque);
-				 printf("el ultimo pGBloque de este archivo es: %d\n",*pGBloque);
+			//	 printf("el pGBloque apuanta antes del ++ a: %p\n",pGBloque);
+				// printf("el ultimo pGBloque de este archivo es: %d\n",*pGBloque);
 				 //pGBloque++;
-				 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
+				 //printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
 		    }	
 	//else pGBloque=iniciarNodo(bMap,nodo+numNodo);  //si es 0 y offset es mayor a un bloque pasa por aca
 	    //pongo esto afuera y soluciono? si lo saco entra a while y el if de verdadero
@@ -466,11 +471,11 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 			while(bloquesDatosActuales < bloquesDatosOffset)
 			{
 				
-				 printf("el bloque actuales son: %d\n",bloquesDatosActuales);
-				 printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%BLOCK_INDIREC_SIZE);
+				 //printf("el bloque actuales son: %d\n",bloquesDatosActuales);
+				 //printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%BLOCK_INDIREC_SIZE);
 				 
 				 
-				 printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);    //no me dice el actual bñk por wmpieza de 0
+				 //printf("ultimo indirecto antes de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);    //no me dice el actual bñk por wmpieza de 0
 				 if(!(bloquesDatosActuales%BLOCK_INDIREC_SIZE)) 
 				   {
 					 
@@ -479,13 +484,13 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 					 indirecRef++;
 					 puts("");puts("");
 				   }  
-				 printf("ultimo indirecto despues de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);
+			//	 printf("ultimo indirecto despues de chequear: %d\n",nodo[numNodo].blk_indirect[nroBlkInd_by_Size(nodo[numNodo].file_size)]);
 				 *pGBloque=asignarBloque(bMap);   
-				 printf("el resultado de pGBloque es: %d\n",*pGBloque);
+			//	 printf("el resultado de pGBloque es: %d\n",*pGBloque);
 				 bloquesDatosActuales++;
 				 //printf("anterior indirecto despues de chequear: %d",nodo->blk_indirect[blkInd_by_cantBlk(bloquesDatosActuales));
 				 pGBloque++;
-				 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
+		//		 printf("el pGBloque apuanta despues del ++ a: %p\n",pGBloque);
 			}
 		}
 	
@@ -495,10 +500,12 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 			{
 				int difBloquesIndirectos = difEntreIndirectos(bloquesDatosActuales,bloquesDatosOffset); //HECHO
 				byteRef =nodo[numNodo].file_size; // (nodo[numNodo].file_size<BLOQUE)? BLOQUE-1 : nodo[numNodo].file_size-BLOQUE;       
+				if(byteRef%(BLOQUE*BLOCK_INDIREC_SIZE)==0) byteRef++;
 				while(bloquesDatosActuales > bloquesDatosOffset)                
 					{
 					 liberarBloque(byteRef,bMap,nodo+numNodo);   
-					 byteRef-=BLOQUE;
+					 if(byteRef>4096) byteRef-=BLOQUE;
+					 else byteRef=BLOQUE-1;
 					 bloquesDatosActuales--;
 					}
 				if (difBloquesIndirectos) liberarIndirecos(bMap,nodo+numNodo,difBloquesIndirectos);   

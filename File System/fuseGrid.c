@@ -222,6 +222,7 @@ static int theGrid_mkdir(const char *path,mode_t mode)
 {   
 	int res = 0;
 	res=crearDirectorio(path,ptr_nodo);
+	printf("nodobypath: %d",res);
 	return res;
 }
 
