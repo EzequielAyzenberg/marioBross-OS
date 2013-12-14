@@ -277,7 +277,8 @@ void *jugar (void *minipersonaje){
 	//logs loggeo;
 	answer ordenPlanificador;
 	char mensaje[256],valor[8];
-	int *esInstancia,*moverEnX,posicionNueva,desbloquear=0;
+	int *esInstancia,*moverEnX,posicionNueva;
+	//int desbloquear=0;
 	moverEnX=(int*)malloc(sizeof(int));
 	esInstancia=(int*)malloc(sizeof(int));
 	*esInstancia=0;
@@ -330,10 +331,10 @@ void *jugar (void *minipersonaje){
 	strcat(mensaje,"])");
 	log_trace(info.loggeo->trace,mensaje,"TRACE");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
-		if(desbloquear){
+		/*if(desbloquear){
 			desbloquear=0;
 			pthread_mutex_unlock( &mutexMuerte); 
-		}
+		}*/
 		if(personaje.vidas<=0){
 			strcpy(mensaje,"--No quedan mas vidas--");
 			log_trace(info.loggeo->trace,mensaje,"TRACE");
@@ -360,12 +361,14 @@ void *jugar (void *minipersonaje){
 			return NULL;
 		}
 		*/
-pthread_mutex_lock( &mutexMuerte);
+
+//pthread_mutex_lock( &mutexMuerte);
+
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		if(personaje.vidas<=0){
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
-			pthread_mutex_unlock(&mutexMuerte);
+		//	pthread_mutex_unlock(&mutexMuerte);
 			pthread_exit(NULL);
 			return NULL;
 			//suicidarme(infoBis);
@@ -379,14 +382,15 @@ if(ordenPlanificador.msg!=8) pthread_mutex_unlock( &mutexMuerte);
 			case 8: //Estoy muerto
 				if(ordenPlanificador.cont==0){
 					strcpy(mensaje,"--Personaje muere por: Goomba--");
-					printf("Personaje muere por: Goomba");
+					printf("Personaje muere por: Goomba\n");
 				} else {
 					strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
-					printf("Personaje muere por: Interbloqueo");
+					printf("Personaje muere por: Interbloqueo\n");
 				}
 				log_trace(info.loggeo->trace,mensaje,"TRACE");
 				estoyMuerto(&info,esInstancia);
-				desbloquear=1;
+				//pthread_mutex_unlock(&mutexMuerte);
+		//		desbloquear=1;
 				break;
 			case 1: //Instancia o movimiento concedido
 				//printf("Es instancia?: %d\n",*esInstancia);
@@ -416,7 +420,7 @@ if(ordenPlanificador.msg!=8) pthread_mutex_unlock( &mutexMuerte);
 		}
 		printf("\n");
 	}
-	printf("Ganamos bitches\n");
+	printf("Personaje completa nivel %s\n",info.nivel);
 	strcpy(mensaje,"--Personaje completa nivel--");
 	log_trace(info.loggeo->trace,mensaje,"TRACE");
 	ganado++;
