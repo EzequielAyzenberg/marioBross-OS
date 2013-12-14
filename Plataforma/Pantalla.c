@@ -4,7 +4,6 @@
 
 int rows,cols;
 WINDOW* nuevoPanel(int posY);
-void nuevoStatus();
 void _pantallaNivel(nodoNivel*);
 bool _sePuedeDibujar(nodoNivel*);
 void interrupcionPlani(nodoNivel*);
@@ -16,17 +15,23 @@ void * scroller(void*);
 extern bool mpantalla, pantallaTerminada;
 extern t_list *listaNiveles;
 extern pthread_mutex_t mutexInterr;
-int resultado;
+int resultado, planiRow;
 WINDOW*scrollWin,*barraWin,
 *statusWin=NULL,*koopaWin=NULL;
 
 void pantallaKoopa(char*mensaje){
 	refresh();
+	div_t tercera = div(cols,2);
+	int ancho,alto = STATUS_ROW -2,posY = 1,posX;
+	ancho = tercera.quot + tercera.rem;
+	posX = tercera.quot;
+	koopaWin = newwin(alto,ancho,posY,posX);
 	wbkgd(koopaWin,COLOR_PAIR(58)|A_BOLD);
 	box(koopaWin, 0, 0);
-	mvwprintw(koopaWin,0,1,"KoopaBar");
-	int posX=cols/4-(strlen(mensaje)/2);
-	int posY=STATUS_ROW/2-1;
+	mvwprintw(koopaWin,0,1,"StatusBar - Koopa");
+	posX=cols/4-(strlen(mensaje)/2);
+	posY=STATUS_ROW/2-1;
+	mvwprintw(koopaWin,posY,posX,"                    ");
 	mvwprintw(koopaWin,posY,posX,mensaje);
 	wrefresh(koopaWin);
 	return;
@@ -40,16 +45,50 @@ void settearPantallaKoopa(){
 	koopaWin = newwin(alto,ancho,posY,posX);
 	wbkgd(koopaWin,COLOR_PAIR(50));
 	box(koopaWin, 0, 0);
-	mvwprintw(koopaWin,0,1,"KoopaBar");
+	mvwprintw(koopaWin,0,1,"StatusBar - Koopa");
+	wrefresh(koopaWin);
+	wbkgd(koopaWin,COLOR_PAIR(50)|A_BOLD);
+	char mensaje[16];
+	strcpy(mensaje,"KOOPA INACTIVO");
+	posX=cols/4-(strlen(mensaje)/2);
+	posY=STATUS_ROW/2-1;
+	mvwprintw(koopaWin,posY,posX,mensaje);
 	wrefresh(koopaWin);
 	return;
 }
+
+void pantallaStatus(char*mensaje){
+	settearStatus();
+	refresh();
+	box(statusWin, 0, 0);
+	mvwprintw(statusWin,0,1,"StatusBar - Orquestador");
+	int posX=cols/4-(strlen(mensaje)/2);
+	int posY=STATUS_ROW/2-1;
+	mvwprintw(statusWin,posY,posX,mensaje);
+	wrefresh(statusWin);
+	return;
+}
+
+void settearStatus(){
+	refresh();
+	div_t tercera = div(cols,2);
+	int ancho = tercera.quot;
+	int alto = STATUS_ROW -2;
+	int posY = 1;
+	int posX = 0;
+	statusWin = newwin(alto,ancho,posY,posX);
+	wbkgd(statusWin,COLOR_PAIR(51));
+	box(statusWin, 0, 0);
+	mvwprintw(statusWin,0,1,"StatusBar - Orquestador");
+	wrefresh(statusWin);
+	return;
+};
 
 void dibujarScroll(){
 	refresh();
 	scrollWin=(WINDOW*)malloc(sizeof(WINDOW));
 	barraWin=(WINDOW*)malloc(sizeof(WINDOW));
-	scrollWin=newwin(PLANI_ROW+2,1,STATUS_ROW-1,cols -2);
+	scrollWin=newwin(planiRow+2,1,STATUS_ROW-1,cols -2);
 	wbkgd(scrollWin,COLOR_PAIR(51)|A_BOLD);
 	wrefresh(scrollWin);
 	return;
@@ -60,7 +99,7 @@ void dibujarBarra(int indice){
 	dibujarScroll();
 
 	int alto,posY,posX;
-	alto = PLANI_ROW/list_size(listaNiveles);
+	alto = planiRow/list_size(listaNiveles);
 	posY=STATUS_ROW+indice*alto;
 	posX=cols-2;
 	refresh();
@@ -105,6 +144,9 @@ WINDOW*wind,*swin,*salert;
 
 void *pantalla(void*parametro){
 	nivel_gui_get_term_size(&rows,&cols);
+	int planiRowActual = rows-STATUS_ROW-2;
+	if(planiRowActual >= PLANI_ROW) planiRow = planiRowActual;
+	else planiRow = PLANI_ROW;
 	resultado=cols/5;
 	pthread_t hiloScroll;
 	if(cols<80 || rows<24){
@@ -139,7 +181,7 @@ void *pantalla(void*parametro){
 	refresh();
 	swin=(WINDOW*)malloc(sizeof(WINDOW));
 	salert=(WINDOW*)malloc(sizeof(WINDOW));
-	nuevoStatus();
+	settearStatus();
 	settearPantallaKoopa();
 	bool first=true;
 
@@ -192,27 +234,12 @@ bool _sePuedeDibujar(nodoNivel *nivel){
 WINDOW* nuevoPanel(int posY){
 	refresh();
 	WINDOW*win=(WINDOW*)malloc(sizeof(WINDOW));
-	win=newwin(PLANI_ROW,cols-3,posY,0);
+	win=newwin(planiRow,cols-3,posY,0);
 	wbkgd(win,COLOR_PAIR(51)|A_BOLD);
 	box(win, 0, 0);
 	mvwprintw(win,0,1,"Planificador");
 	wrefresh(win);
 	return win;
-};
-
-void nuevoStatus(){
-	refresh();
-	div_t tercera = div(cols,2);
-	int ancho = tercera.quot;
-	int alto = STATUS_ROW -2;
-	int posY = 1;
-	int posX = 0;
-	statusWin = newwin(alto,ancho,posY,posX);
-	wbkgd(statusWin,COLOR_PAIR(51));
-	box(statusWin, 0, 0);
-	mvwprintw(statusWin,0,1,"StatusBar");
-	wrefresh(statusWin);
-	return;
 };
 
 void _pantallaNivel(nodoNivel*nivel){

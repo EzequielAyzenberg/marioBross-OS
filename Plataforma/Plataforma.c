@@ -7,12 +7,15 @@
 #define PROGRAMA "PLATAFORMA"
 
 int defaultRD;
-bool mpantalla=false;
+extern bool mpantalla;
 bool mtexto=false;
 bool pantallaTerminada=false;
 char * CFG_PATH;
 
 int main(int argc, char *argv[]){
+
+	mpantalla = false;
+
 	if(argc==1){
 		puts("Uso: pasar por argumento el path del .cfg");
 		exit (0);
