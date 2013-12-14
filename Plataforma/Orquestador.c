@@ -42,7 +42,7 @@ void *orquestador(void* infoAux){
 	FD_SET(socketOrquestador, &original_FD);
 
 	while(!finalizar){
-		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 2)){
+		if(0 == selectGRID_orquestador(socketOrquestador + 1,original_FD, 4)){
 			koopaWarning(socketOrquestador + 1,original_FD,hilosPlanificadores,ganadores,cfg.koopa,cfg.script);
 			continue;
 		}else{
@@ -124,25 +124,29 @@ void koopaWarning(int fdmax, fd_set original, t_list *hilosPlanificadores,t_list
 	char mensaje[64],valor[8];
 	int cont;
 	mensajeWarning("Esperando jugadores entrantes...");
+	if(mtexto)printf("KOOPA WARNING.ON--ORQUESTADOR\n");
 	for(cont = 5; cont >= 0; cont--){
+		if(mtexto)printf("KOOPA LOOP--ORQUESTADOR\n");
 		strcpy(mensaje,"KOOPA: ");
 		itoa(cont,valor,10);
 		strcat(mensaje,valor);
-		pantallaKoopa(mensaje);
+		if(mpantalla)pantallaKoopa(mensaje);
 		if(!chequearKoopa()){
 			loguearInfo("***Se recibio un jugador. Koopa interrumpido");
 			if(mpantalla) pantallaStatus("Se recibio un jugador");
 			return;
 		};
-		if(selectGRID_orquestador(fdmax,original,2) == 0)
+		if(selectGRID_orquestador(fdmax,original,2) == 0)	{
+			if(mtexto)printf("KOOPA LOOP.MID.1.I--ORQUESTADOR\n");
 			continue;
-		else{
+		}else{
 			mensajeWarning("**Se recibio una conexion. Koopa retenido");
 			if(mpantalla) pantallaStatus("Se recibio una conexion");
-			settearPantallaKoopa();
+			if(mpantalla) settearPantallaKoopa();
 			return;
 		};
 	};
+	if(mtexto)printf("KOOPA ACTIVATED.I--ORQUESTADOR\n");
 	activarKoopa(hilosPlanificadores, koopa, script);
 	return;
 };
@@ -270,8 +274,11 @@ bool _hay_jugadores(nodoNivel *nivel) {
 
 bool chequearKoopa(){
 	if( list_is_empty(ganadores) > 0 ) return false;
+	if(mtexto)printf("NOVEDAD.I--ORQUESTADOR\n");
 	t_list* nivelesConJugadores = list_filter(listaNiveles, (void*) _hay_jugadores);
+	if(mtexto)printf("NOVEDAD.II--ORQUESTADOR\n");
 	if( list_size(nivelesConJugadores) > 0 ) return false;
+	if(mtexto)printf("NOVEDAD.III--ORQUESTADOR\n");
 	return true;
 };
 

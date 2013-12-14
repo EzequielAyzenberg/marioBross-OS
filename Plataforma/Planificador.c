@@ -44,6 +44,7 @@ void recurso(global*,answer);
 void cargarAExec(global*);
 bool concederTurno(global*);
 int atenderJugador(global*);
+void _matarlo(t_player*);
 
 logs crearLogs(nodoNivel*);
 void loggearActivos(global);
@@ -107,6 +108,7 @@ void *planificador (void *parametro){
 	inicializar(raiz,&general);
 	short respuesta;
 	while (1){
+		if(mtexto)printf("LOOP--%s\n",general.cabecera->name);
 		if(finalizar){
 			aLaMierdaConTodo(general);
 			break;
@@ -387,9 +389,9 @@ void crearStruct(nodoNivel*raiz,t_player*temp,int RD){
 int leerNovedad(global*tanda){
 	if(mtexto)printf("NOVEDAD.I--%s\n",tanda->cabecera->name);
 	if (tanda->cabecera->tandaRaiz->pid==0){
+		if(mtexto)printf("NOVEDAD.F.SIN-NOVEDAD--%s\n",tanda->cabecera->name);
 		return 0;
-	}
-	else{
+	}else{
 		int respuesta;
 		t_player*temp;
 		if(!mpantalla)puts("Se ha conectado un jugador!!");
@@ -580,10 +582,21 @@ int modoDeRecuperacion(global tabla){
 	return -10;
 }
 int aLaMierdaConTodo(global tabla){
-	if(!mpantalla)puts("NO VAMOS A LA MIEEERDA!!!");
-
+	nuevo *aux;
+	list_iterate(tabla.ready,(void*)_matarlo);
+	list_iterate(tabla.sleeps,(void*)_matarlo);
+	list_iterate(tabla.deads,(void*)_matarlo);
+	if(tabla.exe->player!=NULL)_matarlo(tabla.exe->player);
+	if(mtexto)puts("Eliminando jugadores nuevos.");
+	while(tabla.cabecera->tandaRaiz!=NULL){
+		aux=tabla.cabecera->tandaRaiz;
+		tabla.cabecera->tandaRaiz=tabla.cabecera->tandaRaiz->sgte;
+		sendAnswer(-1,0,' ',' ',aux->pid);
+		close(aux->pid);
+	}
+	if(mtexto)puts("NOS VAMOS A LA MIEEERDA!!!");
 	aniadirInterrupcion(5,tabla);
-	sleep(1);
+	usleep(10000);
 	//exit(1);
 	return -2;
 }
@@ -681,15 +694,19 @@ bool muertePersonaje(int i,global tabla){
 		    return false;
 			}
 	t_player*aux ;
-
+	loggearListas(tabla);
 	aux=list_remove_by_condition(tabla.deads,(void*)_is_PID);
 		if(aux==NULL)	{
-			if(mtexto)printf("DESCONEXION.MID--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
+			if(mtexto)printf("DESCONEXION.MID.1--No_Estaba en Muertos--%s\n",tabla.cabecera->name);
 			aux=list_remove_by_condition(tabla.ready,(void*)_is_PID);
 		}
-		if(aux==NULL) 	aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
-		if(aux==NULL) 	aux=buscarDormido(i,' ',tabla.sleeps);
+		if(aux==NULL) {
+			if(mtexto)printf("DESCONEXION.MID.2--No_Estaba en Ready--%s\n",tabla.cabecera->name);
+			aux=list_remove_by_condition(tabla.sleeps,(void*)_is_PID);
+		}
+		//if(aux==NULL) 	aux=buscarDormido(i,' ',tabla.sleeps);
 		if(aux==NULL){
+			if(mtexto)printf("DESCONEXION.MID.3--No_Estaba en Dormidos--%s\n",tabla.cabecera->name);
 			if(tabla.exe->player==NULL){
 				if(mtexto)printf("\t\t\t\tDESCONEXION.F--No_Estaba--%s\n",tabla.cabecera->name);
 				return false;
@@ -700,6 +717,7 @@ bool muertePersonaje(int i,global tabla){
 				}else aux=tabla.exe->player;
 			}
 		}
+	if(mtexto)printf("DESCONEXION.MID--ENCONTRADO--%s\n",tabla.cabecera->name);
 	char mensaje[128],numero[16],*string;
 	strcpy(mensaje,"Personaje desconectado:");
 	string=ctos(aux->sym);
@@ -719,11 +737,13 @@ bool muertePersonaje(int i,global tabla){
 		strcat(mensaje,numero);
 	}
 	tabla.cabecera->cantJugadores--;
-	if(tabla.cabecera->cantJugadores==0){if(!mpantalla)printf("--ATENCION--No quedan jugadores!!\n");}
+	if(tabla.cabecera->cantJugadores==0){if(!mpantalla)printf("--ATENCION--No quedan jugadores!!--%s\n",tabla.cabecera->name);}
 	sendAnswer(8,0,0,aux->sym,tabla.cabecera->nid);
 	enviarLog(tabla.cabecera->nid,tabla,8,0,'Z',aux->sym);
+	if(mtexto)printf("DESCONEXION.MID--LOG-CORRECTO--%s\n",tabla.cabecera->name);
 	if(tabla.exe->player!=NULL){
 		if(aux->pid==tabla.exe->player->pid){
+			if(mtexto)printf("DESCONEXION.MID--ESTABA JUGANDO!--%s\n",tabla.cabecera->name);
 			tabla.exe->player=NULL;
 			chosen =true;
 		}
@@ -732,9 +752,13 @@ bool muertePersonaje(int i,global tabla){
 	if(!mpantalla)printf("\t\tDESCONEXION.F--%d--%s\n",aux->pid,tabla.cabecera->name);
 	FD_CLR(aux->pid,tabla.original->original);
 	close(aux->pid);
+	if(mtexto)printf("DESCONEXION.MID--SOCEKT CERRADO--%s\n",tabla.cabecera->name);
 	free(aux);
+	if(mtexto)printf("DESCONEXION.MID--PJ LIBERADO--%s\n",tabla.cabecera->name);
 	loggearListas(tabla);
+	if(mtexto)printf("DESCONEXION.MID--LISTAS LOGGEADAS--%s\n",tabla.cabecera->name);
 	aniadirInterrupcion(3,tabla);
+	if(mtexto)printf("DESCONEXION.MID--INTERRUPCION ANIADIDA--%s\n",tabla.cabecera->name);
 	return chosen;
 }/**/
 int matarPersonaje(answer auxiliar,global tabla){
@@ -794,7 +818,8 @@ int interrupcion(int i,short respuesta,answer* aux,global tabla){
 		if(!mpantalla)puts("La interrupcion no se puede enmascarar, atendiendo..");
 		switch(respuesta){
 		case 0:if(!mpantalla)puts("SE HA CAIDO EL NIVEL!!");
-			status=modoDeRecuperacion(tabla);
+		if(!mpantalla&&!mtexto)status=aLaMierdaConTodo(tabla);
+		else status=modoDeRecuperacion(tabla);
 		break;
 		case 4:modificarRetardo(*aux,tabla);
 		break;
@@ -978,6 +1003,7 @@ void darInstancia(t_player*jugador,t_stack*instancia,global*tabla){
 	free(string);
 	strcat(mensaje,".");
 	list_add(jugador->t_stack,(void*)instancia);
+	if(!mpantalla)printf("Instancia Concedida\n");
 	jugador->data.recsol=' ';
 	jugador->data.dist=tabla->algo->remainDist;
 	log_info(tabla->logging.info,mensaje,"INFO");
@@ -1178,6 +1204,10 @@ int atenderJugador(global*tabla){
 	}
 	if(mtexto)printf("\t\tTURNO.F--%s\n",tabla->cabecera->name);
 	return 0;
+}
+
+void _matarlo(t_player*porMorir){
+	sendAnswer(0,0,' ',' ',porMorir->pid);
 }
 /**/
 logs crearLogs(nodoNivel*raiz){
