@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../personaje.c 
+../Mini.c \
+../Personaje.c 
 
 OBJS += \
-./personaje.o 
+./Mini.o \
+./Personaje.o 
 
 C_DEPS += \
-./personaje.d 
+./Mini.d \
+./Personaje.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
