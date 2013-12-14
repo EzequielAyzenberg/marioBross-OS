@@ -1,12 +1,23 @@
 
+
 #include "Introduccion.h"
 
-bool mpantalla;
+bool pantallaTerminada=false;
+bool mpantalla = false;
+bool mnormal = false;
 
 void cerrarTodo(int senial){
 	finalizar=true;
 	signal(SIGINT,SIG_DFL);
-	if(mpantalla) endwin();
+	if(mpantalla) {
+		mpantalla = false;
+		while(!pantallaTerminada);
+		endwin();
+	}
+}
+
+void cerrarIntro(int senial){
+	finalizar=true;
 }
 
 #define RETARDO_MS 50

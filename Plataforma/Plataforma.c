@@ -7,9 +7,8 @@
 #define PROGRAMA "PLATAFORMA"
 
 int defaultRD;
-extern bool mpantalla;
+extern bool mpantalla, mnormal;
 bool mtexto=false;
-bool pantallaTerminada=false;
 char * CFG_PATH;
 
 int main(int argc, char *argv[]){
@@ -17,7 +16,10 @@ int main(int argc, char *argv[]){
 	mpantalla = false;
 
 	if(argc==1){
-		puts("Uso: pasar por argumento el path del .cfg");
+		puts("Uso: pasar por argumento el path del .cfg y el modo de uso\n"
+				"[-p]: Modo Pantalla\n"
+				"[-t]: Modo Texto/Debug\n"
+				"[  ]: Modo Normal\n");
 		exit (0);
 	};
 	if(argc==3){
@@ -35,8 +37,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-
-	signal(SIGINT,cerrarTodo);
+	if(mtexto == false && mpantalla == false) mnormal = true;
 	finalizar=false;
 
 	listaNiveles = list_create();
@@ -50,7 +51,10 @@ int main(int argc, char *argv[]){
 	CFG_PATH = argv[1];
 	printf("CFG_PATH: %s\n", CFG_PATH);
 	defaultRD = cargarRemainingDistance(argv[1]);
-	if(mpantalla)introduction();		//	LLAVE A LA FELICIDAD!!!!!
+	if(mpantalla){
+		signal(SIGINT,cerrarIntro);
+		introduction();		//	LLAVE A LA FELICIDAD!!!!!
+	}else signal(SIGINT,cerrarTodo);
 	pthread_t id_orquest = hiloGRID(orquestador,NULL);
 	if(id_orquest == -1){
 		puts("Hubo un error en la carga");

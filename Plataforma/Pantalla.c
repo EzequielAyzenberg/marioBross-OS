@@ -10,14 +10,16 @@ void interrupcionPlani(nodoNivel*);
 void dibujarBarra(int);
 void dibujarScroll();
 void * scroller(void*);
+void cleanPlanificador();
 
 //WINDOW* ppal;
-extern bool mpantalla, pantallaTerminada;
+extern bool mpantalla, mnormal, pantallaTerminada;
 extern t_list *listaNiveles;
 extern pthread_mutex_t mutexInterr;
 int resultado, planiRow;
 WINDOW*scrollWin,*barraWin,
 *statusWin=NULL,*koopaWin=NULL;
+bool sePuedeBorrar;
 
 void pantallaKoopa(char*mensaje){
 	refresh();
@@ -140,9 +142,10 @@ void * scroller(void *name){
 }
 
 
-WINDOW*wind,*swin,*salert;
+WINDOW*wind,*swin,*salert,*bloque;
 
 void *pantalla(void*parametro){
+	sePuedeBorrar=true;
 	nivel_gui_get_term_size(&rows,&cols);
 	int planiRowActual = rows-STATUS_ROW-2;
 	if(planiRowActual >= PLANI_ROW) planiRow = planiRowActual;
@@ -181,6 +184,7 @@ void *pantalla(void*parametro){
 	refresh();
 	swin=(WINDOW*)malloc(sizeof(WINDOW));
 	salert=(WINDOW*)malloc(sizeof(WINDOW));
+	bloque=(WINDOW*)malloc(sizeof(WINDOW));
 	settearStatus();
 	settearPantallaKoopa();
 	bool first=true;
@@ -189,27 +193,29 @@ void *pantalla(void*parametro){
 		//list_iterate(listaNiveles,(void*)_pantallaNivel);
 		nodoNivel* nivel=NULL;
 		if(!list_is_empty(listaNiveles)){
-			if(first){
-				wrefresh(wind);
-				wind=nuevoPanel(STATUS_ROW);
-				swin=newwin(4,19,STATUS_ROW+1,cols-35);
-				wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
-				wattron(swin,COLOR_PAIR(53));
-				box(swin, 0, 0);
-				salert=newwin(7,30,STATUS_ROW+14,(cols/2)-16);
-				wrefresh(salert);
-				wbkgd(salert,COLOR_PAIR(54)|A_BOLD);
-				//wattron(salert,COLOR_PAIR(54));
-				box(salert, 0, 0);
-				//wattroff(swin,COLOR_PAIR(54));
-				wrefresh(salert);
-				wrefresh(wind);
-				first=false;
-				nivel=list_get(listaNiveles,0);
-				nivel->dibujar = true;
-				hiloScroll = hiloGRID(scroller,NULL);
-			}
 
+			cleanPlanificador();
+
+			if(first){
+			first=false;
+			nivel=list_get(listaNiveles,0);
+			nivel->dibujar = true;
+			hiloScroll = hiloGRID(scroller,NULL);
+			wrefresh(wind);
+			wind=nuevoPanel(STATUS_ROW);
+			swin=newwin(4,19,STATUS_ROW+1,cols-35);
+			wbkgd(swin,COLOR_PAIR(51)|A_BOLD);
+			wattron(swin,COLOR_PAIR(53));
+			box(swin, 0, 0);
+			salert=newwin(7,30,STATUS_ROW+14,(cols/2)-16);
+			wrefresh(salert);
+			wbkgd(salert,COLOR_PAIR(54)|A_BOLD);
+			//wattron(salert,COLOR_PAIR(54));
+			box(salert, 0, 0);
+			//wattroff(swin,COLOR_PAIR(54));
+			wrefresh(salert);
+			wrefresh(wind);
+			}
 			nivel = list_find(listaNiveles,(void*)_sePuedeDibujar);
 			if((nivel==NULL)&&(!list_is_empty(listaNiveles))){
 				nivel=list_get(listaNiveles,0);
@@ -222,7 +228,7 @@ void *pantalla(void*parametro){
 	}
 	refresh();
 	endwin();
-	pthread_cancel(hiloScroll);
+	if(!mnormal)pthread_cancel(hiloScroll);
 	pantallaTerminada = true;
 	return NULL;
 }
@@ -230,6 +236,19 @@ void *pantalla(void*parametro){
 bool _sePuedeDibujar(nodoNivel *nivel){
 	return nivel->dibujar;
 };
+
+void cleanPlanificador(){
+	while(!sePuedeBorrar);
+	refresh();
+	int ancho = cols/2;
+	bloque=newwin(4,ancho,STATUS_ROW+1,1);
+	wbkgd(bloque,COLOR_PAIR(51));
+	wrefresh(bloque);
+	ancho = cols - 5;
+	bloque=newwin(6,ancho,STATUS_ROW+8,1);
+	wbkgd(bloque,COLOR_PAIR(51));
+	wrefresh(bloque);
+}
 
 WINDOW* nuevoPanel(int posY){
 	refresh();
@@ -243,6 +262,7 @@ WINDOW* nuevoPanel(int posY){
 };
 
 void _pantallaNivel(nodoNivel*nivel){
+	sePuedeBorrar = false;
 	if(nivel->dibujar == false)return;
 	static int i=0,j,division;
 	division=cols/8;
@@ -305,6 +325,8 @@ void _pantallaNivel(nodoNivel*nivel){
 	if(!list_is_empty(nivel->inters)) interrupcionPlani(nivel);
 
 	if (i>=(list_size(listaNiveles)))i=0;
+	sePuedeBorrar = true;
+	return;
 }
 
 void interrupcionPlani(nodoNivel*nivel){

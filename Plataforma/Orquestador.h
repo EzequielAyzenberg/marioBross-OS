@@ -14,6 +14,7 @@
 
 
 void cerrarTodo(int);
+void cerrarIntro(int);
 void borrarTodoNivel(void*);
 void *orquestador(void* info);
 void  nivelNuevo(handshake handshakeNivel,  int socketNivel, t_list* hilosPlanificadores);
