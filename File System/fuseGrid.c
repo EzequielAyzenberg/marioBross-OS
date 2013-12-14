@@ -8,65 +8,6 @@
 #include "grasa.c"
 
 /*
- * TAREAS QUE DEBE REALIZAR FUSEVO
- * 
- * Leer archivos                  HECHO
- * Crear archivos                 HECHO
- * Escribir archivos              HECHO  
- * Borrar archivos                HECHO                  
- * Crear directorios y dos niveles de subdirecctorios     HECHO
- * Borrar direcctorios vacíos	  HECHO
- * */
-
-/*
- * TAREAS DERIVADAS DE LAS PRINCIPALES
- * 
- * truncar archivos           HECHO
- * modificar fecha            puesto pero sin terminar
- * getatribute                HECHO
- * readdir                    HECHO
- * setaer bitmap			  HECHO
- * consultar un bit map       HECHO
- * sincronizar esc/lec
- * 
- * agragar tooooooodos los flags 
- *         
- * 	MKDIR
- * 		0 				      HECHO                                      
- *		-EEXIST 		      HECHO		                                  
- *		-ENAMETOOLONG 	      HECHO
- *		-ENOSPC			 	  HECHO						
- *		-ENOENT				  HECHO
- * CREATE
- * 		 0 					  HECHO 
- *  	-ENAMETOOLONG 	      HECHO
- *		-ENOSPC			 	  HECHO						
- *		-ENOENT				  HECHO
- * WRITE
- * 		Size				  HECHO
- * 		-ENOENT  			  HECHO	
- * 		-ENOSPC				  HECHO
- *
- * TRUNCAR
- *       0                    HECHO	       		
- * 		-ENOSPC				  HECHO
- * 		-ENOTDIR		      HECHO
- * 		-ENOENT		          HECHO
- * RMDIR
- * 		0					  HECHO
- * 		-EEXIST				  HECHO
- * 		-ENOTDIR		  	  HECHO
- * 		-EBUSY				  HECHO
- * 
- * UNLIK
- * 		0				      HECHO
- * 		-ENOENT				  HECHO
- * 		-ENOTDIR			  HECHO
- *  	-EEXIST				  HECHO
- * /
-
-
-/*
  * Esta es una estructura auxiliar utilizada para almacenar parametros
  * que nosotros le pasemos por linea de comando a la funcion principal
  * de FUSE

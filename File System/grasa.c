@@ -165,34 +165,26 @@ int crearDirectorio(const char* path,GFile* inodo){
 		return 0;
 	}
 	
-	puts("entre a crear directorio");
-	printf("la ruta que llego es: %s\n",path);
+	
 	
 	if(strlen(lastNameFromPath((char*)path))>(GFILENAMELENGTH+1)) return -ENAMETOOLONG;
-	puts("pase la prueba del nombre");
+	
 	
 	numNodo=nodoByPath(path,inodo);
 	
-	printf("el resultado de nodobypath es: %d\n",numNodo);
-	puts("entonces el directorio no existe\n");
 	if (numNodo!=FAIL) return -EEXIST;
 	
 	
 	else {
-	puts("pase a crear\n");
+	
 	howIsMyFather((char*)path,&pathPadre);
-	printf("la ruta padre es: %s\n",pathPadre);
 	nodoPadre=nodoByPath(pathPadre,inodo);
 	if (nodoPadre==FAIL) return -ENOENT;
-	puts("pase la prueba de si existe el direcctorio");
-	printf("el resultado de nodobypath es: %d\n",nodoPadre);
+	
 	
 	while((inodo[nodoLibre].state!=0)&&(nodoLibre<=GFILEBYTABLE))nodoLibre++;
 	if (nodoLibre>GFILEBYTABLE) return -ENOSPC;
-	
-	printf("el primer nodo libre es: %d\n",nodoLibre);
-	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
-	
+		
 	if ((fecha = time(NULL)) == -1) {
 		error_show("Error getting date!");
 		return 0;
@@ -210,21 +202,15 @@ int crearDirectorio(const char* path,GFile* inodo){
 	return 0;
 	}
 	
-puts("");puts("");puts("");
+
 }
  int howIsMyFather(char* src, char** dest){
 	
 	char* lastName;
 	int tamRuta;
 	int i=0;
-	puts("entre a how is my father");
-	printf("la ruta que entro es: %s\n",src);
-	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath(src));   
 	tamRuta= strlen(src) - strlen(lastNameFromPath(src));
-	printf("tamaño de la ruta: %d\n",tamRuta);
 	*dest=string_duplicate(string_substring_until(src,strlen(src) - (strlen(lastNameFromPath(src))+1)));
-	printf("la ruta donde lo agrego es: %s\n",*dest);
-	puts("");puts("");puts("");
 	return 0;
 	
 }
