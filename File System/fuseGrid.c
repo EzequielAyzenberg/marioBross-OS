@@ -112,58 +112,40 @@ t_bitarray* bitMap;
  *     -ENOENT archivo/directorio no encontrado
  */
 static int theGrid_getattr(const char *path, struct stat *stbuf) {
-	
-	
-
 	memset(stbuf, 0, sizeof(struct stat));
-
-	//Si path es igual a "/" nos estan pidiendo los atributos del punto de montaje
 	
 	extern GFile* ptr_nodo;
 	int numNodo;
-	
-    printf("entre a getattr con el path: %s\n",path);
-    
-	 numNodo=nodoByPath(path,ptr_nodo);
-	printf("res nodobypath: %d\n",numNodo);
-	
-	if (strcmp(path, "/") == 0) {
+	numNodo=nodoByPath(path,ptr_nodo);
+	if (strcmp(path, "/") == 0) 
+		{
 			stbuf->st_mode = S_IFDIR | 0755;
 			stbuf->st_nlink = 2;
 			return 0;
-			
 		}
     
 
+
 	if(numNodo!=FAIL){
-		
-						if(ptr_nodo[numNodo].state==2){
+					 if(ptr_nodo[numNodo].state==2)
+					    {
 							stbuf->st_mode = S_IFDIR | 0755;
 							stbuf->st_nlink = 1;
-							stbuf->st_mtim.tv_nsec = ptr_nodo[numNodo].m_date;   //tipo LOng
-							//stbuf->st_atim.tv_sec = ptr_nodo[numNodo].m_date;            //tipo_t_time
-							stbuf->st_atim.tv_nsec = ptr_nodo[numNodo].c_date;
-							//stbuf->st_ctim.tv_sec = ptr_nodo[numNodo].c_date;
+							stbuf->st_mtim.tv_sec = ptr_nodo[numNodo].m_date; 
+							stbuf->st_atim.tv_sec = ptr_nodo[numNodo].c_date;            
 						}
-						else{
+					else{
 							stbuf->st_mode = S_IFREG | 0444;
 							stbuf->st_nlink = 1;
 							stbuf->st_size = ptr_nodo[numNodo].file_size;
-							stbuf->st_mtim.tv_nsec = ptr_nodo[numNodo].m_date;   //tipo LOng
-							//stbuf->st_atim.tv_sec = ptr_nodo[numNodo].m_date;            //tipo_t_time
-							stbuf->st_atim.tv_nsec = ptr_nodo[numNodo].c_date;
-							//stbuf->st_ctim.tv_sec = ptr_nodo[numNodo].c_date;
-						}
+							stbuf->st_mtim.tv_sec  = ptr_nodo[numNodo].m_date;                                 
+							stbuf->st_atim.tv_sec = ptr_nodo[numNodo].c_date;          
+					    }
 	return 0;
 	}
 	
 	else return -ENOENT;
-	
-	
-	
-
 }
-
 
 
 
@@ -192,36 +174,25 @@ static int theGrid_readdir(const char *path, void *buf, fuse_fill_dir_t filler, 
 	char* nombre;
 	int numNodo;
 	int i;
-
-	t_list* archivos;
+    t_list* archivos;
 	archivos = list_create();
-	
 	numNodo=nodoByPath(path,ptr_nodo);
-	
 	if (numNodo==FAIL) return -ENOENT;
-	
 	else {
-	queHayAca(numNodo,ptr_nodo,archivos);
-	
-	
-	
-
-	// "." y ".." son entradas validas, la primera es una referencia al directorio donde estamos parados
-	// y la segunda indica el directorio padre
-	filler(buf, ".", NULL, 0);
-	filler(buf, "..", NULL, 0);
-
-	for (i=0; i < list_size(archivos); i++){
-	nombre =(char*)list_get(archivos,i);
-	filler(buf, nombre, NULL, 0);
-	}
-
-list_clean(archivos);
-list_destroy(archivos);
-
-	return 0;
-	}
+			queHayAca(numNodo,ptr_nodo,archivos);
+			filler(buf, ".", NULL, 0);                       // "." y ".." son entradas validas, la primera es una referencia al directorio donde estamos parados
+			filler(buf, "..", NULL, 0);   				   	 // y la segunda indica el directorio padre
+			for (i=0; i < list_size(archivos); i++)
+			{
+			nombre =(char*)list_get(archivos,i);
+			filler(buf, nombre, NULL, 0);
+			}
+			list_clean(archivos);
+	    	list_destroy(archivos);
+			return 0;
+	     }
 }
+
 
 /*
  * @DESC
@@ -238,17 +209,14 @@ list_destroy(archivos);
  *      -EACCES archivo no es accesible
  */
 static int theGrid_open(const char *path, struct fuse_file_info *fi) {
-	int res;
-	res=0;
-	
-	
+	int res=0;
 	res = nodoByPath(path,ptr_nodo);
 	//if ((fi->flags & 3) != O_RDONLY)
 		//return -EACCES;
-
 	if (res == FAIL) return -ENOENT;
 	return 0;
 }
+
 
 /*
  * @DESC
@@ -270,28 +238,23 @@ static int theGrid_open(const char *path, struct fuse_file_info *fi) {
  */
 static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
 	puts("entre a leer");
-	
 	size_t len;
 	(void) fi;
 	int numNodo;
 	extern GFile* ptr_nodo;
 	numNodo=nodoByPath(path,ptr_nodo);
 	len = ptr_nodo[numNodo].file_size;
-	
 	if (numNodo==FAIL) return -ENOENT;
-
 	
-	if (offset<len) { 
+	if (offset<len) 
+	    { 
 		if (offset + size > len) size = len - offset;
-	//	pthread_mutex_lock( &mutexLeer);
-	     readGrid(buf,size,offset,ptr_nodo+numNodo);
-	 //   pthread_mutex_unlock( &mutexLeer);
-	}
+		     readGrid(buf,size,offset,ptr_nodo+numNodo);
+		}
 	else size = 0;
-	
-		puts("");puts("");puts("");
 	return size;
 }
+
 
 /* 
  * @NOMBRE 
@@ -315,10 +278,9 @@ static int theGrid_read(const char *path, char *buf, size_t size, off_t offset, 
 
 
 static int theGrid_mkdir(const char *path,mode_t mode)
-{   int res;
-	
-	printf("la ruta que esta en mkdir es: %s\n",path);
-	res = crearDirectorio(path,ptr_nodo);
+{   
+	int res = 0;
+	res=crearDirectorio(path,ptr_nodo);
 	return res;
 }
 
@@ -341,17 +303,14 @@ static int theGrid_mkdir(const char *path,mode_t mode)
  *						¿hay que verificar que el path padre existe? o ¿es una obviedad?
  * 
  */
-
-
 static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *fi)
 {
 	int res = 0;
-	puts("entre a create");
-	
 	res=crearArchivo(path,ptr_nodo);
-	
 	return res;
 }
+
+
 
 /*
  * @NOMBRE
@@ -371,25 +330,25 @@ static int theGrid_create(const char *path, mode_t modo, struct fuse_file_info *
  * 		-ENOTDIR		no es un archivo
  * 		-ENOENT			path no existe
  */
-
 int theGrid_truncate(const char * path, off_t offset) 
 {
-puts("pedi truncar");
 int res=0;
 res=truncale(path,offset,ptr_nodo,bitMap);
 return res;
 }
 
+
+
 static int theGrid_utimens(const char *path, const struct timespec ts[2])
 {
-        /*int res;
-        // don't use utime/utimes since they follow symlinks 
-        res = utimensat(0, path, ts, AT_SYMLINK_NOFOLLOW);
-        if (res == -1)
-                return -errno;
-        */
+        int indexNodo=nodoByPath(path,ptr_nodo);
+        if(indexNodo==FAIL) return -ENOENT;
+        ptr_nodo[indexNodo].m_date=ts->tv_sec;
         return 0;
 }
+
+
+
 
 /*
  * @DESC
@@ -412,7 +371,6 @@ static int theGrid_utimens(const char *path, const struct timespec ts[2])
  
 static int32_t theGrid_write(const char *path, const char *buf, size_t size, off_t offset,struct fuse_file_info *fi)
 {
-	puts("pedi escribir");
 	size_t len;
 	(void) fi;
 	int numNodo;
@@ -420,28 +378,15 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
 	extern GFile* ptr_nodo;
 	numNodo=nodoByPath(path,ptr_nodo);
 	len = ptr_nodo[numNodo].file_size;
-	
 	if (numNodo==FAIL) return -ENOENT;
 	if (bloquesBySize(offset + size) > MAX_BLOQUES_DATOS) return -ENOSPC; 
-	
-	//pthread_mutex_lock( &mutexTruncar);
 	if (offset + size > len) res=truncale(path,offset+size,ptr_nodo,bitMap);
-	//pthread_mutex_unlock( &mutexTruncar);	
-		
-		
-	if ((res != -ENOSPC) && (res!= -ENOTDIR))
-	{ 
-	
-	writeGrid(buf,size,offset,ptr_nodo+numNodo);
-	
-	}
+	if ((res != -ENOSPC) && (res!= -ENOTDIR)) writeGrid(buf,size,offset,ptr_nodo+numNodo);
 	else return -ENOSPC;    
-	
-	
-	
-		puts("");puts("");puts("");
 	return size;
 }
+
+
 
 /*
  *  @NOMBRE
@@ -459,15 +404,15 @@ static int32_t theGrid_write(const char *path, const char *buf, size_t size, off
  *
  *
  */
-
-
 static int32_t theGrid_unlink(const char * path)
-{
-	
+{	
 	int32_t res = 0;
 	res = borrarArchivo(path,ptr_nodo,bitMap);
 	return res;
 }
+
+
+
 
 /*
  *  @NOMBRE
@@ -485,7 +430,7 @@ static int32_t theGrid_unlink(const char * path)
  *
  *
  */
-
+ 
 static int32_t theGrid_rmdir(const char * path)
 {
 	int32_t res = 0;
@@ -574,7 +519,7 @@ int main(int argc, char *argv[]) { //./fuse  mnt -f -disk disk.bin
     struct stat fdStat; 
     fstat(fd, &fdStat); 
     
-    //declaracion y asigancion de variables globales
+    //declaracion y asigancion de globales
     extern GFile* ptr_nodo;
     extern GHeader* ptr_header;
     extern uint8_t* ptr_mmap;

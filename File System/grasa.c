@@ -7,18 +7,6 @@
 
 
 
-
-/*datos recopilados:
-usar funcion open(...)    hecho
-usar funcion mmap         hecho     
-pasarla al fuse la funcion o la estructura para correcta a la funcion correcta para que haga su magia
-    -el ptrGblock contiene un numero fisico que representa un bloque
-    -ese bloque tiene un array de direcciones a bloque que valla a saber Dios como se los voy a dar al fuse
-ver que onda el flag MAP_SHARED
-agregar otra funcionalidad ademas de read con un pipe
-*/
-
-//disco de prueba tiene 6.147.455 bytes comprimido  10 mb sin comprimir 10240
 void* dir_bloque(int n);
 void left_strcat(char*destino,char*origen);
 uint8_t* posicionBloqueSegunByte(GFile* nodo,int byte);
@@ -33,9 +21,9 @@ int nroBlkInd_by_Size(int size)
 
 bool isEmpty(int nodoPadre, GFile* nodo)
 {
-int i=0;	
+int i=1;	
 
- while((nodoPadre != nodo[i].parent_dir_block)&&(i<GFILEBYTABLE)) i++;
+ while((nodoPadre != nodo[i].parent_dir_block)&&(i<GFILEBYTABLE+1)) i++;
  
 if (i==GFILEBYTABLE) return VERDAD;
 else return FALSO;
@@ -74,7 +62,7 @@ int nodoByPath(const char* path,GFile* nodo){
 		numNodo=1;	
 		encontrado = 0;
 		while(numNodo<=(MAXNODO+2)){
-			if(string_equals_ignore_case(nombreHijo[numHijo],(char*)nodo[numNodo].fname)) acierto++; //Le agregue el casteo
+			if(strcmp(nombreHijo[numHijo],(char*)nodo[numNodo].fname)==0) acierto++; //Le agregue el casteo
 			if((numPadre==nodo[numNodo].parent_dir_block)) acierto++;
 			if (acierto==2 && !encontrado) {numPadre=numNodo; encontrado=1;}
 			acierto=0;
@@ -101,15 +89,12 @@ int readGrid(char *buf, size_t size, off_t offset,GFile* nodo){
 	int bytesParaCopiar;
 	uint8_t* ptr_datos;
 	
-	printf("soy el nodo: %s dentro de cargar buffer \n",nodo[0].fname);
-	printf("cuanto es el size: %d \n",(int)size);
-	printf("cuanto es el offset: %d \n",(int)offset);//Le agregue el casteo
-	
+
 	bytePedido=offset;
 	bytesLeidos=0;
 	
 while (bytesLeidos < size) {
-	puts("entre al while de memcpy");
+	
    ptr_datos = posicionBloqueSegunByte(nodo,(int) bytePedido);
    bool esElPrimero = bytesLeidos == 0;  
    int offsetDentroDelBloque = esElPrimero ? offset % BLOQUE : 0;
@@ -123,16 +108,16 @@ while (bytesLeidos < size) {
    memcpy(buf + bytesLeidos, ptr_datos + offsetDentroDelBloque, bytesParaCopiar);
    bytesLeidos += bytesParaCopiar;
    bytePedido += bytesParaCopiar;
-  puts("");puts("");puts("");
+  
 	}
-puts("");puts("");puts("");
+
 	return 0;//Le agregue el return con caca.
 }
 
 
 int blkInd_by_cantBlk(int bloquesDatos)
 {
-	return bloquesDatos%BLOCK_INDIREC_SIZE? bloquesDatos/BLOCK_INDIREC_SIZE+1:bloquesDatos/BLOCK_INDIREC_SIZE;  	 //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
+	return bloquesDatos%BLOCK_INDIREC_SIZE? bloquesDatos/BLOCK_INDIREC_SIZE+1:bloquesDatos/BLOCK_INDIREC_SIZE;  	 //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 0
 
 }
 
@@ -144,22 +129,15 @@ ptrGBloque* arrayIndex(GFile* nodo,int byte){
 	int dirBloqueArray;
 	int offsetDelArray;
 	ptrGBloque* ptrBloque;
-	
-	
-	
 	numeroBloqueDato = byte/BLOQUE; //desde cual bloque de datos voy a leer
 	if(byte<4096) numeroBloqueIndirecto = 0;
-	else numeroBloqueIndirecto=numeroBloqueDato/1024;  //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1
-	
+	else numeroBloqueIndirecto=numeroBloqueDato/1024;  //si el bloque de datos es mayor a 1024 ya pertenece al indirecto de la pocision 1	
 	offsetDelArray = numeroBloqueDato%1024;
 	dirBloqueArray=nodo->blk_indirect[numeroBloqueIndirecto]; //tengo la direcion del bloque de array con puntero a bloques de datos
-	printf("tengo la direcion del bloque de array con puntero a bloques de datos: %d \n",dirBloqueArray);
 	ptrBloque =(ptrGBloque*) dir_bloque(dirBloqueArray); //ahora estoy apuntando a la primera posicion del bloque de array con punteros a bloque de datos
-	printf("ahora estoy apuntando a la primera posicion del bloque de array con punteros a bloque de datos: %d \n",*ptrBloque);
 	ptrBloque=ptrBloque+offsetDelArray;         //ahora estoy apundo a la direccion del bloque que quiero leer
-	printf("ahora estoy apundo a la direccion del bloque que quiero leer: %d \n",*ptrBloque);
 	return ptrBloque;
-	puts("");puts("");puts("");
+	
 }
 
 
@@ -177,11 +155,15 @@ int crearDirectorio(const char* path,GFile* inodo){
 	int numNodo;
 	int nodoPadre;
 	int nodoLibre;
-	int i;
 	char** subDirectorios;
 	char* pathPadre;
 	nodoLibre=0;
-	i=0;
+	time_t fecha;
+	
+	if ((fecha = time(NULL)) == -1) {
+		error_show("Error getting date!");
+		return 0;
+	}
 	
 	puts("entre a crear directorio");
 	printf("la ruta que llego es: %s\n",path);
@@ -211,14 +193,18 @@ int crearDirectorio(const char* path,GFile* inodo){
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	
-	
+	if ((fecha = time(NULL)) == -1) {
+		error_show("Error getting date!");
+		return 0;
+	}
+
 	
 	//grabo
 	inodo[nodoLibre].state=DIRECTORIO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
-	inodo[nodoLibre].m_date=(uint64_t)1381272974;
-	inodo[nodoLibre].c_date=(uint64_t)1381272974;
+	inodo[nodoLibre].m_date=(uint64_t)fecha;
+	inodo[nodoLibre].c_date=(uint64_t)fecha;
 	inodo[nodoLibre].file_size=0;
 	
 	return 0;
@@ -263,6 +249,11 @@ int crearArchivo(const char* path,GFile* inodo){
 	int i;
 	char* pathPadre;
 	nodoLibre=1;
+	time_t fecha;
+	struct tm *temp;
+	
+	
+
 	
 	
 	printf("la ruta que llego es: %s\n",path);
@@ -278,9 +269,14 @@ int crearArchivo(const char* path,GFile* inodo){
 	{
 		if(inodo[numNodo].state==OCUPADO)
 		{
+				if ((fecha = time(NULL)) == -1) 
+				{
+				puts("Error getting date!");
+				return 0;
+				}	
 		puts("entonces el archivo existe\n");
-		inodo[nodoLibre].m_date=1381272974;
-		return 0;
+		inodo[numNodo].c_date=fecha;
+		
 	    }
 	    else return -ENOTDIR;
 	}
@@ -301,12 +297,14 @@ int crearArchivo(const char* path,GFile* inodo){
 	printf("el primer nodo libre es: %d\n",nodoLibre);
 	printf("El que quiero agragar es el last name: %s\n",lastNameFromPath((char*)path));
 	
+	
+		
 	//grabo
 	inodo[nodoLibre].state=OCUPADO;
 	strcpy(inodo[nodoLibre].fname,lastNameFromPath((char*)path));  
 	inodo[nodoLibre].parent_dir_block=nodoPadre;
-	inodo[nodoLibre].m_date=(uint64_t)1381272974;
-	inodo[nodoLibre].c_date=(uint64_t)1381272974;
+	inodo[nodoLibre].m_date=(uint64_t)fecha;
+	inodo[nodoLibre].c_date=(uint64_t)fecha;
 	inodo[nodoLibre].file_size=0;
 	for(i=0;i<=999;i++) inodo[nodoLibre].blk_indirect[i]=0;
 	
@@ -377,6 +375,7 @@ int difEntreIndirectos(int bActual,int bNuevos)
 int liberarBloque(int byte,t_bitarray* bMap,GFile* nodo)
 {
 	ptrGBloque* pgBloque=arrayIndex(nodo,byte);
+	//pgBloque--;
 	printf("que bloque voy a liberar: %d\n", *pgBloque);
 	bitarray_clean_bit(bMap,*pgBloque);
 	printf("la disponibilidad del bloque %d es: ",*pgBloque);
@@ -403,11 +402,11 @@ int liberarIndirecos(t_bitarray* bMap,GFile* nodo,int dif)
 		printf("la disponibilidad del bloque %d es: ",nodo->blk_indirect[nroIndRef]);
 		if(bitarray_test_bit(bMap,nodo->blk_indirect[nroIndRef])) puts("desocupado");
 		else puts("ocupado"); 
-		nroIndRef=-BLOQUE*GFILEBYTABLE;
+		nroIndRef--;
 		dif--;
 	}  
 	
-	puts("");puts("");puts("");
+	
 return 0;
 }
 
@@ -428,7 +427,7 @@ int bloqueLibresRestantes(t_bitarray* bMap)
 
 bool noMeAlcansanLosBloques(int actuales,int offset,int bRestantes)
 {
-	if((offset-actuales+difEntreIndirectos(actuales,offset))>bRestantes) return VERDAD;
+	if((offset+difEntreIndirectos(actuales,offset))>bRestantes) return VERDAD;
 	else return FALSO;
 		
 }
@@ -480,7 +479,7 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 	 
 			while(bloquesDatosActuales < bloquesDatosOffset)
 			{
-				//que pasa si entra con 0, si tiene uno cargado LA CAGA.
+				
 				 printf("el bloque actuales son: %d\n",bloquesDatosActuales);
 				 printf("resultado de bloquesDatosActuales resto: %d\n", bloquesDatosActuales%BLOCK_INDIREC_SIZE);
 				 
@@ -508,25 +507,19 @@ int truncale(const char* path,off_t offset,GFile* nodo,t_bitarray* bMap)
 			puts("entre achicar\n");
 			if (bloquesDatosActuales > bloquesDatosOffset) // se achica  informo el nuevo size del achivo, con eso deberia ser suficiente para saber como leer
 			{
-				puts("estoy achicando\n");
 				int difBloquesIndirectos = difEntreIndirectos(bloquesDatosActuales,bloquesDatosOffset); //HECHO
-				printf("la diferencia entre indirectos es: %d\n", difBloquesIndirectos);
-				byteRef = nodo[numNodo].file_size;         //aaa, que pasa si es un solo bloque   //(offset%BLOQUE==0) ?  offset+1 : offset + (BLOQUE-offset%BLOQUE) + 1;  
+				byteRef =nodo[numNodo].file_size; // (nodo[numNodo].file_size<BLOQUE)? BLOQUE-1 : nodo[numNodo].file_size-BLOQUE;       
 				while(bloquesDatosActuales > bloquesDatosOffset)                
-				{
-				 puts("estoy en while de achicar");	
-				 liberarBloque(byteRef,bMap,nodo+numNodo);   //HECHO
-				 byteRef=-BLOQUE;
-				 bloquesDatosActuales--;
-				}
-				if (difBloquesIndirectos) liberarIndirecos(bMap,nodo+numNodo,difBloquesIndirectos);   //HECHO
+					{
+					 liberarBloque(byteRef,bMap,nodo+numNodo);   
+					 byteRef-=BLOQUE;
+					 bloquesDatosActuales--;
+					}
+				if (difBloquesIndirectos) liberarIndirecos(bMap,nodo+numNodo,difBloquesIndirectos);   
 			}
 				
 	}
-	
-	
 	nodo[numNodo].file_size=(uint32_t)offset;
-puts("");puts("");puts("");
 return 0;
 }
 
@@ -538,16 +531,11 @@ int writeGrid(const char *buf, size_t size, off_t offset,GFile* nodo){
 	int bytePedido;
 	int bytesParaCopiar;
 	uint8_t* ptr_datos;
-	
-	printf("soy el nodo: %s dentro de cargar buffer \n",nodo[0].fname);
-	printf("cuanto es el size: %d \n",(int)size);
-	printf("cuanto es el offset: %d \n",(int)offset);//Le agregue el casteo
-	
 	bytePedido=offset;
 	bytesGrabados=0;
 	
-while (bytesGrabados < size) {
-	puts("entre al while de memcpy del write");
+while (bytesGrabados < size) 
+   {
    ptr_datos = posicionBloqueSegunByte(nodo,(int) bytePedido);
    bool esElPrimero = bytesGrabados == 0;  
    int offsetDentroDelBloque = esElPrimero ? offset % BLOQUE : 0;
@@ -556,16 +544,14 @@ while (bytesGrabados < size) {
    int bytesParaCopiar = size - bytesGrabados;
    if (bytesParaCopiar > bytesRestantesDentroDelBloque)
       bytesParaCopiar = bytesRestantesDentroDelBloque;
-	
-	
    memcpy(ptr_datos + offsetDentroDelBloque,buf + bytesGrabados,  bytesParaCopiar);
    bytesGrabados += bytesParaCopiar;
    bytePedido += bytesParaCopiar;
-   puts("");puts("");puts("");
+   return bytesGrabados;
 	}
-puts("");puts("");puts("");
-	return bytesGrabados;//Le agregue el return con caca.
 }
+
+
 
 /*
  * @descripcion: borra direcctorios vacios
@@ -580,11 +566,10 @@ int32_t borrarDirectorio(const char* path,GFile* inodo)
 	
 	int numNodo=nodoByPath(path,inodo);
 	if (numNodo==FAIL) return -EEXIST;
-	if(!isEmpty(numNodo, inodo+numNodo)) return -EBUSY;
+	//if(!isEmpty(numNodo, inodo+numNodo)) return -EBUSY;
 	if (inodo[numNodo].state!=DIRECTORIO) return -ENOTDIR;
 	howIsMyFather((char*)path,&pathPadre);
 	if (nodoByPath(pathPadre,inodo)==FAIL) return -ENOENT; 
-	
 	inodo[numNodo].state=LIBRE;
 	strcpy(inodo[numNodo].fname,"");  
 	inodo[numNodo].parent_dir_block=-1;
@@ -619,48 +604,4 @@ int32_t borrarArchivo(const char* path,GFile* inodo,t_bitarray* bitMap)
 	
 	return 0;
 }
-
-
-////////////////////////////funciones de ABAJO fuera de uso por el momento  
-
-
-int hijoDondeEstas(char* nombreHijo,int padre,GFile*nodo){
-	int i;
-	i=1;
-	int j;
-	j=0;
-	while(1){
-	if(string_equals_ignore_case(nombreHijo,(char*)nodo[i].fname)) j++;//Le agregue el casteo
-	if((padre==nodo[i].parent_dir_block)) j++;
-    if (j==2)break;
-    j=0;
-    i++;
-  }
-    return  i;
-	
-}
-
-int nodoQueQuiero (const char* path,GFile* nodo){
-		int i=1;
-	
-	
-	while(i<1024){
-		char barra[72];
-		strcpy(barra,(char*)nodo[i].fname);//Le agregue el casteo
-		left_strcat(barra,"/");
-		if (strcmp(path,barra) == 0) break;
-		i++;
-		}
-	
-	
-	return i;
-}
-
-void left_strcat(char*destino,char*origen){
-	char base[72];
-	strcpy(base,origen);
-	strcat(base,destino);
-	strcpy(destino,base);
-}
-
 

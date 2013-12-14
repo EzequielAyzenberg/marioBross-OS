@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <xcb/xcb.h>   //libreria chota para usar los int "especiales"
+#include <time.h> //para usar la funcion de la fecha
 
 ///////////////////DECLARACION DE CONSTANTE///////////////////
 #define GFILEBYTABLE 1024
@@ -55,6 +56,5 @@ typedef struct grasa_file_t { // un cuarto de bloque (256 bytes)
 } GFile;
 
 int nodoByPath(const char* path,GFile* nodo);
-int hijoDondeEstas(char* path,int padre,GFile* nodo);
-int tablaDeNodos(int archDisk);
+
 
