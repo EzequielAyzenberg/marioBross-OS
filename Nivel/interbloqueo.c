@@ -212,7 +212,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 			bufferPersonaje=list_get(info->listaJugadores,i);
 			strcpy(bufferMsg,"El jugador");
 
-			strcat(bufferMsg," ha sido muerto como resolucion de interbloqueo");
+			strcat(bufferMsg,"   ha sido matado como resolucion de interbloqueo");
 
 			bufferMsg[11]=bufferPersonaje->id;
 			//printf("matamos a %c",bufferPersonaje->id);
@@ -233,7 +233,7 @@ void detectarInterbloqueo(infoInterbloqueo *info){
 					bufferPersonaje=list_get(info->listaJugadores,i);
 					strcpy(bufferMsg,"El jugador");
 
-					strcat(bufferMsg," esta interbloqueado");
+					strcat(bufferMsg,"   esta interbloqueado");
 
 					bufferMsg[11]=bufferPersonaje->id;
 								//printf("matamos a %c",bufferPersonaje->id);

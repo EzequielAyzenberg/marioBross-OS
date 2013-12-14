@@ -132,4 +132,10 @@ typedef struct{
  }cfgOrquestador;
  //----------------------------------------------------
 
+void pantallaKoopa(char*mensaje);
+void pantallaStatus(char*mensaje);
+void settearPantallaKoopa();
+void settearStatus();
+
+
 #endif /* HEADERS_H_ */

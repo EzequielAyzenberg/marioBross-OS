@@ -19,6 +19,11 @@
 #define muestreo false
 
 //Variables
+typedef struct{
+	t_log* debug;
+	t_log* trace;
+}logs;
+
 typedef struct hilos{
 	int nombre;
 	char *nivel;
@@ -37,6 +42,7 @@ typedef struct personaje {
 	int orquestadorPort;
 	char *orquestadorIP;
 	t_list *miniPersonajes;
+	t_list *miniHilos;
 }tpersonaje;
 
 typedef struct miniPersonaje{
@@ -45,6 +51,7 @@ typedef struct miniPersonaje{
 	int orquestadorSocket;
 	int posX;
 	int posY;
+	logs *loggeo;
 }tminipersonaje;
 
 typedef struct recurso{
@@ -54,10 +61,6 @@ typedef struct recurso{
 	bool checked;
 }trecurso;
 
-typedef struct{
-	t_log* debug;
-	t_log* trace;
-}logs;
 
 
 int sockfd,socketEscucha,nuevo,ganado=0,ch,
@@ -83,28 +86,30 @@ int cargaPersonaje(char *argv[]);
 void * jugar(void*);
 int cantidadElementosArray(char **);
 int estoyMuerto(tminipersonaje*,int*);
-int actualizarRP(t_list*,int,logs);
-int gestionTurno(t_list*,int,int*,int*,int*,int*,logs);
-int instanciaConc(t_list*,int*,logs);
-int movimientoConc(int,int*,int*,logs);
+int actualizarRP(t_list*,int,logs*);
+int gestionTurno(t_list*,int,int*,int*,int*,int*,logs*);
+int instanciaConc(t_list*,int*,logs*);
+int movimientoConc(int,int*,int*,logs*);
 void cierraHilos();
 void aumentaVida(int);
 void restaVida(int);
 void cerrarBien();
 void suicidarme(tminipersonaje);
 logs crearLogs(tminipersonaje*);
+void _loggearVictoria(tminipersonaje*);
+void _loggearDerrota(tminipersonaje*);
+void _loggearSenialAumenta(tminipersonaje*);
+void _loggearSenialDecrementa(tminipersonaje*);
 
 pthread_mutex_t mutexMuerte =PTHREAD_MUTEX_INITIALIZER;
 
 int main(int argc, char *argv[]) {
-	logs loggeo;
-	char mensaje[128];
 	personaje.miniPersonajes=(t_list*)malloc(sizeof(t_list));
-	char auxiliarMensaje[4];
+	personaje.miniHilos=(t_list*)malloc(sizeof(t_list));
 
 	signal(SIGUSR1,aumentaVida);
 	signal(SIGTERM,restaVida);
-	//signal(SIGINT,cerrarBien);
+	signal(SIGINT,cerrarBien);
 
 	while(repetir==1){
 		superMuerte=0;
@@ -113,6 +118,7 @@ int main(int argc, char *argv[]) {
 		if( cargaPersonaje(argv) == -1){
 			printf("Error al cargar configuracion del personaje.\n");
 			list_destroy(personaje.miniPersonajes);
+			list_destroy(personaje.miniHilos);
 			return 0;
 		}
 		config_destroy(cfgPersonaje);
@@ -120,7 +126,7 @@ int main(int argc, char *argv[]) {
 		//initscr();
 		//keypad(stdscr, TRUE);   // for KEY_UP, KEY_DOWN
 
-		while(personaje.miniPersonajes!=NULL && personaje.vidas>0){
+		while(personaje.miniHilos!=NULL && personaje.vidas>0){
 			if(personaje.planDeNiveles->elements_count==ganado){
 				int sockfdAux;
 				printf("Ganamos! venga koopa, te hago frente\n");
@@ -129,11 +135,7 @@ int main(int argc, char *argv[]) {
 				printf("Avisando a plataforma que soy un groso\n");
 				sendHandshake(2,"",personaje.simbolo,(short)sockfdAux);
 				printf("Ahora si, koopa, dame a la princesa\n");
-				itoa(repeticiones,auxiliarMensaje,10);
-				strcpy(mensaje,"El personaje gano con ");
-				strcat(mensaje,auxiliarMensaje);
-				strcat(mensaje," reintentos.");
-				log_trace(loggeo.trace,mensaje,"TRACE");
+				list_iterate(personaje.miniPersonajes,(void*)_loggearVictoria);
 				//list_destroy(personaje.miniPersonajes);
 				//QUIZAS DEBERIA ESPERAR A VER COMO SALIO KOOPA.
 				exit(0);
@@ -159,6 +161,7 @@ int main(int argc, char *argv[]) {
 			cierraHilos();
 			char intentarlo[4];
 			list_clean(personaje.miniPersonajes);
+			list_clean(personaje.miniHilos);
 			//sleep(1);
 			bool esWeon=true;
 			while(esWeon){
@@ -172,8 +175,7 @@ int main(int argc, char *argv[]) {
 						  break;
 				case 'N': repetir=0;
 					  	  printf("\nPerdimos :(\n");
-					  	  strcpy(mensaje,"--El personaje pierde--");
-					  	  log_trace(loggeo.trace,mensaje,"TRACE");
+					  	  list_iterate(personaje.miniPersonajes,(void*)_loggearDerrota);
 					  	  esWeon=false;
 					  	  break;
 				case 's': repeticiones++;
@@ -183,8 +185,7 @@ int main(int argc, char *argv[]) {
 						  break;
 				case 'n': repetir=0;
 					  	  printf("\nPerdimos :(\n");
-					  	  strcpy(mensaje,"--El personaje pierde--");
-					  	  log_trace(loggeo.trace,mensaje,"TRACE");
+					  	  list_iterate(personaje.miniPersonajes,(void*)_loggearDerrota);
 					  	  esWeon=false;
 					  	  break;
 				default:  puts("\nOpcion incorrecta.\n");
@@ -199,6 +200,18 @@ int main(int argc, char *argv[]) {
 	//endwin();
 	return 0;
 };
+void _loggearVictoria(tminipersonaje* info){
+	char mensaje [128],auxiliarMensaje[6];
+	itoa(repeticiones,auxiliarMensaje,10);
+	strcpy(mensaje,"El personaje gano con ");
+	strcat(mensaje,auxiliarMensaje);
+	strcat(mensaje," reintentos.");
+	log_trace(info->loggeo->trace,mensaje,"TRACE");
+}
+
+void _loggearDerrota(tminipersonaje*info){
+	log_trace(info->loggeo->trace,"--El personaje pierde--","TRACE");
+}
 
 /* Avisa que termino el nivel al orquestador
  * Cierra el socket
@@ -211,30 +224,37 @@ void finDeNivel(int sockfd){
 /* Suma una vida al personaje
  */
 void aumentaVida(int senial){
-	logs loggeo;
-	char mensaje[128];
-	printf("Se recibio la señal: %d",senial);
+	int i;
+	tminipersonaje *aux;
+	printf("Se recibio la señal: %d\n",senial);
 	interrupcion=1;
 	personaje.vidas++;
-	strcpy(mensaje,"--El personaje recibio una vida por senial--");
-	log_trace(loggeo.trace,mensaje,"TRACE");
-}
-void cerraBien(){
-	puts("Personaje cerrado correctamente");
+	for(i=0;i<list_size(personaje.miniPersonajes);i++){
+		aux=list_get(personaje.miniPersonajes,i);
+		_loggearSenialAumenta(aux);
+	}
+	//list_iterate(personaje.miniPersonajes,(void*)_loggearSenialAumenta);
 }
 
+void _loggearSenialAumenta(tminipersonaje* info){
+	log_trace(info->loggeo->trace,"--El personaje recibio una vida por senial--","TRACE");
+}
+void cerrarBien(){
+	puts("Personaje cerrado correctamente");
+	exit(1);
+}
 
 /* Resta una vida al personaje
  */
 void restaVida(int senial){
-	logs loggeo;
-	char mensaje[128];
-	printf("Se recibio la señal: %d",senial);
+	printf("Se recibio la señal: %d\n",senial);
 	interrupcion=1;
 	personaje.vidas--;
-	strcpy(mensaje,"--Personaje muere por: Senial --");
-	log_trace(loggeo.trace,mensaje,"TRACE");
+	list_iterate(personaje.miniPersonajes,(void*)_loggearSenialDecrementa);
+}
 
+void _loggearSenialDecrementa(tminipersonaje* info){
+	log_trace(info->loggeo->trace,"--El personaje muere por: Senial--","TRACE");
 }
 
 /* Retorna true si el recurso fue agarrado
@@ -254,10 +274,11 @@ bool _recursoNoAgarrado(trecurso *recurso){
  * cada opcion por orden
  */
 void *jugar (void *minipersonaje){
-	logs loggeo;
+	//logs loggeo;
 	answer ordenPlanificador;
 	char mensaje[256],valor[8];
-	int *esInstancia,*moverEnX,posicionNueva,desbloquear=0;
+	int *esInstancia,*moverEnX,posicionNueva;
+	//int desbloquear=0;
 	moverEnX=(int*)malloc(sizeof(int));
 	esInstancia=(int*)malloc(sizeof(int));
 	*esInstancia=0;
@@ -287,9 +308,8 @@ void *jugar (void *minipersonaje){
 	   	printf("Recurso en hilo: %c\n",*temp2);
 	}*/
 	extern tpersonaje personaje;
-	loggeo=crearLogs(&info);
 	printf("Creamos el log correspondiente al miniPersonaje\n\n");
-	log_trace(loggeo.trace,"\t\t\t---------------------------\t\t\t","TRACE");
+	log_trace(info.loggeo->trace,"\t\t\t---------------------------\t\t\t","TRACE");
 	strcpy(mensaje,"--Socket:(Env.)-Config:-(Nivel/Sym/[-Recursos-])--(");
 	itoa(info.orquestadorSocket,valor,10);
 	strcat(mensaje,valor);
@@ -309,15 +329,15 @@ void *jugar (void *minipersonaje){
 	if(list_is_empty(info.planDeRecursos))puts("ESTABA VACIA!!!");
 	list_iterate(info.planDeRecursos,(void*)_loggearRecursos);
 	strcat(mensaje,"])");
-	log_trace(loggeo.trace,mensaje,"TRACE");
+	log_trace(info.loggeo->trace,mensaje,"TRACE");
 	while((list_any_satisfy(info.planDeRecursos,(void*)_recursoNoAgarrado))==true){
-		if(desbloquear){
+		/*if(desbloquear){
 			desbloquear=0;
 			pthread_mutex_unlock( &mutexMuerte); 
-		}
+		}*/
 		if(personaje.vidas<=0){
 			strcpy(mensaje,"--No quedan mas vidas--");
-			log_trace(loggeo.trace,mensaje,"TRACE");
+			log_trace(info.loggeo->trace,mensaje,"TRACE");
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
 			pthread_exit(NULL);
@@ -341,12 +361,14 @@ void *jugar (void *minipersonaje){
 			return NULL;
 		}
 		*/
-pthread_mutex_lock( &mutexMuerte);
+
+//pthread_mutex_lock( &mutexMuerte);
+
 		recvAnswer(&ordenPlanificador,info.orquestadorSocket);
 		if(personaje.vidas<=0){
 			hilosMuertos ++;
 			close(info.orquestadorSocket);
-			pthread_mutex_unlock(&mutexMuerte);
+		//	pthread_mutex_unlock(&mutexMuerte);
 			pthread_exit(NULL);
 			return NULL;
 			//suicidarme(infoBis);
@@ -360,46 +382,47 @@ if(ordenPlanificador.msg!=8) pthread_mutex_unlock( &mutexMuerte);
 			case 8: //Estoy muerto
 				if(ordenPlanificador.cont==0){
 					strcpy(mensaje,"--Personaje muere por: Goomba--");
-					printf("Personaje muere por: Goomba");
+					printf("Personaje muere por: Goomba\n");
 				} else {
 					strcpy(mensaje,"--Personaje muere por: Interbloqueo--");
-					printf("Personaje muere por: Interbloqueo");
+					printf("Personaje muere por: Interbloqueo\n");
 				}
-				log_trace(loggeo.trace,mensaje,"TRACE");
+				log_trace(info.loggeo->trace,mensaje,"TRACE");
 				estoyMuerto(&info,esInstancia);
-				desbloquear=1;
+				//pthread_mutex_unlock(&mutexMuerte);
+		//		desbloquear=1;
 				break;
 			case 1: //Instancia o movimiento concedido
 				//printf("Es instancia?: %d\n",*esInstancia);
 				if(*esInstancia==1){
-					instanciaConc(info.planDeRecursos,esInstancia,loggeo);
+					instanciaConc(info.planDeRecursos,esInstancia,info.loggeo);
 				}
-				else movimientoConc(posicionNueva,&(info.posX),&(info.posY),loggeo);
+				else movimientoConc(posicionNueva,&(info.posX),&(info.posY),info.loggeo);
 				interrupcion=0;
 				break;
 			case 2: //Actualizar RP
 				printf("Actualiza RP\n");
-				actualizarRP(info.planDeRecursos,ordenPlanificador.cont,loggeo);
+				actualizarRP(info.planDeRecursos,ordenPlanificador.cont,info.loggeo);
 				interrupcion=0;
 				break;
 			case 7: //Gestion turno
 				//printf("Gestionemos el turno\n");
 				//printf("Mover en X: %d\n",*moverEnX);
-				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),moverEnX,esInstancia,loggeo);
+				posicionNueva=gestionTurno(info.planDeRecursos,info.orquestadorSocket,&(info.posX),&(info.posY),moverEnX,esInstancia,info.loggeo);
 				break;
 			case 0: //Limbo
 				printf("Se fue la plataforma, panico panico!\n");
 				strcpy(mensaje,"--Plataforma caida--");
-				log_trace(loggeo.trace,mensaje,"TRACE");
+				log_trace(info.loggeo->trace,mensaje,"TRACE");
 				limboOK=1;
 				//suicidarme(infoBis);
 				break;
 		}
 		printf("\n");
 	}
-	printf("Ganamos bitches\n");
+	printf("Personaje completa nivel %s\n",info.nivel);
 	strcpy(mensaje,"--Personaje completa nivel--");
-	log_trace(loggeo.trace,mensaje,"TRACE");
+	log_trace(info.loggeo->trace,mensaje,"TRACE");
 	ganado++;
 	suicidarme(info);
 	return NULL;
@@ -425,8 +448,8 @@ int cargaPersonaje(char *argv[]){
 	cfgPersonaje=config_create(argv[1]);//ACA CAMBIE LO QUE LE MANDA AL CONFIG
 	infoNivel=(tinfo*)malloc(sizeof(tinfo));
 	infoNivel->nivel=(char*)malloc(sizeof(char[16]));
-	miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
-	miniPersonaje->nivel=(char*)malloc(sizeof(char[16]));
+	//miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
+	//miniPersonaje->nivel=(char*)malloc(sizeof(char[16]));
 	personaje.orquestadorIP=(char*)malloc(sizeof(char[16]));
 
 	//printf("Cargaremos el personaje\n");
@@ -486,6 +509,8 @@ int cargaPersonaje(char *argv[]){
 		lista=list_create();
 		tamanioArrayNivel=cantidadElementosArray(planNivelesPersonaje);
 		for (i=0;i<tamanioArrayNivel;i++){ //Carga en nodos los niveles
+			miniPersonaje=(tminipersonaje*)malloc(sizeof(tminipersonaje));
+			miniPersonaje->nivel=(char*)malloc(sizeof(char[16]));
 			while(modificar==0);
 			printf("\nSe carga el nivel: %s /// Recursos: ", *(planNivelesPersonaje+i));
 				strcpy(infoNivel->nivel,*(planNivelesPersonaje+i));
@@ -542,14 +567,17 @@ int cargaPersonaje(char *argv[]){
 				miniPersonaje->orquestadorSocket=sockfd;
 				miniHilo->nombre=sockfd;
 				//printf("Buffer de hilo cargado\n");
-				list_add(personaje.miniPersonajes,(void*)miniHilo);
-
 				printf("\n\n  Preparando para cargar el minepersonaje\n  Nivel: %s - Simbolo: %c \n\n",miniPersonaje->nivel,personaje.simbolo);
-				//sleep(6);
+				logs *logAux;
+				logAux=(logs*)malloc(sizeof(logs));
+				*logAux=crearLogs(miniPersonaje);
+				miniPersonaje->loggeo=logAux;
 				hilo=hiloGRID(jugar,(void*)miniPersonaje);
 				miniHilo->hilo=hilo;
 				strcpy(miniHilo->nivel,infoNivel->nivel);
 				modificar = 0;
+				list_add(personaje.miniHilos,(void*)miniHilo);
+				list_add(personaje.miniPersonajes,(void*)miniPersonaje);
 		}
 
 	}else {
@@ -678,7 +706,7 @@ int estoyMuerto(tminipersonaje *info,int *esInstancia){
 
 /*Pide la posicion del recurso siguiente
  */
-int actualizarRP(t_list*planDeRecursos,int posicion,logs loggeo){
+int actualizarRP(t_list*planDeRecursos,int posicion,logs *loggeo){
 	char mensaje[256],aux[8];
 	if(interrupcion==0){
 		trecurso *recursoSiguiente;
@@ -701,7 +729,7 @@ int actualizarRP(t_list*planDeRecursos,int posicion,logs loggeo){
 		itoa(posY,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
-		log_trace(loggeo.trace,mensaje,"TRACE");
+		log_trace(loggeo->trace,mensaje,"TRACE");
 	}
 	return 0;
 }
@@ -710,7 +738,7 @@ int actualizarRP(t_list*planDeRecursos,int posicion,logs loggeo){
  * Si tiene la posicion del siguiente recurso pide movimiento
  * Si esta en el recurso pide una instancia
  */
-int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *moverEnX,int *esInstancia,logs loggeo){
+int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *moverEnX,int *esInstancia,logs *loggeo){
 	trecurso *recursoSiguiente;
 	char mensaje[256],aux[8];
 	int tempX=0,tempY=0;
@@ -725,7 +753,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 			aux[1]='\0';
 			strcat(mensaje,aux);
 			strcat(mensaje," --");
-			log_trace(loggeo.trace,mensaje,"TRACE");
+			log_trace(loggeo->trace,mensaje,"TRACE");
 			if(recursoSiguiente->tipo != '^')
 			sendAnswer(2,0,recursoSiguiente->tipo,personaje.simbolo, sockfd);
 			return 0;
@@ -740,7 +768,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 			aux[1]='\0';
 			strcat(mensaje,aux);
 			strcat(mensaje," --");
-			log_trace(loggeo.trace,mensaje,"TRACE");
+			log_trace(loggeo->trace,mensaje,"TRACE");
 			sendAnswer(2,1,recursoSiguiente->tipo,personaje.simbolo,sockfd); //Pedir instancia
 			//printf("Instancia pedida\n");
 			*esInstancia=auxiliar;
@@ -779,7 +807,7 @@ int gestionTurno(t_list * planDeRecursos,int sockfd,int *posX,int *posY,int *mov
 		itoa(tempY,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
-		log_trace(loggeo.trace,mensaje,"TRACE");
+		log_trace(loggeo->trace,mensaje,"TRACE");
 		//printf("Nueva posicion X: %d\nNueva posicion Y: %d\n",tempX,tempY);
 		//printf("Posicion X: %d\nPosicion Y: %d\n",*posX,*posY);
 		*posX=tempX;
@@ -792,7 +820,7 @@ return 0;
 
 /* Marca como levantado el recurso concedido
  */
-int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
+int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs *loggeo){
 	if(interrupcion==0){
 		trecurso *aux;
 		char mensaje[256],valor[8];
@@ -805,7 +833,7 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
 		valor[1]='\0';
 		strcat(mensaje,valor);
 		strcat(mensaje," --");
-		log_trace(loggeo.trace,mensaje,"TRACE");
+		log_trace(loggeo->trace,mensaje,"TRACE");
 		//printf("Checked: %d\n",aux->checked);
 		*esInstancia=0;
 	}
@@ -815,7 +843,7 @@ int instanciaConc(t_list * planDeRecursos,int* esInstancia,logs loggeo){
 /* Modifica su posicion por la concedida
  */
 
-int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
+int movimientoConc(int posicion,int*posX,int*posY,logs *loggeo){
 	if(interrupcion==0){
 		char mensaje[256],aux[8];
 		strcpy(mensaje,"--Accion - Moverse a posicion(X,Y) -- (");
@@ -829,7 +857,7 @@ int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
 		itoa(*posY,aux,10);
 		strcat(mensaje,aux);
 		strcat(mensaje,") --");
-		log_trace(loggeo.trace,mensaje,"TRACE");
+		log_trace(loggeo->trace,mensaje,"TRACE");
 	}
 	return 0;
 }
@@ -838,8 +866,8 @@ int movimientoConc(int posicion,int*posX,int*posY,logs loggeo){
  * y los hilos
  */
 void cierraHilos(){
-	int j;
-	thilo* aux;
+//	int j;
+//	thilo* aux;
 	/*for (j = 0; j < personaje.miniPersonajes->elements_count; j++) {
 		aux=(thilo*)list_get(personaje.miniPersonajes,j);
 		close(aux->nombre);

@@ -1,12 +1,15 @@
 
 #include "Introduccion.h"
 
-#define RETARDO_MS 50
+bool mpantalla;
 
 void cerrarTodo(int senial){
 	finalizar=true;
 	signal(SIGINT,SIG_DFL);
+	if(mpantalla) endwin();
 }
+
+#define RETARDO_MS 50
 
 void introduction(void){
 	int j,len;
